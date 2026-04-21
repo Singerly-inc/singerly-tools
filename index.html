@@ -171,7 +171,7 @@ a.card { text-decoration:none; color:inherit; display:flex; }
   <div class="stats">
     <div class="stat"><div class="stat-num">50</div><div class="stat-label">ツール</div></div>
     <div class="stat"><div class="stat-num">6</div><div class="stat-label">カテゴリ</div></div>
-    <div class="stat"><div class="stat-num">0</div><div class="stat-label">円</div></div>
+    <div class="stat"><div class="stat-num" id="mudomeCount">0</div><div class="stat-label">ムドメ回数</div></div>
   </div>
 
   <div class="filter-bar">
@@ -261,6 +261,16 @@ const TOOLS = [
 
 let currentCat = 'all';
 
+function getMudomeCount() {
+  return parseInt(localStorage.getItem('mudome_count') || '0');
+}
+function incrementMudome() {
+  localStorage.setItem('mudome_count', getMudomeCount() + 1);
+}
+function updateMudomeDisplay() {
+  document.getElementById('mudomeCount').textContent = getMudomeCount().toLocaleString();
+}
+
 function filter(cat, btn) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
@@ -275,8 +285,9 @@ function render() {
     const active = t.status === 'active';
     const tag = active ? 'a' : 'div';
     const href = active ? `href="${t.path}"` : '';
+    const onclick = active ? `onclick="incrementMudome()"` : '';
     return `
-      <${tag} class="card ${active ? '' : 'coming'}" ${href}>
+      <${tag} class="card ${active ? '' : 'coming'}" ${href} ${onclick}>
         <div class="card-top">
           <div class="card-icon">${t.icon}</div>
           <span class="cat-tag">${CAT_LABEL[t.cat]}</span>
@@ -294,6 +305,7 @@ function render() {
 }
 
 render();
+updateMudomeDisplay();
 </script>
 </body>
 </html>

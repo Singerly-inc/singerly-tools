@@ -360,22 +360,22 @@ const TOOLS = [
 
 let currentCat = 'all';
 
-function getMudomeCount() {
-  return parseInt(localStorage.getItem('mudome_count') || '0');
+async function updateMudomeDisplay() {
+  const { data } = await sb.rpc('get_total_mudome_count');
+  if (data !== null) {
+    document.getElementById('mudomeCount').textContent = Number(data).toLocaleString();
+  }
 }
+
 async function incrementMudome(toolId, toolName) {
-  localStorage.setItem('mudome_count', getMudomeCount() + 1);
-  updateMudomeDisplay();
   if (currentUser) {
     await sb.from('tool_logs').insert({
       user_email: currentUser.email,
       tool_id: toolId,
       tool_name: toolName,
     });
+    updateMudomeDisplay();
   }
-}
-function updateMudomeDisplay() {
-  document.getElementById('mudomeCount').textContent = getMudomeCount().toLocaleString();
 }
 
 function filter(cat, btn) {

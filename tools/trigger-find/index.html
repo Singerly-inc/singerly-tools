@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>トリガー発見 — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+.main { width:100%; max-width:720px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+.step-card { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:12px; padding:24px; }
+.step-num { font-size:0.62rem; font-weight:700; color:#B7282E; letter-spacing:0.15em; text-transform:uppercase; margin-bottom:6px; }
+.step-q { font-size:1.05rem; font-weight:800; color:#000; line-height:1.5; margin-bottom:16px; }
+.step-q .hint { font-size:0.78rem; font-weight:400; color:#888; margin-top:4px; display:block; }
+.field textarea { width:100%; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:10px 14px; color:#000; font-size:0.9rem; font-family:inherit; outline:none; transition:border-color 0.15s; resize:vertical; min-height:80px; line-height:1.6; }
+.field textarea:focus { border-color:#B7282E; }
+.field textarea::placeholder { color:#bbb; }
+.field input { width:100%; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:10px 14px; color:#000; font-size:0.9rem; font-family:inherit; outline:none; transition:border-color 0.15s; }
+.field input:focus { border-color:#B7282E; }
+.field input::placeholder { color:#bbb; }
+.field { margin-bottom:0; }
+.emotion-btns { display:flex; gap:8px; flex-wrap:wrap; }
+.emo-btn { padding:8px 14px; border-radius:6px; border:2px solid #E0E0E0; background:#fff; cursor:pointer; font-size:0.82rem; font-weight:700; color:#555; transition:all 0.15s; font-family:inherit; }
+.emo-btn:hover,.emo-btn.sel { border-color:#B7282E; background:#B7282E; color:#fff; }
+.btn-primary { width:100%; padding:13px; font-size:0.95rem; font-weight:900; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; }
+.btn-primary:hover { background:#83151B; }
+.result-wrap { display:none; }
+.result-wrap.show { display:flex; flex-direction:column; gap:14px; }
+.result-card { background:#000; border-radius:12px; padding:24px; }
+.rc-label { font-size:0.62rem; letter-spacing:0.15em; color:#B7282E; text-transform:uppercase; font-weight:700; margin-bottom:10px; }
+.rc-name { font-size:0.88rem; font-weight:700; color:rgba(255,255,255,0.5); margin-bottom:16px; }
+.trigger-row { display:flex; gap:14px; align-items:flex-start; margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.1); }
+.trigger-row:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
+.tr-arrow { font-size:1rem; flex-shrink:0; margin-top:2px; }
+.tr-col { flex:1; }
+.tr-q { font-size:0.6rem; color:rgba(255,255,255,0.35); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px; }
+.tr-a { font-size:0.9rem; font-weight:700; color:#fff; line-height:1.5; }
+.board-header { display:flex; justify-content:space-between; align-items:center; }
+.btn-clear { font-size:0.72rem; color:#aaa; background:none; border:none; cursor:pointer; }
+.btn-clear:hover { color:#B7282E; }
+.btn-row { display:flex; gap:10px; }
+.btn-new { flex:1; padding:12px; font-size:0.9rem; font-weight:800; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; }
+.btn-new:hover { background:#83151B; }
+.btn-reset { padding:12px 16px; font-size:0.82rem; border:1px solid #CCCCCC; border-radius:8px; cursor:pointer; background:#fff; color:#888; font-family:inherit; }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">🛡️ 心理的安全性</div>
+  <h1 class="page-title">トリガー発見</h1>
+  <p class="page-sub">感情のトリガーを言語化。自己理解と相互理解でチームが動きやすくなる。</p>
+</div>
+<div class="main" id="inputArea">
+  <div class="step-card">
+    <div class="step-num">Step 1</div>
+    <div class="step-q">名前を教えてください</div>
+    <div class="field"><input type="text" id="nameIn" placeholder="田中 太郎"></div>
+  </div>
+  <div class="step-card">
+    <div class="step-num">Step 2</div>
+    <div class="step-q">仕事でイライラ・モヤモヤするのはどんなとき？<span class="hint">具体的な状況で教えてください</span></div>
+    <div class="field"><textarea id="triggerIn" placeholder="例：急に予定が変わったとき、説明なしに決定が降りてきたとき"></textarea></div>
+  </div>
+  <div class="step-card">
+    <div class="step-num">Step 3</div>
+    <div class="step-q">そのとき、どんな感情が出てきますか？</div>
+    <div class="emotion-btns" id="emoRow"></div>
+  </div>
+  <div class="step-card">
+    <div class="step-num">Step 4</div>
+    <div class="step-q">そのとき、あなたは何を大切にしているから？<span class="hint">裏にある価値観・欲求は何でしょう</span></div>
+    <div class="field"><textarea id="valueIn" placeholder="例：見通しを持って動くことを大切にしているから"></textarea></div>
+  </div>
+  <div class="step-card">
+    <div class="step-num">Step 5</div>
+    <div class="step-q">次回同じ状況がきたとき、どう対処しますか？</div>
+    <div class="field"><textarea id="actionIn" placeholder="例：まず深呼吸して、その後に背景を確認する"></textarea></div>
+  </div>
+  <button class="btn-primary" onclick="submit()">ワークを完了する ✅</button>
+
+  <div class="result-wrap" id="resultWrap">
+    <div class="board-header" style="margin-bottom:10px">
+      <div class="area-title" style="margin-bottom:0">トリガーマップ</div>
+      <button class="btn-clear" onclick="clearAll()">全クリア</button>
+    </div>
+    <div id="cards"></div>
+    <div class="btn-row">
+      <button class="btn-new" onclick="newEntry()">＋ 次の人のワーク</button>
+    </div>
+  </div>
+</div>
+<script>
+const EMOTIONS=['イライラ😤','焦り😰','悲しい😢','失望😞','不安😟','モヤモヤ😑','孤独感😶','プレッシャー😖'];
+let selEmo='', entries=[];
+document.getElementById('emoRow').innerHTML=EMOTIONS.map(e=>
+  `<button class="emo-btn" onclick="selectEmo('${e}',this)">${e}</button>`
+).join('');
+function selectEmo(e,el){selEmo=e;document.querySelectorAll('.emo-btn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');}
+function submit(){
+  const name=document.getElementById('nameIn').value.trim();
+  const trigger=document.getElementById('triggerIn').value.trim();
+  const value=document.getElementById('valueIn').value.trim();
+  const action=document.getElementById('actionIn').value.trim();
+  if(!name||!trigger){alert('名前とトリガーを入力してください');return;}
+  entries.unshift({name,trigger,emo:selEmo,value,action});
+  render();
+  document.getElementById('resultWrap').classList.add('show');
+}
+function render(){
+  document.getElementById('cards').innerHTML=entries.map((e,i)=>`
+    <div class="result-card" style="margin-bottom:12px;animation:popIn 0.35s ease both;animation-delay:${i*40}ms">
+      <div class="rc-name">${e.name} さんのトリガーマップ</div>
+      ${[
+        {q:'トリガー状況',a:e.trigger,ar:'⚡'},
+        {q:'出てくる感情',a:e.emo||'—',ar:'💭'},
+        {q:'大切にしていること',a:e.value||'—',ar:'❤️'},
+        {q:'次回の対処法',a:e.action||'—',ar:'✅'},
+      ].map(r=>`<div class="trigger-row"><div class="tr-arrow">${r.ar}</div><div class="tr-col"><div class="tr-q">${r.q}</div><div class="tr-a">${r.a}</div></div></div>`).join('')}
+    </div>`).join('');
+}
+function newEntry(){
+  ['nameIn','triggerIn','valueIn','actionIn'].forEach(id=>document.getElementById(id).value='');
+  selEmo='';document.querySelectorAll('.emo-btn').forEach(b=>b.classList.remove('sel'));
+}
+function clearAll(){if(confirm('全クリアしますか？')){entries=[];document.getElementById('resultWrap').classList.remove('show');}}
+</script>
+<style>@keyframes popIn{0%{opacity:0;transform:scale(0.92)}100%{opacity:1;transform:none}}</style>
+</body>
+</html>

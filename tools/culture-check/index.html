@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>カルチャーチェック — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+.main { width:100%; max-width:720px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+.name-panel { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:20px; display:flex; gap:10px; align-items:center; }
+.name-panel input { flex:1; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:10px 12px; color:#000; font-size:0.9rem; font-family:inherit; outline:none; transition:border-color 0.15s; }
+.name-panel input:focus { border-color:#B7282E; }
+.name-panel input::placeholder { color:#bbb; }
+.btn-start { padding:10px 20px; font-size:0.88rem; font-weight:800; border:none; border-radius:7px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; white-space:nowrap; }
+.btn-start:hover { background:#83151B; }
+.quiz-area { display:none; }
+.quiz-area.show { display:flex; flex-direction:column; gap:16px; }
+.prog-row { display:flex; justify-content:space-between; font-size:0.72rem; color:#888; margin-bottom:4px; }
+.prog-bg { background:#EEEEEE; border-radius:4px; height:6px; overflow:hidden; }
+.prog-fill { height:100%; background:#B7282E; border-radius:4px; transition:width 0.4s ease; }
+.q-card { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:12px; padding:24px; }
+.q-cat { font-size:0.62rem; font-weight:700; color:#B7282E; letter-spacing:0.12em; text-transform:uppercase; margin-bottom:8px; }
+.q-text { font-size:1.05rem; font-weight:700; color:#000; line-height:1.55; margin-bottom:20px; }
+.rating-row { display:flex; gap:8px; justify-content:center; }
+.r-btn { flex:1; max-width:72px; padding:12px 4px; border-radius:8px; border:2px solid #E0E0E0; background:#fff; cursor:pointer; font-family:inherit; font-size:0.82rem; font-weight:700; color:#555; text-align:center; transition:all 0.15s; }
+.r-btn:hover { border-color:#B7282E; color:#B7282E; background:#FDF3F3; }
+.r-btn.sel { border-color:#B7282E; background:#B7282E; color:#fff; }
+.rating-labels { display:flex; justify-content:space-between; font-size:0.62rem; color:#aaa; margin-top:6px; }
+.btn-next { width:100%; padding:12px; font-size:0.9rem; font-weight:800; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; }
+.btn-next:hover { background:#83151B; }
+.btn-next:disabled { background:#DDCCCC; cursor:not-allowed; }
+/* RESULT */
+.result-area { display:none; }
+.result-area.show { display:flex; flex-direction:column; gap:14px; }
+.result-top { background:#000; border-radius:12px; padding:24px; text-align:center; }
+.rt-label { font-size:0.62rem; letter-spacing:0.18em; color:rgba(255,255,255,0.4); text-transform:uppercase; margin-bottom:8px; }
+.rt-score { font-size:3.5rem; font-weight:900; color:#fff; }
+.rt-msg { font-size:0.82rem; color:rgba(255,255,255,0.55); margin-top:8px; }
+.cat-scores { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+@media(max-width:480px){.cat-scores{grid-template-columns:1fr;}}
+.cat-card { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:16px; }
+.cc-name { font-size:0.68rem; font-weight:700; color:#B7282E; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:8px; }
+.cc-score-row { display:flex; align-items:center; gap:8px; }
+.cc-score { font-size:1.3rem; font-weight:900; color:#000; }
+.cc-max { font-size:0.72rem; color:#aaa; }
+.cc-bar-bg { flex:1; background:#EEEEEE; border-radius:3px; height:6px; overflow:hidden; }
+.cc-bar-fill { height:100%; border-radius:3px; background:#B7282E; }
+.all-results { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:16px; }
+.all-row { display:flex; justify-content:space-between; padding:7px 0; border-bottom:1px solid #F0F0F0; font-size:0.85rem; }
+.all-row:last-child { border-bottom:none; }
+.all-name { font-weight:700; }
+.all-score { font-weight:900; color:#B7282E; }
+.btn-row { display:flex; gap:10px; }
+.btn-next-person { flex:1; padding:12px; font-size:0.9rem; font-weight:800; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; }
+.btn-next-person:hover { background:#83151B; }
+.btn-reset { padding:12px 16px; font-size:0.82rem; border:1px solid #CCCCCC; border-radius:8px; cursor:pointer; background:#fff; color:#888; font-family:inherit; }
+.btn-reset:hover { background:#F6F6F6; }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">🧩 理念・文化</div>
+  <h1 class="page-title">カルチャーチェック</h1>
+  <p class="page-sub">組織文化の4軸を診断。チームの今を数値で把握する。</p>
+</div>
+<div class="main">
+  <div class="name-panel" id="namePanel">
+    <input type="text" id="nameIn" placeholder="名前を入力してスタート">
+    <button class="btn-start" onclick="startCheck()">スタート →</button>
+  </div>
+  <div class="quiz-area" id="quizArea">
+    <div><div class="prog-row"><span id="progText">1 / 12</span><span id="catText"></span></div><div class="prog-bg"><div class="prog-fill" id="progFill" style="width:8%"></div></div></div>
+    <div class="q-card">
+      <div class="q-cat" id="qCat"></div>
+      <div class="q-text" id="qText"></div>
+      <div class="rating-row" id="ratingRow"></div>
+      <div class="rating-labels"><span>全くそう思わない</span><span>強くそう思う</span></div>
+    </div>
+    <button class="btn-next" id="btnNext" onclick="nextQ()" disabled>次へ →</button>
+  </div>
+  <div class="result-area" id="resultArea">
+    <div class="result-top">
+      <div class="rt-label">カルチャースコア</div>
+      <div class="rt-score" id="rtScore"></div>
+      <div class="rt-msg" id="rtMsg"></div>
+    </div>
+    <div class="cat-scores" id="catScores"></div>
+    <div class="all-results" id="allResults" style="display:none">
+      <div class="area-title">全員のスコア</div>
+      <div id="allList"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-next-person" onclick="nextPerson()">＋ 次の人が回答</button>
+      <button class="btn-reset" onclick="resetAll()">全リセット</button>
+    </div>
+  </div>
+</div>
+<script>
+const CATS=[
+  {name:'心理的安全性',qs:['失敗しても責められない雰囲気がある','意見や疑問を安心して言える','多様な意見が歓迎される']},
+  {name:'理念浸透',qs:['会社のミッションを自分の言葉で語れる','日々の業務に理念を感じる','メンバーが価値観を共有している']},
+  {name:'コミュニケーション',qs:['チーム内で情報がオープンに共有される','上下関係なく対話ができる','感謝や称賛が日常的に行われている']},
+  {name:'成長支援',qs:['挑戦や学びが奨励される','フィードバックが建設的に行われる','個人の成長を組織が支援している']},
+];
+let curQ=0,selR=null,answers=[],pName='',allResults=[];
+function startCheck(){
+  pName=document.getElementById('nameIn').value.trim();
+  if(!pName){alert('名前を入力してください');return;}
+  answers=[];curQ=0;
+  document.getElementById('namePanel').style.display='none';
+  document.getElementById('quizArea').classList.add('show');
+  renderQ();
+}
+function renderQ(){
+  const total=CATS.reduce((s,c)=>s+c.qs.length,0);
+  let fi=0,qi=curQ;
+  while(qi>=CATS[fi].qs.length){qi-=CATS[fi].qs.length;fi++;}
+  document.getElementById('progText').textContent=`${curQ+1} / ${total}`;
+  document.getElementById('catText').textContent=CATS[fi].name;
+  document.getElementById('progFill').style.width=`${(curQ+1)/total*100}%`;
+  document.getElementById('qCat').textContent=CATS[fi].name;
+  document.getElementById('qText').textContent=CATS[fi].qs[qi];
+  selR=null;document.getElementById('btnNext').disabled=true;
+  document.getElementById('ratingRow').innerHTML=[1,2,3,4,5].map(n=>
+    `<button class="r-btn" onclick="selectR(${n},this)">${n}</button>`
+  ).join('');
+}
+function selectR(n,el){selR=n;document.querySelectorAll('.r-btn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');document.getElementById('btnNext').disabled=false;}
+function nextQ(){if(selR===null)return;answers.push(selR);curQ++;const total=CATS.reduce((s,c)=>s+c.qs.length,0);if(curQ>=total){showResult();return;}renderQ();}
+function showResult(){
+  document.getElementById('quizArea').classList.remove('show');
+  document.getElementById('resultArea').classList.add('show');
+  const total=answers.reduce((s,v)=>s+v,0);
+  const max=answers.length*5;
+  document.getElementById('rtScore').textContent=total+'/'+max;
+  document.getElementById('rtMsg').textContent=total/max>=0.8?'非常に健全な文化です！':total/max>=0.6?'良好な文化。さらに磨きましょう。':total/max>=0.4?'改善の余地があります。対話を増やしましょう。':'文化課題があります。チームで話し合いを。';
+  let ai=0;
+  document.getElementById('catScores').innerHTML=CATS.map(c=>{
+    const sc=c.qs.reduce((_,__)=>_+(answers[ai++]||0),0);
+    const pct=Math.round(sc/c.qs.length/5*100);
+    return `<div class="cat-card"><div class="cc-name">${c.name}</div><div class="cc-score-row"><span class="cc-score">${sc}</span><span class="cc-max">/${c.qs.length*5}</span><div class="cc-bar-bg"><div class="cc-bar-fill" style="width:${pct}%"></div></div></div></div>`;
+  }).join('');
+  allResults.push({name:pName,score:total,max});
+  if(allResults.length>1){
+    document.getElementById('allResults').style.display='';
+    document.getElementById('allList').innerHTML=allResults.map(r=>
+      `<div class="all-row"><span class="all-name">${r.name}</span><span class="all-score">${r.score}/${r.max}</span></div>`
+    ).join('');
+  }
+}
+function nextPerson(){
+  document.getElementById('resultArea').classList.remove('show');
+  document.getElementById('namePanel').style.display='';
+  document.getElementById('nameIn').value='';
+}
+function resetAll(){allResults=[];document.getElementById('resultArea').classList.remove('show');document.getElementById('namePanel').style.display='';document.getElementById('nameIn').value='';}
+</script>
+</body>
+</html>

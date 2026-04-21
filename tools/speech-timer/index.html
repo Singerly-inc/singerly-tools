@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>発言タイマー — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  min-height:100vh; background:#fff;
+  font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif;
+  color:#000000; display:flex; flex-direction:column; align-items:center;
+}
+.nav { width:100%; padding:12px 28px; background:#000000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+
+.main { width:100%; max-width:720px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+
+/* SETUP */
+.setup-area { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:24px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+.setup-area textarea {
+  width:100%; background:#fff; border:1px solid #CCCCCC; border-radius:6px;
+  padding:12px 14px; color:#000000; font-size:0.9rem; font-family:inherit;
+  line-height:1.7; min-height:100px; resize:vertical; outline:none; transition:border-color 0.15s;
+}
+.setup-area textarea:focus { border-color:#B7282E; }
+.setup-area textarea::placeholder { color:#bbb; }
+
+.time-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:16px; }
+.time-label { font-size:0.8rem; font-weight:700; color:#555; white-space:nowrap; }
+.time-btns { display:flex; gap:6px; flex-wrap:wrap; }
+.time-btn {
+  padding:7px 14px; border-radius:5px; border:1px solid #CCCCCC;
+  background:#fff; color:#555; font-size:0.8rem; font-family:inherit;
+  cursor:pointer; font-weight:700; transition:all 0.15s;
+}
+.time-btn.active { background:#B7282E; border-color:#B7282E; color:#fff; }
+
+.btn-primary {
+  margin-top:16px; width:100%; padding:13px; font-size:0.95rem; font-weight:900;
+  border:none; border-radius:8px; cursor:pointer;
+  background:#B7282E; color:#fff; font-family:inherit;
+  transition:background 0.15s;
+}
+.btn-primary:hover { background:#83151B; }
+
+/* TIMER STAGE */
+.timer-stage { display:none; flex-direction:column; gap:16px; }
+.timer-stage.show { display:flex; }
+
+/* PROGRESS ROW */
+.progress-row { display:flex; gap:6px; flex-wrap:wrap; }
+.person-dot {
+  width:10px; height:10px; border-radius:50%;
+  background:#EEEEEE; border:2px solid #E0E0E0; transition:all 0.3s;
+  cursor:default;
+}
+.person-dot.done { background:#B7282E; border-color:#B7282E; }
+.person-dot.current { background:#B7282E; border-color:#B7282E; transform:scale(1.3); }
+
+/* CURRENT SPEAKER */
+.speaker-card { background:#000000; border-radius:12px; padding:28px 24px; text-align:center; }
+.speaker-label { font-size:0.65rem; letter-spacing:0.2em; color:rgba(255,255,255,0.4); text-transform:uppercase; margin-bottom:8px; }
+.speaker-name { font-size:2.2rem; font-weight:900; color:#fff; margin-bottom:6px; }
+.speaker-sub { font-size:0.72rem; color:rgba(255,255,255,0.35); }
+
+/* TIMER DISPLAY */
+.timer-display {
+  background:#F6F6F6; border:2px solid #E0E0E0; border-radius:12px;
+  padding:28px; text-align:center;
+}
+.timer-display.warning { border-color:#E97132; background:#FFF8F4; }
+.timer-display.done { border-color:#B7282E; background:#FDF3F3; }
+
+.timer-num {
+  font-size:5rem; font-weight:900; color:#000000; line-height:1;
+  font-variant-numeric:tabular-nums; letter-spacing:-0.02em;
+}
+.timer-display.warning .timer-num { color:#E97132; }
+.timer-display.done .timer-num { color:#B7282E; }
+
+.timer-bar-bg { background:#EEEEEE; border-radius:4px; height:8px; overflow:hidden; margin-top:16px; }
+.timer-bar-fill { height:100%; background:#B7282E; border-radius:4px; transition:width 0.5s linear; }
+.timer-display.warning .timer-bar-fill { background:#E97132; }
+
+/* CONTROLS */
+.controls { display:flex; gap:10px; }
+.btn-control {
+  flex:1; padding:13px; font-size:0.92rem; font-weight:800;
+  border:none; border-radius:8px; cursor:pointer;
+  font-family:inherit; transition:all 0.15s;
+}
+.btn-start-pause { background:#B7282E; color:#fff; }
+.btn-start-pause:hover { background:#83151B; }
+.btn-skip { background:#F6F6F6; color:#555; border:1px solid #CCCCCC; }
+.btn-skip:hover { background:#FDF3F3; color:#B7282E; }
+.btn-restart { padding:13px 18px; background:#F6F6F6; color:#888; border:1px solid #CCCCCC; border-radius:8px; cursor:pointer; font-family:inherit; font-size:0.82rem; transition:background 0.15s; }
+.btn-restart:hover { background:#F6F6F6; }
+
+/* ALL DONE */
+.all-done { background:#FDF3F3; border:2px solid #B7282E; border-radius:12px; padding:32px 24px; text-align:center; display:none; }
+.all-done.show { display:block; animation:popIn 0.4s ease; }
+@keyframes popIn { 0%{opacity:0;transform:scale(0.9)} 70%{transform:scale(1.03)} 100%{opacity:1;transform:scale(1)} }
+.all-done-emoji { font-size:3rem; margin-bottom:12px; }
+.all-done-title { font-size:1.4rem; font-weight:900; color:#B7282E; margin-bottom:6px; }
+.all-done-sub { font-size:0.82rem; color:#555; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="../../">← ムドメわっしょい！</a>
+  <span class="nav-brand">SINGERLY</span>
+</nav>
+
+<div class="page-header">
+  <div class="tool-badge">🎯 対話・意思決定</div>
+  <h1 class="page-title">発言タイマー</h1>
+  <p class="page-sub">全員が均等に話せるラウンドロビン。会議の一方通行を防ぐ。</p>
+</div>
+
+<div class="main">
+
+  <!-- SETUP -->
+  <div class="setup-area" id="setupArea">
+    <div class="area-title">参加者リスト</div>
+    <textarea id="namesInput" placeholder="名前を1行に1名ずつ入力&#10;&#10;田中 太郎&#10;山田 花子&#10;鈴木 一郎"></textarea>
+    <div class="time-row">
+      <span class="time-label">1人の時間</span>
+      <div class="time-btns" id="timeBtns">
+        <button class="time-btn" data-sec="30" onclick="setTime(30,this)">30秒</button>
+        <button class="time-btn active" data-sec="60" onclick="setTime(60,this)">1分</button>
+        <button class="time-btn" data-sec="90" onclick="setTime(90,this)">1分30秒</button>
+        <button class="time-btn" data-sec="120" onclick="setTime(120,this)">2分</button>
+        <button class="time-btn" data-sec="180" onclick="setTime(180,this)">3分</button>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="startTimer()">⏱️ スタート</button>
+  </div>
+
+  <!-- TIMER STAGE -->
+  <div class="timer-stage" id="timerStage">
+    <div class="progress-row" id="progressRow"></div>
+
+    <div class="speaker-card">
+      <div class="speaker-label">発言中</div>
+      <div class="speaker-name" id="speakerName">―</div>
+      <div class="speaker-sub" id="speakerSub"></div>
+    </div>
+
+    <div class="timer-display" id="timerDisplay">
+      <div class="timer-num" id="timerNum">1:00</div>
+      <div class="timer-bar-bg"><div class="timer-bar-fill" id="timerBar" style="width:100%"></div></div>
+    </div>
+
+    <div class="controls">
+      <button class="btn-control btn-start-pause" id="btnStartPause" onclick="togglePause()">⏸ 一時停止</button>
+      <button class="btn-control btn-skip" onclick="skipToNext()">次の人へ →</button>
+    </div>
+    <button class="btn-restart" onclick="restart()">← 最初からやり直す</button>
+  </div>
+
+  <div class="all-done" id="allDone">
+    <div class="all-done-emoji">🎉</div>
+    <div class="all-done-title">全員発言完了！</div>
+    <div class="all-done-sub" id="allDoneSub"></div>
+  </div>
+
+</div>
+
+<script>
+let names=[], currentIdx=0, timePerPerson=60, remaining=0, timer=null, paused=false;
+
+function setTime(sec, btn){
+  timePerPerson=sec;
+  document.querySelectorAll('.time-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function shuffle(a){ a=[...a]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+function startTimer(){
+  const raw=document.getElementById('namesInput').value;
+  names=shuffle(raw.split(/[\n、,，]+/).map(s=>s.trim()).filter(s=>s));
+  if(!names.length){alert('名前を入力してください');return;}
+  currentIdx=0;
+  document.getElementById('setupArea').style.display='none';
+  document.getElementById('timerStage').classList.add('show');
+  renderProgress();
+  startPerson();
+}
+
+function renderProgress(){
+  document.getElementById('progressRow').innerHTML=names.map((n,i)=>`
+    <div class="person-dot ${i<currentIdx?'done':i===currentIdx?'current':''}" title="${n}"></div>
+  `).join('');
+}
+
+function fmt(s){ const m=Math.floor(s/60),sec=s%60; return m+':'+String(sec).padStart(2,'0'); }
+
+function startPerson(){
+  if(currentIdx>=names.length){ endAll(); return; }
+  remaining=timePerPerson; paused=false;
+  document.getElementById('speakerName').textContent=names[currentIdx];
+  document.getElementById('speakerSub').textContent=`${currentIdx+1}人目 / 全${names.length}人`;
+  document.getElementById('btnStartPause').textContent='⏸ 一時停止';
+  updateDisplay();
+  renderProgress();
+  clearInterval(timer);
+  timer=setInterval(tick,1000);
+}
+
+function tick(){
+  if(paused)return;
+  remaining--;
+  updateDisplay();
+  if(remaining<=0){ clearInterval(timer); nextPerson(); }
+}
+
+function updateDisplay(){
+  const el=document.getElementById('timerDisplay');
+  el.className='timer-display';
+  if(remaining<=10) el.classList.add('warning');
+  else if(remaining<=0) el.classList.add('done');
+  document.getElementById('timerNum').textContent=fmt(remaining);
+  document.getElementById('timerBar').style.width=(remaining/timePerPerson*100)+'%';
+}
+
+function togglePause(){
+  paused=!paused;
+  document.getElementById('btnStartPause').textContent=paused?'▶ 再開':'⏸ 一時停止';
+}
+
+function skipToNext(){ clearInterval(timer); nextPerson(); }
+
+function nextPerson(){ currentIdx++; if(currentIdx>=names.length){endAll();}else{startPerson();} }
+
+function endAll(){
+  document.getElementById('timerStage').classList.remove('show');
+  const done=document.getElementById('allDone');
+  done.classList.add('show');
+  document.getElementById('allDoneSub').textContent=`${names.length}名、全員発言しました。お疲れさまでした！`;
+}
+
+function restart(){
+  clearInterval(timer);
+  document.getElementById('timerStage').classList.remove('show');
+  document.getElementById('allDone').classList.remove('show');
+  document.getElementById('setupArea').style.display='';
+}
+</script>
+</body>
+</html>

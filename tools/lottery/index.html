@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>抽選スロット — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  min-height: 100vh;
+  background: #fff;
+  font-family: 'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif;
+  color: #000000;
+  display: flex; flex-direction: column; align-items: center;
+}
+
+.nav {
+  width:100%; padding:12px 28px;
+  display:flex; align-items:center; justify-content:space-between;
+  background:#000000; color:#fff;
+}
+.nav-back {
+  color:rgba(255,255,255,0.55); font-size:0.78rem;
+  text-decoration:none; letter-spacing:0.04em; transition:color 0.15s;
+}
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+
+.page-header {
+  background:#000000; width:100%;
+  padding:32px 20px 28px; text-align:center;
+  border-bottom:3px solid #B7282E;
+}
+.tool-badge {
+  display:inline-block; background:#B7282E; color:#fff;
+  font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px;
+  border-radius:3px; margin-bottom:12px; font-weight:700;
+}
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+
+.layout {
+  display:flex; gap:24px; width:100%; max-width:860px;
+  padding:28px 24px 0; align-items:flex-start;
+}
+@media(max-width:620px){ .layout{flex-direction:column;} }
+
+/* PANEL */
+.panel {
+  background:#F6F6F6; border:1px solid #E0E0E0;
+  border-radius:10px; padding:22px; flex:1; min-width:200px;
+}
+.panel-title {
+  font-size:0.65rem; letter-spacing:0.18em; color:#888;
+  text-transform:uppercase; margin-bottom:14px; font-weight:700;
+}
+.input-row { display:flex; gap:8px; margin-bottom:12px; }
+.input-row input {
+  flex:1; background:#fff; border:1px solid #CCCCCC;
+  border-radius:6px; padding:9px 12px; color:#000000;
+  font-size:0.88rem; outline:none; font-family:inherit;
+  transition:border-color 0.15s;
+}
+.input-row input:focus { border-color:#B7282E; }
+.input-row input::placeholder { color:#bbb; }
+
+.btn-add {
+  background:#B7282E; border:none; border-radius:6px;
+  width:38px; height:38px; cursor:pointer;
+  font-size:1.2rem; color:#fff; font-weight:900; flex-shrink:0;
+  transition:background 0.15s;
+}
+.btn-add:hover { background:#83151B; }
+
+.name-list {
+  list-style:none; max-height:280px; overflow-y:auto;
+  display:flex; flex-direction:column; gap:5px;
+}
+.name-list::-webkit-scrollbar { width:3px; }
+.name-list::-webkit-scrollbar-thumb { background:#CCCCCC; border-radius:2px; }
+
+.name-item {
+  display:flex; align-items:center;
+  background:#fff; border:1px solid #EEEEEE;
+  border-radius:6px; padding:7px 10px; font-size:0.85rem;
+}
+.name-num { font-size:0.62rem; color:#bbb; width:16px; flex-shrink:0; }
+.name-text { flex:1; padding:0 8px; color:#000000; }
+.btn-del {
+  background:none; border:none; color:#ccc;
+  cursor:pointer; font-size:0.85rem; transition:color 0.15s;
+}
+.btn-del:hover { color:#e05; }
+
+.count-badge { text-align:right; font-size:0.7rem; color:#aaa; margin-top:8px; }
+
+.bulk-area { margin-top:12px; border-top:1px solid #EEEEEE; padding-top:12px; }
+.bulk-area textarea {
+  width:100%; background:#fff; border:1px solid #CCCCCC;
+  border-radius:6px; padding:9px 12px; color:#000000;
+  font-size:0.78rem; resize:vertical; min-height:64px;
+  outline:none; font-family:inherit; line-height:1.6;
+}
+.bulk-area textarea::placeholder { color:#bbb; }
+.btn-bulk {
+  margin-top:6px; width:100%;
+  background:#fff; border:1px solid #CCCCCC;
+  border-radius:6px; padding:8px;
+  color:#555; font-size:0.78rem; cursor:pointer;
+  font-family:inherit; transition:background 0.15s;
+}
+.btn-bulk:hover { background:#F6F6F6; }
+.empty-state { color:#bbb; font-size:0.8rem; text-align:center; padding:14px 0; }
+
+/* SLOT */
+.slot-panel { flex:1.2; display:flex; flex-direction:column; gap:16px; }
+
+.slot-machine {
+  background:#F6F6F6; border:1px solid #E0E0E0;
+  border-radius:10px; padding:24px 20px;
+  display:flex; flex-direction:column; align-items:center; gap:16px;
+}
+
+.reel-wrapper {
+  width:100%; height:104px;
+  background:#000000; border-radius:8px;
+  border:2px solid #B7282E;
+  overflow:hidden; position:relative;
+  display:flex; align-items:center; justify-content:center;
+}
+.reel-wrapper::before, .reel-wrapper::after {
+  content:''; position:absolute; left:0; right:0; height:28px; z-index:2; pointer-events:none;
+}
+.reel-wrapper::before { top:0; background:linear-gradient(to bottom, rgba(14,40,65,0.9), transparent); }
+.reel-wrapper::after  { bottom:0; background:linear-gradient(to top,   rgba(14,40,65,0.9), transparent); }
+
+.reel-highlight {
+  position:absolute; left:0; right:0; top:50%; transform:translateY(-50%);
+  height:48px; border-top:2px solid #B7282E; border-bottom:2px solid #B7282E;
+  background:rgba(21,96,130,0.12); z-index:1; pointer-events:none;
+}
+
+.reel {
+  display:flex; flex-direction:column; align-items:center;
+  position:absolute; width:100%; transition:none;
+}
+.reel-item {
+  height:48px; display:flex; align-items:center; justify-content:center;
+  font-size:1.3rem; font-weight:700; width:100%;
+  padding:0 16px; text-align:center;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  color:rgba(255,255,255,0.7);
+}
+.reel-item.winner { color:#B7282E; }
+
+.winner-display {
+  text-align:center; min-height:52px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
+}
+.winner-label { font-size:0.62rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; }
+.winner-name {
+  font-size:1.8rem; font-weight:900; color:#B7282E;
+  opacity:0; transform:scale(0.85); transition:opacity 0.35s, transform 0.35s;
+}
+.winner-name.show { opacity:1; transform:scale(1); animation:pop 0.4s ease; }
+@keyframes pop { 0%{transform:scale(0.7)} 60%{transform:scale(1.06)} 100%{transform:scale(1)} }
+
+.btn-spin {
+  width:100%; padding:14px; font-size:1rem; font-weight:900;
+  letter-spacing:0.08em; border:none; border-radius:8px;
+  cursor:pointer; background:#B7282E; color:#fff;
+  font-family:inherit; transition:background 0.15s, transform 0.12s;
+}
+.btn-spin:hover:not(:disabled) { background:#83151B; transform:translateY(-1px); }
+.btn-spin:disabled { opacity:0.4; cursor:not-allowed; }
+
+.btn-reset {
+  width:100%; padding:9px; font-size:0.8rem; font-weight:600;
+  border:1px solid #CCCCCC; border-radius:7px;
+  cursor:pointer; background:#fff; color:#888;
+  font-family:inherit; transition:background 0.15s;
+}
+.btn-reset:hover { background:#F6F6F6; }
+
+.history {
+  background:#F6F6F6; border:1px solid #E0E0E0;
+  border-radius:10px; padding:16px 18px;
+}
+.history h3 { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:10px; }
+.history-list { display:flex; flex-wrap:wrap; gap:6px; min-height:20px; }
+.history-chip {
+  background:#FDF3F3; border:1px solid #DDCCCC;
+  border-radius:4px; padding:3px 10px;
+  font-size:0.76rem; color:#B7282E; font-weight:600;
+}
+
+.confetti-container { position:fixed; inset:0; pointer-events:none; z-index:200; overflow:hidden; }
+.confetti-piece { position:absolute; animation:fall linear forwards; }
+@keyframes fall {
+  0%   { transform:translateY(-20px) rotate(0deg); opacity:1; }
+  100% { transform:translateY(100vh)  rotate(720deg); opacity:0; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="../../">← ムドメわっしょい！</a>
+  <span class="nav-brand">SINGERLY</span>
+</nav>
+
+<div class="page-header">
+  <div class="tool-badge">🎰 アイスブレイク</div>
+  <h1 class="page-title">抽選スロット</h1>
+  <p class="page-sub">名前を追加して「スタート」を押すと当選者が決まります</p>
+</div>
+
+<div class="layout">
+  <div class="panel">
+    <div class="panel-title">参加者リスト</div>
+    <div class="input-row">
+      <input type="text" id="nameInput" placeholder="名前を入力…" maxlength="30">
+      <button class="btn-add" onclick="addName()">＋</button>
+    </div>
+    <ul class="name-list" id="nameList">
+      <li class="empty-state">まだ参加者がいません</li>
+    </ul>
+    <div class="count-badge" id="countBadge"></div>
+    <div class="bulk-area">
+      <textarea id="bulkInput" placeholder="一括入力（1行1名 または「、」「,」区切り）"></textarea>
+      <button class="btn-bulk" onclick="bulkAdd()">一括追加</button>
+    </div>
+  </div>
+
+  <div class="slot-panel">
+    <div class="slot-machine">
+      <div class="reel-wrapper">
+        <div class="reel-highlight"></div>
+        <div class="reel" id="reel">
+          <div class="reel-item" style="color:rgba(255,255,255,0.25)">― 参加者を追加してください ―</div>
+        </div>
+      </div>
+      <div class="winner-display">
+        <div class="winner-label" id="winnerLabel"></div>
+        <div class="winner-name" id="winnerName"></div>
+      </div>
+      <button class="btn-spin" id="spinBtn" onclick="spin()" disabled>🎯 スタート</button>
+      <button class="btn-reset" onclick="resetAll()">リセット</button>
+    </div>
+    <div class="history">
+      <h3>当選履歴</h3>
+      <div class="history-list" id="historyList">
+        <span style="color:#bbb;font-size:0.76rem;">まだ当選者がいません</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="confetti-container" id="confetti"></div>
+
+<script>
+let names=[], spinning=false, hist=[];
+const nameInput=document.getElementById('nameInput');
+const nameList=document.getElementById('nameList');
+const countBadge=document.getElementById('countBadge');
+const reel=document.getElementById('reel');
+const spinBtn=document.getElementById('spinBtn');
+const winnerName=document.getElementById('winnerName');
+const winnerLabel=document.getElementById('winnerLabel');
+const historyList=document.getElementById('historyList');
+const confetti=document.getElementById('confetti');
+
+nameInput.addEventListener('keydown',e=>{if(e.key==='Enter')addName();});
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function addName(n){
+  const v=(n||nameInput.value).trim(); if(!v)return;
+  names.push(v); if(!n)nameInput.value='';
+  nameInput.focus(); renderList(); updateReel();
+}
+function removeName(i){names.splice(i,1);renderList();updateReel();}
+function renderList(){
+  if(!names.length){
+    nameList.innerHTML='<li class="empty-state">まだ参加者がいません</li>';
+    countBadge.textContent=''; spinBtn.disabled=true; return;
+  }
+  nameList.innerHTML=names.map((n,i)=>
+    `<li class="name-item"><span class="name-num">${i+1}</span><span class="name-text">${esc(n)}</span><button class="btn-del" onclick="removeName(${i})">✕</button></li>`
+  ).join('');
+  countBadge.textContent=names.length+' 名'; spinBtn.disabled=false;
+}
+function bulkAdd(){
+  const raw=document.getElementById('bulkInput').value;
+  raw.split(/[\n、,，]+/).map(s=>s.trim()).filter(s=>s).forEach(p=>addName(p));
+  document.getElementById('bulkInput').value='';
+}
+function shuffled(a){
+  a=[...a];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+function updateReel(){
+  if(!names.length){reel.innerHTML='<div class="reel-item" style="color:rgba(255,255,255,0.25)">― 参加者を追加してください ―</div>';return;}
+  buildReel(names[0]);
+}
+function buildReel(winner){
+  let items=[];
+  for(let r=0;r<5;r++)items=items.concat(shuffled(names));
+  items.push(winner);
+  reel.innerHTML=items.map((n,i)=>`<div class="reel-item ${i===items.length-1?'winner':''}">${esc(n)}</div>`).join('');
+  return items;
+}
+function spin(){
+  if(spinning||!names.length)return;
+  spinning=true; spinBtn.disabled=true;
+  winnerName.classList.remove('show'); winnerName.textContent=''; winnerLabel.textContent='';
+  const winner=names[Math.floor(Math.random()*names.length)];
+  buildReel(winner);
+  const items=reel.querySelectorAll('.reel-item');
+  const itemH=48, wrapH=reel.parentElement.clientHeight;
+  const finalTop=-(items.length-1)*itemH+(wrapH/2-itemH/2);
+  reel.style.transition='none'; reel.style.top='0px';
+  const dur=2800, t0=performance.now();
+  function animate(now){
+    const p=Math.min((now-t0)/dur,1);
+    const e=1-Math.pow(1-p,4);
+    reel.style.top=(e*finalTop)+'px';
+    if(p<1){requestAnimationFrame(animate);}
+    else{reel.style.top=finalTop+'px';done(winner);}
+  }
+  requestAnimationFrame(animate);
+}
+function done(winner){
+  spinning=false; spinBtn.disabled=false;
+  winnerLabel.textContent='🎉 当選者';
+  winnerName.textContent=winner; winnerName.classList.add('show');
+  hist.unshift(winner);
+  historyList.innerHTML=hist.map(n=>`<div class="history-chip">${esc(n)}</div>`).join('');
+  launchConfetti();
+}
+function resetAll(){
+  names=[]; hist=[]; renderList(); updateReel();
+  winnerName.classList.remove('show'); winnerName.textContent=''; winnerLabel.textContent='';
+  historyList.innerHTML='<span style="color:#bbb;font-size:0.76rem;">まだ当選者がいません</span>';
+}
+const COLORS=['#B7282E','#83151B','#000000','#D4756E','#E8A9A9','#CCCCCC'];
+function launchConfetti(){
+  confetti.innerHTML='';
+  for(let i=0;i<70;i++){
+    const el=document.createElement('div'); el.className='confetti-piece';
+    el.style.left=Math.random()*100+'vw';
+    el.style.background=COLORS[Math.floor(Math.random()*COLORS.length)];
+    el.style.width=(5+Math.random()*7)+'px'; el.style.height=(5+Math.random()*7)+'px';
+    el.style.borderRadius=Math.random()>0.5?'50%':'2px';
+    el.style.animation=`fall ${1.4+Math.random()*2}s ${Math.random()*0.6}s ease-in forwards`;
+    confetti.appendChild(el);
+  }
+  setTimeout(()=>{confetti.innerHTML='';},4000);
+}
+</script>
+</body>
+</html>

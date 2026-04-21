@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>チーム分けジェネレーター — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  min-height:100vh; background:#fff;
+  font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif;
+  color:#000000; display:flex; flex-direction:column; align-items:center;
+}
+.nav {
+  width:100%; padding:12px 28px; background:#000000;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+
+.page-header {
+  background:#000000; width:100%;
+  padding:32px 20px 28px; text-align:center;
+  border-bottom:3px solid #B7282E;
+}
+.tool-badge {
+  display:inline-block; background:#B7282E; color:#fff;
+  font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px;
+  border-radius:3px; margin-bottom:12px; font-weight:700;
+}
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+
+.main { width:100%; max-width:800px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+
+.input-area {
+  background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:24px;
+}
+.input-area textarea {
+  width:100%; background:#fff; border:1px solid #CCCCCC;
+  border-radius:6px; padding:12px 14px; color:#000000;
+  font-size:0.9rem; font-family:inherit; line-height:1.7;
+  min-height:130px; resize:vertical; outline:none; transition:border-color 0.15s;
+}
+.input-area textarea:focus { border-color:#B7282E; }
+.input-area textarea::placeholder { color:#bbb; }
+
+.controls { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:16px; }
+
+.team-count-row { display:flex; align-items:center; gap:10px; }
+.team-count-label { font-size:0.8rem; color:#555; white-space:nowrap; font-weight:600; }
+.team-count-btns { display:flex; align-items:center; gap:4px; }
+.cnt-btn {
+  width:30px; height:30px; border-radius:5px;
+  border:1px solid #CCCCCC; background:#fff;
+  color:#000000; font-size:1rem; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:background 0.15s;
+}
+.cnt-btn:hover { background:#F6F6F6; }
+.cnt-display { width:40px; text-align:center; font-size:1.3rem; font-weight:900; color:#B7282E; }
+
+.btn-split {
+  flex:1; min-width:180px; padding:12px; font-size:0.95rem; font-weight:900;
+  letter-spacing:0.06em; border:none; border-radius:8px; cursor:pointer;
+  background:#B7282E; color:#fff; font-family:inherit;
+  transition:background 0.15s, transform 0.12s;
+}
+.btn-split:hover { background:#83151B; transform:translateY(-1px); }
+
+.btn-reset-all {
+  padding:12px 18px; font-size:0.8rem; font-weight:600;
+  border:1px solid #CCCCCC; border-radius:7px; cursor:pointer;
+  background:#fff; color:#888; font-family:inherit; white-space:nowrap;
+  transition:background 0.15s;
+}
+.btn-reset-all:hover { background:#F6F6F6; }
+
+/* RESULT */
+.result-area { display:none; }
+.result-area.show { display:block; }
+.result-header {
+  font-size:0.72rem; letter-spacing:0.14em; color:#888;
+  text-transform:uppercase; text-align:center; margin-bottom:18px; font-weight:700;
+}
+
+.teams-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:14px; }
+
+.team-card {
+  background:#F6F6F6; border:2px solid #E0E0E0;
+  border-radius:10px; padding:18px 16px;
+  animation:popIn 0.35s ease both;
+}
+@keyframes popIn {
+  0%{opacity:0;transform:scale(0.9) translateY(8px)} 70%{transform:scale(1.02)} 100%{opacity:1;transform:scale(1) translateY(0)}
+}
+.team-header {
+  font-size:0.72rem; font-weight:900; letter-spacing:0.14em;
+  text-transform:uppercase; margin-bottom:12px;
+  padding-bottom:8px; border-bottom:2px solid currentColor;
+}
+.team-members { display:flex; flex-direction:column; gap:6px; }
+.member-tag {
+  background:#fff; border:1px solid #EEEEEE;
+  border-radius:5px; padding:7px 10px;
+  font-size:0.86rem; font-weight:600; color:#000000;
+  animation:slideIn 0.25s ease both;
+}
+@keyframes slideIn { from{opacity:0;transform:translateX(-5px)} to{opacity:1;transform:translateX(0)} }
+
+.reshuffle-row { text-align:center; margin-top:18px; }
+.btn-reshuffle {
+  padding:10px 24px; font-size:0.82rem; font-weight:700;
+  border:2px solid #B7282E; border-radius:7px; cursor:pointer;
+  background:#fff; color:#B7282E; font-family:inherit;
+  letter-spacing:0.04em; transition:all 0.15s;
+}
+.btn-reshuffle:hover { background:#B7282E; color:#fff; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="../../">← ムドメわっしょい！</a>
+  <span class="nav-brand">SINGERLY</span>
+</nav>
+
+<div class="page-header">
+  <div class="tool-badge">👥 チームビルド</div>
+  <h1 class="page-title">チーム分けジェネレーター</h1>
+  <p class="page-sub">メンバーの名前を入力してチーム数を選ぶだけ。ランダムに振り分けます。</p>
+</div>
+
+<div class="main">
+  <div class="input-area">
+    <textarea id="namesInput" placeholder="名前を1行に1名ずつ入力&#10;（「、」「,」区切りでもOK）&#10;&#10;例：&#10;田中 太郎&#10;山田 花子&#10;鈴木 一郎"></textarea>
+    <div class="controls">
+      <div class="team-count-row">
+        <span class="team-count-label">チーム数</span>
+        <div class="team-count-btns">
+          <button class="cnt-btn" onclick="changeCount(-1)">－</button>
+          <div class="cnt-display" id="countDisplay">2</div>
+          <button class="cnt-btn" onclick="changeCount(1)">＋</button>
+        </div>
+      </div>
+      <button class="btn-split" onclick="split()">👥 チームを分ける！</button>
+      <button class="btn-reset-all" onclick="resetAll()">リセット</button>
+    </div>
+  </div>
+
+  <div class="result-area" id="resultArea">
+    <div class="result-header" id="resultHeader"></div>
+    <div class="teams-grid" id="teamsGrid"></div>
+    <div class="reshuffle-row">
+      <button class="btn-reshuffle" onclick="split()">🔀 シャッフルし直す</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let teamCount=2;
+
+const TEAM_COLORS=[
+  {color:'#B7282E'},{color:'#B7282E'},{color:'#000000'},{color:'#2E86AB'},
+  {color:'#1A6B3C'},{color:'#7B3F8C'},{color:'#B85C1A'},{color:'#1B4F72'},
+];
+const TEAM_NAMES=['Aチーム','Bチーム','Cチーム','Dチーム','Eチーム','Fチーム','Gチーム','Hチーム'];
+
+function changeCount(d){
+  teamCount=Math.max(2,Math.min(8,teamCount+d));
+  document.getElementById('countDisplay').textContent=teamCount;
+}
+function parseNames(){
+  return document.getElementById('namesInput').value
+    .split(/[\n、,，]+/).map(s=>s.trim()).filter(s=>s.length>0);
+}
+function shuffled(a){
+  a=[...a];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+function split(){
+  const names=parseNames();
+  if(!names.length){alert('名前を入力してください');return;}
+  if(names.length<teamCount){alert(`人数（${names.length}名）がチーム数（${teamCount}）より少ないです`);return;}
+  const arr=shuffled(names);
+  const teams=Array.from({length:teamCount},()=>[]);
+  arr.forEach((n,i)=>teams[i%teamCount].push(n));
+  const grid=document.getElementById('teamsGrid');
+  grid.innerHTML='';
+  teams.forEach((members,i)=>{
+    const col=TEAM_COLORS[i%TEAM_COLORS.length];
+    const delay=i*70;
+    const card=document.createElement('div');
+    card.className='team-card';
+    card.style.borderColor=col.color;
+    card.style.animationDelay=delay+'ms';
+    card.innerHTML=`
+      <div class="team-header" style="color:${col.color}">${TEAM_NAMES[i]}</div>
+      <div class="team-members">
+        ${members.map((m,mi)=>`<div class="member-tag" style="animation-delay:${delay+mi*50}ms">${m}</div>`).join('')}
+      </div>`;
+    grid.appendChild(card);
+  });
+  document.getElementById('resultHeader').textContent=`${names.length}名 → ${teamCount}チームに振り分けました`;
+  document.getElementById('resultArea').classList.add('show');
+}
+function resetAll(){
+  document.getElementById('namesInput').value='';
+  document.getElementById('resultArea').classList.remove('show');
+  document.getElementById('teamsGrid').innerHTML='';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>フィードバック練習 — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+.main { width:100%; max-width:720px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+.intro-card { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:20px; font-size:0.88rem; color:#555; line-height:1.7; }
+.intro-card strong { color:#B7282E; }
+.sbi-card { background:#000; border-radius:14px; padding:28px; margin-bottom:0; }
+.sbi-title { font-size:0.62rem; letter-spacing:0.18em; color:#B7282E; text-transform:uppercase; font-weight:700; margin-bottom:16px; }
+.sbi-row { display:flex; gap:10px; margin-bottom:10px; }
+.sbi-box { flex:1; background:rgba(255,255,255,0.07); border-radius:8px; padding:14px; text-align:center; }
+.sbi-letter { font-size:1.6rem; font-weight:900; color:#B7282E; }
+.sbi-name { font-size:0.72rem; color:#fff; margin-top:4px; font-weight:700; }
+.sbi-desc { font-size:0.62rem; color:rgba(255,255,255,0.45); margin-top:4px; line-height:1.5; }
+.scenario-card { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:12px; padding:24px; }
+.sc-num { font-size:0.62rem; font-weight:700; color:#B7282E; letter-spacing:0.15em; text-transform:uppercase; margin-bottom:8px; }
+.sc-situation { font-size:1rem; font-weight:700; color:#000; line-height:1.6; margin-bottom:16px; }
+.sc-hint { background:#fff; border:1px solid #E0E0E0; border-radius:8px; padding:16px; }
+.sc-hint-label { font-size:0.62rem; font-weight:700; color:#888; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:8px; }
+.sc-hint-text { font-size:0.88rem; color:#555; line-height:1.6; }
+.sc-hint-text span { color:#B7282E; font-weight:700; }
+.sc-role { font-size:0.78rem; color:#888; margin-top:12px; }
+.progress-dots { display:flex; gap:6px; justify-content:center; }
+.dot { width:10px; height:10px; border-radius:50%; background:#EEEEEE; transition:background 0.3s; }
+.dot.done { background:#22a06b; }
+.dot.active { background:#B7282E; }
+.btn-next { width:100%; padding:13px; font-size:0.95rem; font-weight:900; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; }
+.btn-next:hover { background:#83151B; }
+.complete-card { background:#000; border-radius:14px; padding:36px 28px; text-align:center; display:none; }
+.complete-card.show { display:block; animation:popIn 0.4s ease; }
+@keyframes popIn{0%{opacity:0;transform:scale(0.88)}70%{transform:scale(1.03)}100%{opacity:1;transform:scale(1)}}
+.cc-emoji { font-size:3rem; margin-bottom:12px; }
+.cc-title { font-size:1.4rem; font-weight:900; color:#fff; margin-bottom:8px; }
+.cc-msg { font-size:0.88rem; color:rgba(255,255,255,0.55); line-height:1.6; }
+.btn-retry { margin-top:18px; padding:12px 28px; border:2px solid #B7282E; border-radius:8px; background:transparent; color:#B7282E; font-family:inherit; font-size:0.88rem; font-weight:700; cursor:pointer; }
+.btn-retry:hover { background:#B7282E; color:#fff; }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">🛡️ 心理的安全性</div>
+  <h1 class="page-title">フィードバック練習</h1>
+  <p class="page-sub">SBI法でフィードバックを練習。伝わるフィードバックはスキルで身につく。</p>
+</div>
+<div class="main">
+  <div class="intro-card">💡 <strong>SBI法</strong>とは「Situation（状況）→ Behavior（行動）→ Impact（影響）」の順で伝えるフィードバックフレームワークです。評価ではなく事実と影響を伝えることで、受け手が受け取りやすくなります。
+  </div>
+  <div class="sbi-card">
+    <div class="sbi-title">SBI フレームワーク</div>
+    <div class="sbi-row">
+      <div class="sbi-box"><div class="sbi-letter">S</div><div class="sbi-name">Situation</div><div class="sbi-desc">いつ・どこで起きたか</div></div>
+      <div class="sbi-box"><div class="sbi-letter">B</div><div class="sbi-name">Behavior</div><div class="sbi-desc">具体的にどんな行動をしたか</div></div>
+      <div class="sbi-box"><div class="sbi-letter">I</div><div class="sbi-name">Impact</div><div class="sbi-desc">その行動がどんな影響を生んだか</div></div>
+    </div>
+  </div>
+  <div class="progress-dots" id="dots"></div>
+  <div class="scenario-card" id="scCard">
+    <div class="sc-num" id="scNum"></div>
+    <div class="sc-situation" id="scSit"></div>
+    <div class="sc-hint">
+      <div class="sc-hint-label">SBI例文ヒント</div>
+      <div class="sc-hint-text" id="scHint"></div>
+    </div>
+    <div class="sc-role" id="scRole"></div>
+  </div>
+  <button class="btn-next" onclick="nextScenario()">次のシナリオ →</button>
+  <div class="complete-card" id="completeCard">
+    <div class="cc-emoji">🌟</div>
+    <div class="cc-title">フィードバック練習完了！</div>
+    <div class="cc-msg">SBI法を使えば、評価ではなく事実と影響を伝えられます。<br>継続的なフィードバックがチームを強くします。</div>
+    <button class="btn-retry" onclick="restart()">🔁 もう一度練習する</button>
+  </div>
+</div>
+<script>
+const SCENARIOS=[
+  {
+    sit:'会議中に同僚が何度も話を遮って発言した。どうフィードバックするか。',
+    hint:'S: <span>昨日の定例会議で</span>、B: <span>〇〇さんが話しているときに3回ほど言葉を遮って発言されたことが</span>、I: <span>〇〇さんが言いたいことを最後まで伝えられず、議論が深まりにくい状況になりました。</span>',
+    role:'👤 Aさんがフィードバックを伝える / Bさんが受け取る'
+  },
+  {
+    sit:'後輩が期限ギリギリまで進捗報告をしなかった。次回に活かせるフィードバックをしたい。',
+    hint:'S: <span>先週のプロジェクト期間中に</span>、B: <span>締め切り前日まで進捗の共有がなかったことで</span>、I: <span>急なリカバリーが必要になり、チーム全体の工数が増えてしまいました。</span>',
+    role:'👤 先輩がフィードバックを伝える / 後輩が受け取る'
+  },
+  {
+    sit:'チームメンバーがプレゼンで論理的な構成で分かりやすく説明してくれた。ポジティブフィードバックを伝えたい。',
+    hint:'S: <span>今日のクライアント向けプレゼンで</span>、B: <span>課題→原因→解決策の順で整理して説明してくれたことで</span>、I: <span>クライアントがとても理解しやすそうで、その場で承認をいただけました。</span>',
+    role:'👤 AさんがポジティブFBを伝える / Bさんが受け取る'
+  },
+  {
+    sit:'上司がいつも曖昧な指示を出し、やり直しが多発している。勇気を出してフィードバックしたい。',
+    hint:'S: <span>先月の案件で</span>、B: <span>「いい感じに」という指示で進めた結果、3回修正が入ったことで</span>、I: <span>納期ギリギリになり、品質チェックの時間が取れない状況になりました。</span>',
+    role:'👤 部下が上司にフィードバックを伝える / 上司が受け取る'
+  },
+];
+let cur=0;
+function render(){
+  const s=SCENARIOS[cur];
+  document.getElementById('scNum').textContent=`シナリオ ${cur+1} / ${SCENARIOS.length}`;
+  document.getElementById('scSit').textContent=s.sit;
+  document.getElementById('scHint').innerHTML=s.hint;
+  document.getElementById('scRole').textContent=s.role;
+  document.getElementById('dots').innerHTML=SCENARIOS.map((_,i)=>
+    `<div class="dot ${i<cur?'done':i===cur?'active':''}"></div>`
+  ).join('');
+}
+function nextScenario(){
+  cur++;
+  if(cur>=SCENARIOS.length){document.getElementById('completeCard').classList.add('show');return;}
+  render();
+}
+function restart(){cur=0;document.getElementById('completeCard').classList.remove('show');render();}
+render();
+</script>
+</body>
+</html>

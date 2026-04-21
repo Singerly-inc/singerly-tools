@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>感謝カードボード — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+
+.main { width:100%; max-width:800px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+
+.input-area { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:24px; display:flex; flex-direction:column; gap:12px; }
+.field-row { display:flex; gap:10px; }
+.field-row .field { flex:1; }
+.field label { display:block; font-size:0.75rem; font-weight:700; color:#555; margin-bottom:5px; }
+.field input {
+  width:100%; background:#fff; border:1px solid #CCCCCC; border-radius:6px;
+  padding:10px 14px; color:#000000; font-size:0.88rem; font-family:inherit;
+  outline:none; transition:border-color 0.15s;
+}
+.field input:focus { border-color:#B7282E; }
+.field input::placeholder { color:#bbb; }
+.field textarea {
+  width:100%; background:#fff; border:1px solid #CCCCCC; border-radius:6px;
+  padding:10px 14px; color:#000000; font-size:0.88rem; font-family:inherit;
+  outline:none; transition:border-color 0.15s; resize:vertical; min-height:80px; line-height:1.6;
+}
+.field textarea:focus { border-color:#B7282E; }
+.field textarea::placeholder { color:#bbb; }
+
+.color-pick { display:flex; gap:8px; flex-wrap:wrap; margin-top:4px; }
+.cp-btn {
+  width:32px; height:32px; border-radius:6px; border:2px solid transparent;
+  cursor:pointer; transition:transform 0.15s;
+}
+.cp-btn.selected { border-color:#000000; transform:scale(1.15); }
+
+.btn-primary { width:100%; padding:13px; font-size:0.95rem; font-weight:900; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; }
+.btn-primary:hover { background:#83151B; }
+
+/* BOARD */
+.board-area { display:none; }
+.board-area.show { display:block; }
+.board-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+.board-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; font-weight:700; }
+.btn-clear { font-size:0.72rem; color:#aaa; background:none; border:none; cursor:pointer; }
+.btn-clear:hover { color:#e05; }
+
+.cards-masonry { columns:3; column-gap:14px; }
+@media(max-width:600px){ .cards-masonry{columns:2;} }
+@media(max-width:400px){ .cards-masonry{columns:1;} }
+
+.thank-card {
+  break-inside:avoid; border-radius:10px; padding:18px 16px; margin-bottom:14px;
+  animation:popIn 0.35s ease both; position:relative;
+}
+@keyframes popIn { 0%{opacity:0;transform:translateY(10px) scale(0.95)} 100%{opacity:1;transform:none} }
+.tc-arrow { font-size:0.65rem; font-weight:700; letter-spacing:0.1em; opacity:0.6; margin-bottom:6px; text-transform:uppercase; }
+.tc-to { font-size:1rem; font-weight:900; margin-bottom:8px; }
+.tc-msg { font-size:0.88rem; line-height:1.6; opacity:0.88; }
+.tc-from { font-size:0.68rem; margin-top:12px; opacity:0.55; text-align:right; }
+
+.love-row { display:flex; align-items:center; gap:6px; margin-top:10px; border-top:1px solid rgba(0,0,0,0.08); padding-top:8px; }
+.btn-love { background:rgba(255,255,255,0.4); border:1px solid rgba(0,0,0,0.1); border-radius:5px; padding:4px 10px; font-size:0.78rem; font-weight:700; cursor:pointer; transition:all 0.15s; font-family:inherit; }
+.btn-love:hover { background:rgba(255,255,255,0.7); }
+.love-count { font-size:0.75rem; opacity:0.55; }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">👥 チームビルド</div>
+  <h1 class="page-title">感謝カードボード</h1>
+  <p class="page-sub">「ありがとう」をカードで可視化。感謝があふれる場を作る。</p>
+</div>
+<div class="main">
+  <div class="input-area">
+    <div class="area-title">感謝カードを作る</div>
+    <div class="field-row">
+      <div class="field"><label>送り主</label><input type="text" id="fromInput" placeholder="田中 太郎"></div>
+      <div class="field"><label>宛先</label><input type="text" id="toInput" placeholder="山田 花子"></div>
+    </div>
+    <div class="field"><label>メッセージ</label><textarea id="msgInput" placeholder="いつもフォローしてくれてありがとう！おかげで助かりました。"></textarea></div>
+    <div>
+      <div class="area-title" style="margin-bottom:8px">カードカラー</div>
+      <div class="color-pick" id="colorPick"></div>
+    </div>
+    <button class="btn-primary" onclick="submit()">カードを送る 💌</button>
+  </div>
+
+  <div class="board-area" id="boardArea">
+    <div class="board-header">
+      <div class="board-title">感謝ボード</div>
+      <button class="btn-clear" onclick="clearAll()">全クリア</button>
+    </div>
+    <div class="cards-masonry" id="cardsGrid"></div>
+  </div>
+</div>
+<script>
+const COLORS=[
+  {bg:'#FDF3F3',text:'#000000'},{bg:'#E8F5F0',text:'#0D4A3A'},
+  {bg:'#FFF4E6',text:'#5A3500'},{bg:'#F0EBF8',text:'#3A1A6E'},
+  {bg:'#FFF0F0',text:'#5A1A1A'},{bg:'#F0F8E8',text:'#2A4A10'},
+  {bg:'#000000',text:'#ffffff'},{bg:'#B7282E',text:'#ffffff'},
+];
+let selectedColor=0;
+let entries=[];
+
+document.getElementById('colorPick').innerHTML=COLORS.map((c,i)=>
+  `<button class="cp-btn ${i===0?'selected':''}" style="background:${c.bg};border-color:${i===0?'#000000':'transparent'}" onclick="selectColor(${i},this)"></button>`
+).join('');
+
+function selectColor(i,el){
+  selectedColor=i;
+  document.querySelectorAll('.cp-btn').forEach((b,j)=>{
+    b.classList.toggle('selected',j===i);
+    b.style.borderColor=j===i?'#000000':'transparent';
+  });
+}
+
+function submit(){
+  const from=document.getElementById('fromInput').value.trim();
+  const to=document.getElementById('toInput').value.trim();
+  const msg=document.getElementById('msgInput').value.trim();
+  if(!from||!to||!msg){alert('すべての項目を入力してください');return;}
+  entries.unshift({from,to,msg,color:COLORS[selectedColor],love:0});
+  document.getElementById('fromInput').value='';
+  document.getElementById('toInput').value='';
+  document.getElementById('msgInput').value='';
+  document.getElementById('fromInput').focus();
+  render();
+  document.getElementById('boardArea').classList.add('show');
+}
+
+function love(i){ entries[i].love++; render(); }
+function render(){
+  document.getElementById('cardsGrid').innerHTML=entries.map((e,i)=>`
+    <div class="thank-card" style="background:${e.color.bg};color:${e.color.text};animation-delay:${i*40}ms">
+      <div class="tc-arrow">▶ TO</div>
+      <div class="tc-to">${e.to}</div>
+      <div class="tc-msg">${e.msg}</div>
+      <div class="tc-from">from ${e.from}</div>
+      <div class="love-row">
+        <button class="btn-love" onclick="love(${i})">💛 いいね</button>
+        <span class="love-count">${e.love>0?e.love+'件':''}</span>
+      </div>
+    </div>`).join('');
+}
+
+function clearAll(){
+  if(!confirm('全カードをクリアしますか？'))return;
+  entries=[];
+  document.getElementById('boardArea').classList.remove('show');
+}
+document.getElementById('msgInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.ctrlKey)submit();});
+</script>
+</body>
+</html>

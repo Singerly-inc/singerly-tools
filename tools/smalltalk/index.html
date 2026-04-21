@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>スモールトークスピナー — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+.main { width:100%; max-width:680px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+.cat-tabs { display:flex; gap:8px; flex-wrap:wrap; }
+.cat-btn { padding:7px 16px; border-radius:4px; border:1px solid #E0E0E0; background:#fff; font-size:0.78rem; font-family:inherit; cursor:pointer; font-weight:600; color:#555; transition:all 0.15s; }
+.cat-btn:hover { border-color:#B7282E; color:#B7282E; }
+.cat-btn.active { background:#B7282E; border-color:#B7282E; color:#fff; }
+.topic-card { background:#000; border-radius:16px; padding:52px 36px; text-align:center; min-height:220px; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; transition:all 0.18s; }
+.topic-card:hover { background:#1a1a1a; }
+.tc-cat { font-size:0.62rem; letter-spacing:0.2em; color:#B7282E; text-transform:uppercase; margin-bottom:16px; font-weight:700; }
+.tc-text { font-size:1.55rem; font-weight:900; color:#fff; line-height:1.45; }
+.tc-hint { font-size:0.72rem; color:rgba(255,255,255,0.3); margin-top:20px; }
+.btn-next { width:100%; padding:14px; font-size:1rem; font-weight:900; border:none; border-radius:10px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:all 0.18s; letter-spacing:0.05em; }
+.btn-next:hover { background:#83151B; }
+.history-area { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:18px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+.history-list { display:flex; flex-direction:column; gap:6px; }
+.history-item { background:#fff; border:1px solid #E0E0E0; border-radius:6px; padding:10px 14px; font-size:0.85rem; color:#555; display:flex; gap:8px; align-items:flex-start; }
+.history-dot { width:6px; height:6px; border-radius:50%; background:#B7282E; flex-shrink:0; margin-top:6px; }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">🎲 アイスブレイク</div>
+  <h1 class="page-title">スモールトークスピナー</h1>
+  <p class="page-sub">会話のネタを即座に提供。場を温めるお題を次々と。</p>
+</div>
+<div class="main">
+  <div class="cat-tabs" id="catTabs"></div>
+  <div class="topic-card" id="topicCard" onclick="next()">
+    <div class="tc-cat" id="tcCat">ALL</div>
+    <div class="tc-text" id="tcText">カードをタップ、または「次のお題」ボタンで開始！</div>
+    <div class="tc-hint">タップで次のお題へ</div>
+  </div>
+  <button class="btn-next" onclick="next()">▶ 次のお題</button>
+  <div class="history-area" id="histArea" style="display:none">
+    <div class="area-title">使ったお題</div>
+    <div class="history-list" id="histList"></div>
+  </div>
+</div>
+<script>
+const TOPICS = {
+  '☀️ 近況': ['最近うれしかったことは？','今週のMVP（自分・他者問わず）は？','最近学んだことは？','最近ハマっていることは？','今朝の気分は10点満点で何点？'],
+  '💼 仕事': ['仕事でいちばんやりがいを感じる瞬間は？','理想の会議のスタイルは？','集中できる環境・場所は？','最近ちょっと成長したと思うことは？','仕事で困ったら誰に相談する？'],
+  '🌍 プライベート': ['休日の理想の過ごし方は？','最近行ったおすすめの場所は？','マイブームは？','ストレス発散方法は？','最近食べた一番おいしいものは？'],
+  '💭 価値観': ['「はたらく」理由は何ですか？','人生で大切にしていることは？','尊敬する人と理由は？','10年後どんな自分でいたい？','座右の銘や大切にしている言葉は？'],
+  '😄 クスっと': ['もし動物に生まれたら何になりたい？','超能力が使えるとしたら？','無人島に3つだけ持っていくなら？','子供の頃の夢は？','もし前世があったとしたら何だと思う？'],
+};
+let currentCat = 'ALL', history = [], usedIdx = {};
+
+const cats = ['ALL', ...Object.keys(TOPICS)];
+document.getElementById('catTabs').innerHTML = cats.map(c =>
+  `<button class="cat-btn ${c==='ALL'?'active':''}" onclick="setCat('${c}',this)">${c}</button>`
+).join('');
+
+function setCat(c, el) {
+  currentCat = c; usedIdx = {};
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function next() {
+  let pool = currentCat === 'ALL'
+    ? Object.values(TOPICS).flat()
+    : TOPICS[currentCat] || [];
+  if(!pool.length) return;
+  let idx = Math.floor(Math.random()*pool.length);
+  const topic = pool[idx];
+  const catName = currentCat === 'ALL'
+    ? Object.keys(TOPICS).find(k=>TOPICS[k].includes(topic)) : currentCat;
+  document.getElementById('tcCat').textContent = catName;
+  document.getElementById('tcText').textContent = topic;
+  document.getElementById('topicCard').querySelector('.tc-hint').style.display='none';
+  history.unshift(topic);
+  if(history.length > 10) history.pop();
+  document.getElementById('histArea').style.display = 'block';
+  document.getElementById('histList').innerHTML = history.map(t =>
+    `<div class="history-item"><div class="history-dot"></div>${t}</div>`
+  ).join('');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>多数決ボタン — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+
+.main { width:100%; max-width:680px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+
+.topic-area { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:22px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+.topic-input {
+  width:100%; background:#fff; border:1px solid #CCCCCC; border-radius:6px;
+  padding:12px 14px; color:#000000; font-size:1rem; font-family:inherit;
+  outline:none; transition:border-color 0.15s; font-weight:700;
+}
+.topic-input:focus { border-color:#B7282E; }
+.topic-input::placeholder { color:#bbb; font-weight:400; }
+
+/* TOPIC DISPLAY */
+.topic-display { background:#000000; border-radius:10px; padding:20px 24px; text-align:center; display:none; }
+.topic-display.show { display:block; }
+.topic-q-label { font-size:0.62rem; letter-spacing:0.18em; color:rgba(255,255,255,0.4); text-transform:uppercase; margin-bottom:6px; }
+.topic-q-text { font-size:1.3rem; font-weight:900; color:#fff; }
+
+/* VOTE BUTTONS */
+.vote-area { display:none; }
+.vote-area.show { display:flex; flex-direction:column; gap:14px; }
+
+.vote-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.vote-btn {
+  padding:20px 12px; border-radius:10px; border:2px solid #E0E0E0;
+  background:#fff; cursor:pointer; font-family:inherit;
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  transition:all 0.18s; position:relative; overflow:hidden;
+}
+.vote-btn:hover { border-color:#B7282E; background:#FDF3F3; transform:translateY(-2px); }
+.vote-btn.voted { border-color:#B7282E; background:#FDF3F3; }
+.vote-emoji { font-size:2rem; }
+.vote-label { font-size:0.85rem; font-weight:900; color:#000000; }
+.vote-count { font-size:1.4rem; font-weight:900; color:#B7282E; min-height:28px; }
+
+.vote-bars { display:flex; flex-direction:column; gap:8px; }
+.bar-row { display:flex; align-items:center; gap:10px; }
+.bar-label { font-size:0.8rem; font-weight:700; color:#555; width:80px; flex-shrink:0; }
+.bar-bg { flex:1; background:#EEEEEE; border-radius:4px; height:10px; overflow:hidden; }
+.bar-fill { height:100%; border-radius:4px; background:#B7282E; transition:width 0.5s ease; }
+.bar-pct { font-size:0.78rem; color:#888; width:36px; text-align:right; }
+
+.vote-total { text-align:center; font-size:0.75rem; color:#888; }
+
+.btn-row { display:flex; gap:10px; }
+.btn-new { flex:1; padding:12px; font-size:0.9rem; font-weight:800; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; }
+.btn-new:hover { background:#83151B; }
+.btn-reset-vote { padding:12px 18px; font-size:0.82rem; font-weight:600; border:1px solid #CCCCCC; border-radius:8px; cursor:pointer; background:#fff; color:#888; font-family:inherit; transition:background 0.15s; }
+.btn-reset-vote:hover { background:#F6F6F6; }
+
+.btn-start { width:100%; padding:13px; font-size:0.95rem; font-weight:900; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; margin-top:12px; }
+.btn-start:hover { background:#83151B; }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">🗳️ 対話・意思決定</div>
+  <h1 class="page-title">多数決ボタン</h1>
+  <p class="page-sub">YES/NO/様子見をその場で可視化。即座に意思決定へ。</p>
+</div>
+<div class="main">
+  <div class="topic-area" id="topicArea">
+    <div class="area-title">議題・質問を入力</div>
+    <input type="text" class="topic-input" id="topicInput" placeholder="例：このアイデアを採用しますか？">
+    <button class="btn-start" onclick="startVote()">🗳️ 投票スタート</button>
+  </div>
+
+  <div class="topic-display" id="topicDisplay">
+    <div class="topic-q-label">議題</div>
+    <div class="topic-q-text" id="topicText"></div>
+  </div>
+
+  <div class="vote-area" id="voteArea">
+    <div class="vote-grid">
+      <button class="vote-btn" onclick="vote('yes')" id="btnYes">
+        <div class="vote-emoji">✅</div>
+        <div class="vote-label">YES</div>
+        <div class="vote-count" id="cntYes">0</div>
+      </button>
+      <button class="vote-btn" onclick="vote('watch')" id="btnWatch">
+        <div class="vote-emoji">🤔</div>
+        <div class="vote-label">様子見</div>
+        <div class="vote-count" id="cntWatch">0</div>
+      </button>
+      <button class="vote-btn" onclick="vote('no')" id="btnNo">
+        <div class="vote-emoji">❌</div>
+        <div class="vote-label">NO</div>
+        <div class="vote-count" id="cntNo">0</div>
+      </button>
+    </div>
+
+    <div class="vote-bars" id="voteBars"></div>
+    <div class="vote-total" id="voteTotal"></div>
+
+    <div class="btn-row">
+      <button class="btn-new" onclick="newVote()">＋ 新しい議題</button>
+      <button class="btn-reset-vote" onclick="resetVote()">票をリセット</button>
+    </div>
+  </div>
+</div>
+<script>
+let counts={yes:0,no:0,watch:0};
+
+function startVote(){
+  const topic=document.getElementById('topicInput').value.trim();
+  if(!topic){alert('議題を入力してください');return;}
+  document.getElementById('topicText').textContent=topic;
+  document.getElementById('topicArea').style.display='none';
+  document.getElementById('topicDisplay').classList.add('show');
+  document.getElementById('voteArea').classList.add('show');
+  counts={yes:0,no:0,watch:0}; render();
+}
+
+function vote(type){
+  counts[type]++;
+  render();
+}
+
+function render(){
+  const total=counts.yes+counts.no+counts.watch;
+  ['yes','no','watch'].forEach(t=>{
+    document.getElementById('cnt'+t.charAt(0).toUpperCase()+t.slice(1)).textContent=counts[t];
+  });
+  const pct=(t)=>total?Math.round(counts[t]/total*100):0;
+  document.getElementById('voteBars').innerHTML=`
+    <div class="bar-row"><div class="bar-label">✅ YES</div><div class="bar-bg"><div class="bar-fill" style="width:${pct('yes')}%"></div></div><div class="bar-pct">${pct('yes')}%</div></div>
+    <div class="bar-row"><div class="bar-label">🤔 様子見</div><div class="bar-bg"><div class="bar-fill" style="width:${pct('watch')}%;background:#B7282E"></div></div><div class="bar-pct">${pct('watch')}%</div></div>
+    <div class="bar-row"><div class="bar-label">❌ NO</div><div class="bar-bg"><div class="bar-fill" style="width:${pct('no')}%;background:#aaa"></div></div><div class="bar-pct">${pct('no')}%</div></div>`;
+  document.getElementById('voteTotal').textContent=`合計 ${total} 票`;
+}
+
+function resetVote(){ counts={yes:0,no:0,watch:0}; render(); }
+
+function newVote(){
+  document.getElementById('topicInput').value='';
+  document.getElementById('topicDisplay').classList.remove('show');
+  document.getElementById('voteArea').classList.remove('show');
+  document.getElementById('topicArea').style.display='';
+  counts={yes:0,no:0,watch:0};
+}
+</script>
+</body>
+</html>

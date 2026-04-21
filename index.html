@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>ムドメわっしょい！ by Singerly</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: #fff;
+  font-family: 'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif;
+  color: #000000;
+  min-height: 100vh;
+}
+
+/* HEADER */
+.header {
+  background: #000000;
+  padding: 0 32px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+.logo-icon {
+  width: 32px; height: 32px;
+  background: #B7282E;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.logo-name { font-size:1rem; font-weight:900; color:#fff; letter-spacing:0.02em; }
+.logo-brand { font-size:0.6rem; color:rgba(255,255,255,0.4); letter-spacing:0.2em; }
+.header-right { font-size:0.72rem; color:rgba(255,255,255,0.35); letter-spacing:0.08em; }
+
+/* HERO */
+.hero {
+  background: #000000;
+  padding: 56px 32px 48px;
+  text-align: center;
+  border-bottom: 3px solid #B7282E;
+}
+.hero-eyebrow {
+  font-size:0.7rem; letter-spacing:0.25em; color:#B7282E;
+  text-transform:uppercase; margin-bottom:12px; font-weight:600;
+}
+.hero-title {
+  font-size:3.2rem; font-weight:900; color:#fff;
+  line-height:1.05; margin-bottom:10px;
+}
+.hero-title .accent { color:#B7282E; }
+.hero-sub { font-size:0.9rem; color:rgba(255,255,255,0.5); margin-bottom:8px; }
+.hero-theory { font-size:0.68rem; color:rgba(255,255,255,0.25); margin-bottom:40px; }
+
+.stats { display:flex; justify-content:center; gap:48px; margin-bottom:40px; }
+.stat-num { font-size:2rem; font-weight:900; color:#B7282E; line-height:1; }
+.stat-label { font-size:0.62rem; color:rgba(255,255,255,0.35); letter-spacing:0.1em; margin-top:4px; }
+
+/* FILTER */
+.filter-bar { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; }
+.filter-btn {
+  padding:7px 16px; border-radius:4px;
+  border:1px solid rgba(255,255,255,0.2);
+  background:transparent; color:rgba(255,255,255,0.55);
+  font-size:0.78rem; font-family:inherit; cursor:pointer;
+  font-weight:600; transition:all 0.18s;
+}
+.filter-btn:hover { border-color:rgba(255,255,255,0.5); color:#fff; }
+.filter-btn.active { background:#B7282E; border-color:#B7282E; color:#fff; }
+
+/* GRID */
+.grid-section { max-width:1080px; margin:0 auto; padding:48px 32px 80px; }
+.grid-meta { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:24px; }
+.grid-label { font-size:0.68rem; letter-spacing:0.18em; color:#999; text-transform:uppercase; }
+.tool-count { font-size:0.68rem; color:#999; }
+
+.tool-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+}
+@media(max-width:900px){ .tool-grid{grid-template-columns:repeat(2,1fr);} }
+@media(max-width:560px){ .tool-grid{grid-template-columns:1fr;} }
+
+/* CARD */
+.card {
+  background:#fff;
+  border:1px solid #E0E0E0;
+  border-radius:10px;
+  padding:22px 20px 18px;
+  display:flex; flex-direction:column; gap:10px;
+  cursor:pointer; transition:all 0.18s;
+  position:relative;
+}
+.card:hover {
+  border-color:#B7282E;
+  box-shadow:0 4px 20px rgba(183,40,46,0.10);
+  transform:translateY(-2px);
+}
+.card.coming { opacity:0.4; cursor:default; pointer-events:none; }
+a.card { text-decoration:none; color:inherit; display:flex; }
+
+.card-top { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; }
+.card-icon {
+  width:44px; height:44px; border-radius:10px;
+  background:#F6F6F6;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.5rem; flex-shrink:0;
+}
+.cat-tag {
+  font-size:0.6rem; padding:3px 9px; border-radius:3px;
+  font-weight:700; letter-spacing:0.04em; white-space:nowrap;
+  background:#FDF3F3; color:#B7282E;
+}
+
+.card-name { font-size:0.95rem; font-weight:800; color:#000000; line-height:1.3; }
+.card-catch { font-size:0.76rem; color:#666; line-height:1.65; flex:1; }
+
+.card-footer { display:flex; align-items:center; justify-content:space-between; margin-top:4px; }
+.card-theory { font-size:0.58rem; color:#aaa; }
+.btn-open {
+  background:#B7282E; color:#fff; border:none;
+  border-radius:5px; padding:7px 16px;
+  font-size:0.75rem; font-weight:700; letter-spacing:0.04em;
+  cursor:pointer; font-family:inherit; transition:background 0.15s;
+  white-space:nowrap;
+}
+.btn-open:hover { background:#83151B; }
+.coming-tag {
+  font-size:0.62rem; color:#bbb;
+  background:#F5F5F5; border:1px solid #E0E0E0;
+  border-radius:4px; padding:5px 12px;
+}
+
+/* FOOTER */
+.footer {
+  border-top:1px solid #E8E8E8;
+  padding:24px 32px; text-align:center;
+  font-size:0.7rem; color:#bbb; letter-spacing:0.1em;
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a class="logo" href="#">
+    <div class="logo-icon">🎉</div>
+    <div>
+      <div class="logo-name">ムドメわっしょい！</div>
+      <div class="logo-brand">by Singerly</div>
+    </div>
+  </a>
+  <div class="header-right">組織を盛り上げるツール集</div>
+</header>
+
+<section class="hero">
+  <p class="hero-eyebrow">Mood Making Tools for Organizations</p>
+  <h1 class="hero-title">ムドメ<span class="accent">わっしょい</span>！</h1>
+  <p class="hero-sub">場を盛り上げ、チームの関係性を育てる</p>
+  <p class="hero-theory">エンゲージメント × 組織マネジメント理論 × エンタメ</p>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-num">50</div><div class="stat-label">ツール</div></div>
+    <div class="stat"><div class="stat-num">6</div><div class="stat-label">カテゴリ</div></div>
+    <div class="stat"><div class="stat-num">0</div><div class="stat-label">円</div></div>
+  </div>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" data-cat="all"        onclick="filter('all',this)">すべて</button>
+    <button class="filter-btn"        data-cat="icebreaker" onclick="filter('icebreaker',this)">🎲 アイスブレイク</button>
+    <button class="filter-btn"        data-cat="team"       onclick="filter('team',this)">👥 チームビルド</button>
+    <button class="filter-btn"        data-cat="mission"    onclick="filter('mission',this)">🧩 理念・文化</button>
+    <button class="filter-btn"        data-cat="safety"     onclick="filter('safety',this)">🛡️ 心理的安全性</button>
+    <button class="filter-btn"        data-cat="motivation" onclick="filter('motivation',this)">⚡ モチベーション</button>
+    <button class="filter-btn"        data-cat="discussion" onclick="filter('discussion',this)">🎯 対話・意思決定</button>
+  </div>
+</section>
+
+<main class="grid-section">
+  <div class="grid-meta">
+    <span class="grid-label">ツール一覧</span>
+    <span class="tool-count" id="countLabel"></span>
+  </div>
+  <div class="tool-grid" id="grid"></div>
+</main>
+
+<footer class="footer">© 2026 Singerly Inc. — はたらいて泣こう</footer>
+
+<script>
+const CAT_LABEL = {
+  icebreaker:'アイスブレイク', team:'チームビルド', mission:'理念・文化',
+  safety:'心理的安全性', motivation:'モチベーション', discussion:'対話・意思決定',
+};
+
+const TOOLS = [
+  { id:'lottery',           icon:'🎰', name:'抽選スロット',              catch:'誰が当たる？スロットで選ぶ緊張と興奮',          cat:'icebreaker', theory:'タックマンモデル（形成期）',        status:'active', path:'tools/lottery/index.html' },
+  { id:'saicoro',           icon:'🎲', name:'サイコロトーク',            catch:'出た目のテーマで深掘りトーク。経営者向け収録',   cat:'icebreaker', theory:'五感の文化で共感を促す',           status:'active', path:'tools/saicoro/index.html' },
+  { id:'hot-seat',          icon:'🔥', name:'ホットシート',              catch:'選ばれた人に全員から質問が飛ぶ！緊張と笑い',    cat:'icebreaker', theory:'心理的安全性・相互理解',           status:'active', path:'tools/hot-seat/index.html' },
+  { id:'surprise-fact',     icon:'😲', name:'意外な一面カミングアウト',  catch:'「実は〇〇です」全員シェアで親近感爆発',        cat:'icebreaker', theory:'自己開示・ジョハリの窓',           status:'active', path:'tools/surprise-fact/index.html' },
+  { id:'favorite-roulette', icon:'🎡', name:'好き◯◯ルーレット',        catch:'ランダムなテーマで全員が1分発表',               cat:'icebreaker', theory:'コミュニケーション活性',           status:'active', path:'tools/favorite-roulette/index.html' },
+  { id:'smalltalk',         icon:'☕', name:'雑談テーマジェネレーター',  catch:'1on1・休憩中の話題をランダム提案',              cat:'icebreaker', theory:'関係性の質を高める',               status:'active', path:'tools/smalltalk/index.html' },
+  { id:'team-cheer',        icon:'📣', name:'チームかけ声メーカー',      catch:'その場でスローガンを即生成',                    cat:'icebreaker', theory:'一体感・帰属意識',                 status:'active', path:'tools/team-cheer/index.html' },
+  { id:'three-facts',       icon:'🃏', name:'自己紹介「3つの事実」',     catch:'本当と嘘を混ぜて当てさせるゲーム',             cat:'icebreaker', theory:'タックマンモデル（形成期）',        status:'active', path:'tools/three-facts/index.html' },
+
+  { id:'team-split',        icon:'👥', name:'チーム分けジェネレーター',  catch:'アニメーション付きランダム振り分け',            cat:'team',       theory:'成功循環モデル（関係性の質）',      status:'active', path:'tools/team-split/index.html' },
+  { id:'pair-random',       icon:'🤝', name:'ランダムペアリング',        catch:'普段話さない人と1on1ペアに自動生成',            cat:'team',       theory:'1on1・最強の研修',                status:'active', path:'tools/pair-random/index.html' },
+  { id:'role-roulette',     icon:'🎭', name:'役割ルーレット',            catch:'ファシリ・書記・タイムキーパーを抽選',          cat:'team',       theory:'タックマンモデル（機能期）',        status:'active', path:'tools/role-roulette/index.html' },
+  { id:'my-manual',         icon:'📖', name:'私のトリセツ',              catch:'得意・不得意・スタイルを宣言して相互理解',      cat:'team',       theory:'ソーシャルスタイル分析',           status:'active', path:'tools/my-manual/index.html' },
+  { id:'common-finder',     icon:'🔗', name:'共通点ファインダー',        catch:'タイムアタックで共通点を探す！',               cat:'team',       theory:'成功循環モデル',                  status:'active', path:'tools/common-finder/index.html' },
+  { id:'strength-map',      icon:'💪', name:'ストレングスマップ',        catch:'チームの強みを一覧で見える化',                  cat:'team',       theory:'ハーズバーグ二要因理論',           status:'active', path:'tools/strength-map/index.html' },
+  { id:'appreciation',      icon:'💌', name:'感謝カードビジュアライザー', catch:'匿名でありがとうをビジュアル表示',             cat:'team',       theory:'承認欲求・モチベーション',          status:'active', path:'tools/appreciation/index.html' },
+  { id:'lifeline',          icon:'📈', name:'ライフラインチャート',      catch:'人生の山と谷をチームでシェア',                  cat:'team',       theory:'自己開示・相互理解',               status:'active', path:'tools/lifeline/index.html' },
+  { id:'values-sort',       icon:'🗂️', name:'価値観カードソート',       catch:'大事にしていることを並べてシェア',              cat:'team',       theory:'価値観・多様性の罠',               status:'active', path:'tools/values-sort/index.html' },
+
+  { id:'why-ladder',        icon:'🪜', name:'なぜ？深掘りラダー',       catch:'Whyを5回問い直すと本音に辿り着く',             cat:'mission',    theory:'ゴールデンサークル（Why）',        status:'active', path:'tools/why-ladder/index.html' },
+  { id:'purpose-declare',   icon:'🌟', name:'MYパーパス宣言',           catch:'なぜ働くかを一言で宣言。個人と組織を接続',     cat:'mission',    theory:'ゴールデンサークル',               status:'active', path:'tools/purpose-declare/index.html' },
+  { id:'mission-quiz',      icon:'🧩', name:'理念クイズ',               catch:'自社の理念・MVVをクイズで楽しく再確認',        cat:'mission',    theory:'理念の歴史的変遷',                status:'active', path:'tools/mission-quiz/index.html' },
+  { id:'value-episode',     icon:'📢', name:'バリュー体現エピソード',   catch:'理念を体現した体験を語り合う',                  cat:'mission',    theory:'組織文化三層構造（行動習慣）',      status:'active', path:'tools/value-episode/index.html' },
+  { id:'value-vote',        icon:'🏅', name:'バリュー体現投票',         catch:'今週一番バリューを体現した人を称える',          cat:'mission',    theory:'組織カルチャー変革の4条件',        status:'active', path:'tools/value-vote/index.html' },
+  { id:'mission-interpret', icon:'💭', name:'理念解釈ディスカッション', catch:'同じ言葉でも解釈は人それぞれ。差を楽しむ',     cat:'mission',    theory:'組織文化三層構造（信念）',          status:'active', path:'tools/mission-interpret/index.html' },
+  { id:'daily-connect',     icon:'🔄', name:'理念×日常 紐付けワーク',  catch:'今日の仕事と理念を接続する5分ワーク',          cat:'mission',    theory:'組織カルチャー変革・見える化',      status:'active', path:'tools/daily-connect/index.html' },
+  { id:'culture-check',     icon:'🌳', name:'組織文化三層チェック',     catch:'人工物・行動習慣・信念を棚卸しする',           cat:'mission',    theory:'組織の三種の神器',                status:'active', path:'tools/culture-check/index.html' },
+
+  { id:'mood-check',        icon:'🌡️', name:'感情温度計チェックイン',  catch:'今の気持ちを数値・天気で表現してシェア',        cat:'safety',     theory:'心理的安全性（Google研究）',       status:'active', path:'tools/mood-check/index.html' },
+  { id:'failure-share',     icon:'🙈', name:'失敗自慢タイム',           catch:'失敗談を競い合い笑える文化を作る',              cat:'safety',     theory:'心理的安全性・失敗学習',           status:'active', path:'tools/failure-share/index.html' },
+  { id:'safety-check',      icon:'🛡️', name:'心理的安全性チェック',    catch:'4因子でチームの安全性を計測・可視化',           cat:'safety',     theory:'心理的安全性（Google）',           status:'active', path:'tools/safety-check/index.html' },
+  { id:'trigger-find',      icon:'⚡', name:'マイトリガー発見',         catch:'怒りの引き金を知るアンガーマネジメント',        cat:'safety',     theory:'アンガーマネジメント',             status:'active', path:'tools/trigger-find/index.html' },
+  { id:'help-practice',     icon:'🙋', name:'「助けて」言える練習',     catch:'助けを求めることをロールプレイで体験',          cat:'safety',     theory:'相互依存・心理的安全性',           status:'active', path:'tools/help-practice/index.html' },
+  { id:'feedback-practice', icon:'💬', name:'フィードバック練習',       catch:'2.2.1フォーマットを安全な場で体験',            cat:'safety',     theory:'フィードバックの極意（4A）',       status:'active', path:'tools/feedback-practice/index.html' },
+  { id:'anonymous-box',     icon:'📥', name:'匿名悩み相談箱',           catch:'言えないことを匿名で投稿・チームで解決',        cat:'safety',     theory:'心理的安全性・発言文化',           status:'active', path:'tools/anonymous-box/index.html' },
+  { id:'team-contract',     icon:'📜', name:'チームコントラクト作成',   catch:'チームの約束事をその場で作成・宣言',            cat:'safety',     theory:'組織カルチャー変革の4条件',        status:'active', path:'tools/team-contract/index.html' },
+
+  { id:'achievement',       icon:'🏆', name:'達成祝福タイム',           catch:'小さな成功を紙吹雪で盛大に祝う！',             cat:'motivation', theory:'承認欲求・自己効力感',             status:'active', path:'tools/achievement/index.html' },
+  { id:'excitement-meter',  icon:'🔥', name:'ワクワクメーター',         catch:'次の取り組みへの期待値を全員で可視化',          cat:'motivation', theory:'内発的動機・変革モチベーション',   status:'active', path:'tools/excitement-meter/index.html' },
+  { id:'motivation-wave',   icon:'🌊', name:'モチベーション波グラフ',   catch:'過去の仕事への熱量変化をチームでシェア',        cat:'motivation', theory:'時間軸起点のモチベーション',       status:'active', path:'tools/motivation-wave/index.html' },
+  { id:'intrinsic-work',    icon:'🔍', name:'内発的動機探索',           catch:'やらされ感→やりたい感に変換するワーク',         cat:'motivation', theory:'モチベーションプロセス（内発的）', status:'active', path:'tools/intrinsic-work/index.html' },
+  { id:'maslow-check',      icon:'🔺', name:'マズロー欲求チェック',     catch:'今どの欲求段階か？チームでシェアして支援策へ',  cat:'motivation', theory:'マズローの五段階欲求',             status:'active', path:'tools/maslow-check/index.html' },
+  { id:'goal-declare',      icon:'🎯', name:'目標宣言タイマー',         catch:'SMART法則で目標を公言。コミット感UP',          cat:'motivation', theory:'ゴール設定（SMARTの法則）',        status:'active', path:'tools/goal-declare/index.html' },
+  { id:'strength-share',    icon:'✨', name:'強み発揮シーン共有',       catch:'最近一番輝いていた瞬間を全員が語る',            cat:'motivation', theory:'ハーズバーグ二要因理論',           status:'active', path:'tools/strength-share/index.html' },
+  { id:'change-motivation', icon:'🚀', name:'変革モチベーション診断',   catch:'変化への推進力vs抵抗感を可視化',               cat:'motivation', theory:'変革モチベーション',               status:'active', path:'tools/change-motivation/index.html' },
+
+  { id:'speech-timer',      icon:'⏱️', name:'発言タイマー',            catch:'全員均等に話せるラウンドロビン型タイマー',       cat:'discussion', theory:'コミュニケーションの極意',          status:'active', path:'tools/speech-timer/index.html' },
+  { id:'quick-vote',        icon:'🗳️', name:'多数決ボタン',            catch:'YES/NO/様子見をその場で即座に可視化',          cat:'discussion', theory:'ゲーム理論・意思決定',             status:'active', path:'tools/quick-vote/index.html' },
+  { id:'agenda-timer',      icon:'📅', name:'アジェンダタイマー',       catch:'議題ごとの時間を視覚管理。会議を時間内に',       cat:'discussion', theory:'コミュニケーションの極意',          status:'active', path:'tools/agenda-timer/index.html' },
+  { id:'oneon-roulette',    icon:'💡', name:'1on1テーマルーレット',     catch:'1on1の話題をランダム提案。マンネリ打破',        cat:'discussion', theory:'1on1（最強の研修・部下の成長）',   status:'active', path:'tools/oneon-roulette/index.html' },
+  { id:'devils-advocate',   icon:'😈', name:'悪魔の代弁者ルーレット',  catch:'反論役をランダム割当。思考の盲点を発見',        cat:'discussion', theory:'ゲーム理論（ナッシュ均衡）',       status:'active', path:'tools/devils-advocate/index.html' },
+  { id:'dot-vote',          icon:'🔵', name:'優先順位ドット投票',       catch:'N個のドットを複数案に配分。集合知を可視化',      cat:'discussion', theory:'多数決ルールvs合意形成',           status:'active', path:'tools/dot-vote/index.html' },
+  { id:'kpt-board',         icon:'📋', name:'KPTボード',                catch:'Keep/Problem/Tryを視覚整理。振り返りに',         cat:'discussion', theory:'組織学習の無限サイクル',           status:'active', path:'tools/kpt-board/index.html' },
+  { id:'discussion-roulette',icon:'🎰',name:'ディスカッションテーマ抽選',catch:'話し合うテーマをルーレットで決定',             cat:'discussion', theory:'コミュニケーション活性',           status:'active', path:'tools/discussion-roulette/index.html' },
+  { id:'feedback-roulette', icon:'🎭', name:'フィードバック練習ルーレット',catch:'誰が誰にフィードバックするか抽選で決定',    cat:'discussion', theory:'フィードバックの極意（4A・2.2.1）', status:'active', path:'tools/feedback-roulette/index.html' },
+];
+
+let currentCat = 'all';
+
+function filter(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentCat = cat;
+  render();
+}
+
+function render() {
+  const list = currentCat === 'all' ? TOOLS : TOOLS.filter(t => t.cat === currentCat);
+  document.getElementById('countLabel').textContent = list.length + ' ツール';
+  document.getElementById('grid').innerHTML = list.map(t => {
+    const active = t.status === 'active';
+    const tag = active ? 'a' : 'div';
+    const href = active ? `href="${t.path}"` : '';
+    return `
+      <${tag} class="card ${active ? '' : 'coming'}" ${href}>
+        <div class="card-top">
+          <div class="card-icon">${t.icon}</div>
+          <span class="cat-tag">${CAT_LABEL[t.cat]}</span>
+        </div>
+        <div class="card-name">${t.name}</div>
+        <div class="card-catch">${t.catch}</div>
+        <div class="card-footer">
+          <div class="card-theory">${t.theory}</div>
+          ${active
+            ? `<span class="btn-open">開く →</span>`
+            : `<span class="coming-tag">COMING SOON</span>`}
+        </div>
+      </${tag}>`;
+  }).join('');
+}
+
+render();
+</script>
+</body>
+</html>

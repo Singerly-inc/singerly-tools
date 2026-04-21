@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>パーパス宣言 — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+.main { width:100%; max-width:720px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+.input-panel { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:24px; }
+.field { margin-bottom:14px; }
+.field label { display:block; font-size:0.72rem; font-weight:700; color:#555; margin-bottom:5px; }
+.field input,.field textarea { width:100%; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:10px 14px; color:#000; font-size:0.9rem; font-family:inherit; outline:none; transition:border-color 0.15s; }
+.field input:focus,.field textarea:focus { border-color:#B7282E; }
+.field input::placeholder,.field textarea::placeholder { color:#bbb; }
+.field textarea { resize:vertical; min-height:70px; line-height:1.6; }
+.declare-template { background:#fff; border:1px solid #E0E0E0; border-radius:8px; padding:18px; margin-bottom:16px; font-size:1rem; line-height:2; color:#555; }
+.declare-template .blank { border-bottom:2px solid #B7282E; color:#B7282E; font-weight:700; padding:0 4px; min-width:60px; display:inline-block; }
+.btn-primary { width:100%; padding:13px; font-size:0.95rem; font-weight:900; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; }
+.btn-primary:hover { background:#83151B; }
+/* BOARD */
+.board-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+.btn-clear { font-size:0.72rem; color:#aaa; background:none; border:none; cursor:pointer; }
+.btn-clear:hover { color:#B7282E; }
+.cards-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; }
+.declare-card { background:#000; border-radius:12px; padding:24px 20px; animation:popIn 0.35s ease both; }
+@keyframes popIn { 0%{opacity:0;transform:scale(0.88)} 100%{opacity:1;transform:scale(1)} }
+.dc-name { font-size:0.68rem; font-weight:700; color:#B7282E; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:12px; }
+.dc-text { font-size:0.95rem; color:rgba(255,255,255,0.85); line-height:1.7; }
+.dc-text .highlight { color:#fff; font-weight:900; }
+.love-row { display:flex; align-items:center; gap:8px; margin-top:14px; border-top:1px solid rgba(255,255,255,0.1); padding-top:10px; }
+.btn-love { background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:5px; padding:4px 10px; font-size:0.78rem; font-weight:700; color:rgba(255,255,255,0.8); cursor:pointer; font-family:inherit; transition:all 0.15s; }
+.btn-love:hover { background:#B7282E; border-color:#B7282E; color:#fff; }
+.love-count { font-size:0.72rem; color:rgba(255,255,255,0.4); }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">🧩 理念・文化</div>
+  <h1 class="page-title">パーパス宣言</h1>
+  <p class="page-sub">「私が働く理由」を言語化して宣言。チームのWHYが見える。</p>
+</div>
+<div class="main">
+  <div class="input-panel">
+    <div class="area-title">あなたのパーパスを宣言する</div>
+    <div class="field"><label>名前</label><input type="text" id="nameIn" placeholder="田中 太郎"></div>
+    <div class="field"><label>私が働く理由・目的</label><input type="text" id="why" placeholder="人の成長を支えること"></div>
+    <div class="field"><label>どんな価値を提供したいか</label><input type="text" id="what" placeholder="誰もが自分らしく輝ける環境づくり"></div>
+    <div class="field"><label>誰のために・誰と（対象）</label><input type="text" id="who" placeholder="組織で頑張るすべての人と"></div>
+    <button class="btn-primary" onclick="submit()">宣言する 🔥</button>
+  </div>
+  <div id="boardWrap" style="display:none">
+    <div class="board-header">
+      <div class="area-title" style="margin-bottom:0">パーパスボード</div>
+      <button class="btn-clear" onclick="clearAll()">全クリア</button>
+    </div>
+    <div class="cards-grid" id="cardsGrid"></div>
+  </div>
+</div>
+<script>
+let entries=[];
+function submit(){
+  const name=document.getElementById('nameIn').value.trim();
+  const why=document.getElementById('why').value.trim();
+  const what=document.getElementById('what').value.trim();
+  const who=document.getElementById('who').value.trim();
+  if(!name||!why){alert('名前と「働く理由」を入力してください');return;}
+  entries.unshift({name,why,what,who,love:0});
+  ['nameIn','why','what','who'].forEach(id=>document.getElementById(id).value='');
+  render();
+  document.getElementById('boardWrap').style.display='';
+}
+function love(i){entries[i].love++;render();}
+function render(){
+  document.getElementById('cardsGrid').innerHTML=entries.map((e,i)=>`
+    <div class="declare-card" style="animation-delay:${i*40}ms">
+      <div class="dc-name">${e.name}</div>
+      <div class="dc-text">
+        私は <span class="highlight">「${e.why}」</span> ために働いています。<br>
+        ${e.what?'<span class="highlight">'+e.what+'</span> という価値を、<br>':''}
+        ${e.who?'<span class="highlight">'+e.who+'</span> と共に実現したい。':''}
+      </div>
+      <div class="love-row">
+        <button class="btn-love" onclick="love(${i})">🔥 共感</button>
+        <span class="love-count">${e.love>0?'×'+e.love:''}</span>
+      </div>
+    </div>`).join('');
+}
+function clearAll(){if(confirm('全クリアしますか？')){entries=[];document.getElementById('boardWrap').style.display='none';}}
+</script>
+</body>
+</html>

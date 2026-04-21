@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>2つの真実と1つの嘘 — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+.main { width:100%; max-width:680px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+.input-panel { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:22px; }
+.field { margin-bottom:14px; }
+.field label { display:block; font-size:0.75rem; font-weight:700; color:#555; margin-bottom:5px; }
+.field input { width:100%; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:10px 14px; color:#000; font-size:0.9rem; font-family:inherit; outline:none; transition:border-color 0.15s; }
+.field input:focus { border-color:#B7282E; }
+.field input::placeholder { color:#bbb; }
+.lie-label { display:inline-flex; align-items:center; gap:8px; font-size:0.75rem; font-weight:700; color:#B7282E; margin-top:4px; cursor:pointer; }
+.lie-radio { accent-color:#B7282E; width:15px; height:15px; }
+.fact-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.fact-num { font-size:0.7rem; font-weight:900; color:#B7282E; width:20px; flex-shrink:0; }
+.fact-row input { flex:1; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:9px 12px; color:#000; font-size:0.88rem; font-family:inherit; outline:none; transition:border-color 0.15s; }
+.fact-row input:focus { border-color:#B7282E; }
+.lie-selector { display:flex; gap:10px; flex-direction:column; margin-bottom:4px; }
+.lie-opt { display:flex; align-items:center; gap:8px; font-size:0.75rem; color:#555; cursor:pointer; }
+.lie-opt input[type=radio] { accent-color:#B7282E; }
+.hint { font-size:0.68rem; color:#aaa; margin-top:6px; }
+.btn-primary { width:100%; padding:13px; font-size:0.95rem; font-weight:900; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; }
+.btn-primary:hover { background:#83151B; }
+/* DISPLAY */
+.display-area { display:none; }
+.display-area.show { display:flex; flex-direction:column; gap:16px; }
+.presenter-name { font-size:0.65rem; letter-spacing:0.15em; color:#888; text-transform:uppercase; text-align:center; margin-bottom:-8px; }
+.presenter-h { font-size:1.4rem; font-weight:900; text-align:center; margin-bottom:4px; }
+.cards { display:flex; flex-direction:column; gap:12px; }
+.fact-card { background:#F6F6F6; border:2px solid #E0E0E0; border-radius:10px; padding:20px 22px; cursor:pointer; transition:all 0.18s; font-size:1rem; font-weight:700; color:#000; }
+.fact-card:hover { border-color:#B7282E; background:#FDF3F3; }
+.fact-card.revealed-true { border-color:#22a06b; background:#E8F5F0; color:#0D4A3A; }
+.fact-card.revealed-lie { border-color:#B7282E; background:#FDF3F3; }
+.fact-card .tag { font-size:0.65rem; font-weight:900; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:6px; opacity:0.6; }
+.reveal-hint { text-align:center; font-size:0.72rem; color:#aaa; }
+.btn-reveal { width:100%; padding:13px; font-size:0.95rem; font-weight:900; border:2px solid #B7282E; border-radius:8px; cursor:pointer; background:#fff; color:#B7282E; font-family:inherit; transition:all 0.15s; }
+.btn-reveal:hover { background:#B7282E; color:#fff; }
+.btn-row { display:flex; gap:10px; }
+.btn-next { flex:1; padding:12px; font-size:0.9rem; font-weight:800; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; }
+.btn-next:hover { background:#83151B; }
+.btn-reset-sm { padding:12px 16px; font-size:0.82rem; border:1px solid #CCCCCC; border-radius:8px; cursor:pointer; background:#fff; color:#888; font-family:inherit; }
+.btn-reset-sm:hover { background:#F6F6F6; }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">🎲 アイスブレイク</div>
+  <h1 class="page-title">2つの真実と1つの嘘</h1>
+  <p class="page-sub">3つのうちどれが嘘？当てることで相互理解が深まる。</p>
+</div>
+<div class="main">
+  <div class="input-panel" id="inputPanel">
+    <div class="area-title">発表者の情報を入力</div>
+    <div class="field"><label>発表者の名前</label><input type="text" id="presName" placeholder="田中 太郎"></div>
+    <div class="area-title" style="margin-top:4px">3つの文を入力（うち1つが嘘）</div>
+    <div class="fact-row"><span class="fact-num">①</span><input type="text" id="f1" placeholder="実は〇〇です"></div>
+    <div class="fact-row"><span class="fact-num">②</span><input type="text" id="f2" placeholder="〇〇をしたことがあります"></div>
+    <div class="fact-row"><span class="fact-num">③</span><input type="text" id="f3" placeholder="〇〇が得意です"></div>
+    <div class="hint" style="margin-bottom:12px">どれが嘘かを選んでください（発表者のみわかります）</div>
+    <div class="lie-selector">
+      <label class="lie-opt"><input type="radio" name="lie" value="0"> ① が嘘</label>
+      <label class="lie-opt"><input type="radio" name="lie" value="1"> ② が嘘</label>
+      <label class="lie-opt"><input type="radio" name="lie" value="2" checked> ③ が嘘</label>
+    </div>
+    <div style="margin-top:16px"><button class="btn-primary" onclick="start()">▶ 全員に見せる</button></div>
+  </div>
+
+  <div class="display-area" id="displayArea">
+    <div class="presenter-name">発表者</div>
+    <div class="presenter-h" id="presH"></div>
+    <div class="cards" id="cards"></div>
+    <div class="reveal-hint" id="revealHint">どれが嘘か当てたら「答えを見る」へ</div>
+    <button class="btn-reveal" id="btnReveal" onclick="reveal()">🔍 答えを見る</button>
+    <div class="btn-row">
+      <button class="btn-next" onclick="reset()">＋ 次の発表者</button>
+      <button class="btn-reset-sm" onclick="reset()">リセット</button>
+    </div>
+  </div>
+</div>
+<script>
+let lieIdx = 2, facts = [], revealed = false;
+function start() {
+  facts = [document.getElementById('f1').value.trim(), document.getElementById('f2').value.trim(), document.getElementById('f3').value.trim()];
+  if(!document.getElementById('presName').value.trim() || facts.some(f=>!f)) { alert('名前と3つの文を入力してください'); return; }
+  lieIdx = parseInt(document.querySelector('input[name=lie]:checked').value);
+  document.getElementById('presH').textContent = document.getElementById('presName').value.trim() + ' さんの3つはどれ？';
+  document.getElementById('inputPanel').style.display = 'none';
+  document.getElementById('displayArea').classList.add('show');
+  revealed = false;
+  document.getElementById('btnReveal').style.display = 'block';
+  document.getElementById('revealHint').style.display = 'block';
+  document.getElementById('cards').innerHTML = facts.map((f,i) =>
+    `<div class="fact-card" id="fc${i}"><div class="tag">ステートメント ${['①','②','③'][i]}</div>${f}</div>`
+  ).join('');
+}
+function reveal() {
+  if(revealed) return; revealed = true;
+  facts.forEach((_,i) => {
+    const el = document.getElementById('fc'+i);
+    if(i === lieIdx) { el.classList.add('revealed-lie'); el.querySelector('.tag').textContent = '❌ これが嘘！'; }
+    else { el.classList.add('revealed-true'); el.querySelector('.tag').textContent = '✅ 真実'; }
+  });
+  document.getElementById('btnReveal').style.display='none';
+  document.getElementById('revealHint').style.display='none';
+}
+function reset() {
+  document.getElementById('displayArea').classList.remove('show');
+  document.getElementById('inputPanel').style.display='';
+  ['presName','f1','f2','f3'].forEach(id=>document.getElementById(id).value='');
+}
+</script>
+</body>
+</html>

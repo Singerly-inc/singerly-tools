@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>モチベ波形チェック — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+.main { width:100%; max-width:720px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+.name-panel { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:20px; display:flex; gap:10px; align-items:center; }
+.name-panel input { flex:1; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:10px 12px; font-size:0.9rem; font-family:inherit; color:#000; outline:none; transition:border-color 0.15s; }
+.name-panel input:focus { border-color:#B7282E; }
+.name-panel input::placeholder { color:#bbb; }
+.btn-start { padding:10px 20px; font-size:0.88rem; font-weight:800; border:none; border-radius:7px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; }
+.btn-start:hover { background:#83151B; }
+.wave-area { display:none; }
+.wave-area.show { display:flex; flex-direction:column; gap:16px; }
+.period-card { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:12px; padding:20px; }
+.period-label { font-size:0.72rem; font-weight:700; color:#555; margin-bottom:12px; }
+.slider-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+.slider-row label { font-size:0.82rem; color:#888; min-width:100px; }
+.slider-row input[type=range] { flex:1; accent-color:#B7282E; }
+.slider-val { font-size:1.1rem; font-weight:900; color:#B7282E; min-width:28px; text-align:center; }
+.comment-field { width:100%; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:9px 12px; font-size:0.85rem; font-family:inherit; color:#000; outline:none; transition:border-color 0.15s; resize:none; }
+.comment-field:focus { border-color:#B7282E; }
+.btn-primary { width:100%; padding:13px; font-size:0.95rem; font-weight:900; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; }
+.btn-primary:hover { background:#83151B; }
+/* Result */
+.result-area { display:none; }
+.result-area.show { display:flex; flex-direction:column; gap:14px; }
+.chart-card { background:#000; border-radius:14px; padding:24px; }
+.chart-label { font-size:0.62rem; letter-spacing:0.18em; color:#B7282E; text-transform:uppercase; font-weight:700; margin-bottom:4px; }
+.chart-name { font-size:1rem; font-weight:700; color:#fff; margin-bottom:16px; }
+.wave-chart { width:100%; height:160px; }
+.periods-detail { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:16px; }
+.pd-row { display:flex; align-items:center; gap:12px; padding:8px 0; border-bottom:1px solid #F0F0F0; }
+.pd-row:last-child { border-bottom:none; }
+.pd-label { font-size:0.78rem; color:#888; min-width:90px; }
+.pd-bar-bg { flex:1; background:#EEEEEE; border-radius:3px; height:8px; overflow:hidden; }
+.pd-bar { height:100%; border-radius:3px; background:#B7282E; transition:width 0.5s; }
+.pd-val { font-size:0.88rem; font-weight:900; color:#B7282E; min-width:24px; text-align:right; }
+.pd-comment { font-size:0.75rem; color:#555; width:100%; margin-top:2px; padding-left:102px; }
+.board-wrap { display:none; }
+.board-wrap.show { display:flex; flex-direction:column; gap:10px; }
+.btn-row { display:flex; gap:10px; }
+.btn-new { flex:1; padding:12px; font-size:0.9rem; font-weight:800; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; }
+.btn-new:hover { background:#83151B; }
+.btn-reset { padding:12px 16px; font-size:0.82rem; border:1px solid #CCCCCC; border-radius:8px; cursor:pointer; background:#fff; color:#888; font-family:inherit; }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">⚡ モチベーション</div>
+  <h1 class="page-title">モチベ波形チェック</h1>
+  <p class="page-sub">モチベーションの波を可視化。チームで共有して相互理解を深めよう。</p>
+</div>
+<div class="main">
+  <div class="name-panel" id="namePanel">
+    <input type="text" id="nameIn" placeholder="名前を入力してスタート">
+    <button class="btn-start" onclick="startWave()">スタート →</button>
+  </div>
+  <div class="wave-area" id="waveArea">
+    <div id="periodCards"></div>
+    <button class="btn-primary" onclick="showResult()">波形を確認する 📊</button>
+  </div>
+  <div class="result-area" id="resultArea">
+    <div class="chart-card">
+      <div class="chart-label">モチベ波形</div>
+      <div class="chart-name" id="rName"></div>
+      <svg class="wave-chart" id="waveChart" viewBox="0 0 600 160"></svg>
+    </div>
+    <div class="periods-detail" id="periodsDetail"></div>
+    <div class="btn-row">
+      <button class="btn-new" onclick="nextPerson()">＋ 次の人</button>
+      <button class="btn-reset" onclick="resetAll()">全リセット</button>
+    </div>
+  </div>
+</div>
+<script>
+const PERIODS=['1年前','半年前','3ヶ月前','1ヶ月前','現在'];
+let pName='',vals=[],comments=[];
+function startWave(){
+  pName=document.getElementById('nameIn').value.trim();
+  if(!pName){alert('名前を入力してください');return;}
+  vals=PERIODS.map(()=>5);
+  comments=PERIODS.map(()=>'');
+  renderPeriods();
+  document.getElementById('namePanel').style.display='none';
+  document.getElementById('waveArea').classList.add('show');
+}
+function renderPeriods(){
+  document.getElementById('periodCards').innerHTML=PERIODS.map((p,i)=>`
+    <div class="period-card" style="margin-bottom:12px">
+      <div class="period-label">${p} のモチベーション</div>
+      <div class="slider-row">
+        <label>低い ←→ 高い</label>
+        <input type="range" min="1" max="10" value="${vals[i]}" oninput="vals[${i}]=+this.value;document.getElementById('sv${i}').textContent=this.value">
+        <div class="slider-val" id="sv${i}">${vals[i]}</div>
+      </div>
+      <textarea class="comment-field" rows="2" placeholder="そのときの出来事・理由（任意）" oninput="comments[${i}]=this.value">${comments[i]}</textarea>
+    </div>`).join('');
+}
+function showResult(){
+  document.getElementById('waveArea').classList.remove('show');
+  document.getElementById('resultArea').classList.add('show');
+  document.getElementById('rName').textContent=pName+' さんのモチベ波形';
+  drawChart();
+  const detail=document.getElementById('periodsDetail');
+  detail.innerHTML=PERIODS.map((p,i)=>`
+    <div class="pd-row" style="flex-wrap:wrap">
+      <div class="pd-label">${p}</div>
+      <div class="pd-bar-bg"><div class="pd-bar" style="width:${vals[i]*10}%"></div></div>
+      <div class="pd-val">${vals[i]}</div>
+      ${comments[i]?`<div class="pd-comment">${comments[i]}</div>`:''}
+    </div>`).join('');
+}
+function drawChart(){
+  const svg=document.getElementById('waveChart');
+  const W=600,H=160,pad=40;
+  const xStep=(W-pad*2)/(PERIODS.length-1);
+  const points=vals.map((v,i)=>({x:pad+i*xStep,y:H-pad-(v-1)/(10-1)*(H-pad*2)}));
+  const path=points.map((p,i)=>i===0?`M${p.x},${p.y}`:`L${p.x},${p.y}`).join(' ');
+  const area=`${path} L${points[points.length-1].x},${H-pad} L${points[0].x},${H-pad} Z`;
+  svg.innerHTML=`
+    <defs><linearGradient id="wg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#B7282E" stop-opacity="0.3"/><stop offset="100%" stop-color="#B7282E" stop-opacity="0"/></linearGradient></defs>
+    <line x1="${pad}" y1="${pad}" x2="${pad}" y2="${H-pad}" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+    <line x1="${pad}" y1="${H-pad}" x2="${W-pad}" y2="${H-pad}" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+    <path d="${area}" fill="url(#wg)"/>
+    <path d="${path}" fill="none" stroke="#B7282E" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    ${points.map((p,i)=>`<circle cx="${p.x}" cy="${p.y}" r="5" fill="#B7282E"/>
+    <text x="${p.x}" y="${H-pad+16}" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="10">${PERIODS[i]}</text>
+    <text x="${p.x}" y="${p.y-10}" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">${vals[i]}</text>`).join('')}`;
+}
+function nextPerson(){
+  document.getElementById('resultArea').classList.remove('show');
+  document.getElementById('namePanel').style.display='';
+  document.getElementById('nameIn').value='';
+  pName='';
+}
+function resetAll(){
+  document.getElementById('resultArea').classList.remove('show');
+  document.getElementById('namePanel').style.display='';
+  document.getElementById('nameIn').value='';
+}
+</script>
+</body>
+</html>

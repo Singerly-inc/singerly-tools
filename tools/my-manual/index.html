@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>自分トリセツ — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+.main { width:100%; max-width:760px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+.input-panel { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:24px; }
+.field-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+@media(max-width:560px){ .field-grid{grid-template-columns:1fr;} }
+.field { display:flex; flex-direction:column; gap:4px; }
+.field label { font-size:0.72rem; font-weight:700; color:#555; }
+.field input,.field textarea { background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:9px 12px; color:#000; font-size:0.85rem; font-family:inherit; outline:none; transition:border-color 0.15s; }
+.field input:focus,.field textarea:focus { border-color:#B7282E; }
+.field input::placeholder,.field textarea::placeholder { color:#bbb; }
+.field textarea { resize:vertical; min-height:60px; line-height:1.6; }
+.field.full { grid-column:1/-1; }
+.btn-primary { width:100%; padding:13px; font-size:0.95rem; font-weight:900; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; margin-top:4px; }
+.btn-primary:hover { background:#83151B; }
+/* BOARD */
+.board-header { display:flex; justify-content:space-between; align-items:center; }
+.board-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; font-weight:700; }
+.btn-clear { font-size:0.72rem; color:#aaa; background:none; border:none; cursor:pointer; }
+.btn-clear:hover { color:#B7282E; }
+.cards-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; }
+.manual-card { background:#fff; border:2px solid #E0E0E0; border-radius:12px; padding:20px; animation:popIn 0.35s ease both; }
+@keyframes popIn { 0%{opacity:0;transform:scale(0.92)} 100%{opacity:1;transform:none} }
+.mc-name { font-size:1.1rem; font-weight:900; color:#000; margin-bottom:14px; padding-bottom:10px; border-bottom:2px solid #B7282E; }
+.mc-row { margin-bottom:10px; }
+.mc-label { font-size:0.6rem; font-weight:700; color:#B7282E; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:3px; }
+.mc-val { font-size:0.85rem; color:#333; line-height:1.5; }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">👥 チームビルド</div>
+  <h1 class="page-title">自分トリセツ</h1>
+  <p class="page-sub">自分の取扱説明書を作って共有。互いの理解が深まる。</p>
+</div>
+<div class="main">
+  <div class="input-panel">
+    <div class="area-title">あなたのトリセツを登録</div>
+    <div class="field-grid">
+      <div class="field full"><label>名前</label><input type="text" id="name" placeholder="田中 太郎"></div>
+      <div class="field"><label>得意なこと・強み</label><textarea id="strengths" placeholder="論理的に整理すること、場を和ませること"></textarea></div>
+      <div class="field"><label>苦手なこと</label><textarea id="weaknesses" placeholder="急な予定変更、マルチタスク"></textarea></div>
+      <div class="field"><label>やる気が上がるとき</label><textarea id="motivated" placeholder="感謝されたとき、新しいことに挑戦するとき"></textarea></div>
+      <div class="field"><label>コミュニケーションの特徴</label><textarea id="comms" placeholder="直接言ってほしいタイプ、ひとりで考える時間が必要"></textarea></div>
+      <div class="field full"><label>チームへのお願い事項</label><input type="text" id="request" placeholder="報告は早め・短めにしてもらえると助かります"></div>
+    </div>
+    <button class="btn-primary" onclick="submit()">トリセツを追加 →</button>
+  </div>
+  <div id="boardWrap" style="display:none">
+    <div class="board-header" style="margin-bottom:14px">
+      <div class="board-title">トリセツボード</div>
+      <button class="btn-clear" onclick="clearAll()">全クリア</button>
+    </div>
+    <div class="cards-grid" id="cardsGrid"></div>
+  </div>
+</div>
+<script>
+let entries=[];
+const FIELDS=[{id:'strengths',label:'得意・強み'},{id:'weaknesses',label:'苦手'},{id:'motivated',label:'やる気が上がるとき'},{id:'comms',label:'コミュニケーション'},{id:'request',label:'お願い事項'}];
+function submit(){
+  const name=document.getElementById('name').value.trim();
+  if(!name){alert('名前を入力してください');return;}
+  const data={name};
+  FIELDS.forEach(f=>data[f.id]=document.getElementById(f.id).value.trim());
+  entries.unshift(data);
+  document.getElementById('name').value='';
+  FIELDS.forEach(f=>document.getElementById(f.id).value='');
+  render();
+  document.getElementById('boardWrap').style.display='';
+}
+function render(){
+  document.getElementById('cardsGrid').innerHTML=entries.map((e,i)=>`
+    <div class="manual-card" style="animation-delay:${i*40}ms">
+      <div class="mc-name">${e.name}</div>
+      ${FIELDS.filter(f=>e[f.id]).map(f=>`
+        <div class="mc-row"><div class="mc-label">${f.label}</div><div class="mc-val">${e[f.id]}</div></div>
+      `).join('')}
+    </div>`).join('');
+}
+function clearAll(){if(confirm('全クリアしますか？')){entries=[];document.getElementById('boardWrap').style.display='none';}}
+</script>
+</body>
+</html>

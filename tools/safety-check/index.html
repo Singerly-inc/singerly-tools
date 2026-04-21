@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>心理的安全性チェック — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+
+.main { width:100%; max-width:720px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:14px; font-weight:700; }
+
+.name-area { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:22px; }
+.name-row { display:flex; gap:10px; align-items:center; }
+.name-input { flex:1; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:10px 14px; color:#000000; font-size:0.9rem; font-family:inherit; outline:none; transition:border-color 0.15s; }
+.name-input:focus { border-color:#B7282E; }
+.name-input::placeholder { color:#bbb; }
+
+.btn-primary { padding:10px 20px; font-size:0.88rem; font-weight:800; border:none; border-radius:7px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; white-space:nowrap; }
+.btn-primary:hover { background:#83151B; }
+
+/* QUIZ */
+.quiz-area { display:none; }
+.quiz-area.show { display:flex; flex-direction:column; gap:16px; }
+
+.progress-bar-wrap { background:#EEEEEE; border-radius:4px; height:6px; overflow:hidden; }
+.progress-bar-fill { height:100%; background:#B7282E; border-radius:4px; transition:width 0.4s ease; }
+.progress-label { font-size:0.72rem; color:#888; margin-bottom:8px; display:flex; justify-content:space-between; }
+
+.factor-label { font-size:0.68rem; letter-spacing:0.15em; color:#B7282E; text-transform:uppercase; font-weight:700; }
+.question-card { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:24px; }
+.q-number { font-size:0.65rem; color:#aaa; margin-bottom:8px; }
+.q-text { font-size:1.05rem; font-weight:700; color:#000000; line-height:1.6; margin-bottom:20px; }
+
+.rating-row { display:flex; gap:8px; justify-content:center; }
+.rating-btn {
+  flex:1; max-width:80px; padding:12px 4px; border-radius:8px; border:2px solid #E0E0E0;
+  background:#fff; cursor:pointer; font-family:inherit; font-size:0.8rem; font-weight:700;
+  color:#555; transition:all 0.15s; text-align:center;
+}
+.rating-btn:hover { border-color:#B7282E; color:#B7282E; background:#FDF3F3; }
+.rating-btn.selected { border-color:#B7282E; background:#B7282E; color:#fff; }
+.rating-labels { display:flex; justify-content:space-between; font-size:0.65rem; color:#aaa; margin-top:6px; padding:0 4px; }
+
+.btn-next { width:100%; padding:12px; font-size:0.9rem; font-weight:800; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; }
+.btn-next:hover { background:#83151B; }
+.btn-next:disabled { background:#DDCCCC; cursor:not-allowed; }
+
+/* RESULT */
+.result-area { display:none; }
+.result-area.show { display:flex; flex-direction:column; gap:16px; }
+.result-name { font-size:0.72rem; color:#888; text-align:center; margin-bottom:4px; }
+.result-title { font-size:1.3rem; font-weight:900; color:#000000; text-align:center; margin-bottom:4px; }
+.result-comment { font-size:0.8rem; color:#888; text-align:center; line-height:1.6; }
+
+.factor-scores { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+@media(max-width:480px){ .factor-scores{grid-template-columns:1fr;} }
+.factor-card { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:16px; }
+.fc-name { font-size:0.68rem; font-weight:700; color:#B7282E; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:8px; }
+.fc-icon { font-size:1.4rem; margin-bottom:4px; }
+.fc-score-row { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+.fc-score { font-size:1.4rem; font-weight:900; color:#000000; }
+.fc-max { font-size:0.75rem; color:#aaa; }
+.fc-bar-bg { flex:1; background:#EEEEEE; border-radius:3px; height:6px; overflow:hidden; }
+.fc-bar-fill { height:100%; border-radius:3px; background:#B7282E; transition:width 0.6s ease; }
+.fc-label { font-size:0.68rem; color:#888; line-height:1.4; }
+
+.total-score-card { background:#000000; border-radius:12px; padding:24px; text-align:center; }
+.ts-label { font-size:0.65rem; letter-spacing:0.18em; color:rgba(255,255,255,0.45); text-transform:uppercase; margin-bottom:8px; }
+.ts-score { font-size:3rem; font-weight:900; color:#fff; }
+.ts-max { font-size:1rem; color:rgba(255,255,255,0.4); }
+.ts-comment { font-size:0.82rem; color:rgba(255,255,255,0.65); margin-top:8px; line-height:1.5; }
+
+.board-section { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:20px; }
+.member-row { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #F0F0F0; }
+.member-row:last-child { border-bottom:none; }
+.member-name { font-size:0.85rem; font-weight:700; color:#000000; }
+.member-total { font-size:0.85rem; font-weight:900; color:#B7282E; }
+
+.btn-row { display:flex; gap:10px; }
+.btn-new { flex:1; padding:12px; font-size:0.9rem; font-weight:800; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; }
+.btn-new:hover { background:#83151B; }
+.btn-reset { padding:12px 18px; font-size:0.82rem; font-weight:600; border:1px solid #CCCCCC; border-radius:8px; cursor:pointer; background:#fff; color:#888; font-family:inherit; }
+.btn-reset:hover { background:#F6F6F6; }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">🛡️ 心理的安全性</div>
+  <h1 class="page-title">心理的安全性チェック</h1>
+  <p class="page-sub">Google研究・4因子で今のチームの安全性を数値化する。</p>
+</div>
+<div class="main">
+  <div class="name-area" id="nameArea">
+    <div class="area-title">回答者の名前を入力</div>
+    <div class="name-row">
+      <input type="text" class="name-input" id="nameInput" placeholder="田中 太郎">
+      <button class="btn-primary" onclick="startCheck()">スタート →</button>
+    </div>
+  </div>
+
+  <div class="quiz-area" id="quizArea">
+    <div>
+      <div class="progress-label">
+        <span id="progressText">1 / 12</span>
+        <span id="factorText"></span>
+      </div>
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill" style="width:8%"></div></div>
+    </div>
+    <div class="question-card">
+      <div class="q-number" id="qNumber"></div>
+      <div class="q-text" id="qText"></div>
+      <div class="rating-row" id="ratingRow"></div>
+      <div class="rating-labels"><span>全くそう思わない</span><span>とてもそう思う</span></div>
+    </div>
+    <button class="btn-next" id="btnNext" onclick="nextQ()" disabled>次へ →</button>
+  </div>
+
+  <div class="result-area" id="resultArea">
+    <div class="total-score-card">
+      <div class="ts-label">心理的安全性スコア</div>
+      <div><span class="ts-score" id="tsScore">0</span><span class="ts-max"> / 60</span></div>
+      <div class="ts-comment" id="tsComment"></div>
+    </div>
+    <div class="factor-scores" id="factorScores"></div>
+    <div class="board-section" id="boardSection" style="display:none">
+      <div class="area-title">全員の結果</div>
+      <div id="memberList"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-new" onclick="nextMember()">＋ 次の人が回答</button>
+      <button class="btn-reset" onclick="resetAll()">全リセット</button>
+    </div>
+  </div>
+</div>
+<script>
+const FACTORS = [
+  { name:'話しやすさ', icon:'💬', desc:'意見や質問を気軽に言える',
+    qs:['チームで発言しても馬鹿にされる心配がない','疑問や問題があれば遠慮なく指摘できる','考えが人と違っても言いやすい'] },
+  { name:'助け合い', icon:'🤝', desc:'困ったとき互いにサポートできる',
+    qs:['困ったときチームに助けを求めやすい','メンバーは互いに積極的にサポートしている','失敗してもチームが一緒に対処してくれる'] },
+  { name:'挑戦', icon:'🚀', desc:'新しいことに積極的に取り組める',
+    qs:['新しいアイデアや方法を試みることができる','失敗しても責められることなく学びになる','リスクを取ることが奨励されている'] },
+  { name:'新奇歓迎', icon:'✨', desc:'多様性や違いが受け入れられる',
+    qs:['チームは多様な意見や視点を歓迎している','自分らしい働き方が尊重されている','異なるバックグラウンドが強みとして活かされている'] },
+];
+
+let currentQ=0, currentRating=null, answers=[], memberName='', allResults=[];
+
+function startCheck(){
+  memberName=document.getElementById('nameInput').value.trim();
+  if(!memberName){alert('名前を入力してください');return;}
+  answers=[];currentQ=0;
+  document.getElementById('nameArea').style.display='none';
+  document.getElementById('quizArea').classList.add('show');
+  renderQ();
+}
+
+function renderQ(){
+  const total=FACTORS.reduce((s,f)=>s+f.qs.length,0);
+  let fi=0,qi=currentQ;
+  while(qi>=FACTORS[fi].qs.length){qi-=FACTORS[fi].qs.length;fi++;}
+  const f=FACTORS[fi];
+  document.getElementById('progressText').textContent=`${currentQ+1} / ${total}`;
+  document.getElementById('factorText').textContent=f.icon+' '+f.name;
+  document.getElementById('progressFill').style.width=`${(currentQ+1)/total*100}%`;
+  document.getElementById('qNumber').textContent=`Q${currentQ+1}`;
+  document.getElementById('qText').textContent=f.qs[qi];
+  currentRating=null;
+  document.getElementById('btnNext').disabled=true;
+  const row=document.getElementById('ratingRow');
+  row.innerHTML=[1,2,3,4,5].map(n=>`<button class="rating-btn" onclick="selectRating(${n},this)">${n}</button>`).join('');
+}
+
+function selectRating(n,el){
+  currentRating=n;
+  document.querySelectorAll('.rating-btn').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('btnNext').disabled=false;
+}
+
+function nextQ(){
+  if(currentRating===null)return;
+  answers.push(currentRating);
+  currentQ++;
+  const total=FACTORS.reduce((s,f)=>s+f.qs.length,0);
+  if(currentQ>=total){showResult();return;}
+  renderQ();
+}
+
+function showResult(){
+  document.getElementById('quizArea').classList.remove('show');
+  document.getElementById('resultArea').classList.add('show');
+  const totalScore=answers.reduce((s,v)=>s+v,0);
+  document.getElementById('tsScore').textContent=totalScore;
+  const comment=totalScore>=50?'非常に高い心理的安全性です！':totalScore>=38?'概ね安全な環境です。さらに高めましょう。':totalScore>=25?'一部に不安要素があります。対話を増やしましょう。':'心理的安全性に課題があります。改善が必要です。';
+  document.getElementById('tsComment').textContent=comment;
+
+  let qi=0;
+  document.getElementById('factorScores').innerHTML=FACTORS.map(f=>{
+    const score=f.qs.reduce((_,__)=>{const v=answers[qi++]||0;return _+v;},0);
+    const pct=Math.round(score/f.qs.length/5*100);
+    const label=pct>=80?'良好':pct>=60?'普通':'要改善';
+    return `<div class="factor-card">
+      <div class="fc-icon">${f.icon}</div>
+      <div class="fc-name">${f.name}</div>
+      <div class="fc-score-row">
+        <span class="fc-score">${score}</span><span class="fc-max">/${f.qs.length*5}</span>
+        <div class="fc-bar-bg"><div class="fc-bar-fill" style="width:${pct}%"></div></div>
+      </div>
+      <div class="fc-label">${f.desc} — ${label}</div>
+    </div>`;
+  }).join('');
+
+  allResults.push({name:memberName,score:totalScore});
+  if(allResults.length>1){
+    document.getElementById('boardSection').style.display='block';
+    document.getElementById('memberList').innerHTML=allResults.map(r=>`
+      <div class="member-row"><span class="member-name">${r.name}</span><span class="member-total">${r.score} / 60</span></div>`).join('');
+  }
+}
+
+function nextMember(){
+  document.getElementById('resultArea').classList.remove('show');
+  document.getElementById('nameArea').style.display='';
+  document.getElementById('nameInput').value='';
+  document.getElementById('nameInput').focus();
+}
+
+function resetAll(){
+  allResults=[];
+  document.getElementById('resultArea').classList.remove('show');
+  document.getElementById('nameArea').style.display='';
+  document.getElementById('nameInput').value='';
+}
+</script>
+</body>
+</html>

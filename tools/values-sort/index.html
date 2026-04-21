@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>価値観ソート — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+.main { width:100%; max-width:680px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+.panel { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:22px; }
+.field { margin-bottom:12px; }
+.field label { display:block; font-size:0.72rem; font-weight:700; color:#555; margin-bottom:5px; }
+.field input { width:100%; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:9px 12px; color:#000; font-size:0.88rem; font-family:inherit; outline:none; transition:border-color 0.15s; }
+.field input:focus { border-color:#B7282E; }
+.hint { font-size:0.72rem; color:#888; margin-bottom:14px; line-height:1.5; }
+.values-pool { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+.value-card { padding:8px 16px; border-radius:6px; border:2px solid #E0E0E0; background:#fff; cursor:pointer; font-size:0.88rem; font-weight:700; color:#555; transition:all 0.15s; user-select:none; }
+.value-card:hover { border-color:#B7282E; color:#B7282E; }
+.value-card.chosen { opacity:0.3; pointer-events:none; }
+.ranking { display:flex; flex-direction:column; gap:8px; margin-bottom:14px; }
+.rank-item { display:flex; align-items:center; gap:12px; background:#fff; border:2px solid #E0E0E0; border-radius:8px; padding:12px 16px; animation:slideIn 0.2s ease; }
+@keyframes slideIn { from{opacity:0;transform:translateX(-10px)} to{opacity:1;transform:none} }
+.rank-num { font-size:1.1rem; font-weight:900; color:#B7282E; width:28px; flex-shrink:0; }
+.rank-name { font-size:0.95rem; font-weight:700; flex:1; }
+.rank-remove { background:none; border:none; color:#ccc; cursor:pointer; font-size:0.9rem; }
+.rank-remove:hover { color:#B7282E; }
+.btn-primary { width:100%; padding:13px; font-size:0.95rem; font-weight:900; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; }
+.btn-primary:hover { background:#83151B; }
+.result-card { background:#000; border-radius:12px; padding:28px; display:none; }
+.result-card.show { display:block; animation:popIn 0.4s ease; }
+@keyframes popIn { 0%{opacity:0;transform:scale(0.92)} 100%{opacity:1;transform:scale(1)} }
+.rc-name { font-size:0.88rem; font-weight:700; color:#B7282E; margin-bottom:16px; }
+.rc-items { display:flex; flex-direction:column; gap:8px; }
+.rc-item { display:flex; align-items:center; gap:12px; }
+.rc-num { font-size:1.2rem; font-weight:900; color:#B7282E; width:32px; }
+.rc-val { font-size:0.95rem; font-weight:700; color:#fff; }
+.rc-bar { flex:1; background:rgba(255,255,255,0.1); border-radius:3px; height:4px; }
+.rc-bar-fill { height:100%; border-radius:3px; background:#B7282E; }
+.btn-row { display:flex; gap:10px; margin-top:14px; }
+.btn-retry { flex:1; padding:12px; font-size:0.88rem; font-weight:700; border:2px solid #B7282E; border-radius:7px; cursor:pointer; background:#fff; color:#B7282E; font-family:inherit; transition:all 0.15s; }
+.btn-retry:hover { background:#B7282E; color:#fff; }
+.btn-reset { padding:12px 16px; font-size:0.82rem; border:1px solid #CCCCCC; border-radius:8px; cursor:pointer; background:#fff; color:#888; font-family:inherit; }
+.btn-reset:hover { background:#F6F6F6; }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">👥 チームビルド</div>
+  <h1 class="page-title">価値観ソート</h1>
+  <p class="page-sub">自分が大切にする価値観を順位づけ。自己理解と相互理解が深まる。</p>
+</div>
+<div class="main">
+  <div class="panel" id="inputPanel">
+    <div class="area-title">価値観を選んで並べる</div>
+    <div class="field"><label>名前</label><input type="text" id="nameIn" placeholder="田中 太郎"></div>
+    <div class="hint">大切にしている価値観を上位5〜7個、クリックして順位をつけてください</div>
+    <div class="values-pool" id="valuesPool"></div>
+    <div class="area-title">あなたのランキング</div>
+    <div class="ranking" id="ranking"></div>
+    <button class="btn-primary" onclick="showResult()">✅ 結果を見る</button>
+  </div>
+  <div class="result-card" id="resultCard">
+    <div class="rc-name" id="rcName"></div>
+    <div class="rc-items" id="rcItems"></div>
+    <div class="btn-row">
+      <button class="btn-retry" onclick="reset()">🔁 やり直す</button>
+    </div>
+  </div>
+</div>
+<script>
+const VALUES=['自由','成長','貢献','安定','挑戦','誠実','家族','健康','創造','リーダーシップ','調和','効率','楽しさ','感謝','独立','信頼','学び','影響力','豊かさ','つながり'];
+let ranking=[];
+function init(){
+  ranking=[];
+  document.getElementById('valuesPool').innerHTML=VALUES.map(v=>
+    `<div class="value-card" onclick="addToRanking('${v}',this)">${v}</div>`
+  ).join('');
+  renderRanking();
+}
+function addToRanking(v,el){
+  if(ranking.length>=7)return;
+  ranking.push(v);
+  el.classList.add('chosen');
+  renderRanking();
+}
+function removeFromRanking(i){
+  const v=ranking[i];
+  ranking.splice(i,1);
+  document.querySelectorAll('.value-card').forEach(c=>{if(c.textContent===v)c.classList.remove('chosen');});
+  renderRanking();
+}
+function renderRanking(){
+  document.getElementById('ranking').innerHTML=ranking.map((v,i)=>
+    `<div class="rank-item">
+      <span class="rank-num">${i+1}</span>
+      <span class="rank-name">${v}</span>
+      <button class="rank-remove" onclick="removeFromRanking(${i})">✕</button>
+    </div>`
+  ).join('') || '<div style="color:#bbb;font-size:0.82rem;padding:8px">価値観カードをクリックして選んでください</div>';
+}
+function showResult(){
+  if(ranking.length<3){alert('3つ以上選んでください');return;}
+  const name=document.getElementById('nameIn').value.trim()||'あなた';
+  document.getElementById('rcName').textContent=name+'さんの価値観 TOP'+ranking.length;
+  document.getElementById('rcItems').innerHTML=ranking.map((v,i)=>`
+    <div class="rc-item">
+      <span class="rc-num">${i+1}</span>
+      <span class="rc-val">${v}</span>
+      <div class="rc-bar"><div class="rc-bar-fill" style="width:${100-i*(100/ranking.length)}%"></div></div>
+    </div>`).join('');
+  document.getElementById('inputPanel').style.display='none';
+  document.getElementById('resultCard').classList.add('show');
+}
+function reset(){
+  document.getElementById('resultCard').classList.remove('show');
+  document.getElementById('inputPanel').style.display='';
+  document.getElementById('nameIn').value='';
+  init();
+}
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>なぜ？深掘りラダー — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  min-height:100vh; background:#fff;
+  font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif;
+  color:#000000; display:flex; flex-direction:column; align-items:center;
+}
+.nav { width:100%; padding:12px 28px; background:#000000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+
+.main { width:100%; max-width:680px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:16px; }
+
+.theory-note {
+  background:#FDF3F3; border-left:3px solid #B7282E;
+  border-radius:0 6px 6px 0; padding:12px 16px;
+  font-size:0.78rem; color:#555; line-height:1.6;
+}
+.theory-note strong { color:#B7282E; }
+
+/* LADDER */
+.ladder { display:flex; flex-direction:column; gap:0; }
+
+.rung {
+  display:flex; align-items:flex-start; gap:0;
+  animation:fadeIn 0.35s ease both;
+}
+@keyframes fadeIn { from{opacity:0;transform:translateX(-10px)} to{opacity:1;transform:translateX(0)} }
+
+.rung-left {
+  display:flex; flex-direction:column; align-items:center;
+  width:56px; flex-shrink:0;
+}
+.rung-circle {
+  width:40px; height:40px; border-radius:50%;
+  background:#B7282E; color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.75rem; font-weight:900; flex-shrink:0; z-index:1;
+}
+.rung-line { width:2px; flex:1; min-height:16px; background:#E0E0E0; }
+
+.rung-body { flex:1; padding:0 0 20px 12px; }
+
+.rung-label { font-size:0.65rem; letter-spacing:0.14em; color:#888; text-transform:uppercase; font-weight:700; margin-bottom:6px; }
+
+.rung-input {
+  width:100%; background:#F6F6F6; border:1px solid #CCCCCC;
+  border-radius:8px; padding:12px 14px; color:#000000;
+  font-size:0.92rem; font-family:inherit; outline:none;
+  transition:border-color 0.15s; resize:none; line-height:1.5;
+  min-height:56px;
+}
+.rung-input:focus { border-color:#B7282E; background:#fff; }
+.rung-input::placeholder { color:#bbb; }
+.rung-input:disabled { background:#F6F6F6; color:#aaa; cursor:not-allowed; }
+
+.why-prompt {
+  display:flex; align-items:center; gap:8px;
+  margin:8px 0 0 0; font-size:0.8rem; color:#B7282E; font-weight:700;
+}
+.why-arrow { font-size:1rem; }
+
+/* REVEAL */
+.reveal-card {
+  background:#000000; border-radius:10px; padding:24px;
+  text-align:center; display:none;
+  animation:popIn 0.4s ease;
+}
+@keyframes popIn { 0%{opacity:0;transform:scale(0.9)} 70%{transform:scale(1.04)} 100%{opacity:1;transform:scale(1)} }
+.reveal-card.show { display:block; }
+.reveal-label { font-size:0.62rem; letter-spacing:0.2em; color:rgba(255,255,255,0.4); text-transform:uppercase; margin-bottom:8px; }
+.reveal-text { font-size:1.2rem; font-weight:900; color:#fff; line-height:1.45; }
+.reveal-hint { font-size:0.75rem; color:rgba(255,255,255,0.4); margin-top:10px; }
+
+.btn-row { display:flex; gap:10px; }
+.btn-primary {
+  flex:1; padding:13px; font-size:0.95rem; font-weight:900;
+  border:none; border-radius:8px; cursor:pointer;
+  background:#B7282E; color:#fff; font-family:inherit;
+  transition:background 0.15s, transform 0.12s;
+}
+.btn-primary:hover { background:#83151B; transform:translateY(-1px); }
+.btn-secondary {
+  padding:13px 20px; font-size:0.82rem; font-weight:600;
+  border:1px solid #CCCCCC; border-radius:8px; cursor:pointer;
+  background:#fff; color:#888; font-family:inherit; transition:background 0.15s;
+}
+.btn-secondary:hover { background:#F6F6F6; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="../../">← ムドメわっしょい！</a>
+  <span class="nav-brand">SINGERLY</span>
+</nav>
+
+<div class="page-header">
+  <div class="tool-badge">🧩 理念・文化</div>
+  <h1 class="page-title">なぜ？深掘りラダー</h1>
+  <p class="page-sub">Whyを5回問い直すと、本音の動機に辿り着く。</p>
+</div>
+
+<div class="main">
+
+  <div class="theory-note">
+    <strong>ゴールデンサークル理論</strong>（Simon Sinek）より。
+    「What → How → Why」の順に掘り下げることで、行動の本質的な動機が見えてくる。
+  </div>
+
+  <div class="ladder" id="ladder"></div>
+
+  <div class="reveal-card" id="revealCard">
+    <div class="reveal-label">あなたの本質的な動機</div>
+    <div class="reveal-text" id="revealText"></div>
+    <div class="reveal-hint">これがあなたのWhy。行動の源泉です。</div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-primary" id="mainBtn" onclick="handleMain()">次のなぜ？へ →</button>
+    <button class="btn-secondary" onclick="reset()">リセット</button>
+  </div>
+
+</div>
+
+<script>
+const PROMPTS = [
+  { label:'WHAT — 何をしていますか？', placeholder:'今取り組んでいること・仕事・役割を書いてください', why:null },
+  { label:'WHY 1 — なぜそれをしていますか？', placeholder:'なぜそれをしているのか、思ったことをそのまま書いて', why:'なぜ、それをするのですか？' },
+  { label:'WHY 2 — さらになぜ？', placeholder:'さらに深く。なぜそれが大事なのか', why:'でも、なぜそれが大事なのですか？' },
+  { label:'WHY 3 — もっと深く', placeholder:'もう一段深く掘ってみよう', why:'それはなぜですか？もっと奥にあるものは？' },
+  { label:'WHY 4 — さらにその奥は？', placeholder:'本音に近づいてきた。さらに掘り下げよう', why:'なぜそれがあなたにとって重要なのですか？' },
+  { label:'WHY 5 — 本質はなんですか？', placeholder:'これが本音。あなたが本当に求めているものは？', why:'最終的に、あなたは何のために働いているのですか？' },
+];
+
+let step = 0;
+
+function buildLadder(){
+  const ladder=document.getElementById('ladder');
+  ladder.innerHTML='';
+  for(let i=0;i<=step;i++){
+    const p=PROMPTS[i];
+    const rung=document.createElement('div');
+    rung.className='rung';
+    rung.style.animationDelay=(i===step?'0ms':`${i*0}ms`);
+    rung.innerHTML=`
+      <div class="rung-left">
+        <div class="rung-circle" style="background:${i===0?'#000000':'#B7282E'}">${i===0?'W':'W'+(i)}</div>
+        ${i<PROMPTS.length-1?'<div class="rung-line"></div>':''}
+      </div>
+      <div class="rung-body">
+        ${i>0?`<div class="why-prompt"><span class="why-arrow">↓</span>${p.why}</div>`:''}
+        <div class="rung-label" style="margin-top:${i>0?'6px':'0'}">${p.label}</div>
+        <textarea class="rung-input" id="input-${i}"
+          placeholder="${p.placeholder}"
+          ${i<step?'disabled':''} rows="2">${i<step?getVal(i):''}</textarea>
+      </div>`;
+    ladder.appendChild(rung);
+  }
+  // scroll to latest
+  if(step>0) ladder.lastChild.scrollIntoView({behavior:'smooth',block:'center'});
+  // update button
+  const btn=document.getElementById('mainBtn');
+  if(step===PROMPTS.length-1){ btn.textContent='本質を見る ✨'; }
+  else { btn.textContent='次のなぜ？へ →'; }
+}
+
+function getVal(i){ const el=document.getElementById('input-'+i); return el?el.value.trim():''; }
+
+function handleMain(){
+  const val=getVal(step);
+  if(!val){ alert('まず答えを入力してください'); return; }
+  if(step===PROMPTS.length-1){ showReveal(val); return; }
+  step++;
+  buildLadder();
+}
+
+function showReveal(lastVal){
+  document.getElementById('revealCard').classList.add('show');
+  document.getElementById('revealText').textContent=lastVal;
+  document.getElementById('mainBtn').textContent='もう一度やる';
+  document.getElementById('mainBtn').onclick=reset;
+}
+
+function reset(){
+  step=0;
+  document.getElementById('revealCard').classList.remove('show');
+  document.getElementById('mainBtn').textContent='次のなぜ？へ →';
+  document.getElementById('mainBtn').onclick=handleMain;
+  buildLadder();
+}
+
+buildLadder();
+</script>
+</body>
+</html>

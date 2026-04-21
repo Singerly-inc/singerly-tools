@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>1on1ルーレット — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+.main { width:100%; max-width:680px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+.cat-tabs { display:flex; gap:6px; flex-wrap:wrap; }
+.cat-tab { padding:7px 14px; border-radius:5px; border:1px solid #E0E0E0; background:#fff; cursor:pointer; font-size:0.78rem; font-weight:700; color:#555; transition:all 0.15s; font-family:inherit; }
+.cat-tab:hover,.cat-tab.active { background:#B7282E; border-color:#B7282E; color:#fff; }
+.question-card { background:#000; border-radius:14px; padding:36px 28px; text-align:center; min-height:180px; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.qc-cat { font-size:0.62rem; letter-spacing:0.18em; color:#B7282E; text-transform:uppercase; font-weight:700; margin-bottom:12px; }
+.qc-text { font-size:1.15rem; font-weight:700; color:#fff; line-height:1.65; }
+.qc-empty { font-size:0.88rem; color:rgba(255,255,255,0.3); }
+.btn-spin { width:100%; padding:14px; font-size:1rem; font-weight:900; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; }
+.btn-spin:hover { background:#83151B; }
+.used-area { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:16px; }
+.used-list { display:flex; flex-direction:column; gap:6px; max-height:200px; overflow-y:auto; }
+.used-item { font-size:0.82rem; color:#555; padding:6px 10px; background:#fff; border-radius:5px; border:1px solid #E0E0E0; }
+.used-empty { font-size:0.8rem; color:#aaa; }
+.btn-reset { width:100%; padding:10px; font-size:0.85rem; font-weight:700; border:1px solid #CCCCCC; border-radius:7px; cursor:pointer; background:#fff; color:#888; font-family:inherit; }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">🎯 対話・意思決定</div>
+  <h1 class="page-title">1on1ルーレット</h1>
+  <p class="page-sub">1on1の話題に迷ったらスピン。深い対話のきっかけを引き出す。</p>
+</div>
+<div class="main">
+  <div>
+    <div class="area-title">カテゴリを選ぶ</div>
+    <div class="cat-tabs" id="catTabs"></div>
+  </div>
+  <div class="question-card" id="qCard">
+    <div class="qc-empty">ボタンを押して質問を引こう</div>
+  </div>
+  <button class="btn-spin" onclick="spin()">🎲 質問を引く</button>
+  <div class="used-area">
+    <div class="area-title">使った質問</div>
+    <div class="used-list" id="usedList"><div class="used-empty">まだ質問を引いていません</div></div>
+  </div>
+  <button class="btn-reset" onclick="reset()">🔄 リセット</button>
+</div>
+<script>
+const CATS={
+  '近況・体調':['今週の調子はどうですか？','最近、気になっていることはありますか？','仕事以外で最近楽しかったことは？','体調や睡眠は十分ですか？','今、一番頭にあることは何ですか？'],
+  '仕事・成長':['今の業務で一番やりがいを感じていることは？','最近の仕事でうまくいったことは？','スキルアップのために今やっていることはありますか？','今の仕事で一番難しいと感じている部分は？','3ヶ月後にどうなっていたいですか？'],
+  'チーム・関係':['チーム内で助かっていることはありますか？','コミュニケーションで改善したいことは？','最近、誰かに感謝したいことはありますか？','チームの雰囲気はどう感じていますか？','協力してほしいことはありますか？'],
+  'キャリア・将来':['将来どんな仕事をしたいですか？','今の仕事が将来につながっていると感じますか？','どんなスキルをもっと伸ばしたいですか？','今の役割に満足していますか？','5年後の理想のキャリアは？'],
+  '深掘り':['今のあなたを一言で表すと？','仕事で「本当はやめたい」と感じていることは？','誰かに相談できていないモヤモヤはありますか？','上司（私）に変えてほしいことはありますか？','自分が一番成長したと感じる経験は？'],
+};
+let selCat=Object.keys(CATS)[0],used=[];
+function renderTabs(){
+  document.getElementById('catTabs').innerHTML=Object.keys(CATS).map(c=>
+    `<button class="cat-tab ${c===selCat?'active':''}" onclick="selectCat('${c}',this)">${c}</button>`
+  ).join('');
+}
+function selectCat(c,el){selCat=c;document.querySelectorAll('.cat-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');}
+function spin(){
+  const pool=CATS[selCat].filter(q=>!used.includes(q));
+  if(!pool.length){alert('このカテゴリの質問は全て使いました！リセットしてください');return;}
+  const q=pool[Math.floor(Math.random()*pool.length)];
+  used.push(q);
+  document.getElementById('qCard').innerHTML=`<div class="qc-cat">${selCat}</div><div class="qc-text">${q}</div>`;
+  renderUsed();
+}
+function renderUsed(){
+  const el=document.getElementById('usedList');
+  el.innerHTML=used.length?used.map(q=>`<div class="used-item">${q}</div>`).join(''):'<div class="used-empty">まだ質問を引いていません</div>';
+}
+function reset(){used=[];document.getElementById('qCard').innerHTML='<div class="qc-empty">ボタンを押して質問を引こう</div>';renderUsed();}
+renderTabs();
+</script>
+</body>
+</html>

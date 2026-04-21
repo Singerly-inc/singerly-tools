@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>KPTボード — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+.main { width:100%; max-width:960px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+.session-header { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:16px 20px; display:flex; align-items:center; gap:12px; }
+.session-header input { flex:1; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:9px 12px; font-size:0.9rem; font-family:inherit; color:#000; outline:none; transition:border-color 0.15s; }
+.session-header input:focus { border-color:#B7282E; }
+.session-header input::placeholder { color:#bbb; }
+.kpt-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; }
+@media(max-width:640px){.kpt-grid{grid-template-columns:1fr;}}
+.kpt-col { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:12px; padding:16px; }
+.kpt-header { display:flex; align-items:center; gap:8px; margin-bottom:12px; }
+.kpt-badge { padding:4px 12px; border-radius:4px; font-size:0.72rem; font-weight:900; letter-spacing:0.1em; }
+.kpt-k .kpt-badge { background:#22a06b; color:#fff; }
+.kpt-p .kpt-badge { background:#B7282E; color:#fff; }
+.kpt-t .kpt-badge { background:#000; color:#fff; }
+.kpt-desc { font-size:0.7rem; color:#aaa; }
+.sticky-list { display:flex; flex-direction:column; gap:6px; min-height:60px; }
+.sticky { background:#fff; border:1px solid #E0E0E0; border-radius:7px; padding:10px 12px; font-size:0.85rem; color:#000; line-height:1.5; position:relative; animation:popIn 0.25s ease; cursor:pointer; }
+.kpt-k .sticky { border-left:3px solid #22a06b; }
+.kpt-p .sticky { border-left:3px solid #B7282E; }
+.kpt-t .sticky { border-left:3px solid #000; }
+.sticky:hover .del-btn { opacity:1; }
+.del-btn { position:absolute; top:6px; right:8px; background:none; border:none; font-size:0.72rem; color:#ccc; cursor:pointer; opacity:0; transition:opacity 0.15s,color 0.15s; }
+.del-btn:hover { color:#B7282E; }
+@keyframes popIn{0%{opacity:0;transform:scale(0.9)}100%{opacity:1;transform:none}}
+.add-row { display:flex; gap:6px; margin-top:8px; }
+.add-row input { flex:1; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:8px 10px; font-size:0.82rem; font-family:inherit; color:#000; outline:none; transition:border-color 0.15s; }
+.add-row input:focus { border-color:#B7282E; }
+.add-row input::placeholder { color:#bbb; }
+.btn-add-s { background:#B7282E; border:none; border-radius:6px; padding:8px 12px; color:#fff; font-size:0.82rem; font-weight:700; cursor:pointer; font-family:inherit; transition:background 0.15s; }
+.btn-add-s:hover { background:#83151B; }
+.actions-bar { display:flex; gap:10px; }
+.btn-export { flex:1; padding:12px; font-size:0.9rem; font-weight:800; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; }
+.btn-export:hover { background:#83151B; }
+.btn-clear { padding:12px 16px; font-size:0.82rem; border:1px solid #CCCCCC; border-radius:8px; cursor:pointer; background:#fff; color:#888; font-family:inherit; }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">🎯 対話・意思決定</div>
+  <h1 class="page-title">KPTボード</h1>
+  <p class="page-sub">Keep / Problem / Try の3軸でチームを振り返る。改善のサイクルを回す。</p>
+</div>
+<div class="main">
+  <div class="session-header">
+    <span style="font-size:0.78rem;font-weight:700;color:#555;white-space:nowrap">セッション名:</span>
+    <input type="text" id="sessionName" placeholder="例：2024年Q1 スプリントふりかえり">
+  </div>
+  <div class="kpt-grid">
+    <div class="kpt-col kpt-k" id="colK">
+      <div class="kpt-header"><span class="kpt-badge">K</span><span class="kpt-desc">続けたいこと・良かったこと</span></div>
+      <div class="sticky-list" id="listK"></div>
+      <div class="add-row"><input type="text" id="inK" placeholder="Keepを追加..." onkeydown="if(event.key==='Enter')addSticky('K')"><button class="btn-add-s" onclick="addSticky('K')">＋</button></div>
+    </div>
+    <div class="kpt-col kpt-p" id="colP">
+      <div class="kpt-header"><span class="kpt-badge">P</span><span class="kpt-desc">問題・改善すべきこと</span></div>
+      <div class="sticky-list" id="listP"></div>
+      <div class="add-row"><input type="text" id="inP" placeholder="Problemを追加..." onkeydown="if(event.key==='Enter')addSticky('P')"><button class="btn-add-s" onclick="addSticky('P')">＋</button></div>
+    </div>
+    <div class="kpt-col kpt-t" id="colT">
+      <div class="kpt-header"><span class="kpt-badge">T</span><span class="kpt-desc">次に試すこと・改善策</span></div>
+      <div class="sticky-list" id="listT"></div>
+      <div class="add-row"><input type="text" id="inT" placeholder="Tryを追加..." onkeydown="if(event.key==='Enter')addSticky('T')"><button class="btn-add-s" onclick="addSticky('T')">＋</button></div>
+    </div>
+  </div>
+  <div class="actions-bar">
+    <button class="btn-export" onclick="exportText()">📋 テキストでコピー</button>
+    <button class="btn-clear" onclick="clearAll()">全クリア</button>
+  </div>
+</div>
+<script>
+const data={K:[],P:[],T:[]};
+function addSticky(type){
+  const input=document.getElementById('in'+type);
+  const text=input.value.trim();
+  if(!text)return;
+  data[type].push(text);
+  input.value='';
+  render(type);
+}
+function delSticky(type,i){data[type].splice(i,1);render(type);}
+function render(type){
+  document.getElementById('list'+type).innerHTML=data[type].map((t,i)=>`
+    <div class="sticky">${t}<button class="del-btn" onclick="delSticky('${type}',${i})">✕</button></div>`).join('');
+}
+function exportText(){
+  const name=document.getElementById('sessionName').value.trim()||'KPTボード';
+  const lines=[`# ${name}`,``,`## Keep（続けたいこと）`,...data.K.map(t=>`- ${t}`),``,`## Problem（問題）`,...data.P.map(t=>`- ${t}`),``,`## Try（試すこと）`,...data.T.map(t=>`- ${t}`)];
+  const text=lines.join('\n');
+  if(navigator.clipboard){navigator.clipboard.writeText(text).then(()=>alert('コピーしました！'));}
+  else{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);alert('コピーしました！');}
+}
+function clearAll(){if(confirm('全クリアしますか？')){data.K=[];data.P=[];data.T=[];['K','P','T'].forEach(t=>render(t));}}
+</script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>ヘルプ練習 — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+.main { width:100%; max-width:680px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+.intro-card { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:20px; font-size:0.88rem; color:#555; line-height:1.7; }
+.intro-card strong { color:#B7282E; }
+.scenario-card { background:#000; border-radius:14px; padding:32px 28px; text-align:center; }
+.sc-label { font-size:0.62rem; letter-spacing:0.18em; color:#B7282E; text-transform:uppercase; font-weight:700; margin-bottom:12px; }
+.sc-num { font-size:0.78rem; color:rgba(255,255,255,0.3); margin-bottom:8px; }
+.sc-text { font-size:1.15rem; font-weight:700; color:#fff; line-height:1.6; }
+.sc-role { font-size:0.78rem; color:rgba(255,255,255,0.45); margin-top:12px; }
+.phrase-area { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:20px; }
+.phrase-title { font-size:0.72rem; font-weight:700; color:#555; margin-bottom:10px; }
+.phrases { display:flex; flex-direction:column; gap:8px; }
+.phrase { background:#fff; border:1px solid #E0E0E0; border-radius:7px; padding:12px 16px; font-size:0.9rem; color:#000; cursor:pointer; transition:all 0.15s; }
+.phrase:hover { border-color:#B7282E; background:#FDF3F3; }
+.phrase.used { border-color:#22a06b; background:#E8F5F0; }
+.btn-next-sc { width:100%; padding:13px; font-size:0.95rem; font-weight:900; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; }
+.btn-next-sc:hover { background:#83151B; }
+.progress-dots { display:flex; gap:6px; justify-content:center; }
+.dot { width:10px; height:10px; border-radius:50%; background:#EEEEEE; transition:background 0.3s; }
+.dot.done { background:#22a06b; }
+.dot.active { background:#B7282E; }
+.complete-card { background:#000; border-radius:14px; padding:36px 28px; text-align:center; display:none; }
+.complete-card.show { display:block; animation:popIn 0.4s ease; }
+@keyframes popIn{0%{opacity:0;transform:scale(0.88)}70%{transform:scale(1.03)}100%{opacity:1;transform:scale(1)}}
+.cc-emoji { font-size:3rem; margin-bottom:12px; }
+.cc-title { font-size:1.4rem; font-weight:900; color:#fff; margin-bottom:8px; }
+.cc-msg { font-size:0.88rem; color:rgba(255,255,255,0.55); line-height:1.6; }
+.btn-retry { margin-top:18px; padding:12px 28px; border:2px solid #B7282E; border-radius:8px; background:transparent; color:#B7282E; font-family:inherit; font-size:0.88rem; font-weight:700; cursor:pointer; transition:all 0.15s; }
+.btn-retry:hover { background:#B7282E; color:#fff; }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">🛡️ 心理的安全性</div>
+  <h1 class="page-title">ヘルプ練習</h1>
+  <p class="page-sub">「助けてください」と言える練習。頼ることはチームの力になる。</p>
+</div>
+<div class="main">
+  <div class="intro-card">💡 心理的安全性の高いチームは、<strong>助けを求めることが当たり前</strong>な文化があります。<br>このワークでは「ヘルプを出す練習」をします。ペアで役割を決めてロールプレイしましょう。
+  </div>
+  <div class="progress-dots" id="dots"></div>
+  <div class="scenario-card" id="scCard">
+    <div class="sc-label">シナリオ</div>
+    <div class="sc-num" id="scNum"></div>
+    <div class="sc-text" id="scText"></div>
+    <div class="sc-role" id="scRole"></div>
+  </div>
+  <div class="phrase-area">
+    <div class="phrase-title">💬 使えるフレーズを選んでみよう（クリックで練習！）</div>
+    <div class="phrases" id="phrases"></div>
+  </div>
+  <button class="btn-next-sc" onclick="nextScenario()">次のシナリオ →</button>
+  <div class="complete-card" id="completeCard">
+    <div class="cc-emoji">🎉</div>
+    <div class="cc-title">ヘルプ練習完了！</div>
+    <div class="cc-msg">「助けてください」と言うことは弱さではなく、<br>チームを活かすための知恵です。</div>
+    <button class="btn-retry" onclick="restart()">🔁 もう一度練習する</button>
+  </div>
+</div>
+<script>
+const SCENARIOS=[
+  {text:'締め切り前日に作業が終わらなそうだ。でも「迷惑をかけたくない」と思って言い出せない。',role:'Aさんがヘルプを出す / Bさんが受け取る',phrases:['「〇〇の件で少し詰まっています。相談できますか？」','「手伝っていただけたら助かるのですが…」','「今、キャパがちょっと厳しいです。優先順位を確認させてください」']},
+  {text:'新しい業務に慣れず、ミスが続いている。恥ずかしくて誰にも相談できずにいる。',role:'Aさんがヘルプを出す / Bさんが励ます',phrases:['「教えてもらえますか？自分だけでは難しいと感じています」','「一度一緒に確認してもらえますか？」','「まだ慣れていないので、フォローをお願いしてもいいですか」']},
+  {text:'チームの方針に疑問があるが、「空気を読め」と言われそうで黙っている。',role:'Aさんが意見を出す / Bさんが聴く',phrases:['「少し確認したいことがあるのですが、聞いてもらえますか？」','「方針についての疑問を共有してもいいですか？」','「もしかしたら私の理解が間違っているかもしれないのですが…」']},
+  {text:'メンタル的につらくなってきた。でも「プロとして弱音を吐いてはいけない」と思っている。',role:'Aさんが本音を出す / Bさんが安心感を作る',phrases:['「最近少し疲れています。少し話を聞いてもらえますか？」','「ちょっとしんどい状況で…相談してもいいですか？」','「正直に言うと、今かなりプレッシャーを感じています」']},
+];
+let cur=0;
+function renderQ(){
+  const s=SCENARIOS[cur];
+  document.getElementById('scNum').textContent=`${cur+1} / ${SCENARIOS.length}`;
+  document.getElementById('scText').textContent=s.text;
+  document.getElementById('scRole').textContent='👤 '+s.role;
+  document.getElementById('phrases').innerHTML=s.phrases.map(p=>
+    `<div class="phrase" onclick="this.classList.toggle('used')">${p}</div>`
+  ).join('');
+  document.getElementById('dots').innerHTML=SCENARIOS.map((_,i)=>
+    `<div class="dot ${i<cur?'done':i===cur?'active':''}"></div>`
+  ).join('');
+}
+function nextScenario(){
+  cur++;
+  if(cur>=SCENARIOS.length){document.getElementById('completeCard').classList.add('show');return;}
+  renderQ();
+}
+function restart(){cur=0;document.getElementById('completeCard').classList.remove('show');renderQ();}
+renderQ();
+</script>
+</body>
+</html>

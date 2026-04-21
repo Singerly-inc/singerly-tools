@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>共通点ファインダー — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+.main { width:100%; max-width:680px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+.panel { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:22px; }
+.panel textarea { width:100%; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:10px 12px; font-family:inherit; font-size:0.88rem; color:#000; min-height:90px; resize:vertical; outline:none; transition:border-color 0.15s; line-height:1.7; }
+.panel textarea:focus { border-color:#B7282E; }
+.panel textarea::placeholder { color:#bbb; }
+.btn-primary { width:100%; padding:13px; font-size:0.95rem; font-weight:900; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; }
+.btn-primary:hover { background:#83151B; }
+/* THEME DISPLAY */
+.theme-card { background:#000; border-radius:14px; padding:40px 28px; text-align:center; display:none; }
+.theme-card.show { display:block; animation:popIn 0.4s ease; }
+@keyframes popIn { 0%{opacity:0;transform:scale(0.88)} 70%{transform:scale(1.04)} 100%{opacity:1;transform:scale(1)} }
+.tc-label { font-size:0.62rem; letter-spacing:0.2em; color:#B7282E; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+.tc-theme { font-size:1.8rem; font-weight:900; color:#fff; line-height:1.3; margin-bottom:8px; }
+.tc-hint { font-size:0.8rem; color:rgba(255,255,255,0.4); }
+/* COMMON BOARD */
+.board-area { display:none; }
+.board-area.show { display:flex; flex-direction:column; gap:14px; }
+.members-banner { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:8px; padding:14px 18px; font-size:0.88rem; color:#555; }
+.members-label { font-size:0.62rem; font-weight:700; color:#B7282E; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:4px; }
+.common-input-row { display:flex; gap:10px; }
+.common-input-row input { flex:1; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:10px 12px; color:#000; font-size:0.88rem; font-family:inherit; outline:none; transition:border-color 0.15s; }
+.common-input-row input:focus { border-color:#B7282E; }
+.common-input-row input::placeholder { color:#bbb; }
+.btn-add { padding:10px 20px; font-size:0.88rem; font-weight:700; border:none; border-radius:6px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; white-space:nowrap; }
+.btn-add:hover { background:#83151B; }
+.commons-list { display:flex; flex-direction:column; gap:8px; }
+.common-item { background:#fff; border:2px solid #E0E0E0; border-radius:8px; padding:12px 16px; display:flex; align-items:center; gap:10px; animation:slideIn 0.3s ease; }
+@keyframes slideIn { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:none} }
+.ci-dot { width:8px; height:8px; border-radius:50%; background:#B7282E; flex-shrink:0; }
+.ci-text { font-size:0.9rem; font-weight:700; color:#000; flex:1; }
+.btn-row { display:flex; gap:10px; }
+.btn-next-theme { flex:1; padding:12px; font-size:0.88rem; font-weight:700; border:2px solid #B7282E; border-radius:8px; cursor:pointer; background:#fff; color:#B7282E; font-family:inherit; transition:all 0.15s; }
+.btn-next-theme:hover { background:#B7282E; color:#fff; }
+.btn-reset { padding:12px 16px; font-size:0.82rem; border:1px solid #CCCCCC; border-radius:8px; cursor:pointer; background:#fff; color:#888; font-family:inherit; }
+.btn-reset:hover { background:#F6F6F6; }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">👥 チームビルド</div>
+  <h1 class="page-title">共通点ファインダー</h1>
+  <p class="page-sub">みんなの意外な共通点を発見。関係性の質がぐっと上がる。</p>
+</div>
+<div class="main">
+  <div class="panel" id="setupPanel">
+    <div class="area-title">参加者の名前を入力</div>
+    <textarea id="namesInput" placeholder="田中 太郎&#10;山田 花子&#10;鈴木 一郎&#10;佐藤 次郎"></textarea>
+    <button class="btn-primary" style="margin-top:12px" onclick="startGame()">▶ 共通点探しをスタート</button>
+  </div>
+  <div class="theme-card" id="themeCard">
+    <div class="tc-label">テーマ</div>
+    <div class="tc-theme" id="tcTheme"></div>
+    <div class="tc-hint">このテーマで全員が共通点を探してください</div>
+  </div>
+  <div class="board-area" id="boardArea">
+    <div class="members-banner">
+      <div class="members-label">参加者</div>
+      <div id="membersList"></div>
+    </div>
+    <div class="panel" style="padding:16px">
+      <div class="area-title">共通点を記録</div>
+      <div class="common-input-row">
+        <input type="text" id="commonInput" placeholder="共通点を入力（例：全員が猫派！）">
+        <button class="btn-add" onclick="addCommon()">追加</button>
+      </div>
+    </div>
+    <div class="commons-list" id="commonsList"></div>
+    <div class="btn-row">
+      <button class="btn-next-theme" onclick="nextTheme()">🎲 次のテーマ</button>
+      <button class="btn-reset" onclick="resetGame()">リセット</button>
+    </div>
+  </div>
+</div>
+<script>
+const THEMES=['好きな食べ物','子供の頃の夢','最近ハマっていること','学生時代の部活・サークル','苦手な食べ物','好きな季節','旅行したことがある国・都道府県','朝型か夜型か','兄弟構成','好きな映画のジャンル','ペットを飼っているか','コーヒー派かお茶派か','趣味・休日の過ごし方','子供の頃好きだったキャラクター','何時に起きているか'];
+let commons=[], members=[], usedThemes=new Set();
+function startGame(){
+  members=document.getElementById('namesInput').value.split('\n').map(s=>s.trim()).filter(s=>s);
+  if(members.length<2){alert('参加者を2名以上入力してください');return;}
+  document.getElementById('setupPanel').style.display='none';
+  document.getElementById('membersList').textContent=members.join('・');
+  document.getElementById('boardArea').classList.add('show');
+  nextTheme();
+}
+function nextTheme(){
+  const avail=THEMES.filter(t=>!usedThemes.has(t));
+  if(!avail.length){usedThemes.clear();}
+  const theme=avail.length ? avail[Math.floor(Math.random()*avail.length)] : THEMES[Math.floor(Math.random()*THEMES.length)];
+  usedThemes.add(theme);
+  document.getElementById('tcTheme').textContent='「'+theme+'」について';
+  document.getElementById('themeCard').classList.add('show');
+  commons=[];render();
+}
+function addCommon(){
+  const val=document.getElementById('commonInput').value.trim();
+  if(!val)return;
+  commons.unshift(val);
+  document.getElementById('commonInput').value='';
+  render();
+}
+function render(){
+  document.getElementById('commonsList').innerHTML=commons.map(c=>
+    `<div class="common-item"><div class="ci-dot"></div><div class="ci-text">${c}</div></div>`
+  ).join('');
+}
+function resetGame(){
+  commons=[];usedThemes=new Set();
+  document.getElementById('boardArea').classList.remove('show');
+  document.getElementById('themeCard').classList.remove('show');
+  document.getElementById('setupPanel').style.display='';
+  document.getElementById('namesInput').value='';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.activeElement.id==='commonInput')addCommon();});
+</script>
+</body>
+</html>

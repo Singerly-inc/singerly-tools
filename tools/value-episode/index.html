@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>価値観エピソード — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+.main { width:100%; max-width:760px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+.input-panel { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:24px; }
+.field { margin-bottom:14px; }
+.field label { display:block; font-size:0.72rem; font-weight:700; color:#555; margin-bottom:5px; }
+.field input,.field textarea { width:100%; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:10px 14px; color:#000; font-size:0.9rem; font-family:inherit; outline:none; transition:border-color 0.15s; }
+.field input:focus,.field textarea:focus { border-color:#B7282E; }
+.field input::placeholder,.field textarea::placeholder { color:#bbb; }
+.field textarea { resize:vertical; min-height:90px; line-height:1.6; }
+.value-chips { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px; }
+.chip { padding:5px 12px; border-radius:4px; border:1px solid #E0E0E0; background:#fff; cursor:pointer; font-size:0.78rem; font-weight:700; color:#555; transition:all 0.15s; }
+.chip:hover { border-color:#B7282E; color:#B7282E; }
+.chip.sel { background:#B7282E; border-color:#B7282E; color:#fff; }
+.btn-primary { width:100%; padding:13px; font-size:0.95rem; font-weight:900; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; }
+.btn-primary:hover { background:#83151B; }
+.board-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+.btn-clear { font-size:0.72rem; color:#aaa; background:none; border:none; cursor:pointer; }
+.btn-clear:hover { color:#B7282E; }
+.cards-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; }
+.ep-card { background:#fff; border:2px solid #E0E0E0; border-radius:12px; padding:20px; animation:popIn 0.35s ease both; }
+@keyframes popIn { 0%{opacity:0;transform:scale(0.88)} 100%{opacity:1;transform:scale(1)} }
+.ep-value-tag { display:inline-block; background:#B7282E; color:#fff; font-size:0.65rem; font-weight:700; letter-spacing:0.1em; padding:3px 10px; border-radius:3px; margin-bottom:8px; text-transform:uppercase; }
+.ep-name { font-size:0.75rem; font-weight:700; color:#888; margin-bottom:10px; }
+.ep-episode { font-size:0.9rem; color:#333; line-height:1.65; }
+.ep-learn { font-size:0.78rem; color:#B7282E; margin-top:10px; font-weight:700; border-top:1px solid #F0F0F0; padding-top:8px; }
+.love-row { display:flex; align-items:center; gap:8px; margin-top:10px; }
+.btn-love { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:5px; padding:4px 10px; font-size:0.78rem; font-weight:700; color:#555; cursor:pointer; font-family:inherit; transition:all 0.15s; }
+.btn-love:hover { background:#B7282E; border-color:#B7282E; color:#fff; }
+.love-count { font-size:0.72rem; color:#aaa; }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">🧩 理念・文化</div>
+  <h1 class="page-title">価値観エピソード</h1>
+  <p class="page-sub">大切にしている価値観と、それが宿るエピソードを共有する。</p>
+</div>
+<div class="main">
+  <div class="input-panel">
+    <div class="area-title">あなたの価値観エピソードを書く</div>
+    <div class="field"><label>名前</label><input type="text" id="nameIn" placeholder="田中 太郎"></div>
+    <div class="field">
+      <label>大切にしている価値観</label>
+      <div class="value-chips" id="chips"></div>
+      <input type="text" id="customVal" placeholder="自由入力（例：チャレンジ精神）" style="margin-top:6px">
+    </div>
+    <div class="field"><label>それが伝わるエピソード</label><textarea id="episode" placeholder="そのエピソードを具体的に教えてください..."></textarea></div>
+    <div class="field"><label>そこから得た学び・気づき</label><input type="text" id="learn" placeholder="失敗を恐れず動くことで道が開けると知った"></div>
+    <button class="btn-primary" onclick="submit()">エピソードを投稿 →</button>
+  </div>
+  <div id="boardWrap" style="display:none">
+    <div class="board-header">
+      <div class="area-title" style="margin-bottom:0">エピソードボード</div>
+      <button class="btn-clear" onclick="clearAll()">全クリア</button>
+    </div>
+    <div class="cards-grid" id="cardsGrid"></div>
+  </div>
+</div>
+<script>
+const VALUES=['誠実','挑戦','成長','チームワーク','貢献','自律','感謝','創造','情熱','共感','責任','革新'];
+let selVal='', entries=[];
+document.getElementById('chips').innerHTML=VALUES.map(v=>
+  `<div class="chip" onclick="selectVal('${v}',this)">${v}</div>`
+).join('');
+function selectVal(v,el){
+  selVal=v;
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('customVal').value='';
+}
+function submit(){
+  const name=document.getElementById('nameIn').value.trim();
+  const custom=document.getElementById('customVal').value.trim();
+  const val=custom||selVal;
+  const ep=document.getElementById('episode').value.trim();
+  const learn=document.getElementById('learn').value.trim();
+  if(!name||!val||!ep){alert('名前・価値観・エピソードを入力してください');return;}
+  entries.unshift({name,val,ep,learn,love:0});
+  ['nameIn','customVal','episode','learn'].forEach(id=>document.getElementById(id).value='');
+  selVal='';document.querySelectorAll('.chip').forEach(c=>c.classList.remove('sel'));
+  render();
+  document.getElementById('boardWrap').style.display='';
+}
+function love(i){entries[i].love++;render();}
+function render(){
+  document.getElementById('cardsGrid').innerHTML=entries.map((e,i)=>`
+    <div class="ep-card" style="animation-delay:${i*40}ms">
+      <div class="ep-value-tag">${e.val}</div>
+      <div class="ep-name">${e.name}</div>
+      <div class="ep-episode">${e.ep}</div>
+      ${e.learn?`<div class="ep-learn">💡 ${e.learn}</div>`:''}
+      <div class="love-row">
+        <button class="btn-love" onclick="love(${i})">👏 共感</button>
+        <span class="love-count">${e.love>0?'×'+e.love:''}</span>
+      </div>
+    </div>`).join('');
+}
+function clearAll(){if(confirm('全クリアしますか？')){entries=[];document.getElementById('boardWrap').style.display='none';}}
+</script>
+</body>
+</html>

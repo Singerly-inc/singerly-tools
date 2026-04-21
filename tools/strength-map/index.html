@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>強みマップ — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+.main { width:100%; max-width:760px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+.input-panel { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:22px; }
+.field { margin-bottom:12px; }
+.field label { display:block; font-size:0.72rem; font-weight:700; color:#555; margin-bottom:5px; }
+.field input { width:100%; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:9px 12px; color:#000; font-size:0.88rem; font-family:inherit; outline:none; transition:border-color 0.15s; }
+.field input:focus { border-color:#B7282E; }
+.field input::placeholder { color:#bbb; }
+.strength-tags { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px; }
+.preset-chip { padding:5px 12px; border-radius:20px; border:1px solid #E0E0E0; background:#fff; cursor:pointer; font-size:0.75rem; color:#555; transition:all 0.15s; font-family:inherit; }
+.preset-chip:hover,.preset-chip.sel { background:#B7282E; border-color:#B7282E; color:#fff; }
+.tag-input-row { display:flex; gap:8px; }
+.tag-input-row input { flex:1; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:8px 12px; color:#000; font-size:0.82rem; font-family:inherit; outline:none; }
+.tag-input-row input:focus { border-color:#B7282E; }
+.btn-tag-add { padding:8px 16px; border:none; border-radius:6px; background:#B7282E; color:#fff; font-family:inherit; font-size:0.82rem; font-weight:700; cursor:pointer; }
+.selected-tags { display:flex; flex-wrap:wrap; gap:6px; min-height:30px; }
+.sel-tag { background:#B7282E; color:#fff; border-radius:4px; padding:4px 10px; font-size:0.75rem; font-weight:700; display:flex; align-items:center; gap:4px; }
+.sel-tag button { background:none; border:none; color:rgba(255,255,255,0.7); cursor:pointer; font-size:0.8rem; padding:0; }
+.btn-primary { width:100%; padding:13px; font-size:0.95rem; font-weight:900; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; margin-top:4px; }
+.btn-primary:hover { background:#83151B; }
+/* BOARD */
+.board-header { display:flex; justify-content:space-between; align-items:center; }
+.btn-clear { font-size:0.72rem; color:#aaa; background:none; border:none; cursor:pointer; }
+.btn-clear:hover { color:#B7282E; }
+.member-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; }
+.member-card { background:#fff; border:2px solid #E0E0E0; border-radius:10px; padding:18px 16px; animation:popIn 0.3s ease both; }
+@keyframes popIn { 0%{opacity:0;transform:scale(0.92)} 100%{opacity:1;transform:none} }
+.mc-name { font-size:1rem; font-weight:900; color:#000; margin-bottom:10px; padding-bottom:8px; border-bottom:2px solid #B7282E; }
+.mc-tags { display:flex; flex-wrap:wrap; gap:5px; }
+.mc-tag { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:4px; padding:3px 9px; font-size:0.72rem; font-weight:700; color:#555; }
+/* CLOUD */
+.strength-cloud { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:20px; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+.cloud-tag { border-radius:4px; padding:4px 12px; font-weight:700; background:#B7282E; color:#fff; transition:transform 0.2s; }
+.cloud-tag:hover { transform:scale(1.1); }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">👥 チームビルド</div>
+  <h1 class="page-title">強みマップ</h1>
+  <p class="page-sub">チーム全員の強みを見える化。誰に何を頼めるかがわかる。</p>
+</div>
+<div class="main">
+  <div class="input-panel">
+    <div class="area-title">強みを登録する</div>
+    <div class="field"><label>名前</label><input type="text" id="nameIn" placeholder="田中 太郎"></div>
+    <div class="field">
+      <label>強み（クリックで選択 or 自由入力）</label>
+      <div class="strength-tags" id="presets"></div>
+      <div class="tag-input-row" style="margin-top:6px">
+        <input type="text" id="customTag" placeholder="自由記入（例：ファシリ力）">
+        <button class="btn-tag-add" onclick="addCustomTag()">追加</button>
+      </div>
+    </div>
+    <div class="area-title" style="margin-top:4px;margin-bottom:6px">選択中の強み</div>
+    <div class="selected-tags" id="selectedTags"></div>
+    <button class="btn-primary" style="margin-top:14px" onclick="submit()">強みを登録 →</button>
+  </div>
+  <div id="boardWrap" style="display:none">
+    <div class="board-header" style="margin-bottom:12px">
+      <div class="area-title" style="margin-bottom:0">チーム強みクラウド</div>
+    </div>
+    <div class="strength-cloud" id="strengthCloud"></div>
+    <div class="board-header" style="margin:16px 0 12px">
+      <div class="area-title" style="margin-bottom:0">メンバー別</div>
+      <button class="btn-clear" onclick="clearAll()">全クリア</button>
+    </div>
+    <div class="member-cards" id="memberCards"></div>
+  </div>
+</div>
+<script>
+const PRESET_TAGS=['傾聴力','発信力','論理思考','クリエイティビティ','行動力','計画力','共感力','リーダーシップ','巻き込み力','細部への注意','アイデア力','問題解決','チームワーク','専門知識','柔軟性'];
+let selectedTags=new Set(), entries=[];
+document.getElementById('presets').innerHTML=PRESET_TAGS.map(t=>
+  `<button class="preset-chip" onclick="toggleTag('${t}',this)">${t}</button>`
+).join('');
+function toggleTag(t,el){
+  if(selectedTags.has(t)){selectedTags.delete(t);el.classList.remove('sel');}
+  else{selectedTags.add(t);el.classList.add('sel');}
+  renderSelected();
+}
+function addCustomTag(){
+  const v=document.getElementById('customTag').value.trim();
+  if(!v)return;
+  selectedTags.add(v);
+  document.getElementById('customTag').value='';
+  renderSelected();
+}
+function renderSelected(){
+  document.getElementById('selectedTags').innerHTML=[...selectedTags].map(t=>
+    `<div class="sel-tag">${t}<button onclick="removeTag('${t}')">✕</button></div>`
+  ).join('');
+}
+function removeTag(t){selectedTags.delete(t);renderSelected();document.querySelectorAll('.preset-chip').forEach(c=>{if(c.textContent===t)c.classList.remove('sel');});}
+function submit(){
+  const name=document.getElementById('nameIn').value.trim();
+  if(!name||!selectedTags.size){alert('名前と強みを入力してください');return;}
+  entries.unshift({name,tags:[...selectedTags]});
+  document.getElementById('nameIn').value='';
+  selectedTags=new Set();
+  document.querySelectorAll('.preset-chip').forEach(c=>c.classList.remove('sel'));
+  renderSelected();
+  render();
+  document.getElementById('boardWrap').style.display='';
+}
+function render(){
+  const allTags={};
+  entries.forEach(e=>e.tags.forEach(t=>{allTags[t]=(allTags[t]||0)+1;}));
+  const max=Math.max(...Object.values(allTags),1);
+  document.getElementById('strengthCloud').innerHTML=Object.entries(allTags).sort((a,b)=>b[1]-a[1]).map(([t,c])=>{
+    const size=0.75+c/max*0.7;
+    return `<span class="cloud-tag" style="font-size:${size}rem;opacity:${0.5+c/max*0.5}">${t}${c>1?' ×'+c:''}</span>`;
+  }).join('');
+  document.getElementById('memberCards').innerHTML=entries.map((e,i)=>
+    `<div class="member-card" style="animation-delay:${i*40}ms">
+      <div class="mc-name">${e.name}</div>
+      <div class="mc-tags">${e.tags.map(t=>`<span class="mc-tag">${t}</span>`).join('')}</div>
+    </div>`
+  ).join('');
+}
+function clearAll(){if(confirm('全クリアしますか？')){entries=[];document.getElementById('boardWrap').style.display='none';}}
+</script>
+</body>
+</html>

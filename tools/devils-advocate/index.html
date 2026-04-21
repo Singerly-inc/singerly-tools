@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>悪魔の代弁者 — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+.main { width:100%; max-width:720px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+.intro-card { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:20px; font-size:0.88rem; color:#555; line-height:1.7; }
+.intro-card strong { color:#B7282E; }
+.setup-card { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:12px; padding:24px; }
+.field { margin-bottom:14px; }
+.field label { display:block; font-size:0.72rem; font-weight:700; color:#555; margin-bottom:5px; }
+.field input,.field textarea { width:100%; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:10px 14px; color:#000; font-size:0.9rem; font-family:inherit; outline:none; transition:border-color 0.15s; }
+.field input:focus,.field textarea:focus { border-color:#B7282E; }
+.field input::placeholder,.field textarea::placeholder { color:#bbb; }
+.field textarea { resize:vertical; min-height:80px; line-height:1.6; }
+.btn-primary { width:100%; padding:13px; font-size:0.95rem; font-weight:900; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; }
+.btn-primary:hover { background:#83151B; }
+/* Session */
+.session-area { display:none; }
+.session-area.show { display:flex; flex-direction:column; gap:16px; }
+.proposal-box { background:#000; border-radius:12px; padding:20px; }
+.pb-label { font-size:0.62rem; letter-spacing:0.18em; color:#B7282E; text-transform:uppercase; font-weight:700; margin-bottom:6px; }
+.pb-text { font-size:0.95rem; color:#fff; font-weight:700; line-height:1.55; }
+.devil-card { background:#F6F6F6; border:2px solid #B7282E; border-radius:12px; padding:20px; }
+.devil-header { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+.devil-emoji { font-size:1.5rem; }
+.devil-name { font-size:0.88rem; font-weight:700; color:#B7282E; }
+.devil-sub { font-size:0.72rem; color:#888; }
+.objection-list { display:flex; flex-direction:column; gap:8px; }
+.objection-row { display:flex; gap:8px; align-items:flex-start; }
+.objection-row input { flex:1; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:9px 12px; font-size:0.88rem; font-family:inherit; color:#000; outline:none; transition:border-color 0.15s; }
+.objection-row input:focus { border-color:#B7282E; }
+.objection-row input::placeholder { color:#bbb; }
+.btn-add { background:none; border:1px dashed #CCCCCC; border-radius:6px; padding:9px; cursor:pointer; color:#aaa; font-size:0.85rem; transition:all 0.15s; }
+.btn-add:hover { border-color:#B7282E; color:#B7282E; }
+.btn-del { background:none; border:none; cursor:pointer; color:#ccc; font-size:0.85rem; padding:4px; transition:color 0.15s; flex-shrink:0; margin-top:8px; }
+.btn-del:hover { color:#B7282E; }
+.angel-card { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:12px; padding:20px; }
+.angel-header { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+.angel-emoji { font-size:1.5rem; }
+.angel-name { font-size:0.88rem; font-weight:700; color:#555; }
+.rebuttal-list { display:flex; flex-direction:column; gap:8px; }
+.result-card { display:none; background:#000; border-radius:14px; padding:24px; }
+.result-card.show { display:block; animation:popIn 0.4s ease; }
+@keyframes popIn{0%{opacity:0;transform:scale(0.9)}100%{opacity:1;transform:scale(1)}}
+.rc-label { font-size:0.62rem; letter-spacing:0.18em; color:#B7282E; text-transform:uppercase; font-weight:700; margin-bottom:10px; }
+.rc-proposal { font-size:0.9rem; font-weight:700; color:#fff; margin-bottom:16px; }
+.rc-section { margin-bottom:14px; }
+.rc-sec-title { font-size:0.65rem; color:rgba(255,255,255,0.35); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:8px; }
+.rc-item { display:flex; gap:8px; margin-bottom:6px; }
+.rc-bullet { color:#B7282E; flex-shrink:0; }
+.rc-text { font-size:0.88rem; color:#fff; line-height:1.5; }
+.btn-row { display:flex; gap:10px; margin-top:14px; }
+.btn-new { flex:1; padding:12px; font-size:0.9rem; font-weight:800; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; }
+.btn-reset { padding:12px 16px; font-size:0.82rem; border:1px solid rgba(255,255,255,0.2); border-radius:8px; cursor:pointer; background:transparent; color:rgba(255,255,255,0.5); font-family:inherit; }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">🎯 対話・意思決定</div>
+  <h1 class="page-title">悪魔の代弁者</h1>
+  <p class="page-sub">あえて反論役を置いて議論を深める。思考の盲点を炙り出す。</p>
+</div>
+<div class="main">
+  <div class="intro-card">💡 <strong>悪魔の代弁者（Devil's Advocate）</strong>とは、わざと反対意見を述べる役割のこと。グループシンクを防ぎ、意思決定の質を高めるための手法です。
+  </div>
+  <div class="setup-card">
+    <div class="area-title">提案・議題を入力</div>
+    <div class="field"><label>議題・提案内容</label><textarea id="proposalIn" placeholder="例：来月から週次MTGを月次に変更する"></textarea></div>
+    <div class="field"><label>悪魔の代弁者（反論役）の名前</label><input type="text" id="devilName" placeholder="田中 太郎（または「悪魔くん」など）"></div>
+    <button class="btn-primary" onclick="startSession()">セッションを開始 😈</button>
+  </div>
+  <div class="session-area" id="sessionArea">
+    <div class="proposal-box">
+      <div class="pb-label">今日の議題</div>
+      <div class="pb-text" id="pbText"></div>
+    </div>
+    <div class="devil-card">
+      <div class="devil-header"><div class="devil-emoji">😈</div><div><div class="devil-name" id="devilNameDisplay"></div><div class="devil-sub">悪魔の代弁者 — あえて反論する役</div></div></div>
+      <div class="area-title" style="margin-bottom:8px">反論・懸念点を挙げよう</div>
+      <div class="objection-list" id="objList"></div>
+      <button class="btn-add" onclick="addObj()" style="margin-top:8px;width:100%">＋ 反論を追加</button>
+    </div>
+    <div class="angel-card">
+      <div class="angel-header"><div class="angel-emoji">😇</div><div><div class="angel-name">チーム全員 — 反論への回答</div></div></div>
+      <div class="area-title" style="margin-bottom:8px">反論への対応・改善案</div>
+      <div class="rebuttal-list" id="rebuttalList"></div>
+      <button class="btn-add" onclick="addRebuttal()" style="margin-top:8px;width:100%">＋ 回答を追加</button>
+    </div>
+    <button class="btn-primary" onclick="finalize()">ディスカッションを完成させる ✅</button>
+    <div class="result-card" id="resultCard">
+      <div class="rc-label">ディスカッション記録</div>
+      <div class="rc-proposal" id="rcProposal"></div>
+      <div class="rc-section" id="rcObj"></div>
+      <div class="rc-section" id="rcReb"></div>
+      <div class="btn-row">
+        <button class="btn-new" onclick="newSession()">＋ 新しい議題</button>
+        <button class="btn-reset" onclick="resetAll()">リセット</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+let proposal='',devilN='';
+function startSession(){
+  proposal=document.getElementById('proposalIn').value.trim();
+  devilN=document.getElementById('devilName').value.trim()||'悪魔の代弁者';
+  if(!proposal){alert('議題を入力してください');return;}
+  document.getElementById('pbText').textContent=proposal;
+  document.getElementById('devilNameDisplay').textContent=devilN;
+  document.querySelector('.setup-card').style.display='none';
+  document.getElementById('sessionArea').classList.add('show');
+  addObj();addObj();
+  addRebuttal();
+}
+function addObj(){
+  const el=document.getElementById('objList');
+  const row=document.createElement('div');row.className='objection-row';
+  row.innerHTML=`<input type="text" placeholder="例：参加者の準備不足で質が下がる恐れがある"><button class="btn-del" onclick="this.parentElement.remove()">✕</button>`;
+  el.appendChild(row);
+}
+function addRebuttal(){
+  const el=document.getElementById('rebuttalList');
+  const row=document.createElement('div');row.className='objection-row';
+  row.innerHTML=`<input type="text" placeholder="例：事前アジェンダを必須化してPre-readを共有する"><button class="btn-del" onclick="this.parentElement.remove()">✕</button>`;
+  el.appendChild(row);
+}
+function getVals(listId){return Array.from(document.getElementById(listId).querySelectorAll('input')).map(i=>i.value.trim()).filter(Boolean);}
+function finalize(){
+  const objs=getVals('objList');
+  const rebs=getVals('rebuttalList');
+  document.getElementById('rcProposal').textContent='議題: '+proposal;
+  const makeSec=(title,items,bullet)=>items.length?`<div class="rc-sec-title">${title}</div>${items.map(t=>`<div class="rc-item"><div class="rc-bullet">${bullet}</div><div class="rc-text">${t}</div></div>`).join('')}`:'';
+  document.getElementById('rcObj').innerHTML=makeSec('😈 反論・懸念点',objs,'▸');
+  document.getElementById('rcReb').innerHTML=makeSec('😇 対応・改善案',rebs,'✓');
+  document.getElementById('resultCard').classList.add('show');
+  document.getElementById('resultCard').scrollIntoView({behavior:'smooth'});
+}
+function newSession(){document.querySelector('.setup-card').style.display='';document.getElementById('sessionArea').classList.remove('show');document.getElementById('resultCard').classList.remove('show');document.getElementById('proposalIn').value='';document.getElementById('objList').innerHTML='';document.getElementById('rebuttalList').innerHTML='';}
+function resetAll(){newSession();}
+</script>
+</body>
+</html>

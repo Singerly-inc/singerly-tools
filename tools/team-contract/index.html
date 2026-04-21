@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>チーム憲法 — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+.main { width:100%; max-width:720px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+.intro-card { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:20px; font-size:0.88rem; color:#555; line-height:1.7; }
+.intro-card strong { color:#B7282E; }
+.section-card { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:12px; padding:24px; }
+.sec-title { font-size:0.72rem; font-weight:700; color:#000; margin-bottom:4px; text-transform:uppercase; letter-spacing:0.1em; }
+.sec-sub { font-size:0.78rem; color:#888; margin-bottom:14px; }
+.rule-list { display:flex; flex-direction:column; gap:8px; }
+.rule-row { display:flex; gap:8px; align-items:flex-start; }
+.rule-row input { flex:1; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:9px 12px; font-size:0.88rem; font-family:inherit; color:#000; outline:none; transition:border-color 0.15s; }
+.rule-row input:focus { border-color:#B7282E; }
+.rule-row input::placeholder { color:#bbb; }
+.btn-add-rule { background:none; border:1px dashed #CCCCCC; border-radius:6px; padding:9px; cursor:pointer; color:#aaa; font-size:1rem; transition:all 0.15s; }
+.btn-add-rule:hover { border-color:#B7282E; color:#B7282E; }
+.btn-del { background:none; border:none; cursor:pointer; color:#ccc; font-size:0.85rem; padding:4px; transition:color 0.15s; flex-shrink:0; margin-top:8px; }
+.btn-del:hover { color:#B7282E; }
+.team-name-row { display:flex; gap:10px; margin-bottom:0; }
+.team-name-row input { flex:1; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:10px 12px; font-size:0.9rem; font-family:inherit; color:#000; outline:none; transition:border-color 0.15s; }
+.team-name-row input:focus { border-color:#B7282E; }
+.btn-primary { width:100%; padding:13px; font-size:0.95rem; font-weight:900; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; }
+.btn-primary:hover { background:#83151B; }
+.contract-result { display:none; background:#000; border-radius:14px; padding:32px 28px; }
+.contract-result.show { display:block; animation:popIn 0.4s ease; }
+@keyframes popIn{0%{opacity:0;transform:scale(0.9)}100%{opacity:1;transform:scale(1)}}
+.cr-label { font-size:0.62rem; letter-spacing:0.18em; color:#B7282E; text-transform:uppercase; font-weight:700; margin-bottom:6px; }
+.cr-team { font-size:1.5rem; font-weight:900; color:#fff; margin-bottom:20px; }
+.cr-section { margin-bottom:18px; }
+.cr-sec-name { font-size:0.68rem; font-weight:700; color:rgba(255,255,255,0.4); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:10px; }
+.cr-rule { display:flex; align-items:flex-start; gap:10px; margin-bottom:8px; }
+.cr-bullet { color:#B7282E; font-size:0.8rem; flex-shrink:0; margin-top:2px; }
+.cr-text { font-size:0.9rem; color:#fff; line-height:1.55; }
+.cr-sign { margin-top:20px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.1); font-size:0.78rem; color:rgba(255,255,255,0.35); }
+.btn-row { display:flex; gap:10px; margin-top:16px; }
+.btn-print { flex:1; padding:12px; font-size:0.88rem; font-weight:700; border:2px solid #B7282E; border-radius:8px; cursor:pointer; background:transparent; color:#B7282E; font-family:inherit; }
+.btn-print:hover { background:#B7282E; color:#fff; }
+.btn-reset { padding:12px 16px; font-size:0.82rem; border:1px solid #CCCCCC; border-radius:8px; cursor:pointer; background:#fff; color:#888; font-family:inherit; }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">🛡️ 心理的安全性</div>
+  <h1 class="page-title">チーム憲法</h1>
+  <p class="page-sub">チームの行動規範を全員で決める。約束が安全基地をつくる。</p>
+</div>
+<div class="main">
+  <div class="intro-card">💡 チームで守りたいルールを<strong>全員で決める</strong>ことが大切です。トップダウンで決めたルールより、自分たちで作ったルールの方が守られやすくなります。
+  </div>
+  <div class="section-card">
+    <div class="sec-title">チーム名</div>
+    <div class="sec-sub">このチーム憲法を作るチームの名前</div>
+    <div class="team-name-row"><input type="text" id="teamName" placeholder="例：営業チーム・開発グループA"></div>
+  </div>
+  <div class="section-card">
+    <div class="sec-title">✅ やること（Do）</div>
+    <div class="sec-sub">チームとして実践することを決めよう</div>
+    <div class="rule-list" id="doList"></div>
+    <button class="btn-add-rule" onclick="addRule('do')" style="margin-top:8px;width:100%">＋ ルールを追加</button>
+  </div>
+  <div class="section-card">
+    <div class="sec-title">🚫 やらないこと（Don't）</div>
+    <div class="sec-sub">チームとして避けることを決めよう</div>
+    <div class="rule-list" id="dontList"></div>
+    <button class="btn-add-rule" onclick="addRule('dont')" style="margin-top:8px;width:100%">＋ ルールを追加</button>
+  </div>
+  <div class="section-card">
+    <div class="sec-title">🤝 困ったときは（Help）</div>
+    <div class="sec-sub">困ったときにどうするかを決めよう</div>
+    <div class="rule-list" id="helpList"></div>
+    <button class="btn-add-rule" onclick="addRule('help')" style="margin-top:8px;width:100%">＋ ルールを追加</button>
+  </div>
+  <button class="btn-primary" onclick="generate()">チーム憲法を完成させる 📜</button>
+  <div class="contract-result" id="result">
+    <div class="cr-label">チーム憲法</div>
+    <div class="cr-team" id="rTeamName"></div>
+    <div class="cr-section" id="rDo"></div>
+    <div class="cr-section" id="rDont"></div>
+    <div class="cr-section" id="rHelp"></div>
+    <div class="cr-sign" id="rSign"></div>
+    <div class="btn-row">
+      <button class="btn-print" onclick="window.print()">🖨️ 印刷・保存</button>
+      <button class="btn-reset" onclick="reset()">最初から</button>
+    </div>
+  </div>
+</div>
+<script>
+const DEFAULTS={
+  do:['意見を最後まで聴く','報告・連絡・相談を早めに行う','できたことを認め合う'],
+  dont:['人格を批判する','陰口・悪口を言う','返事なく無視する'],
+  help:['困ったらまずチームに相談する','「わからない」と言っていい','助けを求めた人を責めない']
+};
+function initSection(id,defaults){
+  const el=document.getElementById(id+'List');
+  el.innerHTML='';
+  defaults.forEach(d=>addRuleWithVal(id,d));
+}
+function addRule(id){addRuleWithVal(id,'');}
+function addRuleWithVal(id,val){
+  const el=document.getElementById(id+'List');
+  const row=document.createElement('div');
+  row.className='rule-row';
+  row.innerHTML=`<input type="text" placeholder="ルールを入力..." value="${val}"><button class="btn-del" onclick="this.parentElement.remove()">✕</button>`;
+  el.appendChild(row);
+}
+function generate(){
+  const team=document.getElementById('teamName').value.trim()||'私たちのチーム';
+  const getVals=id=>Array.from(document.getElementById(id+'List').querySelectorAll('input')).map(i=>i.value.trim()).filter(Boolean);
+  const doRules=getVals('do');
+  const dontRules=getVals('dont');
+  const helpRules=getVals('help');
+  if(!doRules.length&&!dontRules.length&&!helpRules.length){alert('ルールを入力してください');return;}
+  document.getElementById('rTeamName').textContent=team;
+  const makeSec=(title,rules)=>rules.length?`<div class="cr-sec-name">${title}</div>${rules.map(r=>`<div class="cr-rule"><div class="cr-bullet">▶</div><div class="cr-text">${r}</div></div>`).join('')}`:'';
+  document.getElementById('rDo').innerHTML=makeSec('✅ やること',doRules);
+  document.getElementById('rDont').innerHTML=makeSec('🚫 やらないこと',dontRules);
+  document.getElementById('rHelp').innerHTML=makeSec('🤝 困ったときは',helpRules);
+  const d=new Date();
+  document.getElementById('rSign').textContent=`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日 — 全員で合意した憲法です`;
+  document.getElementById('result').classList.add('show');
+  document.getElementById('result').scrollIntoView({behavior:'smooth'});
+}
+function reset(){document.getElementById('result').classList.remove('show');}
+initSection('do',DEFAULTS.do);
+initSection('dont',DEFAULTS.dont);
+initSection('help',DEFAULTS.help);
+</script>
+</body>
+</html>

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>ホットシート — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  min-height:100vh; background:#fff;
+  font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif;
+  color:#000000; display:flex; flex-direction:column; align-items:center;
+}
+.nav { width:100%; padding:12px 28px; background:#000000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+
+.main { width:100%; max-width:800px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+
+/* SETUP */
+.setup-area { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:24px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:14px; font-weight:700; }
+.setup-area textarea {
+  width:100%; background:#fff; border:1px solid #CCCCCC; border-radius:6px;
+  padding:12px 14px; color:#000000; font-size:0.9rem; font-family:inherit;
+  line-height:1.7; min-height:100px; resize:vertical; outline:none; transition:border-color 0.15s;
+}
+.setup-area textarea:focus { border-color:#B7282E; }
+.setup-area textarea::placeholder { color:#bbb; }
+
+.cat-row { display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; }
+.cat-btn {
+  padding:6px 14px; border-radius:4px; border:1px solid #CCCCCC;
+  background:#fff; color:#555; font-size:0.78rem; font-family:inherit;
+  cursor:pointer; transition:all 0.15s; font-weight:600;
+}
+.cat-btn.active { background:#B7282E; border-color:#B7282E; color:#fff; }
+
+.btn-primary {
+  margin-top:16px; width:100%; padding:13px; font-size:0.95rem; font-weight:900;
+  letter-spacing:0.06em; border:none; border-radius:8px; cursor:pointer;
+  background:#B7282E; color:#fff; font-family:inherit;
+  transition:background 0.15s, transform 0.12s;
+}
+.btn-primary:hover { background:#83151B; transform:translateY(-1px); }
+.btn-primary:disabled { opacity:0.35; cursor:not-allowed; transform:none; }
+
+/* STAGE */
+.stage { display:none; flex-direction:column; gap:16px; }
+.stage.show { display:flex; }
+
+/* PERSON DISPLAY */
+.person-card {
+  background:#000000; border-radius:10px;
+  padding:32px 24px; text-align:center;
+}
+.person-label { font-size:0.65rem; letter-spacing:0.2em; color:rgba(255,255,255,0.4); text-transform:uppercase; margin-bottom:8px; }
+.person-name { font-size:2.4rem; font-weight:900; color:#fff; line-height:1.2; animation:popIn 0.4s ease; }
+@keyframes popIn { 0%{transform:scale(0.7);opacity:0} 70%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+.person-turn { font-size:0.72rem; color:rgba(255,255,255,0.35); margin-top:8px; }
+
+/* QUESTION DISPLAY */
+.question-card {
+  background:#FDF3F3; border:2px solid #B7282E; border-radius:10px;
+  padding:24px; text-align:center;
+}
+.question-label { font-size:0.62rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:8px; }
+.question-text { font-size:1.3rem; font-weight:800; color:#000000; line-height:1.45; animation:fadeQ 0.3s ease; }
+@keyframes fadeQ { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+.question-hint { font-size:0.72rem; color:#888; margin-top:8px; }
+
+.action-row { display:flex; gap:10px; }
+.btn-next-q {
+  flex:1; padding:12px; font-size:0.9rem; font-weight:800;
+  border:2px solid #B7282E; border-radius:8px; cursor:pointer;
+  background:#fff; color:#B7282E; font-family:inherit;
+  transition:all 0.15s;
+}
+.btn-next-q:hover { background:#B7282E; color:#fff; }
+
+.btn-next-person {
+  flex:1; padding:12px; font-size:0.9rem; font-weight:800;
+  border:none; border-radius:8px; cursor:pointer;
+  background:#B7282E; color:#fff; font-family:inherit;
+  transition:background 0.15s;
+}
+.btn-next-person:hover { background:#83151B; }
+
+.btn-restart {
+  padding:12px 20px; font-size:0.82rem; font-weight:600;
+  border:1px solid #CCCCCC; border-radius:7px; cursor:pointer;
+  background:#fff; color:#888; font-family:inherit; transition:background 0.15s;
+}
+.btn-restart:hover { background:#F6F6F6; }
+
+/* PROGRESS */
+.progress-bar { background:#EEEEEE; border-radius:4px; height:6px; overflow:hidden; }
+.progress-fill { height:100%; background:#B7282E; border-radius:4px; transition:width 0.4s ease; }
+.progress-label { font-size:0.68rem; color:#888; text-align:center; margin-top:6px; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="../../">← ムドメわっしょい！</a>
+  <span class="nav-brand">SINGERLY</span>
+</nav>
+
+<div class="page-header">
+  <div class="tool-badge">🔥 アイスブレイク</div>
+  <h1 class="page-title">ホットシート</h1>
+  <p class="page-sub">選ばれた人にランダムな質問が飛ぶ。チームの相互理解を深める。</p>
+</div>
+
+<div class="main">
+
+  <!-- SETUP -->
+  <div class="setup-area" id="setupArea">
+    <div class="area-title">参加者リスト</div>
+    <textarea id="namesInput" placeholder="名前を1行に1名ずつ入力&#10;&#10;田中 太郎&#10;山田 花子&#10;鈴木 一郎"></textarea>
+
+    <div class="area-title" style="margin-top:18px;">質問カテゴリ</div>
+    <div class="cat-row" id="catRow">
+      <button class="cat-btn active" data-cat="all" onclick="toggleCat('all',this)">すべて</button>
+      <button class="cat-btn" data-cat="team" onclick="toggleCat('team',this)">👥 相互理解</button>
+      <button class="cat-btn" data-cat="work" onclick="toggleCat('work',this)">💼 仕事・キャリア</button>
+      <button class="cat-btn" data-cat="fun" onclick="toggleCat('fun',this)">😄 素の自分</button>
+      <button class="cat-btn" data-cat="deep" onclick="toggleCat('deep',this)">🔍 深掘り</button>
+    </div>
+
+    <button class="btn-primary" onclick="startGame()">🔥 スタート</button>
+  </div>
+
+  <!-- STAGE -->
+  <div class="stage" id="stage">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label" id="progressLabel"></div>
+
+    <div class="person-card">
+      <div class="person-label">ホットシートの人</div>
+      <div class="person-name" id="personName">―</div>
+      <div class="person-turn" id="personTurn"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="question-label">質問</div>
+      <div class="question-text" id="questionText">―</div>
+      <div class="question-hint">チームから自由に追加質問してもOK 🗣️</div>
+    </div>
+
+    <div class="action-row">
+      <button class="btn-next-q" onclick="nextQuestion()">🎲 別の質問</button>
+      <button class="btn-next-person" onclick="nextPerson()">👉 次の人へ</button>
+    </div>
+    <button class="btn-restart" onclick="restart()">← やり直す</button>
+  </div>
+
+</div>
+
+<script>
+const QUESTIONS = {
+  team: [
+    '最近うれしかったことは？','仕事で一番大変だったことは？','チームで感謝していることは？',
+    '一緒に働いて学んだことは？','職場で大切にしている習慣は？','最近誰かに助けてもらったことは？',
+    '自分のここを直したいと思うことは？','あなたの「隠れた才能」は何ですか？',
+  ],
+  work: [
+    '今年の仕事での目標は？','仕事で一番やりがいを感じる瞬間は？','なぜ今の仕事を選んだの？',
+    '5年後どうなっていたい？','キャリアで一番の転機は？','仕事で大切にしている価値観は？',
+    '一番誇りに思う仕事の成果は？','理想の働き方を一言で表すと？',
+  ],
+  fun: [
+    '最近ハマっていることは？','休日は何をしていますか？','人生で一番楽しかった旅行は？',
+    '子どもの頃の夢は？','無人島に1つ持っていくなら？','特技や隠し芸はある？',
+    '人生でもう一度やり直せるなら？','好きな食べ物ベスト3は？',
+  ],
+  deep: [
+    'なぜ今の仕事をしているか、深く考えたことはある？','人生で一番成長できた経験は？',
+    '自分が変わったと思う転機は？','大切にしている「言葉」や「座右の銘」は？',
+    '10年後の自分へ一言メッセージを送るとしたら？','人生で一番恐れていることは？',
+    '誰にも言っていない「夢」はある？','今の自分に必要なものは何だと思う？',
+  ],
+};
+
+let names=[], shuffled=[], currentIdx=0, activeCats=['all'];
+
+function toggleCat(cat, btn) {
+  if(cat==='all'){
+    activeCats=['all'];
+    document.querySelectorAll('.cat-btn').forEach(b=>{b.classList.remove('active');});
+    btn.classList.add('active');
+    return;
+  }
+  const allBtn=document.querySelector('[data-cat="all"]');
+  allBtn.classList.remove('active');
+  btn.classList.toggle('active');
+  activeCats = [...document.querySelectorAll('.cat-btn.active')].map(b=>b.dataset.cat);
+  if(!activeCats.length){ allBtn.classList.add('active'); activeCats=['all']; }
+}
+
+function getQuestions(){
+  if(activeCats.includes('all')) return Object.values(QUESTIONS).flat();
+  return activeCats.flatMap(c=>QUESTIONS[c]||[]);
+}
+
+function shuffle(a){ a=[...a]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+function startGame(){
+  const raw=document.getElementById('namesInput').value;
+  names=raw.split(/[\n、,，]+/).map(s=>s.trim()).filter(s=>s);
+  if(!names.length){alert('名前を入力してください');return;}
+  shuffled=shuffle(names); currentIdx=0;
+  document.getElementById('setupArea').style.display='none';
+  document.getElementById('stage').classList.add('show');
+  showPerson();
+}
+
+function showPerson(){
+  if(currentIdx>=shuffled.length){ endGame(); return; }
+  document.getElementById('personName').textContent=shuffled[currentIdx];
+  document.getElementById('personTurn').textContent=`${currentIdx+1}人目 / 全${shuffled.length}人`;
+  const pct=((currentIdx)/shuffled.length*100);
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('progressLabel').textContent=`残り ${shuffled.length-currentIdx} 人`;
+  nextQuestion();
+}
+
+function nextQuestion(){
+  const qs=getQuestions();
+  const q=qs[Math.floor(Math.random()*qs.length)];
+  const el=document.getElementById('questionText');
+  el.style.animation='none'; el.offsetHeight;
+  el.style.animation='fadeQ 0.3s ease';
+  el.textContent=q;
+}
+
+function nextPerson(){ currentIdx++; showPerson(); }
+
+function endGame(){
+  document.getElementById('personName').textContent='全員完了！';
+  document.getElementById('personTurn').textContent='お疲れさまでした 🎉';
+  document.getElementById('questionText').textContent='ホットシート、お疲れさまでした！';
+  document.getElementById('progressFill').style.width='100%';
+  document.getElementById('progressLabel').textContent='全員終了';
+}
+
+function restart(){
+  document.getElementById('setupArea').style.display='';
+  document.getElementById('stage').classList.remove('show');
+}
+</script>
+</body>
+</html>

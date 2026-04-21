@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>目標宣言ボード — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+.main { width:100%; max-width:720px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+.input-panel { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:12px; padding:24px; }
+.field { margin-bottom:14px; }
+.field label { display:block; font-size:0.72rem; font-weight:700; color:#555; margin-bottom:5px; }
+.field input,.field textarea,.field select { width:100%; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:10px 14px; color:#000; font-size:0.9rem; font-family:inherit; outline:none; transition:border-color 0.15s; }
+.field input:focus,.field textarea:focus,.field select:focus { border-color:#B7282E; }
+.field input::placeholder,.field textarea::placeholder { color:#bbb; }
+.field textarea { resize:vertical; min-height:80px; line-height:1.6; }
+.period-btns { display:flex; gap:8px; flex-wrap:wrap; }
+.period-btn { padding:7px 16px; border-radius:5px; border:1px solid #E0E0E0; background:#fff; cursor:pointer; font-size:0.8rem; font-weight:700; color:#555; transition:all 0.15s; font-family:inherit; }
+.period-btn:hover,.period-btn.sel { background:#B7282E; border-color:#B7282E; color:#fff; }
+.btn-primary { width:100%; padding:13px; font-size:0.95rem; font-weight:900; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; }
+.btn-primary:hover { background:#83151B; }
+.board-wrap { display:none; }
+.board-wrap.show { display:flex; flex-direction:column; gap:14px; }
+.board-header { display:flex; justify-content:space-between; align-items:center; }
+.btn-clear { font-size:0.72rem; color:#aaa; background:none; border:none; cursor:pointer; }
+.btn-clear:hover { color:#B7282E; }
+.goal-cards { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+@media(max-width:520px){.goal-cards{grid-template-columns:1fr;}}
+.goal-card { background:#000; border-radius:12px; padding:20px; animation:popIn 0.35s ease both; }
+@keyframes popIn{0%{opacity:0;transform:scale(0.92)}100%{opacity:1;transform:none}}
+.gc-period { display:inline-block; background:#B7282E; color:#fff; font-size:0.6rem; padding:2px 8px; border-radius:3px; margin-bottom:8px; font-weight:700; letter-spacing:0.1em; }
+.gc-name { font-size:0.72rem; color:rgba(255,255,255,0.45); margin-bottom:6px; }
+.gc-goal { font-size:0.95rem; font-weight:800; color:#fff; line-height:1.55; margin-bottom:10px; }
+.gc-why { background:rgba(255,255,255,0.07); border-radius:6px; padding:10px; font-size:0.78rem; color:rgba(255,255,255,0.6); line-height:1.5; margin-bottom:8px; }
+.gc-action { font-size:0.78rem; color:#B7282E; font-weight:700; }
+.cheer-row { display:flex; align-items:center; gap:8px; margin-top:10px; }
+.btn-cheer { background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:5px; padding:4px 12px; font-size:0.78rem; font-weight:700; color:#fff; cursor:pointer; font-family:inherit; transition:all 0.15s; }
+.btn-cheer:hover { background:#B7282E; border-color:#B7282E; }
+.cheer-count { font-size:0.72rem; color:rgba(255,255,255,0.3); }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">⚡ モチベーション</div>
+  <h1 class="page-title">目標宣言ボード</h1>
+  <p class="page-sub">チームに目標を宣言。パブリックコミットメントが達成率を上げる。</p>
+</div>
+<div class="main">
+  <div class="input-panel">
+    <div class="area-title">目標を宣言する</div>
+    <div class="field">
+      <label>名前</label>
+      <input type="text" id="nameIn" placeholder="田中 太郎">
+    </div>
+    <div class="field">
+      <label>期間</label>
+      <div class="period-btns" id="periodBtns"></div>
+    </div>
+    <div class="field">
+      <label>目標（具体的に）</label>
+      <textarea id="goalIn" placeholder="例：今月中に新規提案を3件以上クローズする"></textarea>
+    </div>
+    <div class="field">
+      <label>なぜその目標？（Why）</label>
+      <input type="text" id="whyIn" placeholder="例：チームの売上目標達成に貢献したいから">
+    </div>
+    <div class="field">
+      <label>最初の一歩（行動宣言）</label>
+      <input type="text" id="actionIn" placeholder="例：明日の朝イチで顧客リストを整理する">
+    </div>
+    <button class="btn-primary" onclick="submit()">🚀 チームに宣言する</button>
+  </div>
+  <div class="board-wrap" id="boardWrap">
+    <div class="board-header">
+      <div class="area-title" style="margin-bottom:0">目標宣言ボード</div>
+      <button class="btn-clear" onclick="clearAll()">全クリア</button>
+    </div>
+    <div class="goal-cards" id="goalCards"></div>
+  </div>
+</div>
+<script>
+const PERIODS=['今日中','今週中','今月中','今四半期','今年中'];
+let selPeriod=PERIODS[2],entries=[];
+document.getElementById('periodBtns').innerHTML=PERIODS.map(p=>
+  `<button class="period-btn ${p===selPeriod?'sel':''}" onclick="selectP('${p}',this)">${p}</button>`
+).join('');
+function selectP(p,el){selPeriod=p;document.querySelectorAll('.period-btn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');}
+function submit(){
+  const name=document.getElementById('nameIn').value.trim();
+  const goal=document.getElementById('goalIn').value.trim();
+  const why=document.getElementById('whyIn').value.trim();
+  const action=document.getElementById('actionIn').value.trim();
+  if(!name||!goal){alert('名前と目標を入力してください');return;}
+  entries.unshift({name,period:selPeriod,goal,why,action,cheer:0});
+  ['nameIn','goalIn','whyIn','actionIn'].forEach(id=>document.getElementById(id).value='');
+  render();
+  document.getElementById('boardWrap').classList.add('show');
+}
+function cheer(i){entries[i].cheer++;render();}
+function render(){
+  document.getElementById('goalCards').innerHTML=entries.map((e,i)=>`
+    <div class="goal-card" style="animation-delay:${i*40}ms">
+      <div class="gc-period">${e.period}</div>
+      <div class="gc-name">${e.name}</div>
+      <div class="gc-goal">${e.goal}</div>
+      ${e.why?`<div class="gc-why">💡 ${e.why}</div>`:''}
+      ${e.action?`<div class="gc-action">▶ ${e.action}</div>`:''}
+      <div class="cheer-row">
+        <button class="btn-cheer" onclick="cheer(${i})">👊 応援する</button>
+        <span class="cheer-count">${e.cheer>0?'×'+e.cheer+'人が応援中':''}</span>
+      </div>
+    </div>`).join('');
+}
+function clearAll(){if(confirm('全クリアしますか？')){entries=[];document.getElementById('boardWrap').classList.remove('show');}}
+</script>
+</body>
+</html>

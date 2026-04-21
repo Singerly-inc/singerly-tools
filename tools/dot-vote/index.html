@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>ドット投票 — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+.main { width:100%; max-width:720px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+.setup-card { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:12px; padding:24px; }
+.field { margin-bottom:14px; }
+.field label { display:block; font-size:0.72rem; font-weight:700; color:#555; margin-bottom:5px; }
+.field input { width:100%; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:10px 14px; color:#000; font-size:0.9rem; font-family:inherit; outline:none; transition:border-color 0.15s; }
+.field input:focus { border-color:#B7282E; }
+.field input::placeholder { color:#bbb; }
+.options-list { display:flex; flex-direction:column; gap:8px; margin-bottom:12px; }
+.opt-row { display:flex; gap:8px; }
+.opt-row input { flex:1; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:9px 12px; font-size:0.88rem; font-family:inherit; color:#000; outline:none; transition:border-color 0.15s; }
+.opt-row input:focus { border-color:#B7282E; }
+.opt-row input::placeholder { color:#bbb; }
+.btn-del { background:none; border:none; cursor:pointer; color:#ccc; font-size:0.85rem; padding:4px; transition:color 0.15s; }
+.btn-del:hover { color:#B7282E; }
+.btn-add { background:none; border:1px dashed #CCCCCC; border-radius:6px; padding:9px; cursor:pointer; color:#aaa; font-size:0.85rem; transition:all 0.15s; width:100%; }
+.btn-add:hover { border-color:#B7282E; color:#B7282E; }
+.dots-row { display:flex; align-items:center; gap:10px; }
+.dots-row label { font-size:0.78rem; color:#555; }
+.dots-row select { background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:8px 12px; font-size:0.9rem; font-family:inherit; color:#000; outline:none; }
+.btn-primary { width:100%; padding:13px; font-size:0.95rem; font-weight:900; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; }
+.btn-primary:hover { background:#83151B; }
+/* Voting */
+.voting-area { display:none; }
+.voting-area.show { display:flex; flex-direction:column; gap:16px; }
+.vote-topic { background:#000; border-radius:12px; padding:20px; }
+.vt-label { font-size:0.62rem; letter-spacing:0.18em; color:#B7282E; text-transform:uppercase; font-weight:700; margin-bottom:4px; }
+.vt-text { font-size:1rem; font-weight:700; color:#fff; }
+.voter-card { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:12px; padding:20px; }
+.vc-name { font-size:0.88rem; font-weight:700; color:#000; margin-bottom:14px; }
+.vc-dots { font-size:0.78rem; color:#B7282E; font-weight:700; margin-bottom:10px; }
+.option-btns { display:flex; flex-direction:column; gap:8px; }
+.opt-btn { display:flex; align-items:center; gap:10px; padding:12px 14px; background:#fff; border:1px solid #E0E0E0; border-radius:8px; cursor:pointer; transition:all 0.15s; text-align:left; font-family:inherit; }
+.opt-btn:hover { border-color:#B7282E; background:#FDF3F3; }
+.opt-btn-text { font-size:0.88rem; color:#000; flex:1; }
+.opt-dot-count { font-size:0.78rem; font-weight:900; color:#B7282E; background:#FDF3F3; border:1px solid #B7282E; border-radius:4px; padding:2px 8px; }
+.btn-next-voter { width:100%; padding:12px; font-size:0.9rem; font-weight:800; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; }
+.btn-next-voter:hover { background:#83151B; }
+/* Result */
+.result-area { display:none; }
+.result-area.show { display:flex; flex-direction:column; gap:14px; }
+.result-card { background:#000; border-radius:14px; padding:24px; }
+.rc-label { font-size:0.62rem; letter-spacing:0.18em; color:#B7282E; text-transform:uppercase; font-weight:700; margin-bottom:10px; }
+.result-row { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+.rr-rank { font-size:0.78rem; font-weight:900; color:rgba(255,255,255,0.3); min-width:24px; text-align:center; }
+.rr-rank.top { color:#B7282E; }
+.rr-text { flex:1; font-size:0.9rem; color:#fff; }
+.rr-bar-bg { width:80px; background:rgba(255,255,255,0.1); border-radius:3px; height:8px; }
+.rr-bar { height:100%; border-radius:3px; background:#B7282E; }
+.rr-count { font-size:0.9rem; font-weight:900; color:#B7282E; min-width:30px; text-align:right; }
+.btn-reset { width:100%; padding:12px; font-size:0.9rem; font-weight:700; border:2px solid #B7282E; border-radius:8px; cursor:pointer; background:transparent; color:#B7282E; font-family:inherit; }
+.btn-reset:hover { background:#B7282E; color:#fff; }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">🎯 対話・意思決定</div>
+  <h1 class="page-title">ドット投票</h1>
+  <p class="page-sub">限られたドットで優先順位を決める。チームの合意形成を可視化する。</p>
+</div>
+<div class="main">
+  <div class="setup-card" id="setupCard">
+    <div class="area-title">投票の設定</div>
+    <div class="field"><label>議題・テーマ</label><input type="text" id="topicIn" placeholder="例：次四半期の注力施策を決める"></div>
+    <div class="area-title" style="margin-top:4px">選択肢（3〜8個）</div>
+    <div class="options-list" id="optsList"></div>
+    <button class="btn-add" onclick="addOpt()">＋ 選択肢を追加</button>
+    <div class="dots-row" style="margin-top:14px;margin-bottom:14px">
+      <label>1人あたりのドット数:</label>
+      <select id="dotCount"><option>3</option><option selected>5</option><option>7</option><option>10</option></select>
+    </div>
+    <div class="field"><label>投票者の名前（1行1名）</label><textarea style="min-height:100px;resize:vertical;width:100%;background:#fff;border:1px solid #CCCCCC;border-radius:6px;padding:10px 14px;font-size:0.9rem;font-family:inherit;color:#000;outline:none;line-height:1.6" id="votersIn" placeholder="田中 太郎&#10;山田 花子&#10;鈴木 一郎"></textarea></div>
+    <button class="btn-primary" onclick="startVoting()">投票を開始する →</button>
+  </div>
+  <div class="voting-area" id="votingArea">
+    <div class="vote-topic"><div class="vt-label">議題</div><div class="vt-text" id="vtText"></div></div>
+    <div class="voter-card" id="voterCard"></div>
+  </div>
+  <div class="result-area" id="resultArea">
+    <div class="result-card">
+      <div class="rc-label">投票結果</div>
+      <div id="resultRows"></div>
+    </div>
+    <button class="btn-reset" onclick="resetAll()">🔄 最初からやり直す</button>
+  </div>
+</div>
+<script>
+let topic='',opts=[],voters=[],dotsPerPerson=5,curVoter=0,votes={};
+function addOpt(){
+  const el=document.getElementById('optsList');
+  const row=document.createElement('div');row.className='opt-row';
+  row.innerHTML=`<input type="text" placeholder="選択肢 ${el.children.length+1}"><button class="btn-del" onclick="this.parentElement.remove()">✕</button>`;
+  el.appendChild(row);
+}
+function startVoting(){
+  topic=document.getElementById('topicIn').value.trim();
+  opts=Array.from(document.getElementById('optsList').querySelectorAll('input')).map(i=>i.value.trim()).filter(Boolean);
+  voters=document.getElementById('votersIn').value.split('\n').map(s=>s.trim()).filter(Boolean);
+  dotsPerPerson=+document.getElementById('dotCount').value;
+  if(!topic||opts.length<2||!voters.length){alert('議題・選択肢2つ以上・投票者を入力してください');return;}
+  votes={};opts.forEach(o=>votes[o]=0);
+  curVoter=0;
+  document.getElementById('vtText').textContent=topic;
+  document.getElementById('setupCard').style.display='none';
+  document.getElementById('votingArea').classList.add('show');
+  renderVoter();
+}
+function renderVoter(){
+  if(curVoter>=voters.length){showResult();return;}
+  const name=voters[curVoter];
+  let remaining=dotsPerPerson;
+  const tempVotes={};opts.forEach(o=>tempVotes[o]=0);
+  document.getElementById('voterCard').innerHTML=`
+    <div class="vc-name">${name} さんの番（残りドット: <span id="remaining">${dotsPerPerson}</span>）</div>
+    <div class="vc-dots">●を選択肢に配分してください（1つに複数ドット可）</div>
+    <div class="option-btns">${opts.map((o,i)=>`
+      <button class="opt-btn" id="ob${i}" onclick="addDot(${i})">
+        <div class="opt-btn-text">${o}</div>
+        <div class="opt-dot-count" id="dc${i}">0</div>
+      </button>`).join('')}
+    </div>
+    <button class="btn-next-voter" style="margin-top:14px" onclick="commitVotes()">投票を確定 →</button>`;
+  window._tempVotes=tempVotes;window._remaining=remaining;
+}
+window.addDot=function(i){
+  if(window._remaining<=0){return;}
+  window._remaining--;
+  window._tempVotes[opts[i]]=(window._tempVotes[opts[i]]||0)+1;
+  document.getElementById('dc'+i).textContent=window._tempVotes[opts[i]];
+  document.getElementById('remaining').textContent=window._remaining;
+};
+function commitVotes(){
+  opts.forEach(o=>votes[o]+=window._tempVotes[o]||0);
+  curVoter++;
+  renderVoter();
+}
+function showResult(){
+  document.getElementById('votingArea').classList.remove('show');
+  document.getElementById('resultArea').classList.add('show');
+  const sorted=opts.map(o=>({text:o,v:votes[o]})).sort((a,b)=>b.v-a.v);
+  const max=sorted[0].v||1;
+  document.getElementById('resultRows').innerHTML=sorted.map((r,i)=>`
+    <div class="result-row">
+      <div class="rr-rank ${i===0?'top':''}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</div>
+      <div class="rr-text">${r.text}</div>
+      <div class="rr-bar-bg"><div class="rr-bar" style="width:${r.v/max*100}%"></div></div>
+      <div class="rr-count">${r.v}pt</div>
+    </div>`).join('');
+}
+function resetAll(){
+  document.getElementById('resultArea').classList.remove('show');
+  document.getElementById('setupCard').style.display='';
+  document.getElementById('topicIn').value='';
+  document.getElementById('optsList').innerHTML='';
+  document.getElementById('votersIn').value='';
+  ['addOpt','addOpt','addOpt'].forEach(()=>addOpt());
+}
+addOpt();addOpt();addOpt();
+</script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>感情温度計 — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  min-height:100vh; background:#fff;
+  font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif;
+  color:#000000; display:flex; flex-direction:column; align-items:center;
+}
+.nav { width:100%; padding:12px 28px; background:#000000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+
+.main { width:100%; max-width:720px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+
+/* INPUT */
+.input-area { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:24px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:14px; font-weight:700; }
+
+.name-row { display:flex; gap:8px; margin-bottom:18px; }
+.name-row input {
+  flex:1; background:#fff; border:1px solid #CCCCCC; border-radius:6px;
+  padding:10px 14px; color:#000000; font-size:0.9rem; font-family:inherit;
+  outline:none; transition:border-color 0.15s;
+}
+.name-row input:focus { border-color:#B7282E; }
+.name-row input::placeholder { color:#bbb; }
+
+.mood-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin-bottom:18px; }
+.mood-btn {
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  padding:14px 8px; border:2px solid #E0E0E0; border-radius:10px;
+  background:#fff; cursor:pointer; transition:all 0.15s; font-family:inherit;
+}
+.mood-btn:hover { border-color:#B7282E; background:#FDF3F3; }
+.mood-btn.selected { border-color:#B7282E; background:#FDF3F3; }
+.mood-emoji { font-size:1.8rem; line-height:1; }
+.mood-label { font-size:0.68rem; color:#555; font-weight:700; text-align:center; line-height:1.2; }
+
+.comment-input {
+  width:100%; background:#fff; border:1px solid #CCCCCC; border-radius:6px;
+  padding:10px 14px; color:#000000; font-size:0.85rem; font-family:inherit;
+  outline:none; transition:border-color 0.15s; margin-bottom:14px;
+}
+.comment-input:focus { border-color:#B7282E; }
+.comment-input::placeholder { color:#bbb; }
+
+.btn-primary {
+  width:100%; padding:13px; font-size:0.95rem; font-weight:900;
+  border:none; border-radius:8px; cursor:pointer;
+  background:#B7282E; color:#fff; font-family:inherit;
+  transition:background 0.15s;
+}
+.btn-primary:hover { background:#83151B; }
+
+/* RESULTS */
+.results-area { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:24px; display:none; }
+.results-area.show { display:block; }
+.results-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
+.results-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; font-weight:700; }
+.btn-clear { font-size:0.72rem; color:#aaa; background:none; border:none; cursor:pointer; transition:color 0.15s; }
+.btn-clear:hover { color:#e05; }
+
+.result-list { display:flex; flex-direction:column; gap:10px; }
+.result-item {
+  background:#fff; border:1px solid #E0E0E0; border-radius:8px;
+  padding:12px 16px; display:flex; align-items:center; gap:12px;
+  animation:slideIn 0.25s ease;
+}
+@keyframes slideIn { from{opacity:0;transform:translateY(-5px)} to{opacity:1;transform:translateY(0)} }
+.result-emoji { font-size:1.5rem; flex-shrink:0; }
+.result-info { flex:1; }
+.result-name { font-size:0.92rem; font-weight:800; color:#000000; }
+.result-mood-label { font-size:0.72rem; color:#B7282E; font-weight:700; }
+.result-comment { font-size:0.75rem; color:#666; margin-top:2px; }
+
+/* SUMMARY */
+.summary { margin-top:16px; padding-top:16px; border-top:1px solid #EEEEEE; }
+.summary-title { font-size:0.62rem; letter-spacing:0.16em; color:#888; text-transform:uppercase; margin-bottom:10px; font-weight:700; }
+.summary-bars { display:flex; flex-direction:column; gap:8px; }
+.summary-bar-row { display:flex; align-items:center; gap:10px; }
+.summary-bar-emoji { font-size:1rem; width:24px; text-align:center; }
+.summary-bar-bg { flex:1; background:#EEEEEE; border-radius:4px; height:8px; overflow:hidden; }
+.summary-bar-fill { height:100%; background:#B7282E; border-radius:4px; transition:width 0.4s ease; }
+.summary-bar-count { font-size:0.72rem; color:#888; width:24px; text-align:right; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="../../">← ムドメわっしょい！</a>
+  <span class="nav-brand">SINGERLY</span>
+</nav>
+
+<div class="page-header">
+  <div class="tool-badge">🛡️ 心理的安全性</div>
+  <h1 class="page-title">感情温度計</h1>
+  <p class="page-sub">今の気持ちを天気で表現。会議・研修の前後チェックインに。</p>
+</div>
+
+<div class="main">
+
+  <div class="input-area">
+    <div class="area-title">チェックイン</div>
+    <div class="name-row">
+      <input type="text" id="nameInput" placeholder="あなたの名前">
+    </div>
+    <div class="mood-grid">
+      <button class="mood-btn" data-mood="0" onclick="selectMood(0)">
+        <span class="mood-emoji">☀️</span><span class="mood-label">快晴<br>絶好調！</span>
+      </button>
+      <button class="mood-btn" data-mood="1" onclick="selectMood(1)">
+        <span class="mood-emoji">⛅</span><span class="mood-label">晴れ曇り<br>まあまあ</span>
+      </button>
+      <button class="mood-btn" data-mood="2" onclick="selectMood(2)">
+        <span class="mood-emoji">☁️</span><span class="mood-label">曇り<br>ちょっと重め</span>
+      </button>
+      <button class="mood-btn" data-mood="3" onclick="selectMood(3)">
+        <span class="mood-emoji">🌧️</span><span class="mood-label">雨<br>しんどい</span>
+      </button>
+      <button class="mood-btn" data-mood="4" onclick="selectMood(4)">
+        <span class="mood-emoji">⛈️</span><span class="mood-label">嵐<br>かなりキツい</span>
+      </button>
+    </div>
+    <input type="text" class="comment-input" id="commentInput" placeholder="一言コメント（任意）">
+    <button class="btn-primary" onclick="submit()">チェックイン →</button>
+  </div>
+
+  <div class="results-area" id="resultsArea">
+    <div class="results-header">
+      <div class="results-title">チェックイン結果</div>
+      <button class="btn-clear" onclick="clearAll()">全員クリア</button>
+    </div>
+    <div class="result-list" id="resultList"></div>
+    <div class="summary" id="summary"></div>
+  </div>
+
+</div>
+
+<script>
+const MOODS = [
+  {emoji:'☀️', label:'快晴 — 絶好調！'},
+  {emoji:'⛅', label:'晴れ曇り — まあまあ'},
+  {emoji:'☁️', label:'曇り — ちょっと重め'},
+  {emoji:'🌧️', label:'雨 — しんどい'},
+  {emoji:'⛈️', label:'嵐 — かなりキツい'},
+];
+
+let selectedMood = null;
+let entries = [];
+
+function selectMood(idx){
+  selectedMood=idx;
+  document.querySelectorAll('.mood-btn').forEach((b,i)=>{ b.classList.toggle('selected', i===idx); });
+}
+
+function submit(){
+  const name=document.getElementById('nameInput').value.trim();
+  if(!name){alert('名前を入力してください');return;}
+  if(selectedMood===null){alert('天気を選んでください');return;}
+  const comment=document.getElementById('commentInput').value.trim();
+  entries.push({name, mood:selectedMood, comment});
+  document.getElementById('nameInput').value='';
+  document.getElementById('commentInput').value='';
+  document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('selected'));
+  selectedMood=null;
+  renderResults();
+  document.getElementById('resultsArea').classList.add('show');
+}
+
+function renderResults(){
+  const list=document.getElementById('resultList');
+  list.innerHTML=entries.map(e=>`
+    <div class="result-item">
+      <div class="result-emoji">${MOODS[e.mood].emoji}</div>
+      <div class="result-info">
+        <div class="result-name">${e.name}</div>
+        <div class="result-mood-label">${MOODS[e.mood].label}</div>
+        ${e.comment?`<div class="result-comment">${e.comment}</div>`:''}
+      </div>
+    </div>
+  `).join('');
+
+  // summary
+  const counts=Array(5).fill(0);
+  entries.forEach(e=>counts[e.mood]++);
+  const max=Math.max(...counts,1);
+  document.getElementById('summary').innerHTML=`
+    <div class="summary-title">天気分布</div>
+    <div class="summary-bars">
+      ${MOODS.map((m,i)=>`
+        <div class="summary-bar-row">
+          <div class="summary-bar-emoji">${m.emoji}</div>
+          <div class="summary-bar-bg"><div class="summary-bar-fill" style="width:${counts[i]/max*100}%"></div></div>
+          <div class="summary-bar-count">${counts[i]}</div>
+        </div>
+      `).join('')}
+    </div>`;
+}
+
+function clearAll(){
+  if(!confirm('全員のデータをクリアしますか？'))return;
+  entries=[];
+  document.getElementById('resultList').innerHTML='';
+  document.getElementById('summary').innerHTML='';
+  document.getElementById('resultsArea').classList.remove('show');
+}
+</script>
+</body>
+</html>

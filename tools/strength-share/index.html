@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>強み発見シェア — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+.main { width:100%; max-width:720px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+.intro-card { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:20px; font-size:0.88rem; color:#555; line-height:1.7; }
+.intro-card strong { color:#B7282E; }
+.input-panel { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:12px; padding:24px; }
+.field { margin-bottom:14px; }
+.field label { display:block; font-size:0.72rem; font-weight:700; color:#555; margin-bottom:5px; }
+.field input,.field textarea { width:100%; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:10px 14px; color:#000; font-size:0.9rem; font-family:inherit; outline:none; transition:border-color 0.15s; }
+.field input:focus,.field textarea:focus { border-color:#B7282E; }
+.field input::placeholder,.field textarea::placeholder { color:#bbb; }
+.field textarea { resize:vertical; min-height:80px; line-height:1.6; }
+.tags-area { display:flex; gap:7px; flex-wrap:wrap; margin-bottom:14px; }
+.tag { padding:6px 14px; border-radius:20px; border:1px solid #E0E0E0; background:#fff; cursor:pointer; font-size:0.78rem; font-weight:700; color:#555; transition:all 0.15s; font-family:inherit; }
+.tag:hover,.tag.sel { background:#B7282E; border-color:#B7282E; color:#fff; }
+.tag-hint { font-size:0.72rem; color:#aaa; margin-bottom:8px; }
+.btn-primary { width:100%; padding:13px; font-size:0.95rem; font-weight:900; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; }
+.btn-primary:hover { background:#83151B; }
+.board-wrap { display:none; }
+.board-wrap.show { display:flex; flex-direction:column; gap:14px; }
+.board-header { display:flex; justify-content:space-between; align-items:center; }
+.btn-clear { font-size:0.72rem; color:#aaa; background:none; border:none; cursor:pointer; }
+.btn-clear:hover { color:#B7282E; }
+.share-cards { display:flex; flex-direction:column; gap:12px; }
+.share-card { background:#000; border-radius:12px; padding:20px; animation:popIn 0.35s ease both; }
+@keyframes popIn{0%{opacity:0;transform:scale(0.92)}100%{opacity:1;transform:none}}
+.sc-name { font-size:0.72rem; color:rgba(255,255,255,0.45); margin-bottom:10px; }
+.sc-tags { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
+.sc-tag { background:#B7282E; color:#fff; font-size:0.7rem; font-weight:700; padding:3px 10px; border-radius:20px; }
+.sc-story { font-size:0.88rem; color:#fff; line-height:1.6; margin-bottom:8px; }
+.sc-connect { background:rgba(255,255,255,0.07); border-radius:6px; padding:10px; font-size:0.78rem; color:rgba(255,255,255,0.6); line-height:1.5; }
+.sc-connect-label { font-size:0.6rem; color:rgba(255,255,255,0.35); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px; }
+.like-row { display:flex; align-items:center; gap:8px; margin-top:10px; }
+.btn-like { background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:5px; padding:4px 12px; font-size:0.78rem; font-weight:700; color:#fff; cursor:pointer; font-family:inherit; transition:all 0.15s; }
+.btn-like:hover { background:#B7282E; border-color:#B7282E; }
+.like-count { font-size:0.72rem; color:rgba(255,255,255,0.3); }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">⚡ モチベーション</div>
+  <h1 class="page-title">強み発見シェア</h1>
+  <p class="page-sub">自分の強みを語ってシェア。認め合いがチームの自信を育てる。</p>
+</div>
+<div class="main">
+  <div class="intro-card">💡 強みは<strong>「自分が自然とできること」「エネルギーが湧くこと」</strong>に隠れています。うまくいったエピソードを語ることで、自分の強みが見えてきます。
+  </div>
+  <div class="input-panel">
+    <div class="area-title">強みをシェアする</div>
+    <div class="field"><label>名前</label><input type="text" id="nameIn" placeholder="田中 太郎"></div>
+    <div class="tag-hint">あなたの強みタグを選ぼう（複数選択OK）</div>
+    <div class="tags-area" id="tagsArea"></div>
+    <div class="field">
+      <label>その強みが発揮されたエピソード</label>
+      <textarea id="storyIn" placeholder="例：プロジェクトの混乱期に情報を整理してチームに共有したら、全員が動きやすくなった"></textarea>
+    </div>
+    <div class="field">
+      <label>その強みをチームにどう活かせそう？</label>
+      <input type="text" id="connectIn" placeholder="例：次のプロジェクトで情報整理役を担当したい">
+    </div>
+    <button class="btn-primary" onclick="submit()">💪 シェアする</button>
+  </div>
+  <div class="board-wrap" id="boardWrap">
+    <div class="board-header">
+      <div class="area-title" style="margin-bottom:0">強みシェアボード</div>
+      <button class="btn-clear" onclick="clearAll()">全クリア</button>
+    </div>
+    <div class="share-cards" id="shareCards"></div>
+  </div>
+</div>
+<script>
+const STRENGTH_TAGS=['分析力','発信力','共感力','行動力','企画力','巻き込み力','傾聴力','粘り強さ','柔軟性','論理思考','創造性','丁寧さ','スピード','統率力','サポート力','観察眼','楽観力','責任感'];
+let selTags=new Set(),entries=[];
+document.getElementById('tagsArea').innerHTML=STRENGTH_TAGS.map(t=>
+  `<button class="tag" onclick="toggleTag('${t}',this)">${t}</button>`
+).join('');
+function toggleTag(t,el){
+  if(selTags.has(t)){selTags.delete(t);el.classList.remove('sel');}
+  else{selTags.add(t);el.classList.add('sel');}
+}
+function submit(){
+  const name=document.getElementById('nameIn').value.trim();
+  const story=document.getElementById('storyIn').value.trim();
+  const connect=document.getElementById('connectIn').value.trim();
+  if(!name||selTags.size===0){alert('名前と強みタグを入力してください');return;}
+  entries.unshift({name,tags:[...selTags],story,connect,likes:0});
+  document.getElementById('nameIn').value='';
+  document.getElementById('storyIn').value='';
+  document.getElementById('connectIn').value='';
+  selTags.clear();
+  document.querySelectorAll('.tag').forEach(t=>t.classList.remove('sel'));
+  render();
+  document.getElementById('boardWrap').classList.add('show');
+}
+function like(i){entries[i].likes++;render();}
+function render(){
+  document.getElementById('shareCards').innerHTML=entries.map((e,i)=>`
+    <div class="share-card" style="animation-delay:${i*40}ms">
+      <div class="sc-name">${e.name} さんの強み</div>
+      <div class="sc-tags">${e.tags.map(t=>`<span class="sc-tag">${t}</span>`).join('')}</div>
+      ${e.story?`<div class="sc-story">${e.story}</div>`:''}
+      ${e.connect?`<div class="sc-connect"><div class="sc-connect-label">チームへの貢献</div>${e.connect}</div>`:''}
+      <div class="like-row">
+        <button class="btn-like" onclick="like(${i})">👏 いいね</button>
+        <span class="like-count">${e.likes>0?'×'+e.likes+'人':''}</span>
+      </div>
+    </div>`).join('');
+}
+function clearAll(){if(confirm('全クリアしますか？')){entries=[];document.getElementById('boardWrap').classList.remove('show');}}
+</script>
+</body>
+</html>

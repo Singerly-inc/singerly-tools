@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>ライフライン — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+.main { width:100%; max-width:760px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+.panel { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:22px; }
+.field { margin-bottom:12px; }
+.field label { display:block; font-size:0.72rem; font-weight:700; color:#555; margin-bottom:5px; }
+.field input { width:100%; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:9px 12px; color:#000; font-size:0.88rem; font-family:inherit; outline:none; transition:border-color 0.15s; }
+.field input:focus { border-color:#B7282E; }
+.field input::placeholder { color:#bbb; }
+.points-table { width:100%; border-collapse:collapse; }
+.points-table th { font-size:0.65rem; font-weight:700; color:#888; text-transform:uppercase; letter-spacing:0.1em; padding:6px 8px; border-bottom:1px solid #E0E0E0; text-align:left; }
+.points-table td { padding:6px 4px; }
+.points-table td input[type=text] { background:#fff; border:1px solid #CCCCCC; border-radius:5px; padding:6px 8px; font-size:0.82rem; font-family:inherit; width:100%; outline:none; transition:border-color 0.15s; }
+.points-table td input[type=text]:focus { border-color:#B7282E; }
+.points-table td input[type=range] { width:100%; accent-color:#B7282E; }
+.range-val { font-size:0.78rem; font-weight:700; color:#B7282E; width:24px; text-align:center; }
+.btn-row-sm { display:flex; gap:8px; margin-top:10px; }
+.btn-add-pt { padding:7px 16px; font-size:0.8rem; font-weight:700; border:1px dashed #CCCCCC; border-radius:6px; cursor:pointer; background:#fff; color:#888; font-family:inherit; transition:all 0.15s; }
+.btn-add-pt:hover { border-color:#B7282E; color:#B7282E; }
+.btn-del-pt { background:none; border:none; font-size:0.9rem; cursor:pointer; color:#ccc; padding:0 4px; }
+.btn-del-pt:hover { color:#B7282E; }
+.btn-primary { width:100%; padding:13px; font-size:0.95rem; font-weight:900; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; margin-top:12px; }
+.btn-primary:hover { background:#83151B; }
+/* CHART */
+.chart-wrap { background:#fff; border:1px solid #E0E0E0; border-radius:10px; padding:16px; overflow-x:auto; }
+.chart-name { font-size:1rem; font-weight:900; margin-bottom:14px; }
+svg text { font-family:'DM Sans',sans-serif; }
+.btn-back { padding:11px; font-size:0.88rem; font-weight:700; border:1px solid #CCCCCC; border-radius:8px; cursor:pointer; background:#fff; color:#555; font-family:inherit; }
+.btn-back:hover { background:#F6F6F6; }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">👥 チームビルド</div>
+  <h1 class="page-title">ライフライン</h1>
+  <p class="page-sub">人生のモチベーション曲線を描いて自己開示。過去が未来を照らす。</p>
+</div>
+<div class="main">
+  <div class="panel" id="inputPanel">
+    <div class="area-title">ライフラインを作成</div>
+    <div class="field"><label>名前</label><input type="text" id="nameIn" placeholder="田中 太郎"></div>
+    <table class="points-table">
+      <thead><tr><th>時期・出来事</th><th style="width:180px">モチベーション</th><th style="width:36px"></th></tr></thead>
+      <tbody id="pointsBody"></tbody>
+    </table>
+    <div class="btn-row-sm"><button class="btn-add-pt" onclick="addPoint()">＋ 時期を追加</button></div>
+    <button class="btn-primary" onclick="drawChart()">📈 ライフラインを描く</button>
+  </div>
+  <div id="chartWrap" style="display:none">
+    <div class="chart-wrap">
+      <div class="chart-name" id="chartName"></div>
+      <svg id="chart" width="680" height="280" viewBox="0 0 680 280" style="max-width:100%"></svg>
+    </div>
+    <button class="btn-back" onclick="goBack()">← 編集に戻る</button>
+  </div>
+</div>
+<script>
+let points=[{label:'学生時代',val:5},{label:'社会人1年目',val:4},{label:'転機',val:8},{label:'現在',val:7}];
+function renderTable(){
+  document.getElementById('pointsBody').innerHTML=points.map((p,i)=>`
+    <tr>
+      <td><input type="text" value="${p.label}" placeholder="時期・出来事" oninput="points[${i}].label=this.value"></td>
+      <td style="display:flex;align-items:center;gap:6px;padding:6px 4px">
+        <input type="range" min="-5" max="10" value="${p.val}" oninput="points[${i}].val=parseInt(this.value);this.nextElementSibling.textContent=this.value">
+        <span class="range-val">${p.val}</span>
+      </td>
+      <td><button class="btn-del-pt" onclick="removePoint(${i})">✕</button></td>
+    </tr>`).join('');
+}
+function addPoint(){points.push({label:'',val:5});renderTable();}
+function removePoint(i){if(points.length<=2)return;points.splice(i,1);renderTable();}
+function drawChart(){
+  const name=document.getElementById('nameIn').value.trim()||'—';
+  document.getElementById('chartName').textContent=name+' さんのライフライン';
+  document.getElementById('inputPanel').style.display='none';
+  document.getElementById('chartWrap').style.display='';
+  const W=680,H=260,PAD={top:20,right:20,bottom:50,left:40};
+  const iW=W-PAD.left-PAD.right, iH=H-PAD.top-PAD.bottom;
+  const n=points.length;
+  const xStep=iW/(n-1||1);
+  const yScale=v=>(PAD.top+iH/2)-v/10*iH/2;
+  const xs=points.map((_,i)=>PAD.left+i*xStep);
+  const ys=points.map(p=>yScale(p.val));
+  const pathD=points.map((p,i)=>(i===0?'M':'L')+xs[i]+' '+ys[i]).join(' ');
+  const svg=document.getElementById('chart');
+  svg.innerHTML=`
+    <line x1="${PAD.left}" y1="${PAD.top+iH/2}" x2="${PAD.left+iW}" y2="${PAD.top+iH/2}" stroke="#E0E0E0" stroke-width="1"/>
+    <text x="${PAD.left-4}" y="${PAD.top+iH/2+4}" text-anchor="end" font-size="10" fill="#aaa">0</text>
+    <text x="${PAD.left-4}" y="${PAD.top+4}" text-anchor="end" font-size="10" fill="#aaa">+10</text>
+    <text x="${PAD.left-4}" y="${H-PAD.bottom}" text-anchor="end" font-size="10" fill="#aaa">-5</text>
+    <path d="${pathD}" fill="none" stroke="#B7282E" stroke-width="3" stroke-linejoin="round"/>
+    ${points.map((p,i)=>`
+      <circle cx="${xs[i]}" cy="${ys[i]}" r="7" fill="#B7282E" stroke="#fff" stroke-width="2"/>
+      <text x="${xs[i]}" y="${H-PAD.bottom+16}" text-anchor="middle" font-size="11" fill="#555">${p.label||'—'}</text>
+      <text x="${xs[i]}" y="${ys[i]-12}" text-anchor="middle" font-size="11" font-weight="700" fill="#B7282E">${p.val>0?'+':''}${p.val}</text>
+    `).join('')}`;
+}
+function goBack(){
+  document.getElementById('chartWrap').style.display='none';
+  document.getElementById('inputPanel').style.display='';
+}
+renderTable();
+</script>
+</body>
+</html>

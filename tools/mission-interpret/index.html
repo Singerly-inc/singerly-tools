@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>理念解釈ワーク — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+.main { width:100%; max-width:720px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+.panel { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:22px; }
+.mission-banner { background:#000; border-radius:12px; padding:24px; margin-bottom:16px; }
+.mb-label { font-size:0.62rem; letter-spacing:0.18em; color:#B7282E; text-transform:uppercase; font-weight:700; margin-bottom:8px; }
+.mb-text { font-size:1.2rem; font-weight:900; color:#fff; line-height:1.5; }
+.field { margin-bottom:14px; }
+.field label { display:block; font-size:0.72rem; font-weight:700; color:#555; margin-bottom:5px; }
+.field input,.field textarea { width:100%; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:10px 14px; color:#000; font-size:0.9rem; font-family:inherit; outline:none; transition:border-color 0.15s; }
+.field input:focus,.field textarea:focus { border-color:#B7282E; }
+.field input::placeholder,.field textarea::placeholder { color:#bbb; }
+.field textarea { resize:vertical; min-height:80px; line-height:1.6; }
+.mission-setup { margin-bottom:14px; }
+.mission-setup textarea { width:100%; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:10px 12px; font-family:inherit; font-size:0.95rem; color:#000; min-height:60px; resize:vertical; outline:none; transition:border-color 0.15s; line-height:1.6; }
+.mission-setup textarea:focus { border-color:#B7282E; }
+.btn-primary { width:100%; padding:13px; font-size:0.95rem; font-weight:900; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; }
+.btn-primary:hover { background:#83151B; }
+.board-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+.btn-clear { font-size:0.72rem; color:#aaa; background:none; border:none; cursor:pointer; }
+.btn-clear:hover { color:#B7282E; }
+.cards-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; }
+.interp-card { background:#fff; border:2px solid #E0E0E0; border-radius:12px; padding:20px; animation:popIn 0.35s ease both; }
+@keyframes popIn { 0%{opacity:0;transform:scale(0.88)} 100%{opacity:1;transform:scale(1)} }
+.ic-name { font-size:0.72rem; font-weight:700; color:#B7282E; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:8px; }
+.ic-interp { font-size:0.95rem; color:#000; line-height:1.65; margin-bottom:10px; font-weight:600; }
+.ic-action { font-size:0.82rem; color:#555; border-top:1px solid #F0F0F0; padding-top:8px; }
+.love-row { display:flex; align-items:center; gap:8px; margin-top:10px; }
+.btn-love { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:5px; padding:4px 10px; font-size:0.78rem; font-weight:700; color:#555; cursor:pointer; font-family:inherit; transition:all 0.15s; }
+.btn-love:hover { background:#B7282E; border-color:#B7282E; color:#fff; }
+.love-count { font-size:0.72rem; color:#aaa; }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">🧩 理念・文化</div>
+  <h1 class="page-title">理念解釈ワーク</h1>
+  <p class="page-sub">ミッションを「自分の言葉」で解釈。腹落ちと多様な視点が生まれる。</p>
+</div>
+<div class="main">
+  <div id="missionSetupArea">
+    <div class="panel">
+      <div class="area-title">ミッションを入力</div>
+      <div class="mission-setup"><textarea id="missionIn" placeholder="例：はたらいて泣こう / 世界中の組織を盛り上げる"></textarea></div>
+      <button class="btn-primary" onclick="setMission()">▶ ワークを開始</button>
+    </div>
+  </div>
+  <div id="workArea" style="display:none">
+    <div class="mission-banner">
+      <div class="mb-label">ミッション</div>
+      <div class="mb-text" id="missionDisplay"></div>
+    </div>
+    <div class="panel">
+      <div class="area-title">自分なりの解釈を書く</div>
+      <div class="field"><label>名前</label><input type="text" id="nameIn" placeholder="田中 太郎"></div>
+      <div class="field"><label>このミッションを自分なりに解釈すると…</label><textarea id="interpIn" placeholder="自分の仕事に置き換えると、〇〇という意味だと思います。"></textarea></div>
+      <div class="field"><label>自分の仕事でどう体現するか</label><input type="text" id="actionIn" placeholder="日々の〇〇において〇〇を意識する"></div>
+      <button class="btn-primary" onclick="submit()">解釈を投稿 →</button>
+    </div>
+    <div id="boardWrap" style="display:none">
+      <div class="board-header">
+        <div class="area-title" style="margin-bottom:0">チームの解釈ボード</div>
+        <button class="btn-clear" onclick="clearAll()">全クリア</button>
+      </div>
+      <div class="cards-grid" id="cardsGrid"></div>
+    </div>
+    <button style="width:100%;padding:11px;font-size:0.82rem;border:1px solid #CCCCCC;border-radius:8px;cursor:pointer;background:#fff;color:#888;font-family:inherit;margin-top:8px" onclick="changeMission()">← ミッションを変更</button>
+  </div>
+</div>
+<script>
+let entries=[];
+function setMission(){
+  const m=document.getElementById('missionIn').value.trim();
+  if(!m){alert('ミッションを入力してください');return;}
+  document.getElementById('missionDisplay').textContent=m;
+  document.getElementById('missionSetupArea').style.display='none';
+  document.getElementById('workArea').style.display='';
+}
+function submit(){
+  const name=document.getElementById('nameIn').value.trim();
+  const interp=document.getElementById('interpIn').value.trim();
+  const action=document.getElementById('actionIn').value.trim();
+  if(!name||!interp){alert('名前と解釈を入力してください');return;}
+  entries.unshift({name,interp,action,love:0});
+  ['nameIn','interpIn','actionIn'].forEach(id=>document.getElementById(id).value='');
+  render();
+  document.getElementById('boardWrap').style.display='';
+}
+function love(i){entries[i].love++;render();}
+function render(){
+  document.getElementById('cardsGrid').innerHTML=entries.map((e,i)=>`
+    <div class="interp-card" style="animation-delay:${i*40}ms">
+      <div class="ic-name">${e.name}</div>
+      <div class="ic-interp">${e.interp}</div>
+      ${e.action?`<div class="ic-action">▶ ${e.action}</div>`:''}
+      <div class="love-row">
+        <button class="btn-love" onclick="love(${i})">💡 なるほど</button>
+        <span class="love-count">${e.love>0?'×'+e.love:''}</span>
+      </div>
+    </div>`).join('');
+}
+function clearAll(){if(confirm('全クリアしますか？')){entries=[];document.getElementById('boardWrap').style.display='none';}}
+function changeMission(){
+  entries=[];
+  document.getElementById('workArea').style.display='none';
+  document.getElementById('missionSetupArea').style.display='';
+  document.getElementById('missionIn').value='';
+}
+</script>
+</body>
+</html>

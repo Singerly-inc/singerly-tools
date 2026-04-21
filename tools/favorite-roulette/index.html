@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>好きなものルーレット — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+.main { width:100%; max-width:680px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+.panel { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:22px; }
+.panel textarea { width:100%; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:10px 12px; font-family:inherit; font-size:0.88rem; color:#000; min-height:100px; resize:vertical; outline:none; transition:border-color 0.15s; line-height:1.7; }
+.panel textarea:focus { border-color:#B7282E; }
+.panel textarea::placeholder { color:#bbb; }
+.topic-chips { display:flex; gap:8px; flex-wrap:wrap; }
+.chip { padding:6px 14px; border-radius:20px; border:2px solid #E0E0E0; background:#fff; cursor:pointer; font-size:0.8rem; font-weight:700; color:#555; transition:all 0.15s; font-family:inherit; }
+.chip:hover { border-color:#B7282E; color:#B7282E; }
+.chip.selected { border-color:#B7282E; background:#B7282E; color:#fff; }
+.btn-spin { width:100%; padding:16px; font-size:1.1rem; font-weight:900; border:none; border-radius:10px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:all 0.2s; letter-spacing:0.05em; }
+.btn-spin:hover { background:#83151B; transform:scale(1.02); }
+.btn-spin:active { transform:scale(0.98); }
+.result-card { background:#000; border-radius:14px; padding:36px 28px; text-align:center; display:none; animation:popIn 0.4s ease; }
+.result-card.show { display:block; }
+@keyframes popIn { 0%{opacity:0;transform:scale(0.88)} 70%{transform:scale(1.03)} 100%{opacity:1;transform:scale(1)} }
+.rc-person { font-size:0.72rem; letter-spacing:0.15em; color:rgba(255,255,255,0.4); text-transform:uppercase; margin-bottom:8px; }
+.rc-name { font-size:2rem; font-weight:900; color:#fff; margin-bottom:20px; }
+.rc-topic-label { font-size:0.65rem; letter-spacing:0.15em; color:#B7282E; text-transform:uppercase; margin-bottom:10px; }
+.rc-topic { font-size:1.4rem; font-weight:900; color:#fff; line-height:1.4; }
+.btn-again { margin-top:20px; padding:10px 28px; border:2px solid rgba(255,255,255,0.3); border-radius:7px; background:transparent; color:#fff; font-family:inherit; font-size:0.88rem; font-weight:700; cursor:pointer; transition:all 0.15s; }
+.btn-again:hover { border-color:#B7282E; background:#B7282E; }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">🎲 アイスブレイク</div>
+  <h1 class="page-title">好きなものルーレット</h1>
+  <p class="page-sub">お題に答えて、意外な一面を発見。会話が弾む。</p>
+</div>
+<div class="main">
+  <div class="panel">
+    <div class="area-title">お題カテゴリを選ぶ（複数選択OK）</div>
+    <div class="topic-chips" id="chips"></div>
+  </div>
+  <div class="panel">
+    <div class="area-title">参加者名（1行1人）</div>
+    <textarea id="names" placeholder="田中 太郎&#10;山田 花子&#10;鈴木 一郎"></textarea>
+  </div>
+  <button class="btn-spin" onclick="spin()">🎲 ルーレットを回す！</button>
+  <div class="result-card" id="result">
+    <div class="rc-person">回答者</div>
+    <div class="rc-name" id="rcName">—</div>
+    <div class="rc-topic-label">お題</div>
+    <div class="rc-topic" id="rcTopic">—</div>
+    <button class="btn-again" onclick="spin()">🔀 もう一度</button>
+  </div>
+</div>
+<script>
+const CATS = {
+  '🍜 食べ物': ['好きな食べ物は？','最近ハマっている料理は？','絶対食べたいラストメシは？','得意料理を教えて','一番好きなスイーツは？'],
+  '🎬 エンタメ': ['最近見た映画・ドラマは？','おすすめのマンガ・本は？','行きたいライブ・イベントは？','無人島に持っていくなら？','子供の頃の好きなアニメは？'],
+  '🏃 趣味': ['最近ハマっていることは？','休日の過ごし方は？','やってみたいスポーツは？','旅行で行きたい場所は？','コレクションしているものは？'],
+  '💼 仕事': ['仕事でうれしい瞬間は？','理想の働き方は？','仕事の原動力は？','尊敬する人は？','座右の銘は？'],
+  '🌟 人生': ['子供の頃の夢は？','人生で一番の転機は？','もし時間を戻せるなら？','10年後どうなりたい？','今年挑戦したいことは？'],
+};
+let selectedCats = new Set(['🍜 食べ物','🎬 エンタメ','🏃 趣味']);
+
+document.getElementById('chips').innerHTML = Object.keys(CATS).map(c =>
+  `<button class="chip ${selectedCats.has(c)?'selected':''}" onclick="toggleCat('${c}',this)">${c}</button>`
+).join('');
+
+function toggleCat(c, el) {
+  if(selectedCats.has(c)) { if(selectedCats.size===1) return; selectedCats.delete(c); el.classList.remove('selected'); }
+  else { selectedCats.add(c); el.classList.add('selected'); }
+}
+
+function spin() {
+  const names = document.getElementById('names').value.split('\n').map(s=>s.trim()).filter(s=>s);
+  const cats = [...selectedCats];
+  const cat = cats[Math.floor(Math.random()*cats.length)];
+  const topics = CATS[cat];
+  const topic = topics[Math.floor(Math.random()*topics.length)];
+  const name = names.length ? names[Math.floor(Math.random()*names.length)] : '——';
+  document.getElementById('rcName').textContent = name;
+  document.getElementById('rcTopic').textContent = topic;
+  const r = document.getElementById('result');
+  r.classList.remove('show'); void r.offsetWidth; r.classList.add('show');
+}
+</script>
+</body>
+</html>

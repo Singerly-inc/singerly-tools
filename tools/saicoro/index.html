@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>サイコロトーク — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  min-height:100vh; background:#fff;
+  font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif;
+  color:#000000; display:flex; flex-direction:column; align-items:center;
+}
+.nav {
+  width:100%; padding:12px 28px; background:#000000;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+
+.page-header {
+  background:#000000; width:100%;
+  padding:32px 20px 28px; text-align:center;
+  border-bottom:3px solid #B7282E;
+}
+.tool-badge {
+  display:inline-block; background:#B7282E; color:#fff;
+  font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px;
+  border-radius:3px; margin-bottom:12px; font-weight:700;
+}
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+
+.main {
+  width:100%; max-width:720px;
+  padding:28px 24px 60px;
+  display:flex; flex-direction:column; align-items:center; gap:20px;
+}
+
+/* DICE AREA */
+.dice-area {
+  width:100%; background:#F6F6F6;
+  border:1px solid #E0E0E0; border-radius:10px;
+  padding:28px 24px; display:flex; flex-direction:column;
+  align-items:center; gap:24px;
+}
+
+.dice-row {
+  display:flex; align-items:center;
+  justify-content:center; gap:32px;
+}
+
+.dice-block { display:flex; flex-direction:column; align-items:center; gap:8px; }
+
+.dice-label {
+  font-size:0.65rem; letter-spacing:0.14em; color:#888;
+  text-transform:uppercase; font-weight:700;
+}
+
+.dice {
+  width:88px; height:88px; background:#000000;
+  border-radius:14px; display:flex; align-items:center; justify-content:center;
+  font-size:2.8rem; font-weight:900; color:#fff;
+  box-shadow:0 2px 12px rgba(14,40,65,0.2);
+  user-select:none;
+}
+.dice.rolling { animation:shake 0.5s ease; }
+@keyframes shake {
+  0%,100%{transform:rotate(0) scale(1)} 15%{transform:rotate(-8deg) scale(1.05)}
+  30%{transform:rotate(8deg) scale(1.07)} 60%{transform:rotate(6deg) scale(1.07)}
+  75%{transform:rotate(-3deg) scale(1.04)}
+}
+
+.dice-sub { font-size:0.73rem; color:#555; text-align:center; max-width:96px; line-height:1.4; }
+
+/* TOPIC */
+.topic-display {
+  width:100%; background:#FDF3F3;
+  border:2px solid #B7282E; border-radius:8px;
+  padding:20px 24px; text-align:center;
+  min-height:80px; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:4px;
+}
+.topic-label { font-size:0.62rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; }
+.topic-text {
+  font-size:1.45rem; font-weight:900; color:#B7282E; line-height:1.3;
+  opacity:0; transform:scale(0.92); transition:opacity 0.3s, transform 0.3s;
+}
+.topic-text.show { opacity:1; transform:scale(1); }
+.topic-rule { font-size:0.7rem; color:#888; margin-top:2px; }
+
+.btn-roll {
+  width:100%; max-width:380px; padding:15px;
+  font-size:1rem; font-weight:900; letter-spacing:0.08em;
+  border:none; border-radius:8px; cursor:pointer;
+  background:#B7282E; color:#fff; font-family:inherit;
+  transition:background 0.15s, transform 0.12s;
+}
+.btn-roll:hover { background:#83151B; transform:translateY(-1px); }
+.btn-roll:disabled { opacity:0.4; cursor:not-allowed; }
+
+/* TABLE */
+.table-section {
+  width:100%; background:#F6F6F6;
+  border:1px solid #E0E0E0; border-radius:10px;
+  padding:20px; overflow-x:auto;
+}
+.section-title {
+  font-size:0.65rem; letter-spacing:0.18em; color:#888;
+  text-transform:uppercase; margin-bottom:14px; font-weight:700;
+}
+.topic-table { width:100%; border-collapse:separate; border-spacing:3px; font-size:0.7rem; }
+.topic-table th {
+  background:#000000; color:rgba(255,255,255,0.85);
+  padding:7px 8px; border-radius:4px; text-align:center;
+  font-weight:700; white-space:nowrap;
+}
+.topic-table td {
+  background:#fff; border:1px solid #EEEEEE;
+  border-radius:4px; padding:6px 8px; text-align:center;
+  color:#666; vertical-align:middle; line-height:1.4; transition:all 0.18s;
+}
+.topic-table td.active {
+  background:#FDF3F3; border-color:#B7282E;
+  color:#000000; font-weight:700;
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="../../">← ムドメわっしょい！</a>
+  <span class="nav-brand">SINGERLY</span>
+</nav>
+
+<div class="page-header">
+  <div class="tool-badge">🎲 アイスブレイク</div>
+  <h1 class="page-title">サイコロトーク</h1>
+  <p class="page-sub">2つのサイコロを振ってランダムなテーマで話す。理由を添えて語ろう。</p>
+</div>
+
+<div class="main">
+  <div class="dice-area">
+    <div class="dice-row">
+      <div class="dice-block">
+        <div class="dice-label">サイコロ１（カテゴリ）</div>
+        <div class="dice" id="dice1">？</div>
+        <div class="dice-sub" id="dice1label">―</div>
+      </div>
+      <div style="font-size:1.6rem;color:#ccc;padding-top:18px;">×</div>
+      <div class="dice-block">
+        <div class="dice-label">サイコロ２（テーマ）</div>
+        <div class="dice" id="dice2">？</div>
+        <div class="dice-sub" id="dice2label">―</div>
+      </div>
+    </div>
+
+    <div class="topic-display">
+      <div class="topic-label">今回のテーマ</div>
+      <div class="topic-text" id="topicText">サイコロを振ってください</div>
+      <div class="topic-rule" id="topicRule"></div>
+    </div>
+
+    <button class="btn-roll" id="rollBtn" onclick="roll()">🎲 サイコロを振る！</button>
+  </div>
+
+  <div class="table-section">
+    <div class="section-title">テーマ一覧（経営者版）</div>
+    <table class="topic-table" id="topicTable"></table>
+  </div>
+</div>
+
+<script>
+const CATS=['起業・創業期','経営の葛藤','人・チームの関係','お金・財務','習慣・プライベート','ビジョン・未来'];
+const TOPICS=[
+  ['起業を決意したきっかけ','社員に言えなかった本音','人生を変えた出会い','一番使って良かった投資','朝のルーティン','10年後の会社の姿'],
+  ['創業期の一番つらかった話','一番孤独だった瞬間','辞めてほしくなかったメンバー','お金の最大の失敗','最近ハマっていること','次の世代に伝えたいこと'],
+  ['最初に採用したメンバー','間違えた経営判断','チームで一番燃えた瞬間','資金繰りで一番苦しかった時','ストレス解消法','まだ挑戦していないこと'],
+  ['0→1で一番苦労したこと','経営者になって変わった価値観','採用の最大の失敗','給与・報酬への哲学','人生で一番ハマった趣味','経営を退いたら何をしたいか'],
+  ['今でも後悔している選択','もし経営者でなければ？','今も感謝している人','お金より大事にしていること','仕事とプライベートの向き合い方','自分の「理念」を一言で'],
+  ['あの頃の自分に一言','経営者でしか感じられない喜び','一緒に働きたい人物像','次に投資するとしたら？','誰にも言っていない秘密','壮大な夢'],
+];
+const DOTS=['⚀','⚁','⚂','⚃','⚄','⚅'];
+let rolling=false, curD1=null, curD2=null;
+
+function buildTable(){
+  const t=document.getElementById('topicTable');
+  let html='<thead><tr><th>🎲2＼🎲1</th>';
+  CATS.forEach(c=>{html+=`<th>${c}</th>`;});
+  html+='</tr></thead><tbody>';
+  for(let r=0;r<6;r++){
+    html+=`<tr><th>${DOTS[r]}</th>`;
+    for(let c=0;c<6;c++){html+=`<td id="cell-${c}-${r}">${TOPICS[r][c]}</td>`;}
+    html+='</tr>';
+  }
+  t.innerHTML=html+'</tbody>';
+}
+
+function roll(){
+  if(rolling)return; rolling=true;
+  document.getElementById('rollBtn').disabled=true;
+  if(curD1!==null) document.getElementById(`cell-${curD1}-${curD2}`).classList.remove('active');
+  document.getElementById('topicText').classList.remove('show');
+  const d1=Math.floor(Math.random()*6), d2=Math.floor(Math.random()*6);
+  const el1=document.getElementById('dice1'), el2=document.getElementById('dice2');
+  el1.classList.add('rolling'); el2.classList.add('rolling');
+  let n=0;
+  const iv=setInterval(()=>{
+    el1.textContent=DOTS[Math.floor(Math.random()*6)];
+    el2.textContent=DOTS[Math.floor(Math.random()*6)];
+    if(++n>=12){
+      clearInterval(iv);
+      el1.classList.remove('rolling'); el2.classList.remove('rolling');
+      el1.textContent=DOTS[d1]; el2.textContent=DOTS[d2];
+      document.getElementById('dice1label').textContent=CATS[d1];
+      document.getElementById('dice2label').textContent=(d2+1)+'番のテーマ';
+      const topic=TOPICS[d2][d1];
+      const tt=document.getElementById('topicText');
+      tt.textContent=topic;
+      setTimeout(()=>tt.classList.add('show'),40);
+      document.getElementById('topicRule').textContent='理由を添えて話しましょう 🗣️';
+      document.getElementById(`cell-${d1}-${d2}`).classList.add('active');
+      curD1=d1; curD2=d2;
+      rolling=false; document.getElementById('rollBtn').disabled=false;
+    }
+  },80);
+}
+
+buildTable();
+</script>
+</body>
+</html>

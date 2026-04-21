@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>アジェンダタイマー — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+
+.main { width:100%; max-width:720px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+
+.setup-area { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:22px; }
+.agenda-list { display:flex; flex-direction:column; gap:10px; margin-bottom:14px; }
+.agenda-row { display:flex; gap:8px; align-items:center; }
+.agenda-row input[type=text] {
+  flex:1; background:#fff; border:1px solid #CCCCCC; border-radius:6px;
+  padding:9px 12px; color:#000000; font-size:0.88rem; font-family:inherit; outline:none; transition:border-color 0.15s;
+}
+.agenda-row input[type=text]:focus { border-color:#B7282E; }
+.agenda-row input[type=text]::placeholder { color:#bbb; }
+.agenda-row input[type=number] {
+  width:72px; background:#fff; border:1px solid #CCCCCC; border-radius:6px;
+  padding:9px 8px; color:#000000; font-size:0.88rem; font-family:inherit; outline:none; text-align:center;
+}
+.time-unit { font-size:0.72rem; color:#888; white-space:nowrap; }
+.btn-del { background:none; border:none; font-size:1.1rem; cursor:pointer; color:#ccc; padding:4px; transition:color 0.15s; }
+.btn-del:hover { color:#e05; }
+.btn-add { background:none; border:1px dashed #CCCCCC; border-radius:6px; padding:8px; font-size:0.82rem; color:#aaa; cursor:pointer; width:100%; transition:all 0.15s; }
+.btn-add:hover { border-color:#B7282E; color:#B7282E; }
+
+.btn-primary { width:100%; padding:13px; font-size:0.95rem; font-weight:900; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; margin-top:14px; }
+.btn-primary:hover { background:#83151B; }
+
+/* TIMER */
+.timer-area { display:none; }
+.timer-area.show { display:flex; flex-direction:column; gap:16px; }
+
+.progress-overview { display:flex; gap:6px; flex-wrap:wrap; }
+.prog-dot { width:12px; height:12px; border-radius:50%; background:#EEEEEE; transition:background 0.3s; }
+.prog-dot.done { background:#83151B; }
+.prog-dot.active { background:#B7282E; }
+
+.timer-card { background:#000000; border-radius:14px; padding:30px 24px; text-align:center; }
+.tc-idx { font-size:0.65rem; letter-spacing:0.15em; color:rgba(255,255,255,0.4); text-transform:uppercase; margin-bottom:6px; }
+.tc-name { font-size:1.4rem; font-weight:900; color:#fff; margin-bottom:20px; line-height:1.3; }
+.tc-time { font-size:4.5rem; font-weight:900; color:#fff; letter-spacing:0.05em; font-variant-numeric:tabular-nums; }
+.tc-total { font-size:0.75rem; color:rgba(255,255,255,0.4); margin-top:4px; }
+.tc-bar-bg { margin:16px 0 0; background:rgba(255,255,255,0.15); border-radius:4px; height:6px; overflow:hidden; }
+.tc-bar-fill { height:100%; background:#B7282E; border-radius:4px; transition:width 0.5s linear; }
+.tc-warn { color:#F4A838; }
+
+.ctrl-row { display:flex; gap:10px; }
+.btn-playpause { flex:1; padding:14px; font-size:1rem; font-weight:900; border:none; border-radius:9px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; }
+.btn-playpause:hover { background:#83151B; }
+.btn-skip { padding:14px 20px; font-size:0.88rem; font-weight:700; border:1px solid #CCCCCC; border-radius:9px; cursor:pointer; background:#fff; color:#555; font-family:inherit; }
+.btn-skip:hover { background:#F6F6F6; }
+
+.agenda-overview { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:16px; }
+.overview-row { display:flex; justify-content:space-between; align-items:center; padding:7px 0; border-bottom:1px solid #F0F0F0; font-size:0.85rem; }
+.overview-row:last-child { border-bottom:none; }
+.ov-name { color:#000000; font-weight:600; }
+.ov-name.active { color:#B7282E; font-weight:800; }
+.ov-name.done { color:#aaa; text-decoration:line-through; }
+.ov-time { color:#888; font-weight:500; }
+
+.btn-restart { width:100%; padding:12px; font-size:0.88rem; font-weight:700; border:1px solid #CCCCCC; border-radius:8px; cursor:pointer; background:#fff; color:#555; font-family:inherit; }
+.btn-restart:hover { background:#F6F6F6; }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">🎯 対話・意思決定</div>
+  <h1 class="page-title">アジェンダタイマー</h1>
+  <p class="page-sub">議題ごとの時間を設定してカウントダウン。時間通りの会議を実現。</p>
+</div>
+<div class="main">
+  <div class="setup-area" id="setupArea">
+    <div class="area-title">アジェンダを設定</div>
+    <div class="agenda-list" id="agendaList"></div>
+    <button class="btn-add" onclick="addItem()">＋ アジェンダを追加</button>
+    <button class="btn-primary" onclick="startTimer()">▶ タイマーをスタート</button>
+  </div>
+
+  <div class="timer-area" id="timerArea">
+    <div class="progress-overview" id="progDots"></div>
+    <div class="timer-card" id="timerCard">
+      <div class="tc-idx" id="tcIdx"></div>
+      <div class="tc-name" id="tcName"></div>
+      <div class="tc-time" id="tcTime">00:00</div>
+      <div class="tc-total" id="tcTotal"></div>
+      <div class="tc-bar-bg"><div class="tc-bar-fill" id="tcBarFill" style="width:100%"></div></div>
+    </div>
+    <div class="ctrl-row">
+      <button class="btn-playpause" id="btnPlay" onclick="togglePlay()">⏸ 一時停止</button>
+      <button class="btn-skip" onclick="skipNext()">次へ →</button>
+    </div>
+    <div class="agenda-overview" id="agendaOverview"></div>
+    <button class="btn-restart" onclick="restart()">← 最初からやり直す</button>
+  </div>
+</div>
+<script>
+let agendaItems=[{name:'',min:5},{name:'',min:3}];
+let currentIdx=0, remaining=0, total=0, running=false, timer=null;
+
+function renderSetup(){
+  document.getElementById('agendaList').innerHTML=agendaItems.map((a,i)=>`
+    <div class="agenda-row">
+      <input type="text" placeholder="アジェンダ名" value="${a.name}" oninput="agendaItems[${i}].name=this.value">
+      <input type="number" min="1" max="120" value="${a.min}" oninput="agendaItems[${i}].min=parseInt(this.value)||1">
+      <span class="time-unit">分</span>
+      <button class="btn-del" onclick="removeItem(${i})">✕</button>
+    </div>`).join('');
+}
+
+function addItem(){ agendaItems.push({name:'',min:5}); renderSetup(); }
+function removeItem(i){ if(agendaItems.length<=1)return; agendaItems.splice(i,1); renderSetup(); }
+
+function startTimer(){
+  const valid=agendaItems.filter(a=>a.name.trim());
+  if(!valid.length){alert('アジェンダ名を入力してください');return;}
+  agendaItems=valid;
+  currentIdx=0; running=false;
+  document.getElementById('setupArea').style.display='none';
+  document.getElementById('timerArea').classList.add('show');
+  loadItem(0);
+  togglePlay();
+}
+
+function loadItem(i){
+  const a=agendaItems[i];
+  remaining=a.min*60; total=a.min*60;
+  document.getElementById('tcIdx').textContent=`${i+1} / ${agendaItems.length}`;
+  document.getElementById('tcName').textContent=a.name;
+  document.getElementById('tcTotal').textContent=`合計 ${a.min} 分`;
+  document.getElementById('timerCard').classList.remove('tc-warn');
+  renderDots(); renderOverview(); tick();
+}
+
+function tick(){
+  const m=Math.floor(remaining/60).toString().padStart(2,'0');
+  const s=(remaining%60).toString().padStart(2,'0');
+  document.getElementById('tcTime').textContent=`${m}:${s}`;
+  document.getElementById('tcBarFill').style.width=`${remaining/total*100}%`;
+  if(remaining<=10) document.getElementById('timerCard').classList.add('tc-warn');
+}
+
+function togglePlay(){
+  running=!running;
+  document.getElementById('btnPlay').textContent=running?'⏸ 一時停止':'▶ 再開';
+  if(running){
+    timer=setInterval(()=>{
+      if(remaining<=0){ clearInterval(timer); skipNext(); return; }
+      remaining--; tick();
+    },1000);
+  } else { clearInterval(timer); }
+}
+
+function skipNext(){
+  clearInterval(timer); running=false;
+  currentIdx++;
+  if(currentIdx>=agendaItems.length){ showDone(); return; }
+  loadItem(currentIdx);
+  togglePlay();
+}
+
+function showDone(){
+  document.getElementById('timerCard').innerHTML='<div style="padding:20px;text-align:center;color:#fff"><div style="font-size:3rem;margin-bottom:12px">🎉</div><div style="font-size:1.4rem;font-weight:900">全アジェンダ完了！</div></div>';
+  document.getElementById('btnPlay').disabled=true;
+  document.querySelectorAll('.prog-dot').forEach(d=>d.classList.replace('active','done'));
+}
+
+function renderDots(){
+  document.getElementById('progDots').innerHTML=agendaItems.map((_,i)=>`
+    <div class="prog-dot ${i<currentIdx?'done':i===currentIdx?'active':''}"></div>`).join('');
+}
+
+function renderOverview(){
+  document.getElementById('agendaOverview').innerHTML=agendaItems.map((a,i)=>`
+    <div class="overview-row">
+      <span class="ov-name ${i<currentIdx?'done':i===currentIdx?'active':''}">${a.name}</span>
+      <span class="ov-time">${a.min}分</span>
+    </div>`).join('');
+}
+
+function restart(){
+  clearInterval(timer); running=false;
+  document.getElementById('timerArea').classList.remove('show');
+  document.getElementById('setupArea').style.display='';
+  document.getElementById('btnPlay').disabled=false;
+}
+
+renderSetup();
+</script>
+</body>
+</html>

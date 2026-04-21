@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>議論ルーレット — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+.main { width:100%; max-width:680px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+.cat-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+@media(max-width:480px){.cat-grid{grid-template-columns:1fr 1fr;}}
+.cat-btn { padding:10px 8px; border-radius:8px; border:2px solid #E0E0E0; background:#fff; cursor:pointer; font-family:inherit; font-size:0.78rem; font-weight:700; color:#555; text-align:center; transition:all 0.15s; }
+.cat-btn:hover,.cat-btn.active { border-color:#B7282E; background:#B7282E; color:#fff; }
+.cat-btn-emoji { font-size:1.2rem; display:block; margin-bottom:4px; }
+.question-card { background:#000; border-radius:14px; padding:40px 28px; text-align:center; min-height:200px; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; }
+.qc-cat { font-size:0.62rem; letter-spacing:0.18em; color:#B7282E; text-transform:uppercase; font-weight:700; margin-bottom:12px; }
+.qc-text { font-size:1.15rem; font-weight:700; color:#fff; line-height:1.65; }
+.qc-time { font-size:0.78rem; color:rgba(255,255,255,0.35); margin-top:12px; }
+.qc-empty { font-size:0.88rem; color:rgba(255,255,255,0.3); }
+.timer-display { font-size:2rem; font-weight:900; color:#B7282E; margin-top:8px; }
+.btn-row { display:flex; gap:10px; }
+.btn-spin { flex:2; padding:14px; font-size:1rem; font-weight:900; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; }
+.btn-spin:hover { background:#83151B; }
+.btn-timer { flex:1; padding:14px; font-size:0.88rem; font-weight:800; border:2px solid #B7282E; border-radius:8px; cursor:pointer; background:#fff; color:#B7282E; font-family:inherit; transition:all 0.15s; }
+.btn-timer:hover { background:#B7282E; color:#fff; }
+.used-area { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:16px; }
+.used-list { display:flex; flex-direction:column; gap:6px; max-height:160px; overflow-y:auto; }
+.used-item { font-size:0.8rem; color:#555; padding:5px 10px; background:#fff; border-radius:5px; border:1px solid #E0E0E0; }
+.btn-reset { width:100%; padding:10px; font-size:0.85rem; font-weight:700; border:1px solid #CCCCCC; border-radius:7px; cursor:pointer; background:#fff; color:#888; font-family:inherit; }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">🎯 対話・意思決定</div>
+  <h1 class="page-title">議論ルーレット</h1>
+  <p class="page-sub">ランダムな問いで議論をスタート。思考の枠を外してチームの発想を広げる。</p>
+</div>
+<div class="main">
+  <div>
+    <div class="area-title">カテゴリ（複数選択可）</div>
+    <div class="cat-grid" id="catGrid"></div>
+  </div>
+  <div class="question-card" id="qCard">
+    <div class="qc-empty">カテゴリを選んでルーレットを回そう</div>
+  </div>
+  <div class="btn-row">
+    <button class="btn-spin" onclick="spin()">🎲 問いをランダムに引く</button>
+    <button class="btn-timer" onclick="startTimer()" id="timerBtn">⏱ 3分タイマー</button>
+  </div>
+  <div class="used-area">
+    <div class="area-title">使った問い</div>
+    <div class="used-list" id="usedList"><div style="font-size:0.8rem;color:#aaa">まだ問いを引いていません</div></div>
+  </div>
+  <button class="btn-reset" onclick="reset()">🔄 リセット</button>
+</div>
+<script>
+const CATS={
+  '戦略・方向性':{emoji:'🧭',qs:['このチームが1年後に誇れる状態とは何ですか？','「今やらないと後悔すること」は何ですか？','最大のリスクと最小のリスクを教えてください','今の戦略で一番の盲点はどこですか？','競合との本質的な差は何ですか？']},
+  '改善・問題解決':{emoji:'🔧',qs:['もし明日チームが解散するとしたら何が残りますか？','チームで一番の無駄はどこですか？','もし10倍の速度で動くとしたら何を変えますか？','3ヶ月後に後悔しそうなことは何ですか？','「やめること」を1つ決めるとしたら？']},
+  'アイデア':{emoji:'💡',qs:['全く違う業界のやり方を参考にするとしたら？','もし予算が10倍あったら何をしますか？','お客さんを驚かせるとしたら何をしますか？','最もクレイジーなアイデアを言ってみてください','子供だったらこの問題をどう解きますか？']},
+  'チーム・文化':{emoji:'🤝',qs:['チームの暗黙のルールは何ですか？','「言いにくい」と感じていることは？','チームが最高だったと思う瞬間はいつでしたか？','新メンバーに最初に伝えたいことは？','このチームの強みを1つ選ぶとしたら？']},
+  '顧客・価値':{emoji:'🎯',qs:['お客さんが本当に欲しいものは何ですか？','最もお客さんに感謝されたことは？','提供できていない価値で最大のものは？','お客さんの言葉で「成功」を定義するとしたら？','競合ではなくあなたを選ぶ理由は？']},
+  '未来・学び':{emoji:'🚀',qs:['5年後のこの業界はどう変わりますか？','今月最も大きな学びは何でしたか？','失敗から得た最大の教訓は何ですか？','AIはこの仕事をどう変えると思いますか？','来年の自分へのアドバイスは？']},
+};
+let selCats=new Set(Object.keys(CATS)),used=[],timerInterval=null;
+function renderCats(){
+  document.getElementById('catGrid').innerHTML=Object.keys(CATS).map(c=>`
+    <button class="cat-btn active" onclick="toggleCat('${c}',this)">
+      <span class="cat-btn-emoji">${CATS[c].emoji}</span>${c}
+    </button>`).join('');
+}
+function toggleCat(c,el){
+  if(selCats.has(c)){if(selCats.size<=1)return;selCats.delete(c);el.classList.remove('active');}
+  else{selCats.add(c);el.classList.add('active');}
+}
+function spin(){
+  const pool=[];
+  selCats.forEach(c=>CATS[c].qs.forEach(q=>{ if(!used.includes(q))pool.push({cat:c,q}); }));
+  if(!pool.length){alert('全ての問いを使い切りました！リセットしてください');return;}
+  const item=pool[Math.floor(Math.random()*pool.length)];
+  used.push(item.q);
+  document.getElementById('qCard').innerHTML=`<div class="qc-cat">${CATS[item.cat].emoji} ${item.cat}</div><div class="qc-text">${item.q}</div><div class="qc-time">じっくり考えて議論しよう</div>`;
+  clearTimer();
+  renderUsed();
+}
+function renderUsed(){
+  document.getElementById('usedList').innerHTML=used.length?used.map(q=>`<div class="used-item">${q}</div>`).join(''):'<div style="font-size:0.8rem;color:#aaa">まだ問いを引いていません</div>';
+}
+function startTimer(){
+  clearTimer();
+  let sec=180;
+  function tick(){
+    const m=Math.floor(sec/60);const s=sec%60;
+    const timeStr=`${m}:${String(s).padStart(2,'0')}`;
+    document.getElementById('timerBtn').textContent=`⏱ ${timeStr}`;
+    if(sec===0){clearTimer();document.getElementById('timerBtn').textContent='⏱ 時間！';return;}
+    sec--;
+  }
+  tick();
+  timerInterval=setInterval(tick,1000);
+}
+function clearTimer(){if(timerInterval){clearInterval(timerInterval);timerInterval=null;}document.getElementById('timerBtn').textContent='⏱ 3分タイマー';}
+function reset(){used=[];clearTimer();document.getElementById('qCard').innerHTML='<div class="qc-empty">カテゴリを選んでルーレットを回そう</div>';renderUsed();}
+renderCats();
+</script>
+</body>
+</html>

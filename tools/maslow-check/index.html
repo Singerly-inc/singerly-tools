@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>マズロー欲求チェック — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+.main { width:100%; max-width:720px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+.name-panel { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:20px; display:flex; gap:10px; }
+.name-panel input { flex:1; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:10px 12px; font-size:0.9rem; font-family:inherit; color:#000; outline:none; transition:border-color 0.15s; }
+.name-panel input:focus { border-color:#B7282E; }
+.name-panel input::placeholder { color:#bbb; }
+.btn-start { padding:10px 20px; font-size:0.88rem; font-weight:800; border:none; border-radius:7px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; }
+.btn-start:hover { background:#83151B; }
+.quiz-area { display:none; }
+.quiz-area.show { display:flex; flex-direction:column; gap:16px; }
+.level-card { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:12px; padding:20px; }
+.level-header { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+.level-num { background:#B7282E; color:#fff; border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; font-size:0.78rem; font-weight:900; flex-shrink:0; }
+.level-name { font-size:0.9rem; font-weight:800; color:#000; }
+.level-desc { font-size:0.75rem; color:#888; }
+.slider-group { display:flex; align-items:center; gap:12px; }
+.slider-group span { font-size:0.75rem; color:#aaa; min-width:60px; }
+.slider-group input[type=range] { flex:1; accent-color:#B7282E; }
+.slider-val { font-size:1.1rem; font-weight:900; color:#B7282E; min-width:24px; text-align:center; }
+.btn-primary { width:100%; padding:13px; font-size:0.95rem; font-weight:900; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; }
+.btn-primary:hover { background:#83151B; }
+/* Result */
+.result-area { display:none; }
+.result-area.show { display:flex; flex-direction:column; gap:14px; }
+.result-card { background:#000; border-radius:14px; padding:24px; }
+.rc-label { font-size:0.62rem; letter-spacing:0.18em; color:#B7282E; text-transform:uppercase; font-weight:700; margin-bottom:4px; }
+.rc-name { font-size:1rem; font-weight:700; color:#fff; margin-bottom:16px; }
+.pyramid { width:100%; }
+.pyr-row { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.pyr-label { font-size:0.72rem; color:rgba(255,255,255,0.6); min-width:100px; text-align:right; }
+.pyr-bar-bg { flex:1; background:rgba(255,255,255,0.1); border-radius:3px; height:20px; overflow:hidden; }
+.pyr-bar { height:100%; border-radius:3px; background:#B7282E; transition:width 0.6s; display:flex; align-items:center; justify-content:flex-end; padding-right:6px; }
+.pyr-val { font-size:0.72rem; font-weight:900; color:#fff; }
+.focus-box { background:rgba(183,40,46,0.15); border:1px solid #B7282E; border-radius:8px; padding:14px; margin-top:8px; }
+.focus-label { font-size:0.62rem; color:#B7282E; font-weight:700; margin-bottom:4px; }
+.focus-text { font-size:0.88rem; color:#fff; line-height:1.55; }
+.board-header { display:flex; justify-content:space-between; align-items:center; }
+.btn-clear { font-size:0.72rem; color:#aaa; background:none; border:none; cursor:pointer; }
+.btn-clear:hover { color:#B7282E; }
+.board-cards { display:flex; flex-direction:column; gap:10px; }
+.board-card { background:#fff; border:1px solid #E0E0E0; border-radius:10px; padding:14px 16px; animation:popIn 0.3s ease; }
+@keyframes popIn{0%{opacity:0;transform:scale(0.95)}100%{opacity:1;transform:none}}
+.bc-name { font-size:0.78rem; font-weight:700; color:#B7282E; margin-bottom:8px; }
+.bc-bars { display:flex; flex-direction:column; gap:4px; }
+.bc-row { display:flex; align-items:center; gap:8px; }
+.bc-lbl { font-size:0.65rem; color:#888; min-width:80px; }
+.bc-bar-bg { flex:1; background:#EEEEEE; border-radius:2px; height:6px; }
+.bc-bar { height:100%; border-radius:2px; background:#B7282E; }
+.bc-v { font-size:0.7rem; font-weight:700; color:#B7282E; min-width:16px; }
+.btn-row { display:flex; gap:10px; }
+.btn-new { flex:1; padding:12px; font-size:0.9rem; font-weight:800; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; }
+.btn-new:hover { background:#83151B; }
+.btn-reset { padding:12px 16px; font-size:0.82rem; border:1px solid #CCCCCC; border-radius:8px; cursor:pointer; background:#fff; color:#888; font-family:inherit; }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">⚡ モチベーション</div>
+  <h1 class="page-title">マズロー欲求チェック</h1>
+  <p class="page-sub">今の自分に必要なものを可視化。欲求の充足度からモチベを分析する。</p>
+</div>
+<div class="main">
+  <div class="name-panel" id="namePanel">
+    <input type="text" id="nameIn" placeholder="名前を入力してスタート">
+    <button class="btn-start" onclick="start()">スタート →</button>
+  </div>
+  <div class="quiz-area" id="quizArea">
+    <div id="levelCards"></div>
+    <button class="btn-primary" onclick="showResult()">結果を見る →</button>
+  </div>
+  <div class="result-area" id="resultArea">
+    <div class="result-card">
+      <div class="rc-label">マズロー欲求チェック</div>
+      <div class="rc-name" id="rName"></div>
+      <div class="pyramid" id="pyramid"></div>
+      <div class="focus-box">
+        <div class="focus-label">🎯 今、最も充足が必要な欲求</div>
+        <div class="focus-text" id="focusText"></div>
+      </div>
+    </div>
+    <div>
+      <div class="board-header" style="margin-bottom:10px">
+        <div class="area-title" style="margin-bottom:0">チーム全体の欲求マップ</div>
+        <button class="btn-clear" onclick="clearBoard()">全クリア</button>
+      </div>
+      <div class="board-cards" id="boardCards"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-new" onclick="nextPerson()">＋ 次の人</button>
+      <button class="btn-reset" onclick="resetAll()">全リセット</button>
+    </div>
+  </div>
+</div>
+<script>
+const LEVELS=[
+  {name:'生理的欲求',desc:'食事・睡眠・体調など基本的な生活の充実度',q:'生活の基盤（食事・睡眠・体調）は整っていますか？'},
+  {name:'安全・安定欲求',desc:'雇用・収入・職場環境の安定感',q:'雇用・収入・職場の安全性に安心感がありますか？'},
+  {name:'社会的欲求',desc:'仲間・チームへの帰属感・つながり',q:'チームに受け入れられていると感じますか？'},
+  {name:'承認欲求',desc:'評価・感謝・自分の貢献への認知',q:'仕事での貢献が認められていると感じますか？'},
+  {name:'自己実現欲求',desc:'成長・やりがい・自分らしい仕事への充実',q:'自分の可能性を発揮できていると感じますか？'},
+];
+let pName='',vals=LEVELS.map(()=>5),allEntries=[];
+function start(){
+  pName=document.getElementById('nameIn').value.trim();
+  if(!pName){alert('名前を入力してください');return;}
+  vals=LEVELS.map(()=>5);
+  document.getElementById('levelCards').innerHTML=LEVELS.map((l,i)=>`
+    <div class="level-card" style="margin-bottom:12px">
+      <div class="level-header">
+        <div class="level-num">${i+1}</div>
+        <div><div class="level-name">${l.name}</div><div class="level-desc">${l.desc}</div></div>
+      </div>
+      <div style="font-size:0.88rem;color:#555;margin-bottom:10px;">${l.q}</div>
+      <div class="slider-group">
+        <span>低い(1)</span>
+        <input type="range" min="1" max="10" value="5" oninput="vals[${i}]=+this.value;document.getElementById('sv${i}').textContent=this.value">
+        <span style="text-align:right">高い(10)</span>
+        <div class="slider-val" id="sv${i}">5</div>
+      </div>
+    </div>`).join('');
+  document.getElementById('namePanel').style.display='none';
+  document.getElementById('quizArea').classList.add('show');
+}
+function showResult(){
+  document.getElementById('quizArea').classList.remove('show');
+  document.getElementById('resultArea').classList.add('show');
+  document.getElementById('rName').textContent=pName+' さんの欲求マップ';
+  document.getElementById('pyramid').innerHTML=LEVELS.map((l,i)=>`
+    <div class="pyr-row">
+      <div class="pyr-label">${l.name}</div>
+      <div class="pyr-bar-bg"><div class="pyr-bar" style="width:${vals[i]*10}%"><span class="pyr-val">${vals[i]}</span></div></div>
+    </div>`).reverse().join('');
+  const minIdx=vals.indexOf(Math.min(...vals));
+  document.getElementById('focusText').textContent=`「${LEVELS[minIdx].name}」（スコア ${vals[minIdx]}）— ${LEVELS[minIdx].desc}`;
+  allEntries.unshift({name:pName,vals:[...vals]});
+  renderBoard();
+}
+function renderBoard(){
+  document.getElementById('boardCards').innerHTML=allEntries.map(e=>`
+    <div class="board-card">
+      <div class="bc-name">${e.name} さん</div>
+      <div class="bc-bars">${LEVELS.map((l,i)=>`
+        <div class="bc-row">
+          <div class="bc-lbl">${l.name}</div>
+          <div class="bc-bar-bg"><div class="bc-bar" style="width:${e.vals[i]*10}%"></div></div>
+          <div class="bc-v">${e.vals[i]}</div>
+        </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+function clearBoard(){if(confirm('全クリアしますか？')){allEntries=[];renderBoard();}}
+function nextPerson(){
+  document.getElementById('resultArea').classList.remove('show');
+  document.getElementById('namePanel').style.display='';
+  document.getElementById('nameIn').value='';
+}
+function resetAll(){allEntries=[];nextPerson();}
+</script>
+</body>
+</html>

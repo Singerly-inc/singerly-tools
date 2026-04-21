@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>デイリーコネクト — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { min-height:100vh; background:#fff; font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif; color:#000; display:flex; flex-direction:column; align-items:center; }
+.nav { width:100%; padding:12px 28px; background:#000; display:flex; align-items:center; justify-content:space-between; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.page-header { background:#000; width:100%; padding:28px 20px 24px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:10px; font-weight:700; }
+.page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+.main { width:100%; max-width:760px; padding:28px 24px 60px; display:flex; flex-direction:column; gap:20px; }
+.area-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+.input-panel { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:22px; }
+.field { margin-bottom:12px; }
+.field label { display:block; font-size:0.72rem; font-weight:700; color:#555; margin-bottom:5px; }
+.field input,.field textarea { width:100%; background:#fff; border:1px solid #CCCCCC; border-radius:6px; padding:9px 12px; color:#000; font-size:0.88rem; font-family:inherit; outline:none; transition:border-color 0.15s; }
+.field input:focus,.field textarea:focus { border-color:#B7282E; }
+.field input::placeholder,.field textarea::placeholder { color:#bbb; }
+.field textarea { resize:vertical; min-height:70px; line-height:1.6; }
+.mood-row { display:flex; gap:8px; }
+.mood-btn { flex:1; padding:10px 6px; border-radius:8px; border:2px solid #E0E0E0; background:#fff; cursor:pointer; font-size:1.3rem; text-align:center; transition:all 0.15s; }
+.mood-btn:hover,.mood-btn.sel { border-color:#B7282E; background:#FDF3F3; transform:scale(1.08); }
+.mood-label { font-size:0.6rem; color:#888; margin-top:4px; display:block; }
+.btn-primary { width:100%; padding:13px; font-size:0.95rem; font-weight:900; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background 0.15s; margin-top:4px; }
+.btn-primary:hover { background:#83151B; }
+/* BOARD */
+.board-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+.btn-clear { font-size:0.72rem; color:#aaa; background:none; border:none; cursor:pointer; }
+.btn-clear:hover { color:#B7282E; }
+.entries-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; }
+.entry-card { background:#fff; border:2px solid #E0E0E0; border-radius:10px; padding:16px; animation:popIn 0.3s ease both; }
+@keyframes popIn { 0%{opacity:0;transform:scale(0.9)} 100%{opacity:1;transform:none} }
+.ec-mood { font-size:1.6rem; margin-bottom:6px; }
+.ec-name { font-size:0.72rem; font-weight:700; color:#B7282E; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px; }
+.ec-comment { font-size:0.88rem; color:#333; line-height:1.55; }
+.ec-question { font-size:0.78rem; color:#555; margin-top:8px; border-top:1px solid #F0F0F0; padding-top:6px; }
+.ec-time { font-size:0.62rem; color:#bbb; margin-top:6px; text-align:right; }
+</style>
+</head>
+<body>
+<nav class="nav"><a class="nav-back" href="../../">← ムドメわっしょい！</a><span class="nav-brand">SINGERLY</span></nav>
+<div class="page-header">
+  <div class="tool-badge">🧩 理念・文化</div>
+  <h1 class="page-title">デイリーコネクト</h1>
+  <p class="page-sub">毎朝の気持ちを一言シェア。チームの関係性の質を育てる。</p>
+</div>
+<div class="main">
+  <div class="input-panel">
+    <div class="area-title">今日の一言を投稿</div>
+    <div class="field"><label>名前</label><input type="text" id="nameIn" placeholder="田中 太郎"></div>
+    <div class="field">
+      <label>今日の気持ち</label>
+      <div class="mood-row" id="moodRow"></div>
+    </div>
+    <div class="field"><label>今日やること・意気込み</label><textarea id="comment" placeholder="今日は〇〇を頑張ります。先週の〇〇が良かったのでその勢いで！"></textarea></div>
+    <div class="field"><label>チームへのひとこと（任意）</label><input type="text" id="question" placeholder="〇〇について誰かと話したい！"></div>
+    <button class="btn-primary" onclick="submit()">投稿する →</button>
+  </div>
+  <div id="boardWrap" style="display:none">
+    <div class="board-header">
+      <div class="area-title" style="margin-bottom:0">今日のコネクトボード</div>
+      <button class="btn-clear" onclick="clearAll()">全クリア</button>
+    </div>
+    <div class="entries-grid" id="entriesGrid"></div>
+  </div>
+</div>
+<script>
+const MOODS=[{e:'😴',l:'ゆっくり'},{e:'😐',l:'普通'},{e:'🙂',l:'まあまあ'},{e:'😊',l:'いい感じ'},{e:'🔥',l:'最高！'}];
+let selMood=null, entries=[];
+document.getElementById('moodRow').innerHTML=MOODS.map((m,i)=>
+  `<button class="mood-btn" onclick="selectMood(${i},this)"><span>${m.e}</span><span class="mood-label">${m.l}</span></button>`
+).join('');
+function selectMood(i,el){
+  selMood=MOODS[i];
+  document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function submit(){
+  const name=document.getElementById('nameIn').value.trim();
+  const comment=document.getElementById('comment').value.trim();
+  const question=document.getElementById('question').value.trim();
+  if(!name||!comment){alert('名前と今日の意気込みを入力してください');return;}
+  const now=new Date();
+  const time=now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
+  entries.unshift({name,mood:selMood,comment,question,time});
+  ['nameIn','comment','question'].forEach(id=>document.getElementById(id).value='');
+  selMood=null;
+  document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('sel'));
+  render();
+  document.getElementById('boardWrap').style.display='';
+}
+function render(){
+  document.getElementById('entriesGrid').innerHTML=entries.map((e,i)=>`
+    <div class="entry-card" style="animation-delay:${i*40}ms">
+      ${e.mood?`<div class="ec-mood">${e.mood.e}</div>`:''}
+      <div class="ec-name">${e.name}</div>
+      <div class="ec-comment">${e.comment}</div>
+      ${e.question?`<div class="ec-question">💬 ${e.question}</div>`:''}
+      <div class="ec-time">${e.time}</div>
+    </div>`).join('');
+}
+function clearAll(){if(confirm('全クリアしますか？')){entries=[];document.getElementById('boardWrap').style.display='none';}}
+</script>
+</body>
+</html>

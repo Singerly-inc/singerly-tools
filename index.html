@@ -7,6 +7,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
 <title>ムドメわっしょい！ by Singerly</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase-config.js"></script>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 
@@ -141,6 +143,49 @@ a.card { text-decoration:none; color:inherit; display:flex; }
   border-radius:4px; padding:5px 12px;
 }
 
+/* LOGIN OVERLAY */
+.login-overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,0.85);
+  display:flex; align-items:center; justify-content:center;
+  z-index:1000;
+}
+.login-box {
+  background:#fff; border-radius:12px;
+  padding:40px 36px; width:100%; max-width:400px;
+  display:flex; flex-direction:column; gap:16px;
+  text-align:center;
+}
+.login-logo { font-size:2rem; margin-bottom:4px; }
+.login-title { font-size:1.3rem; font-weight:900; color:#000; }
+.login-sub { font-size:0.8rem; color:#666; line-height:1.6; }
+.login-input {
+  width:100%; padding:12px 14px; border:1px solid #CCCCCC;
+  border-radius:6px; font-size:0.9rem; font-family:inherit;
+  outline:none; transition:border-color 0.15s;
+}
+.login-input:focus { border-color:#B7282E; }
+.login-btn {
+  width:100%; padding:13px; background:#B7282E; color:#fff;
+  border:none; border-radius:6px; font-size:0.9rem; font-weight:700;
+  font-family:inherit; cursor:pointer; transition:background 0.15s;
+}
+.login-btn:hover { background:#83151B; }
+.login-sent { font-size:0.82rem; color:#B7282E; font-weight:700; display:none; }
+.login-note { font-size:0.7rem; color:#aaa; }
+
+/* USER BAR */
+.user-bar {
+  font-size:0.72rem; color:rgba(255,255,255,0.5);
+  display:flex; align-items:center; gap:10px;
+}
+.logout-btn {
+  background:transparent; border:1px solid rgba(255,255,255,0.25);
+  color:rgba(255,255,255,0.5); border-radius:4px;
+  padding:3px 10px; font-size:0.68rem; cursor:pointer;
+  font-family:inherit; transition:all 0.15s;
+}
+.logout-btn:hover { border-color:#fff; color:#fff; }
+
 /* FOOTER */
 .footer {
   border-top:1px solid #E8E8E8;
@@ -159,8 +204,23 @@ a.card { text-decoration:none; color:inherit; display:flex; }
       <div class="logo-brand">by Singerly</div>
     </div>
   </a>
-  <div class="header-right">組織を盛り上げるツール集</div>
+  <div class="user-bar">
+    <span id="userEmail"></span>
+    <button class="logout-btn" id="logoutBtn" onclick="logout()" style="display:none">ログアウト</button>
+  </div>
 </header>
+
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-box">
+    <div class="login-logo">🎉</div>
+    <div class="login-title">ムドメわっしょい！</div>
+    <p class="login-sub">メールアドレスを入力してください。<br>ログインリンクをお送りします。</p>
+    <input class="login-input" id="emailInput" type="email" placeholder="your@email.com">
+    <button class="login-btn" onclick="sendMagicLink()">ログインリンクを送る</button>
+    <div class="login-sent" id="loginSent">メールを送信しました！リンクをクリックしてください。</div>
+    <div class="login-note">初回のみ必要です。次回以降は自動でログインされます。</div>
+  </div>
+</div>
 
 <section class="hero">
   <p class="hero-eyebrow">Mood Making Tools for Organizations</p>
@@ -196,6 +256,45 @@ a.card { text-decoration:none; color:inherit; display:flex; }
 <footer class="footer">© 2026 Singerly Inc. — はたらいて泣こう</footer>
 
 <script>
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let currentUser = null;
+
+async function initAuth() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    setUser(session.user);
+  }
+  sb.auth.onAuthStateChange((_event, session) => {
+    if (session) setUser(session.user);
+    else clearUser();
+  });
+}
+
+function setUser(user) {
+  currentUser = user;
+  document.getElementById('loginOverlay').style.display = 'none';
+  document.getElementById('userEmail').textContent = user.email;
+  document.getElementById('logoutBtn').style.display = 'inline-block';
+}
+
+function clearUser() {
+  currentUser = null;
+  document.getElementById('loginOverlay').style.display = 'flex';
+  document.getElementById('userEmail').textContent = '';
+  document.getElementById('logoutBtn').style.display = 'none';
+}
+
+async function sendMagicLink() {
+  const email = document.getElementById('emailInput').value.trim();
+  if (!email) return;
+  await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: location.origin + location.pathname } });
+  document.getElementById('loginSent').style.display = 'block';
+}
+
+async function logout() {
+  await sb.auth.signOut();
+}
+
 const CAT_LABEL = {
   icebreaker:'アイスブレイク', team:'チームビルド', mission:'理念・文化',
   safety:'心理的安全性', motivation:'モチベーション', discussion:'対話・意思決定',
@@ -264,8 +363,16 @@ let currentCat = 'all';
 function getMudomeCount() {
   return parseInt(localStorage.getItem('mudome_count') || '0');
 }
-function incrementMudome() {
+async function incrementMudome(toolId, toolName) {
   localStorage.setItem('mudome_count', getMudomeCount() + 1);
+  updateMudomeDisplay();
+  if (currentUser) {
+    await sb.from('tool_logs').insert({
+      user_email: currentUser.email,
+      tool_id: toolId,
+      tool_name: toolName,
+    });
+  }
 }
 function updateMudomeDisplay() {
   document.getElementById('mudomeCount').textContent = getMudomeCount().toLocaleString();
@@ -285,7 +392,7 @@ function render() {
     const active = t.status === 'active';
     const tag = active ? 'a' : 'div';
     const href = active ? `href="${t.path}"` : '';
-    const onclick = active ? `onclick="incrementMudome()"` : '';
+    const onclick = active ? `onclick="incrementMudome('${t.id}','${t.name}')"` : '';
     return `
       <${tag} class="card ${active ? '' : 'coming'}" ${href} ${onclick}>
         <div class="card-top">
@@ -306,6 +413,7 @@ function render() {
 
 render();
 updateMudomeDisplay();
+initAuth();
 </script>
 </body>
 </html>

@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
 <title>お品書きジェネレーター — ムドメわっしょい！</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../../supabase-config.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
@@ -21,6 +23,8 @@ body {
 .nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
 .nav-back:hover { color:#fff; }
 .nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+.nav-user { font-size:0.68rem; color:rgba(255,255,255,0.45); display:none; }
+.nav-user.show { display:block; }
 
 .page-header {
   background:#000; width:100%;
@@ -72,24 +76,6 @@ body {
 .item-row .form-input { flex:1; }
 .item-num { font-size:0.72rem; font-weight:700; color:#B7282E; width:18px; flex-shrink:0; text-align:center; }
 
-/* APIキー設定 */
-.apikey-section {
-  background:#f9f9f9; border:1px solid #eee; border-radius:8px; padding:12px;
-}
-.apikey-header {
-  display:flex; align-items:center; justify-content:space-between;
-  cursor:pointer; user-select:none;
-}
-.apikey-title { font-size:0.75rem; font-weight:700; color:#666; }
-.apikey-status { font-size:0.65rem; padding:2px 8px; border-radius:10px; }
-.apikey-status.set { background:#d4edda; color:#155724; }
-.apikey-status.unset { background:#f8d7da; color:#721c24; }
-.apikey-body { margin-top:10px; display:none; gap:6px; flex-direction:column; }
-.apikey-body.open { display:flex; }
-.apikey-hint { font-size:0.67rem; color:#999; line-height:1.5; }
-.apikey-row { display:flex; gap:6px; }
-.apikey-save { padding:8px 14px; background:#B7282E; color:#fff; border:none; border-radius:6px; font-size:0.78rem; font-weight:700; font-family:inherit; cursor:pointer; white-space:nowrap; }
-
 /* ボタン */
 .generate-btn {
   width:100%; padding:14px; background:#B7282E; color:#fff;
@@ -129,6 +115,37 @@ body {
 }
 @keyframes spin { to { transform:rotate(360deg); } }
 .gen-step { font-size:0.78rem; color:rgba(255,255,255,0.7); }
+
+/* ── ログインオーバーレイ ── */
+.login-overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,0.92);
+  display:flex; align-items:center; justify-content:center;
+  z-index:9999;
+}
+.login-box {
+  background:#fff; border-radius:16px; padding:40px 36px;
+  max-width:380px; width:100%; text-align:center;
+  display:flex; flex-direction:column; gap:14px;
+}
+.login-logo { font-size:2.5rem; }
+.login-title { font-size:1.2rem; font-weight:900; color:#000; }
+.login-sub { font-size:0.8rem; color:#666; line-height:1.6; }
+.login-input {
+  width:100%; padding:11px 14px; border:1.5px solid #ddd; border-radius:8px;
+  font-size:0.9rem; font-family:inherit; outline:none; transition:border-color 0.15s;
+}
+.login-input:focus { border-color:#B7282E; }
+.login-btn {
+  width:100%; padding:12px; background:#B7282E; color:#fff;
+  border:none; border-radius:8px; font-size:0.95rem; font-weight:700;
+  font-family:inherit; cursor:pointer; transition:background 0.15s;
+}
+.login-btn:hover { background:#83151B; }
+.login-sent { font-size:0.82rem; color:#B7282E; font-weight:700; display:none; }
+.login-note { font-size:0.7rem; color:#aaa; }
+.login-denied {
+  color:#B7282E; font-size:0.85rem; font-weight:700; display:none;
+}
 
 /* ── お品書き レンダリング領域（オフスクリーン）── */
 #ok-render {
@@ -215,8 +232,23 @@ body {
 </head>
 <body>
 
+<!-- ログインオーバーレイ -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-box">
+    <div class="login-logo">🍙</div>
+    <div class="login-title">お品書きジェネレーター</div>
+    <p class="login-sub">Singerly スタッフ専用ツールです。<br>@singerly.co.jp のメールアドレスでログインしてください。</p>
+    <input class="login-input" id="emailInput" type="email" placeholder="you@singerly.co.jp">
+    <button class="login-btn" onclick="sendMagicLink()">ログインリンクを送る</button>
+    <div class="login-sent" id="loginSent">メールを送信しました！リンクをクリックしてください。</div>
+    <div class="login-denied" id="loginDenied">このアカウントはアクセスできません。</div>
+    <div class="login-note">初回のみ必要です。次回以降は自動でログインされます。</div>
+  </div>
+</div>
+
 <nav class="nav">
   <a class="nav-back" href="../../index.html">← ムドメわっしょい！</a>
+  <span class="nav-user" id="navUser"></span>
   <span class="nav-brand">SINGERLY</span>
 </nav>
 
@@ -231,21 +263,6 @@ body {
   <!-- フォームパネル -->
   <div class="form-panel">
     <div class="form-title">📋 メニュー入力</div>
-
-    <!-- OpenAI APIキー -->
-    <div class="apikey-section">
-      <div class="apikey-header" onclick="toggleApiKey()">
-        <span class="apikey-title">🔑 OpenAI APIキー（画像生成に必要）</span>
-        <span class="apikey-status" id="keyStatus">未設定</span>
-      </div>
-      <div class="apikey-body" id="apikeyBody">
-        <span class="apikey-hint">OpenAIのAPIキーを入力してください。ブラウザのみに保存されます。</span>
-        <div class="apikey-row">
-          <input class="form-input" id="apikeyInput" type="password" placeholder="sk-...">
-          <button class="apikey-save" onclick="saveApiKey()">保存</button>
-        </div>
-      </div>
-    </div>
 
     <div class="form-section">
       <label class="form-label">イベント名</label>
@@ -372,50 +389,54 @@ body {
   document.getElementById('eventDate').value = `令和${y}年${d.getMonth()+1}月${d.getDate()}日`;
 })();
 
-// ── APIキー管理 ──
-function toggleApiKey() {
-  document.getElementById('apikeyBody').classList.toggle('open');
-}
-function saveApiKey() {
-  const key = document.getElementById('apikeyInput').value.trim();
-  if (!key) return;
-  localStorage.setItem('oai_key', key);
-  document.getElementById('apikeyInput').value = '';
-  updateKeyStatus();
-  document.getElementById('apikeyBody').classList.remove('open');
-}
-function updateKeyStatus() {
-  const el = document.getElementById('keyStatus');
-  const key = localStorage.getItem('oai_key');
-  el.textContent = key ? '設定済み ✓' : '未設定';
-  el.className = 'apikey-status ' + (key ? 'set' : 'unset');
-}
-updateKeyStatus();
+// ── Supabase 認証 ──
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let currentSession = null;
 
-// ── DALL-E 画像生成 ──
-async function generateOnigiriImage(items) {
-  const key = localStorage.getItem('oai_key');
-  if (!key) throw new Error('OpenAI APIキーが設定されていません。フォーム上部で設定してください。');
-
-  const itemStr = items.slice(0, 5).join('・');
-  const prompt = `Professional Japanese food photography. A stunning single large onigiri (rice ball) ` +
-    `wrapped in dark crispy nori seaweed, with generous ${itemStr} toppings piled on top. ` +
-    `Placed on a natural light wood board with small Japanese garnishes. ` +
-    `Shallow depth of field, warm restaurant lighting, highly appetizing sizzle shot, close-up angle. ` +
-    `Photorealistic, no text, no watermarks, restaurant quality.`;
-
-  const res = await fetch('https://api.openai.com/v1/images/generations', {
-    method: 'POST',
-    headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model: 'gpt-image-1', prompt, size: '1536x1024', quality: 'medium' }),
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    applySession(session);
+  }
+  sb.auth.onAuthStateChange((_event, session) => {
+    if (session) applySession(session);
   });
+})();
 
+function applySession(session) {
+  const email = session.user?.email || '';
+  if (!email.endsWith('@singerly.co.jp')) {
+    document.getElementById('loginDenied').style.display = 'block';
+    return;
+  }
+  currentSession = session;
+  document.getElementById('loginOverlay').style.display = 'none';
+  const navUser = document.getElementById('navUser');
+  navUser.textContent = email;
+  navUser.classList.add('show');
+}
+
+async function sendMagicLink() {
+  const email = document.getElementById('emailInput').value.trim();
+  if (!email) return;
+  await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: location.origin + location.pathname } });
+  document.getElementById('loginSent').style.display = 'block';
+}
+
+// ── サーバーサイド画像生成 ──
+async function generateOnigiriImage(items) {
+  if (!currentSession) throw new Error('ログインしてください');
+  const res = await fetch('/api/generate-onigiri', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ items, access_token: currentSession.access_token }),
+  });
   if (!res.ok) {
-    const err = await res.json();
-    throw new Error(err.error?.message || 'DALL-E APIエラー');
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || 'APIエラー');
   }
   const data = await res.json();
-  return 'data:image/png;base64,' + data.data[0].b64_json;
+  return 'data:image/png;base64,' + data.b64_json;
 }
 
 // ── メイン生成 ──
@@ -438,7 +459,7 @@ async function generate() {
   genMsg.classList.add('show');
 
   try {
-    // Step 1: AI画像生成
+    // Step 1: AI画像生成（サーバー経由）
     genStep.textContent = '🎨 AIがおにぎり画像を生成中...';
     const heroSrc = await generateOnigiriImage(items);
 

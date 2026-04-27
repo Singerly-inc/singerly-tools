@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>お品書きジェネレーター — ムドメわっしょい！</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  min-height:100vh; background:#f5f5f5;
+  font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif;
+  color:#000;
+}
+
+/* NAV */
+.nav {
+  width:100%; padding:12px 28px; background:#000;
+  display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:100;
+}
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
+.nav-back:hover { color:#fff; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
+
+/* HEADER */
+.page-header {
+  background:#000; width:100%;
+  padding:28px 20px 24px; text-align:center;
+  border-bottom:3px solid #B7282E;
+}
+.tool-badge {
+  display:inline-block; background:#B7282E; color:#fff;
+  font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px;
+  border-radius:3px; margin-bottom:10px; font-weight:700;
+}
+.page-title { font-size:1.7rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+
+/* MAIN LAYOUT */
+.main {
+  max-width:1400px; margin:0 auto;
+  padding:28px 24px 60px;
+  display:grid;
+  grid-template-columns: 380px 1fr;
+  gap:28px;
+  align-items:start;
+}
+
+/* FORM PANEL */
+.form-panel {
+  background:#fff; border-radius:12px;
+  border:1px solid #e8e8e8;
+  padding:24px;
+  position:sticky;
+  top:70px;
+}
+.form-title {
+  font-size:0.85rem; font-weight:900;
+  letter-spacing:0.05em; margin-bottom:20px;
+  color:#000; border-bottom:2px solid #B7282E;
+  padding-bottom:8px;
+}
+.form-section { margin-bottom:20px; }
+.form-section-label {
+  font-size:0.68rem; font-weight:700;
+  letter-spacing:0.15em; color:#B7282E;
+  text-transform:uppercase; margin-bottom:8px;
+  display:block;
+}
+.form-input, .form-textarea {
+  width:100%; padding:9px 12px;
+  border:1px solid #ddd; border-radius:6px;
+  font-size:0.88rem; font-family:inherit;
+  outline:none; transition:border-color 0.15s;
+  color:#000;
+}
+.form-input:focus, .form-textarea:focus { border-color:#B7282E; }
+.form-textarea { resize:vertical; min-height:70px; }
+.form-hint { font-size:0.68rem; color:#999; margin-top:4px; }
+
+.item-inputs { display:flex; flex-direction:column; gap:6px; }
+.item-row { display:flex; gap:6px; align-items:center; }
+.item-row .form-input { flex:1; }
+.item-num {
+  font-size:0.72rem; font-weight:700; color:#B7282E;
+  width:18px; flex-shrink:0; text-align:center;
+}
+
+.generate-btn {
+  width:100%; padding:14px;
+  background:#B7282E; color:#fff;
+  border:none; border-radius:8px;
+  font-size:1rem; font-weight:900;
+  font-family:inherit; cursor:pointer;
+  letter-spacing:0.05em;
+  transition:background 0.15s;
+  margin-top:4px;
+}
+.generate-btn:hover { background:#83151B; }
+.generate-btn:disabled { background:#ccc; cursor:not-allowed; }
+
+.download-btn {
+  width:100%; padding:12px;
+  background:#000; color:#fff;
+  border:none; border-radius:8px;
+  font-size:0.9rem; font-weight:700;
+  font-family:inherit; cursor:pointer;
+  letter-spacing:0.05em;
+  transition:background 0.15s;
+  margin-top:8px;
+  display:none;
+}
+.download-btn:hover { background:#333; }
+.download-btn.show { display:block; }
+
+/* PREVIEW PANEL */
+.preview-panel {
+  display:flex; flex-direction:column; gap:16px;
+}
+.preview-label {
+  font-size:0.72rem; font-weight:700;
+  color:#666; letter-spacing:0.1em;
+}
+.preview-wrap {
+  background:#ddd;
+  border-radius:8px;
+  overflow:hidden;
+  position:relative;
+  aspect-ratio:16/9;
+  display:flex; align-items:center; justify-content:center;
+}
+.preview-placeholder {
+  text-align:center; color:#999;
+  font-size:0.85rem; line-height:2;
+}
+.preview-wrap img {
+  width:100%; height:100%;
+  object-fit:contain;
+  display:none;
+}
+.preview-wrap img.show { display:block; }
+
+.generating-msg {
+  position:absolute; inset:0;
+  background:rgba(0,0,0,0.6);
+  display:none; align-items:center; justify-content:center;
+  flex-direction:column; gap:12px; color:#fff;
+  font-size:0.9rem; font-weight:700;
+}
+.generating-msg.show { display:flex; }
+.spinner {
+  width:32px; height:32px;
+  border:3px solid rgba(255,255,255,0.3);
+  border-top-color:#fff;
+  border-radius:50%;
+  animation:spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* ── お品書き本体（オフスクリーンレンダリング用）── */
+#ohinagaki-render {
+  position: fixed;
+  left: -9999px;
+  top: 0;
+  width: 1280px;
+  height: 720px;
+  overflow: hidden;
+}
+
+/* ─────── お品書きスタイル ─────── */
+.ok-body {
+  width:1280px; height:720px;
+  overflow:hidden;
+  font-family:'Hiragino Mincho ProN','YuMincho','Yu Mincho','游明朝',serif;
+  background:#111;
+  display:flex;
+}
+.ok-left {
+  position:relative; width:420px; flex-shrink:0; overflow:hidden;
+}
+.ok-left-img {
+  width:100%; height:100%;
+  object-fit:cover; object-position:center 30%;
+  filter:brightness(0.65) saturate(1.2) contrast(1.05);
+}
+.ok-left-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(160deg,rgba(8,22,12,.3) 0%,rgba(8,22,12,.65) 60%,rgba(8,22,12,.82) 100%);
+}
+.ok-left-content {
+  position:absolute; inset:0;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:12px;
+}
+.ok-emblem {
+  width:58px; height:58px;
+  border:1.5px solid #c9a84c; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  color:#c9a84c; font-size:22px; margin-bottom:4px;
+}
+.ok-evname { color:#c9a84c; font-size:13px; letter-spacing:7px; }
+.ok-title {
+  color:#fff; font-size:62px; letter-spacing:20px;
+  font-weight:300; line-height:1;
+  text-shadow:0 3px 16px rgba(0,0,0,.5);
+}
+.ok-date { color:rgba(255,255,255,.65); font-size:12px; letter-spacing:4px; margin-top:4px; }
+.ok-vdiv {
+  width:1px; flex-shrink:0;
+  background:linear-gradient(to bottom,transparent,#c9a84c66,transparent);
+}
+.ok-right {
+  flex:1; background:#f8f4ed;
+  display:flex; flex-direction:column;
+  padding:22px 32px 22px;
+  height:720px; overflow:hidden;
+}
+.ok-sec-head { display:flex; align-items:center; gap:12px; margin-bottom:10px; flex-shrink:0; }
+.ok-sec-vert { color:#c9a84c; font-size:9px; letter-spacing:3px; writing-mode:vertical-rl; line-height:1; }
+.ok-sec-title { font-size:16px; color:#1a2f1a; letter-spacing:5px; font-weight:400; }
+.ok-sec-rule { flex:1; height:1px; background:linear-gradient(to right,rgba(26,47,26,.25),transparent); }
+.ok-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:5px; height:148px; margin-bottom:10px; flex-shrink:0; }
+.ok-gcard { position:relative; border-radius:3px; overflow:hidden; height:100%; }
+.ok-gcard img { width:100%; height:100%; object-fit:cover; filter:brightness(.87) saturate(1.1); }
+.ok-glabel {
+  position:absolute; bottom:0; left:0; right:0;
+  background:linear-gradient(to top,rgba(0,0,0,.82),transparent);
+  color:#fff; font-size:9.5px; padding:18px 5px 6px;
+  text-align:center; letter-spacing:.5px; line-height:1.3;
+}
+.ok-menu { display:grid; grid-template-columns:1fr 1fr; column-gap:20px; margin-bottom:12px; flex-shrink:0; }
+.ok-mitem { display:flex; align-items:center; gap:9px; padding:6px 0; border-bottom:1px solid rgba(26,47,26,.08); font-size:13.5px; color:#2c1a0e; letter-spacing:1.5px; }
+.ok-dot { width:5px; height:5px; background:#c9a84c; border-radius:50%; flex-shrink:0; }
+.ok-special {
+  background:#1a2f1a; border-radius:5px;
+  display:flex; align-items:stretch; overflow:hidden;
+  margin-bottom:12px; height:175px; flex-shrink:0;
+  border-left:4px solid #c9a84c;
+  box-shadow:0 4px 20px rgba(26,47,26,.25);
+}
+.ok-sp-photo-wrap { position:relative; width:200px; flex-shrink:0; overflow:hidden; }
+.ok-sp-photo-wrap img { width:100%; height:100%; object-fit:cover; object-position:center 35%; filter:brightness(.88) saturate(1.15) contrast(1.05); }
+.ok-sp-body { flex:1; padding:0 28px; display:flex; align-items:center; gap:20px; }
+.ok-sp-vert { writing-mode:vertical-rl; color:#c9a84c; font-size:10px; letter-spacing:4px; flex-shrink:0; line-height:1; }
+.ok-sp-divline { width:1px; height:70px; background:rgba(201,168,76,.45); flex-shrink:0; }
+.ok-sp-text { flex:1; }
+.ok-sp-smlab { color:#c9a84c; font-size:10px; letter-spacing:5px; margin-bottom:10px; }
+.ok-sp-name { color:#fff; font-size:34px; letter-spacing:6px; font-weight:300; line-height:1.2; }
+.ok-sp-desc { color:rgba(255,255,255,.45); font-size:11px; letter-spacing:2px; margin-top:8px; }
+.ok-sp-badge { border:1px solid #c9a84c; color:#c9a84c; font-size:9px; letter-spacing:3px; padding:6px 14px; flex-shrink:0; align-self:flex-start; margin-top:4px; }
+.ok-bottom { flex:1; display:grid; grid-template-columns:1fr 1fr 1fr; border-top:1px solid rgba(26,47,26,.15); padding-top:14px; align-items:center; }
+.ok-bcol { padding:0 24px; border-right:1px solid rgba(26,47,26,.1); }
+.ok-bcol:first-child { padding-left:0; }
+.ok-bcol:last-child { border-right:none; padding-right:0; }
+.ok-blabel { color:#c9a84c; font-size:10px; letter-spacing:5px; margin-bottom:8px; }
+.ok-bitem { font-size:18px; color:#2c1a0e; letter-spacing:3px; line-height:1.8; }
+.ok-bfooter { font-size:9px; color:rgba(44,26,14,.22); letter-spacing:3px; margin-top:6px; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="../../index.html">← ムドメわっしょい！</a>
+  <span class="nav-brand">SINGERLY</span>
+</nav>
+
+<div class="page-header">
+  <div class="tool-badge">🍙 ASAGE NO KAI</div>
+  <h1 class="page-title">お品書きジェネレーター</h1>
+  <p class="page-sub">メニューを入力するだけで、高品質なお品書き画像を自動生成</p>
+</div>
+
+<div class="main">
+
+  <!-- フォームパネル -->
+  <div class="form-panel">
+    <div class="form-title">📋 メニュー入力</div>
+
+    <div class="form-section">
+      <label class="form-section-label">イベント名</label>
+      <input class="form-input" id="eventName" value="あさげの会" placeholder="あさげの会">
+    </div>
+
+    <div class="form-section">
+      <label class="form-section-label">日付</label>
+      <input class="form-input" id="eventDate" placeholder="令和7年5月8日">
+    </div>
+
+    <div class="form-section">
+      <label class="form-section-label">本日のおにぎり（最大5種）</label>
+      <div class="item-inputs" id="onigiriInputs">
+        <div class="item-row"><span class="item-num">①</span><input class="form-input" placeholder="例：極上梅"></div>
+        <div class="item-row"><span class="item-num">②</span><input class="form-input" placeholder="例：卵黄肉そぼろ"></div>
+        <div class="item-row"><span class="item-num">③</span><input class="form-input" placeholder="例：クリームチーズの醤油漬け"></div>
+        <div class="item-row"><span class="item-num">④</span><input class="form-input" placeholder="例：白ワイン鯖明太子"></div>
+        <div class="item-row"><span class="item-num">⑤</span><input class="form-input" placeholder="例：ネギ塩牛タン"></div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <label class="form-section-label">本日のスペシャル</label>
+      <input class="form-input" id="spName" placeholder="例：自家製海苔キムチ" style="margin-bottom:6px">
+      <input class="form-input" id="spDesc" placeholder="説明文（任意）：旬の食材を使った特製一品">
+    </div>
+
+    <div class="form-section">
+      <label class="form-section-label">お椀</label>
+      <input class="form-input" id="owan" placeholder="例：具沢山味噌汁">
+    </div>
+
+    <div class="form-section">
+      <label class="form-section-label">本日の〆</label>
+      <input class="form-input" id="shime" placeholder="例：だし茶漬け">
+    </div>
+
+    <div class="form-section">
+      <label class="form-section-label">香の物</label>
+      <input class="form-input" id="konomono" placeholder="例：季節のお漬物">
+    </div>
+
+    <button class="generate-btn" id="genBtn" onclick="generate()">🍙 お品書きを生成する</button>
+    <button class="download-btn" id="dlBtn" onclick="download()">⬇️ PNGをダウンロード</button>
+  </div>
+
+  <!-- プレビューパネル -->
+  <div class="preview-panel">
+    <div class="preview-label">プレビュー（16:9 / 1280×720）</div>
+    <div class="preview-wrap" id="previewWrap">
+      <div class="preview-placeholder" id="placeholder">
+        🍙<br>左のフォームを入力して<br>「生成する」を押してください
+      </div>
+      <img id="previewImg" alt="お品書きプレビュー">
+      <div class="generating-msg" id="genMsg">
+        <div class="spinner"></div>
+        <div>生成中...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- オフスクリーン レンダリング領域 -->
+<div id="ohinagaki-render">
+  <div class="ok-body" id="okBody">
+    <div class="ok-left">
+      <img class="ok-left-img" id="okBgImg" src="photos/bg.jpg" crossorigin="anonymous">
+      <div class="ok-left-overlay"></div>
+      <div class="ok-left-content">
+        <div class="ok-emblem">朝</div>
+        <div class="ok-evname" id="okEvName">あさげの会</div>
+        <div class="ok-title">お品書き</div>
+        <div class="ok-date" id="okDate"></div>
+      </div>
+    </div>
+    <div class="ok-vdiv"></div>
+    <div class="ok-right">
+      <div class="ok-sec-head">
+        <div class="ok-sec-vert">本日</div>
+        <div class="ok-sec-title">本日のおにぎり</div>
+        <div class="ok-sec-rule"></div>
+      </div>
+      <div class="ok-grid" id="okGrid">
+        <div class="ok-gcard"><img src="photos/g1.jpg" crossorigin="anonymous"><div class="ok-glabel" id="okL1"></div></div>
+        <div class="ok-gcard"><img src="photos/g2.jpg" crossorigin="anonymous"><div class="ok-glabel" id="okL2"></div></div>
+        <div class="ok-gcard"><img src="photos/g3.jpg" crossorigin="anonymous"><div class="ok-glabel" id="okL3"></div></div>
+        <div class="ok-gcard"><img src="photos/g4.jpg" crossorigin="anonymous"><div class="ok-glabel" id="okL4"></div></div>
+        <div class="ok-gcard"><img src="photos/g5.jpg" crossorigin="anonymous"><div class="ok-glabel" id="okL5"></div></div>
+      </div>
+      <div class="ok-menu" id="okMenu"></div>
+      <div class="ok-special">
+        <div class="ok-sp-photo-wrap"><img src="photos/special.jpg" id="okSpImg" crossorigin="anonymous"></div>
+        <div class="ok-sp-body">
+          <div class="ok-sp-vert" id="okSpLabel">本日のスペシャル</div>
+          <div class="ok-sp-divline"></div>
+          <div class="ok-sp-text">
+            <div class="ok-sp-smlab">TODAY'S SPECIAL</div>
+            <div class="ok-sp-name" id="okSpName"></div>
+            <div class="ok-sp-desc" id="okSpDesc"></div>
+          </div>
+          <div class="ok-sp-badge">SPECIAL</div>
+        </div>
+      </div>
+      <div class="ok-bottom">
+        <div class="ok-bcol">
+          <div class="ok-blabel">お椀</div>
+          <div class="ok-bitem" id="okOwan"></div>
+        </div>
+        <div class="ok-bcol">
+          <div class="ok-blabel">本日の〆</div>
+          <div class="ok-bitem" id="okShime"></div>
+        </div>
+        <div class="ok-bcol">
+          <div class="ok-blabel">香の物</div>
+          <div class="ok-bitem" id="okKonomono"></div>
+          <div class="ok-bfooter">Singerly — はたらいて、泣こう。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// 今日の日付をデフォルトにセット
+(function() {
+  const d = new Date();
+  const y = d.getFullYear() - 2018;
+  const m = d.getMonth() + 1;
+  const day = d.getDate();
+  document.getElementById('eventDate').value = `令和${y}年${m}月${day}日`;
+})();
+
+let lastDataUrl = null;
+
+function getInputs() {
+  const rows = document.querySelectorAll('#onigiriInputs .item-row input');
+  const items = Array.from(rows).map(r => r.value.trim()).filter(Boolean);
+  return {
+    eventName : document.getElementById('eventName').value.trim() || 'あさげの会',
+    date      : document.getElementById('eventDate').value.trim(),
+    onigiri   : items,
+    spName    : document.getElementById('spName').value.trim(),
+    spDesc    : document.getElementById('spDesc').value.trim(),
+    owan      : document.getElementById('owan').value.trim(),
+    shime     : document.getElementById('shime').value.trim(),
+    konomono  : document.getElementById('konomono').value.trim(),
+  };
+}
+
+function updateRender(data) {
+  document.getElementById('okEvName').textContent  = data.eventName;
+  document.getElementById('okDate').textContent    = data.date;
+  document.getElementById('okSpName').textContent  = data.spName;
+  document.getElementById('okSpDesc').textContent  = data.spDesc;
+  document.getElementById('okOwan').textContent    = data.owan;
+  document.getElementById('okShime').textContent   = data.shime;
+  document.getElementById('okKonomono').textContent = data.konomono;
+
+  // おにぎりグリッドラベル
+  const labels = ['okL1','okL2','okL3','okL4','okL5'];
+  labels.forEach((id, i) => {
+    document.getElementById(id).textContent = data.onigiri[i] || '';
+  });
+
+  // おにぎりリスト
+  const menu = document.getElementById('okMenu');
+  menu.innerHTML = data.onigiri.map(item =>
+    `<div class="ok-mitem"><span class="ok-dot"></span>${item}</div>`
+  ).join('');
+}
+
+async function generate() {
+  const data = getInputs();
+  updateRender(data);
+
+  const genBtn = document.getElementById('genBtn');
+  const genMsg = document.getElementById('genMsg');
+  const placeholder = document.getElementById('placeholder');
+  const previewImg = document.getElementById('previewImg');
+
+  genBtn.disabled = true;
+  genMsg.classList.add('show');
+
+  // 画像ロード待ち
+  await new Promise(r => setTimeout(r, 300));
+
+  try {
+    const canvas = await html2canvas(document.getElementById('okBody'), {
+      width: 1280,
+      height: 720,
+      scale: 1,
+      useCORS: true,
+      allowTaint: false,
+      logging: false,
+      backgroundColor: null,
+    });
+
+    lastDataUrl = canvas.toDataURL('image/png');
+    placeholder.style.display = 'none';
+    previewImg.src = lastDataUrl;
+    previewImg.classList.add('show');
+    document.getElementById('dlBtn').classList.add('show');
+  } catch(e) {
+    alert('生成エラー: ' + e.message);
+  }
+
+  genBtn.disabled = false;
+  genMsg.classList.remove('show');
+}
+
+function download() {
+  if (!lastDataUrl) return;
+  const d = new Date();
+  const fname = `お品書き_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}.png`;
+  const a = document.createElement('a');
+  a.href = lastDataUrl;
+  a.download = fname;
+  a.click();
+}
+</script>
+</body>
+</html>

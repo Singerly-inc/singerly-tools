@@ -142,6 +142,12 @@ a.card { text-decoration:none; color:inherit; display:flex; }
   background:#F5F5F5; border:1px solid #E0E0E0;
   border-radius:4px; padding:5px 12px;
 }
+.staff-tag {
+  font-size:0.6rem; color:#1a2f1a;
+  background:#e8f5e2; border:1px solid #a8d5a2;
+  border-radius:4px; padding:3px 8px;
+  font-weight:700; letter-spacing:0.04em; white-space:nowrap;
+}
 
 /* CELEBRATION */
 .celebration-overlay {
@@ -365,7 +371,7 @@ const CAT_LABEL = {
 };
 
 const TOOLS = [
-  { id:'ohinagaki',         icon:'🍙', name:'お品書きジェネレーター',      catch:'メニューを入力するだけで高品質お品書き画像を自動生成', cat:'icebreaker', theory:'あさげの会 オリジナル',             status:'active', path:'tools/ohinagaki/index.html' },
+  { id:'ohinagaki',         icon:'🍙', name:'お品書きジェネレーター',      catch:'メニューを入力するだけで高品質お品書き画像を自動生成', cat:'icebreaker', theory:'あさげの会 オリジナル',             status:'active', staff:true, path:'tools/ohinagaki/index.html' },
   { id:'lottery',           icon:'🎰', name:'抽選スロット',              catch:'誰が当たる？スロットで選ぶ緊張と興奮',          cat:'icebreaker', theory:'タックマンモデル（形成期）',        status:'active', path:'tools/lottery/index.html' },
   { id:'presentation-order', icon:'🎤', name:'発表順くじ引き',           catch:'プレゼン発表順をランダム決定・PPTXで即出力',    cat:'icebreaker', theory:'ランダマイズ・公平性',              status:'active', path:'tools/presentation-order/index.html' },
   { id:'saicoro',           icon:'🎲', name:'サイコロトーク',            catch:'出た目のテーマで深掘りトーク。経営者向け収録',   cat:'icebreaker', theory:'五感の文化で共感を促す',           status:'active', path:'tools/saicoro/index.html' },
@@ -545,7 +551,10 @@ function render() {
       <${tag} class="card ${active ? '' : 'coming'}" ${href} ${onclick}>
         <div class="card-top">
           <div class="card-icon">${t.icon}</div>
-          <span class="cat-tag">${CAT_LABEL[t.cat]}</span>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+            <span class="cat-tag">${CAT_LABEL[t.cat]}</span>
+            ${t.staff ? `<span class="staff-tag">🔒 Singerly限定</span>` : ''}
+          </div>
         </div>
         <div class="card-name">${t.name}</div>
         <div class="card-catch">${t.catch}</div>

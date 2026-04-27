@@ -48,7 +48,7 @@ module.exports = async function handler(req, res) {
       Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ model: 'gpt-image-2', prompt, size: '1792x1024', quality: 'medium' }),
+    body: JSON.stringify({ model: 'gpt-image-1', prompt, size: '1536x1024', quality: 'medium' }),
   });
 
   if (!imgRes.ok) {

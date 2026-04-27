@@ -221,10 +221,10 @@ body {
 .ok-sp-name { color:#fff; font-size:30px; letter-spacing:5px; font-weight:300; line-height:1.2; }
 .ok-sp-desc { color:rgba(255,255,255,.45); font-size:11px; letter-spacing:2px; margin-top:6px; }
 .ok-sp-badge { border:1px solid #c9a84c; color:#c9a84c; font-size:9px; letter-spacing:3px; padding:5px 12px; flex-shrink:0; align-self:flex-start; margin-top:4px; }
-.ok-bottom { flex:1; display:grid; grid-template-columns:1fr 1fr 1fr; border-top:1px solid rgba(26,47,26,.15); padding-top:14px; align-items:center; }
-.ok-bcol { padding:0 24px; border-right:1px solid rgba(26,47,26,.1); }
-.ok-bcol:first-child { padding-left:0; }
-.ok-bcol:last-child { border-right:none; padding-right:0; }
+.ok-bottom { flex:1; display:flex; border-top:1px solid rgba(26,47,26,.15); padding-top:14px; align-items:center; }
+.ok-bcol { flex:1; padding:0 20px; border-right:1px solid rgba(26,47,26,.1); }
+.ok-bcol:first-of-type { padding-left:0; }
+.ok-bcol.last-visible { border-right:none; padding-right:0; }
 .ok-blabel { color:#c9a84c; font-size:10px; letter-spacing:5px; margin-bottom:8px; }
 .ok-bitem { font-size:18px; color:#2c1a0e; letter-spacing:3px; line-height:1.8; }
 .ok-bfooter { font-size:9px; color:rgba(44,26,14,.22); letter-spacing:3px; margin-top:6px; }
@@ -362,16 +362,16 @@ body {
           <div class="ok-sp-badge">SPECIAL</div>
         </div>
       </div>
-      <div class="ok-bottom">
-        <div class="ok-bcol">
+      <div class="ok-bottom" id="okBottom">
+        <div class="ok-bcol" id="okOwanCol">
           <div class="ok-blabel">お椀</div>
           <div class="ok-bitem" id="okOwan"></div>
         </div>
-        <div class="ok-bcol">
+        <div class="ok-bcol" id="okShimeCol">
           <div class="ok-blabel">本日の〆</div>
           <div class="ok-bitem" id="okShime"></div>
         </div>
-        <div class="ok-bcol">
+        <div class="ok-bcol" id="okKonominoCol">
           <div class="ok-blabel">香の物</div>
           <div class="ok-bitem" id="okKonomono"></div>
           <div class="ok-bfooter">Singerly — はたらいて、泣こう。</div>
@@ -469,9 +469,25 @@ async function generate() {
     document.getElementById('okDate').textContent   = evDate;
     document.getElementById('okSpName').textContent = spName;
     document.getElementById('okSpDesc').textContent = spDesc;
-    document.getElementById('okOwan').textContent   = owan;
-    document.getElementById('okShime').textContent  = shime;
-    document.getElementById('okKonomono').textContent = konomono;
+    // ボトム列：空なら非表示、表示中の最後列にlast-visibleクラス
+    const bottomCols = [
+      { colId:'okOwanCol',    itemId:'okOwan',    value:owan },
+      { colId:'okShimeCol',   itemId:'okShime',   value:shime },
+      { colId:'okKonominoCol',itemId:'okKonomono',value:konomono },
+    ];
+    let lastVisibleCol = null;
+    bottomCols.forEach(({ colId, itemId, value }) => {
+      const col = document.getElementById(colId);
+      col.classList.remove('last-visible');
+      if (value) {
+        col.style.display = '';
+        document.getElementById(itemId).textContent = value;
+        lastVisibleCol = col;
+      } else {
+        col.style.display = 'none';
+      }
+    });
+    if (lastVisibleCol) lastVisibleCol.classList.add('last-visible');
     document.getElementById('okMenu').innerHTML = items.map(i =>
       `<div class="ok-mitem"><span class="ok-dot"></span>${i}</div>`
     ).join('');

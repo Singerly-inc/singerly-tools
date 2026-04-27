@@ -24,7 +24,7 @@ export default async function handler(req, res) {
     return res.status(403).json({ error: '@singerly.co.jp のアカウントのみ使用できます' });
   }
 
-  // OpenAI gpt-image-1 で画像生成
+  // OpenAI gpt-image-2 で画像生成
   if (!items?.length) return res.status(400).json({ error: 'おにぎりのネタを入力してください' });
 
   const itemStr = items.slice(0, 5).join('・');
@@ -41,7 +41,7 @@ export default async function handler(req, res) {
       Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ model: 'gpt-image-1', prompt, size: '1536x1024', quality: 'medium' }),
+    body: JSON.stringify({ model: 'gpt-image-2', prompt, size: '1792x1024', quality: 'medium' }),
   });
 
   if (!imgRes.ok) {

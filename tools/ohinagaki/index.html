@@ -13,8 +13,6 @@ body {
   font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif;
   color:#000;
 }
-
-/* NAV */
 .nav {
   width:100%; padding:12px 28px; background:#000;
   display:flex; align-items:center; justify-content:space-between;
@@ -24,7 +22,6 @@ body {
 .nav-back:hover { color:#fff; }
 .nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
 
-/* HEADER */
 .page-header {
   background:#000; width:100%;
   padding:28px 20px 24px; text-align:center;
@@ -38,7 +35,6 @@ body {
 .page-title { font-size:1.7rem; font-weight:900; color:#fff; margin-bottom:4px; }
 .page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
 
-/* MAIN LAYOUT */
 .main {
   max-width:1400px; margin:0 auto;
   padding:28px 24px 60px;
@@ -48,208 +44,166 @@ body {
   align-items:start;
 }
 
-/* FORM PANEL */
+/* ── フォームパネル ── */
 .form-panel {
   background:#fff; border-radius:12px;
-  border:1px solid #e8e8e8;
-  padding:24px;
-  position:sticky;
-  top:70px;
+  border:1px solid #e8e8e8; padding:24px;
+  position:sticky; top:70px;
+  display:flex; flex-direction:column; gap:16px;
 }
 .form-title {
-  font-size:0.85rem; font-weight:900;
-  letter-spacing:0.05em; margin-bottom:20px;
-  color:#000; border-bottom:2px solid #B7282E;
-  padding-bottom:8px;
+  font-size:0.85rem; font-weight:900; letter-spacing:0.05em;
+  color:#000; border-bottom:2px solid #B7282E; padding-bottom:8px;
 }
-.form-section { margin-bottom:20px; }
-.form-section-label {
+.form-section { display:flex; flex-direction:column; gap:6px; }
+.form-label {
   font-size:0.68rem; font-weight:700;
-  letter-spacing:0.15em; color:#B7282E;
-  text-transform:uppercase; margin-bottom:8px;
-  display:block;
+  letter-spacing:0.15em; color:#B7282E; text-transform:uppercase;
 }
-.form-input, .form-textarea {
-  width:100%; padding:9px 12px;
-  border:1px solid #ddd; border-radius:6px;
-  font-size:0.88rem; font-family:inherit;
-  outline:none; transition:border-color 0.15s;
-  color:#000;
+.form-input {
+  width:100%; padding:9px 12px; border:1px solid #ddd; border-radius:6px;
+  font-size:0.88rem; font-family:inherit; outline:none;
+  transition:border-color 0.15s; color:#000;
 }
-.form-input:focus, .form-textarea:focus { border-color:#B7282E; }
-.form-textarea { resize:vertical; min-height:70px; }
-.form-hint { font-size:0.68rem; color:#999; margin-top:4px; }
+.form-input:focus { border-color:#B7282E; }
 
-.item-inputs { display:flex; flex-direction:column; gap:6px; }
+.item-inputs { display:flex; flex-direction:column; gap:5px; }
 .item-row { display:flex; gap:6px; align-items:center; }
 .item-row .form-input { flex:1; }
-.item-num {
-  font-size:0.72rem; font-weight:700; color:#B7282E;
-  width:18px; flex-shrink:0; text-align:center;
-}
+.item-num { font-size:0.72rem; font-weight:700; color:#B7282E; width:18px; flex-shrink:0; text-align:center; }
 
+/* APIキー設定 */
+.apikey-section {
+  background:#f9f9f9; border:1px solid #eee; border-radius:8px; padding:12px;
+}
+.apikey-header {
+  display:flex; align-items:center; justify-content:space-between;
+  cursor:pointer; user-select:none;
+}
+.apikey-title { font-size:0.75rem; font-weight:700; color:#666; }
+.apikey-status { font-size:0.65rem; padding:2px 8px; border-radius:10px; }
+.apikey-status.set { background:#d4edda; color:#155724; }
+.apikey-status.unset { background:#f8d7da; color:#721c24; }
+.apikey-body { margin-top:10px; display:none; gap:6px; flex-direction:column; }
+.apikey-body.open { display:flex; }
+.apikey-hint { font-size:0.67rem; color:#999; line-height:1.5; }
+.apikey-row { display:flex; gap:6px; }
+.apikey-save { padding:8px 14px; background:#B7282E; color:#fff; border:none; border-radius:6px; font-size:0.78rem; font-weight:700; font-family:inherit; cursor:pointer; white-space:nowrap; }
+
+/* ボタン */
 .generate-btn {
-  width:100%; padding:14px;
-  background:#B7282E; color:#fff;
-  border:none; border-radius:8px;
-  font-size:1rem; font-weight:900;
-  font-family:inherit; cursor:pointer;
-  letter-spacing:0.05em;
-  transition:background 0.15s;
-  margin-top:4px;
+  width:100%; padding:14px; background:#B7282E; color:#fff;
+  border:none; border-radius:8px; font-size:1rem; font-weight:900;
+  font-family:inherit; cursor:pointer; letter-spacing:0.05em; transition:background 0.15s;
 }
 .generate-btn:hover { background:#83151B; }
 .generate-btn:disabled { background:#ccc; cursor:not-allowed; }
-
 .download-btn {
-  width:100%; padding:12px;
-  background:#000; color:#fff;
-  border:none; border-radius:8px;
-  font-size:0.9rem; font-weight:700;
-  font-family:inherit; cursor:pointer;
-  letter-spacing:0.05em;
-  transition:background 0.15s;
-  margin-top:8px;
-  display:none;
+  width:100%; padding:12px; background:#000; color:#fff;
+  border:none; border-radius:8px; font-size:0.9rem; font-weight:700;
+  font-family:inherit; cursor:pointer; transition:background 0.15s; display:none;
 }
 .download-btn:hover { background:#333; }
 .download-btn.show { display:block; }
 
-/* PREVIEW PANEL */
-.preview-panel {
-  display:flex; flex-direction:column; gap:16px;
-}
-.preview-label {
-  font-size:0.72rem; font-weight:700;
-  color:#666; letter-spacing:0.1em;
-}
+/* ── プレビューパネル ── */
+.preview-panel { display:flex; flex-direction:column; gap:12px; }
+.preview-label { font-size:0.72rem; font-weight:700; color:#666; letter-spacing:0.1em; }
 .preview-wrap {
-  background:#ddd;
-  border-radius:8px;
-  overflow:hidden;
-  position:relative;
-  aspect-ratio:16/9;
+  background:#ddd; border-radius:8px; overflow:hidden;
+  position:relative; aspect-ratio:16/9;
   display:flex; align-items:center; justify-content:center;
 }
-.preview-placeholder {
-  text-align:center; color:#999;
-  font-size:0.85rem; line-height:2;
-}
-.preview-wrap img {
-  width:100%; height:100%;
-  object-fit:contain;
-  display:none;
-}
+.preview-placeholder { text-align:center; color:#999; font-size:0.85rem; line-height:2; }
+.preview-wrap img { width:100%; height:100%; object-fit:contain; display:none; }
 .preview-wrap img.show { display:block; }
-
 .generating-msg {
-  position:absolute; inset:0;
-  background:rgba(0,0,0,0.6);
+  position:absolute; inset:0; background:rgba(0,0,0,0.7);
   display:none; align-items:center; justify-content:center;
-  flex-direction:column; gap:12px; color:#fff;
-  font-size:0.9rem; font-weight:700;
+  flex-direction:column; gap:12px; color:#fff; font-size:0.9rem; font-weight:700;
 }
 .generating-msg.show { display:flex; }
 .spinner {
-  width:32px; height:32px;
-  border:3px solid rgba(255,255,255,0.3);
-  border-top-color:#fff;
-  border-radius:50%;
-  animation:spin 0.8s linear infinite;
+  width:32px; height:32px; border:3px solid rgba(255,255,255,0.3);
+  border-top-color:#fff; border-radius:50%; animation:spin 0.8s linear infinite;
 }
 @keyframes spin { to { transform:rotate(360deg); } }
+.gen-step { font-size:0.78rem; color:rgba(255,255,255,0.7); }
 
-/* ── お品書き本体（オフスクリーンレンダリング用）── */
-#ohinagaki-render {
-  position: fixed;
-  left: -9999px;
-  top: 0;
-  width: 1280px;
-  height: 720px;
-  overflow: hidden;
+/* ── お品書き レンダリング領域（オフスクリーン）── */
+#ok-render {
+  position:fixed; left:-9999px; top:0;
+  width:1280px; height:720px; overflow:hidden;
 }
-
-/* ─────── お品書きスタイル ─────── */
-.ok-body {
-  width:1280px; height:720px;
-  overflow:hidden;
+/* お品書きスタイル */
+.ok {
+  width:1280px; height:720px; overflow:hidden;
   font-family:'Hiragino Mincho ProN','YuMincho','Yu Mincho','游明朝',serif;
-  background:#111;
   display:flex;
 }
 .ok-left {
-  position:relative; width:420px; flex-shrink:0; overflow:hidden;
+  position:relative; width:420px; flex-shrink:0; overflow:hidden; background:#111;
 }
-.ok-left-img {
-  width:100%; height:100%;
-  object-fit:cover; object-position:center 30%;
-  filter:brightness(0.65) saturate(1.2) contrast(1.05);
+.ok-left img.bg {
+  width:100%; height:100%; object-fit:cover; object-position:center 30%;
+  filter:brightness(.65) saturate(1.2) contrast(1.05);
 }
-.ok-left-overlay {
+.ok-left-ov {
   position:absolute; inset:0;
   background:linear-gradient(160deg,rgba(8,22,12,.3) 0%,rgba(8,22,12,.65) 60%,rgba(8,22,12,.82) 100%);
 }
-.ok-left-content {
+.ok-left-c {
   position:absolute; inset:0;
-  display:flex; flex-direction:column;
-  align-items:center; justify-content:center; gap:12px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;
 }
 .ok-emblem {
-  width:58px; height:58px;
-  border:1.5px solid #c9a84c; border-radius:50%;
+  width:58px; height:58px; border:1.5px solid #c9a84c; border-radius:50%;
   display:flex; align-items:center; justify-content:center;
   color:#c9a84c; font-size:22px; margin-bottom:4px;
 }
 .ok-evname { color:#c9a84c; font-size:13px; letter-spacing:7px; }
-.ok-title {
-  color:#fff; font-size:62px; letter-spacing:20px;
-  font-weight:300; line-height:1;
-  text-shadow:0 3px 16px rgba(0,0,0,.5);
-}
+.ok-title { color:#fff; font-size:62px; letter-spacing:20px; font-weight:300; line-height:1; text-shadow:0 3px 16px rgba(0,0,0,.5); }
 .ok-date { color:rgba(255,255,255,.65); font-size:12px; letter-spacing:4px; margin-top:4px; }
-.ok-vdiv {
-  width:1px; flex-shrink:0;
-  background:linear-gradient(to bottom,transparent,#c9a84c66,transparent);
-}
+.ok-vdiv { width:1px; flex-shrink:0; background:linear-gradient(to bottom,transparent,#c9a84c66,transparent); }
 .ok-right {
   flex:1; background:#f8f4ed;
   display:flex; flex-direction:column;
-  padding:22px 32px 22px;
-  height:720px; overflow:hidden;
+  padding:22px 32px; height:720px; overflow:hidden;
 }
 .ok-sec-head { display:flex; align-items:center; gap:12px; margin-bottom:10px; flex-shrink:0; }
 .ok-sec-vert { color:#c9a84c; font-size:9px; letter-spacing:3px; writing-mode:vertical-rl; line-height:1; }
 .ok-sec-title { font-size:16px; color:#1a2f1a; letter-spacing:5px; font-weight:400; }
 .ok-sec-rule { flex:1; height:1px; background:linear-gradient(to right,rgba(26,47,26,.25),transparent); }
-.ok-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:5px; height:148px; margin-bottom:10px; flex-shrink:0; }
-.ok-gcard { position:relative; border-radius:3px; overflow:hidden; height:100%; }
-.ok-gcard img { width:100%; height:100%; object-fit:cover; filter:brightness(.87) saturate(1.1); }
-.ok-glabel {
-  position:absolute; bottom:0; left:0; right:0;
-  background:linear-gradient(to top,rgba(0,0,0,.82),transparent);
-  color:#fff; font-size:9.5px; padding:18px 5px 6px;
-  text-align:center; letter-spacing:.5px; line-height:1.3;
+
+/* ── AI生成おにぎり1枚 ── */
+.ok-hero-img {
+  width:100%; height:190px; flex-shrink:0;
+  border-radius:4px; overflow:hidden; margin-bottom:10px;
 }
+.ok-hero-img img {
+  width:100%; height:100%; object-fit:cover; object-position:center 35%;
+  filter:brightness(.92) saturate(1.1) contrast(1.03);
+}
+
 .ok-menu { display:grid; grid-template-columns:1fr 1fr; column-gap:20px; margin-bottom:12px; flex-shrink:0; }
-.ok-mitem { display:flex; align-items:center; gap:9px; padding:6px 0; border-bottom:1px solid rgba(26,47,26,.08); font-size:13.5px; color:#2c1a0e; letter-spacing:1.5px; }
+.ok-mitem { display:flex; align-items:center; gap:9px; padding:5px 0; border-bottom:1px solid rgba(26,47,26,.08); font-size:13.5px; color:#2c1a0e; letter-spacing:1.5px; }
 .ok-dot { width:5px; height:5px; background:#c9a84c; border-radius:50%; flex-shrink:0; }
 .ok-special {
   background:#1a2f1a; border-radius:5px;
   display:flex; align-items:stretch; overflow:hidden;
-  margin-bottom:12px; height:175px; flex-shrink:0;
-  border-left:4px solid #c9a84c;
-  box-shadow:0 4px 20px rgba(26,47,26,.25);
+  margin-bottom:12px; height:155px; flex-shrink:0;
+  border-left:4px solid #c9a84c; box-shadow:0 4px 20px rgba(26,47,26,.25);
 }
-.ok-sp-photo-wrap { position:relative; width:200px; flex-shrink:0; overflow:hidden; }
-.ok-sp-photo-wrap img { width:100%; height:100%; object-fit:cover; object-position:center 35%; filter:brightness(.88) saturate(1.15) contrast(1.05); }
-.ok-sp-body { flex:1; padding:0 28px; display:flex; align-items:center; gap:20px; }
+.ok-sp-photo { position:relative; width:180px; flex-shrink:0; overflow:hidden; }
+.ok-sp-photo img { width:100%; height:100%; object-fit:cover; object-position:center 35%; filter:brightness(.88) saturate(1.15); }
+.ok-sp-body { flex:1; padding:0 24px; display:flex; align-items:center; gap:18px; }
 .ok-sp-vert { writing-mode:vertical-rl; color:#c9a84c; font-size:10px; letter-spacing:4px; flex-shrink:0; line-height:1; }
-.ok-sp-divline { width:1px; height:70px; background:rgba(201,168,76,.45); flex-shrink:0; }
+.ok-sp-divline { width:1px; height:60px; background:rgba(201,168,76,.45); flex-shrink:0; }
 .ok-sp-text { flex:1; }
-.ok-sp-smlab { color:#c9a84c; font-size:10px; letter-spacing:5px; margin-bottom:10px; }
-.ok-sp-name { color:#fff; font-size:34px; letter-spacing:6px; font-weight:300; line-height:1.2; }
-.ok-sp-desc { color:rgba(255,255,255,.45); font-size:11px; letter-spacing:2px; margin-top:8px; }
-.ok-sp-badge { border:1px solid #c9a84c; color:#c9a84c; font-size:9px; letter-spacing:3px; padding:6px 14px; flex-shrink:0; align-self:flex-start; margin-top:4px; }
+.ok-sp-smlab { color:#c9a84c; font-size:10px; letter-spacing:5px; margin-bottom:8px; }
+.ok-sp-name { color:#fff; font-size:30px; letter-spacing:5px; font-weight:300; line-height:1.2; }
+.ok-sp-desc { color:rgba(255,255,255,.45); font-size:11px; letter-spacing:2px; margin-top:6px; }
+.ok-sp-badge { border:1px solid #c9a84c; color:#c9a84c; font-size:9px; letter-spacing:3px; padding:5px 12px; flex-shrink:0; align-self:flex-start; margin-top:4px; }
 .ok-bottom { flex:1; display:grid; grid-template-columns:1fr 1fr 1fr; border-top:1px solid rgba(26,47,26,.15); padding-top:14px; align-items:center; }
 .ok-bcol { padding:0 24px; border-right:1px solid rgba(26,47,26,.1); }
 .ok-bcol:first-child { padding-left:0; }
@@ -269,7 +223,7 @@ body {
 <div class="page-header">
   <div class="tool-badge">🍙 ASAGE NO KAI</div>
   <h1 class="page-title">お品書きジェネレーター</h1>
-  <p class="page-sub">メニューを入力するだけで、高品質なお品書き画像を自動生成</p>
+  <p class="page-sub">メニューを入力 → AIがおにぎり画像を生成 → 高品質PNG出力</p>
 </div>
 
 <div class="main">
@@ -278,75 +232,88 @@ body {
   <div class="form-panel">
     <div class="form-title">📋 メニュー入力</div>
 
-    <div class="form-section">
-      <label class="form-section-label">イベント名</label>
-      <input class="form-input" id="eventName" value="あさげの会" placeholder="あさげの会">
-    </div>
-
-    <div class="form-section">
-      <label class="form-section-label">日付</label>
-      <input class="form-input" id="eventDate" placeholder="令和7年5月8日">
-    </div>
-
-    <div class="form-section">
-      <label class="form-section-label">本日のおにぎり（最大5種）</label>
-      <div class="item-inputs" id="onigiriInputs">
-        <div class="item-row"><span class="item-num">①</span><input class="form-input" placeholder="例：極上梅"></div>
-        <div class="item-row"><span class="item-num">②</span><input class="form-input" placeholder="例：卵黄肉そぼろ"></div>
-        <div class="item-row"><span class="item-num">③</span><input class="form-input" placeholder="例：クリームチーズの醤油漬け"></div>
-        <div class="item-row"><span class="item-num">④</span><input class="form-input" placeholder="例：白ワイン鯖明太子"></div>
-        <div class="item-row"><span class="item-num">⑤</span><input class="form-input" placeholder="例：ネギ塩牛タン"></div>
+    <!-- OpenAI APIキー -->
+    <div class="apikey-section">
+      <div class="apikey-header" onclick="toggleApiKey()">
+        <span class="apikey-title">🔑 OpenAI APIキー（画像生成に必要）</span>
+        <span class="apikey-status" id="keyStatus">未設定</span>
+      </div>
+      <div class="apikey-body" id="apikeyBody">
+        <span class="apikey-hint">OpenAIのAPIキーを入力してください。ブラウザのみに保存されます。</span>
+        <div class="apikey-row">
+          <input class="form-input" id="apikeyInput" type="password" placeholder="sk-...">
+          <button class="apikey-save" onclick="saveApiKey()">保存</button>
+        </div>
       </div>
     </div>
 
     <div class="form-section">
-      <label class="form-section-label">本日のスペシャル</label>
-      <input class="form-input" id="spName" placeholder="例：自家製海苔キムチ" style="margin-bottom:6px">
-      <input class="form-input" id="spDesc" placeholder="説明文（任意）：旬の食材を使った特製一品">
+      <label class="form-label">イベント名</label>
+      <input class="form-input" id="eventName" value="あさげの会">
     </div>
 
     <div class="form-section">
-      <label class="form-section-label">お椀</label>
+      <label class="form-label">日付</label>
+      <input class="form-input" id="eventDate">
+    </div>
+
+    <div class="form-section">
+      <label class="form-label">本日のおにぎり（最大5種）</label>
+      <div class="item-inputs">
+        <div class="item-row"><span class="item-num">①</span><input class="form-input ok-item" placeholder="例：極上梅"></div>
+        <div class="item-row"><span class="item-num">②</span><input class="form-input ok-item" placeholder="例：卵黄肉そぼろ"></div>
+        <div class="item-row"><span class="item-num">③</span><input class="form-input ok-item" placeholder="例：クリームチーズの醤油漬け"></div>
+        <div class="item-row"><span class="item-num">④</span><input class="form-input ok-item" placeholder="例：白ワイン鯖明太子"></div>
+        <div class="item-row"><span class="item-num">⑤</span><input class="form-input ok-item" placeholder="例：ネギ塩牛タン"></div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <label class="form-label">本日のスペシャル</label>
+      <input class="form-input" id="spName" placeholder="例：自家製海苔キムチ" style="margin-bottom:5px">
+      <input class="form-input" id="spDesc" placeholder="説明文：旬の食材を使った特製一品">
+    </div>
+
+    <div class="form-section">
+      <label class="form-label">お椀</label>
       <input class="form-input" id="owan" placeholder="例：具沢山味噌汁">
     </div>
 
     <div class="form-section">
-      <label class="form-section-label">本日の〆</label>
+      <label class="form-label">本日の〆</label>
       <input class="form-input" id="shime" placeholder="例：だし茶漬け">
     </div>
 
     <div class="form-section">
-      <label class="form-section-label">香の物</label>
+      <label class="form-label">香の物</label>
       <input class="form-input" id="konomono" placeholder="例：季節のお漬物">
     </div>
 
-    <button class="generate-btn" id="genBtn" onclick="generate()">🍙 お品書きを生成する</button>
+    <button class="generate-btn" id="genBtn" onclick="generate()">🍙 生成する（AI画像付き）</button>
     <button class="download-btn" id="dlBtn" onclick="download()">⬇️ PNGをダウンロード</button>
   </div>
 
   <!-- プレビューパネル -->
   <div class="preview-panel">
     <div class="preview-label">プレビュー（16:9 / 1280×720）</div>
-    <div class="preview-wrap" id="previewWrap">
-      <div class="preview-placeholder" id="placeholder">
-        🍙<br>左のフォームを入力して<br>「生成する」を押してください
-      </div>
-      <img id="previewImg" alt="お品書きプレビュー">
+    <div class="preview-wrap">
+      <div class="preview-placeholder" id="placeholder">🍙<br>メニューを入力して「生成する」を押してください</div>
+      <img id="previewImg" alt="お品書き">
       <div class="generating-msg" id="genMsg">
         <div class="spinner"></div>
-        <div>生成中...</div>
+        <div id="genStep">AIがおにぎり画像を生成中...</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- オフスクリーン レンダリング領域 -->
-<div id="ohinagaki-render">
-  <div class="ok-body" id="okBody">
+<!-- オフスクリーン レンダリング -->
+<div id="ok-render">
+  <div class="ok" id="okBody">
     <div class="ok-left">
-      <img class="ok-left-img" id="okBgImg" src="photos/bg.jpg" crossorigin="anonymous">
-      <div class="ok-left-overlay"></div>
-      <div class="ok-left-content">
+      <img class="bg" src="photos/bg.jpg" crossorigin="anonymous" id="okBg">
+      <div class="ok-left-ov"></div>
+      <div class="ok-left-c">
         <div class="ok-emblem">朝</div>
         <div class="ok-evname" id="okEvName">あさげの会</div>
         <div class="ok-title">お品書き</div>
@@ -360,16 +327,13 @@ body {
         <div class="ok-sec-title">本日のおにぎり</div>
         <div class="ok-sec-rule"></div>
       </div>
-      <div class="ok-grid" id="okGrid">
-        <div class="ok-gcard"><img src="photos/g1.jpg" crossorigin="anonymous"><div class="ok-glabel" id="okL1"></div></div>
-        <div class="ok-gcard"><img src="photos/g2.jpg" crossorigin="anonymous"><div class="ok-glabel" id="okL2"></div></div>
-        <div class="ok-gcard"><img src="photos/g3.jpg" crossorigin="anonymous"><div class="ok-glabel" id="okL3"></div></div>
-        <div class="ok-gcard"><img src="photos/g4.jpg" crossorigin="anonymous"><div class="ok-glabel" id="okL4"></div></div>
-        <div class="ok-gcard"><img src="photos/g5.jpg" crossorigin="anonymous"><div class="ok-glabel" id="okL5"></div></div>
+      <!-- AI生成おにぎり1枚 -->
+      <div class="ok-hero-img">
+        <img id="okHeroImg" src="photos/g1.jpg" crossorigin="anonymous">
       </div>
       <div class="ok-menu" id="okMenu"></div>
       <div class="ok-special">
-        <div class="ok-sp-photo-wrap"><img src="photos/special.jpg" id="okSpImg" crossorigin="anonymous"></div>
+        <div class="ok-sp-photo"><img src="photos/special.jpg" crossorigin="anonymous"></div>
         <div class="ok-sp-body">
           <div class="ok-sp-vert" id="okSpLabel">本日のスペシャル</div>
           <div class="ok-sp-divline"></div>
@@ -401,87 +365,123 @@ body {
 </div>
 
 <script>
-// 今日の日付をデフォルトにセット
-(function() {
+// ── 今日の日付 ──
+(function(){
   const d = new Date();
   const y = d.getFullYear() - 2018;
-  const m = d.getMonth() + 1;
-  const day = d.getDate();
-  document.getElementById('eventDate').value = `令和${y}年${m}月${day}日`;
+  document.getElementById('eventDate').value = `令和${y}年${d.getMonth()+1}月${d.getDate()}日`;
 })();
 
-let lastDataUrl = null;
-
-function getInputs() {
-  const rows = document.querySelectorAll('#onigiriInputs .item-row input');
-  const items = Array.from(rows).map(r => r.value.trim()).filter(Boolean);
-  return {
-    eventName : document.getElementById('eventName').value.trim() || 'あさげの会',
-    date      : document.getElementById('eventDate').value.trim(),
-    onigiri   : items,
-    spName    : document.getElementById('spName').value.trim(),
-    spDesc    : document.getElementById('spDesc').value.trim(),
-    owan      : document.getElementById('owan').value.trim(),
-    shime     : document.getElementById('shime').value.trim(),
-    konomono  : document.getElementById('konomono').value.trim(),
-  };
+// ── APIキー管理 ──
+function toggleApiKey() {
+  document.getElementById('apikeyBody').classList.toggle('open');
 }
+function saveApiKey() {
+  const key = document.getElementById('apikeyInput').value.trim();
+  if (!key) return;
+  localStorage.setItem('oai_key', key);
+  document.getElementById('apikeyInput').value = '';
+  updateKeyStatus();
+  document.getElementById('apikeyBody').classList.remove('open');
+}
+function updateKeyStatus() {
+  const el = document.getElementById('keyStatus');
+  const key = localStorage.getItem('oai_key');
+  el.textContent = key ? '設定済み ✓' : '未設定';
+  el.className = 'apikey-status ' + (key ? 'set' : 'unset');
+}
+updateKeyStatus();
 
-function updateRender(data) {
-  document.getElementById('okEvName').textContent  = data.eventName;
-  document.getElementById('okDate').textContent    = data.date;
-  document.getElementById('okSpName').textContent  = data.spName;
-  document.getElementById('okSpDesc').textContent  = data.spDesc;
-  document.getElementById('okOwan').textContent    = data.owan;
-  document.getElementById('okShime').textContent   = data.shime;
-  document.getElementById('okKonomono').textContent = data.konomono;
+// ── DALL-E 画像生成 ──
+async function generateOnigiriImage(items) {
+  const key = localStorage.getItem('oai_key');
+  if (!key) throw new Error('OpenAI APIキーが設定されていません。フォーム上部で設定してください。');
 
-  // おにぎりグリッドラベル
-  const labels = ['okL1','okL2','okL3','okL4','okL5'];
-  labels.forEach((id, i) => {
-    document.getElementById(id).textContent = data.onigiri[i] || '';
+  const itemStr = items.slice(0, 5).join('・');
+  const prompt = `Professional Japanese food photography. A stunning single large onigiri (rice ball) ` +
+    `wrapped in dark crispy nori seaweed, with generous ${itemStr} toppings piled on top. ` +
+    `Placed on a natural light wood board with small Japanese garnishes. ` +
+    `Shallow depth of field, warm restaurant lighting, highly appetizing sizzle shot, close-up angle. ` +
+    `Photorealistic, no text, no watermarks, restaurant quality.`;
+
+  const res = await fetch('https://api.openai.com/v1/images/generations', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model: 'dall-e-3', prompt, n: 1, size: '1792x1024', quality: 'standard', response_format: 'b64_json' }),
   });
 
-  // おにぎりリスト
-  const menu = document.getElementById('okMenu');
-  menu.innerHTML = data.onigiri.map(item =>
-    `<div class="ok-mitem"><span class="ok-dot"></span>${item}</div>`
-  ).join('');
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error?.message || 'DALL-E APIエラー');
+  }
+  const data = await res.json();
+  return 'data:image/png;base64,' + data.data[0].b64_json;
 }
 
+// ── メイン生成 ──
+let lastDataUrl = null;
+
 async function generate() {
-  const data = getInputs();
-  updateRender(data);
+  const items   = Array.from(document.querySelectorAll('.ok-item')).map(i=>i.value.trim()).filter(Boolean);
+  const evName  = document.getElementById('eventName').value.trim() || 'あさげの会';
+  const evDate  = document.getElementById('eventDate').value.trim();
+  const spName  = document.getElementById('spName').value.trim();
+  const spDesc  = document.getElementById('spDesc').value.trim();
+  const owan    = document.getElementById('owan').value.trim();
+  const shime   = document.getElementById('shime').value.trim();
+  const konomono= document.getElementById('konomono').value.trim();
 
   const genBtn = document.getElementById('genBtn');
   const genMsg = document.getElementById('genMsg');
-  const placeholder = document.getElementById('placeholder');
-  const previewImg = document.getElementById('previewImg');
-
+  const genStep= document.getElementById('genStep');
   genBtn.disabled = true;
   genMsg.classList.add('show');
 
-  // 画像ロード待ち
-  await new Promise(r => setTimeout(r, 300));
-
   try {
+    // Step 1: AI画像生成
+    genStep.textContent = '🎨 AIがおにぎり画像を生成中...';
+    const heroSrc = await generateOnigiriImage(items);
+
+    // Step 2: レンダリング領域を更新
+    genStep.textContent = '🖼️ お品書きを組み立て中...';
+    document.getElementById('okEvName').textContent = evName;
+    document.getElementById('okDate').textContent   = evDate;
+    document.getElementById('okSpName').textContent = spName;
+    document.getElementById('okSpDesc').textContent = spDesc;
+    document.getElementById('okOwan').textContent   = owan;
+    document.getElementById('okShime').textContent  = shime;
+    document.getElementById('okKonomono').textContent = konomono;
+    document.getElementById('okMenu').innerHTML = items.map(i =>
+      `<div class="ok-mitem"><span class="ok-dot"></span>${i}</div>`
+    ).join('');
+
+    // AI画像をセット
+    const heroImg = document.getElementById('okHeroImg');
+    heroImg.src = heroSrc;
+    await new Promise((res, rej) => {
+      heroImg.onload = res;
+      heroImg.onerror = rej;
+      setTimeout(res, 3000);
+    });
+
+    await new Promise(r => setTimeout(r, 300));
+
+    // Step 3: html2canvas
+    genStep.textContent = '📸 画像を書き出し中...';
     const canvas = await html2canvas(document.getElementById('okBody'), {
-      width: 1280,
-      height: 720,
-      scale: 1,
-      useCORS: true,
-      allowTaint: false,
-      logging: false,
-      backgroundColor: null,
+      width: 1280, height: 720, scale: 1,
+      useCORS: true, allowTaint: false, logging: false, backgroundColor: null,
     });
 
     lastDataUrl = canvas.toDataURL('image/png');
-    placeholder.style.display = 'none';
-    previewImg.src = lastDataUrl;
-    previewImg.classList.add('show');
+    document.getElementById('placeholder').style.display = 'none';
+    const img = document.getElementById('previewImg');
+    img.src = lastDataUrl;
+    img.classList.add('show');
     document.getElementById('dlBtn').classList.add('show');
+
   } catch(e) {
-    alert('生成エラー: ' + e.message);
+    alert('エラー: ' + e.message);
   }
 
   genBtn.disabled = false;
@@ -491,10 +491,9 @@ async function generate() {
 function download() {
   if (!lastDataUrl) return;
   const d = new Date();
-  const fname = `お品書き_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}.png`;
   const a = document.createElement('a');
   a.href = lastDataUrl;
-  a.download = fname;
+  a.download = `お品書き_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}.png`;
   a.click();
 }
 </script>

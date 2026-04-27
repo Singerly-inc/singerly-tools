@@ -341,7 +341,7 @@ body {
     <div class="ok-right">
       <div class="ok-sec-head">
         <div class="ok-sec-vert">本日</div>
-        <div class="ok-sec-title">本日のおにぎり</div>
+        <div class="ok-sec-title" id="okSecTitle">本日のおにぎり</div>
         <div class="ok-sec-rule"></div>
       </div>
       <!-- AI生成おにぎり1枚 -->
@@ -488,6 +488,7 @@ async function generate() {
       }
     });
     if (lastVisibleCol) lastVisibleCol.classList.add('last-visible');
+    document.getElementById('okSecTitle').textContent = `本日のおにぎり（${items.length}種）`;
     document.getElementById('okMenu').innerHTML = items.map(i =>
       `<div class="ok-mitem"><span class="ok-dot"></span>${i}</div>`
     ).join('');

@@ -14,158 +14,139 @@ body {
   font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif;
   color:#000; display:flex; flex-direction:column; align-items:center;
 }
-.nav {
-  width:100%; padding:12px 28px;
-  display:flex; align-items:center; justify-content:space-between;
-  background:#000; color:#fff;
-}
-.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; letter-spacing:0.04em; transition:color 0.15s; }
+.nav { width:100%; padding:12px 28px; display:flex; align-items:center; justify-content:space-between; background:#000; }
+.nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color .15s; }
 .nav-back:hover { color:#fff; }
-.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
-.page-header {
-  background:#000; width:100%;
-  padding:32px 20px 28px; text-align:center;
-  border-bottom:3px solid #B7282E;
-}
-.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px; border-radius:3px; margin-bottom:12px; font-weight:700; }
+.nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:.15em; }
+.page-header { background:#000; width:100%; padding:32px 20px 28px; text-align:center; border-bottom:3px solid #B7282E; }
+.tool-badge { display:inline-block; background:#B7282E; color:#fff; font-size:.68rem; letter-spacing:.15em; padding:3px 12px; border-radius:3px; margin-bottom:12px; font-weight:700; }
 .page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
-.page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
+.page-sub { font-size:.8rem; color:rgba(255,255,255,.45); }
 
-.layout {
-  display:flex; gap:24px; width:100%; max-width:900px;
-  padding:28px 24px 60px; align-items:flex-start;
-}
+.layout { display:flex; gap:24px; width:100%; max-width:900px; padding:28px 24px 60px; align-items:flex-start; }
 @media(max-width:640px){ .layout{flex-direction:column;} }
 
-/* LEFT PANEL */
 .panel { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:22px; flex:1; min-width:200px; }
-.panel-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; margin-bottom:14px; font-weight:700; }
+.panel-title { font-size:.65rem; letter-spacing:.18em; color:#888; text-transform:uppercase; margin-bottom:14px; font-weight:700; }
 .input-row { display:flex; gap:8px; margin-bottom:12px; }
-.input-row input {
-  flex:1; background:#fff; border:1px solid #CCCCCC;
-  border-radius:6px; padding:9px 12px; color:#000;
-  font-size:0.88rem; outline:none; font-family:inherit; transition:border-color 0.15s;
-}
+.input-row input { flex:1; background:#fff; border:1px solid #CCC; border-radius:6px; padding:9px 12px; color:#000; font-size:.88rem; outline:none; font-family:inherit; transition:border-color .15s; }
 .input-row input:focus { border-color:#B7282E; }
 .input-row input::placeholder { color:#bbb; }
-.btn-add {
-  background:#B7282E; border:none; border-radius:6px;
-  width:38px; height:38px; cursor:pointer;
-  font-size:1.2rem; color:#fff; font-weight:900; flex-shrink:0; transition:background 0.15s;
-}
+.btn-add { background:#B7282E; border:none; border-radius:6px; width:38px; height:38px; cursor:pointer; font-size:1.2rem; color:#fff; font-weight:900; flex-shrink:0; transition:background .15s; }
 .btn-add:hover { background:#83151B; }
 .name-list { list-style:none; max-height:280px; overflow-y:auto; display:flex; flex-direction:column; gap:5px; }
 .name-list::-webkit-scrollbar { width:3px; }
-.name-list::-webkit-scrollbar-thumb { background:#CCCCCC; border-radius:2px; }
-.name-item { display:flex; align-items:center; background:#fff; border:1px solid #EEEEEE; border-radius:6px; padding:7px 10px; font-size:0.85rem; }
-.name-num { font-size:0.62rem; color:#bbb; width:16px; flex-shrink:0; }
+.name-list::-webkit-scrollbar-thumb { background:#CCC; border-radius:2px; }
+.name-item { display:flex; align-items:center; background:#fff; border:1px solid #EEE; border-radius:6px; padding:7px 10px; font-size:.85rem; }
+.name-num { font-size:.62rem; color:#bbb; width:16px; flex-shrink:0; }
 .name-text { flex:1; padding:0 8px; color:#000; }
-.btn-del { background:none; border:none; color:#ccc; cursor:pointer; font-size:0.85rem; transition:color 0.15s; }
+.btn-del { background:none; border:none; color:#ccc; cursor:pointer; font-size:.85rem; transition:color .15s; }
 .btn-del:hover { color:#e05; }
-.count-badge { text-align:right; font-size:0.7rem; color:#aaa; margin-top:8px; }
-.bulk-area { margin-top:12px; border-top:1px solid #EEEEEE; padding-top:12px; }
-.bulk-area textarea {
-  width:100%; background:#fff; border:1px solid #CCCCCC;
-  border-radius:6px; padding:9px 12px; color:#000;
-  font-size:0.78rem; resize:vertical; min-height:64px;
-  outline:none; font-family:inherit; line-height:1.6;
-}
+.count-badge { text-align:right; font-size:.7rem; color:#aaa; margin-top:8px; }
+.bulk-area { margin-top:12px; border-top:1px solid #EEE; padding-top:12px; }
+.bulk-area textarea { width:100%; background:#fff; border:1px solid #CCC; border-radius:6px; padding:9px 12px; color:#000; font-size:.78rem; resize:vertical; min-height:64px; outline:none; font-family:inherit; line-height:1.6; }
 .bulk-area textarea:focus { border-color:#B7282E; }
 .bulk-area textarea::placeholder { color:#bbb; }
-.btn-bulk {
-  margin-top:6px; width:100%;
-  background:#fff; border:1px solid #CCCCCC;
-  border-radius:6px; padding:8px;
-  color:#555; font-size:0.78rem; cursor:pointer;
-  font-family:inherit; transition:background 0.15s;
-}
+.btn-bulk { margin-top:6px; width:100%; background:#fff; border:1px solid #CCC; border-radius:6px; padding:8px; color:#555; font-size:.78rem; cursor:pointer; font-family:inherit; transition:background .15s; }
 .btn-bulk:hover { background:#F6F6F6; }
-.empty-state { color:#bbb; font-size:0.8rem; text-align:center; padding:14px 0; }
+.empty-state { color:#bbb; font-size:.8rem; text-align:center; padding:14px 0; }
 
-/* RIGHT PANEL */
 .result-panel { flex:1.3; display:flex; flex-direction:column; gap:16px; }
-
-.shuffle-box {
-  background:#F6F6F6; border:1px solid #E0E0E0;
-  border-radius:10px; padding:24px 20px;
-  display:flex; flex-direction:column; gap:14px;
-}
-.btn-shuffle {
-  width:100%; padding:14px; font-size:1rem; font-weight:900;
-  letter-spacing:0.08em; border:none; border-radius:8px;
-  cursor:pointer; background:#B7282E; color:#fff;
-  font-family:inherit; transition:background 0.15s, transform 0.12s;
-}
+.shuffle-box { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:24px 20px; display:flex; flex-direction:column; gap:14px; }
+.btn-shuffle { width:100%; padding:14px; font-size:1rem; font-weight:900; letter-spacing:.08em; border:none; border-radius:8px; cursor:pointer; background:#B7282E; color:#fff; font-family:inherit; transition:background .15s, transform .12s; }
 .btn-shuffle:hover:not(:disabled) { background:#83151B; transform:translateY(-1px); }
-.btn-shuffle:disabled { opacity:0.4; cursor:not-allowed; }
-.btn-reset {
-  width:100%; padding:9px; font-size:0.8rem; font-weight:600;
-  border:1px solid #CCCCCC; border-radius:7px;
-  cursor:pointer; background:#fff; color:#888;
-  font-family:inherit; transition:background 0.15s;
-}
+.btn-shuffle:disabled { opacity:.4; cursor:not-allowed; }
+.btn-reset { width:100%; padding:9px; font-size:.8rem; font-weight:600; border:1px solid #CCC; border-radius:7px; cursor:pointer; background:#fff; color:#888; font-family:inherit; transition:background .15s; }
 .btn-reset:hover { background:#F6F6F6; }
-
-.result-box {
-  background:#F6F6F6; border:1px solid #E0E0E0;
-  border-radius:10px; padding:20px;
-  display:none; flex-direction:column; gap:12px;
-}
+.result-box { background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px; padding:20px; display:none; flex-direction:column; gap:12px; }
 .result-box.show { display:flex; }
-.result-header { display:flex; align-items:center; justify-content:space-between; }
-.result-title { font-size:0.65rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; font-weight:700; }
-
+.result-header { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+.result-title { font-size:.65rem; letter-spacing:.18em; color:#888; text-transform:uppercase; font-weight:700; }
 .action-btns { display:flex; gap:8px; flex-wrap:wrap; }
-.btn-copy, .btn-pptx {
-  display:flex; align-items:center; gap:5px;
-  padding:7px 14px; border-radius:6px; font-size:0.76rem;
-  font-weight:700; cursor:pointer; font-family:inherit;
-  border:none; transition:background 0.15s, transform 0.1s; letter-spacing:0.04em;
-}
+.btn-copy, .btn-pptx { display:flex; align-items:center; gap:5px; padding:7px 14px; border-radius:6px; font-size:.76rem; font-weight:700; cursor:pointer; font-family:inherit; border:none; transition:background .15s, transform .1s; letter-spacing:.04em; }
 .btn-copy { background:#000; color:#fff; }
 .btn-copy:hover { background:#333; transform:translateY(-1px); }
 .btn-pptx { background:#B7282E; color:#fff; }
 .btn-pptx:hover { background:#83151B; transform:translateY(-1px); }
 .btn-copy.copied { background:#28a745; }
-
-.order-list {
-  list-style:none; display:flex; flex-direction:column; gap:5px;
-  max-height:380px; overflow-y:auto;
-}
+.order-list { list-style:none; display:flex; flex-direction:column; gap:5px; max-height:400px; overflow-y:auto; }
 .order-list::-webkit-scrollbar { width:3px; }
-.order-list::-webkit-scrollbar-thumb { background:#CCCCCC; border-radius:2px; }
-.order-item {
-  display:flex; align-items:center; gap:10px;
-  background:#fff; border:1px solid #EEEEEE;
-  border-radius:6px; padding:8px 12px;
-  animation:slideIn 0.25s ease both;
-}
-.order-item:nth-child(1)  { animation-delay:0.00s }
-.order-item:nth-child(2)  { animation-delay:0.03s }
-.order-item:nth-child(3)  { animation-delay:0.06s }
-.order-item:nth-child(4)  { animation-delay:0.09s }
-.order-item:nth-child(5)  { animation-delay:0.12s }
-.order-item:nth-child(6)  { animation-delay:0.15s }
-.order-item:nth-child(7)  { animation-delay:0.18s }
-.order-item:nth-child(8)  { animation-delay:0.20s }
-.order-item:nth-child(9)  { animation-delay:0.22s }
-.order-item:nth-child(10) { animation-delay:0.24s }
-@keyframes slideIn { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:none} }
+.order-list::-webkit-scrollbar-thumb { background:#CCC; border-radius:2px; }
+.order-item { display:flex; align-items:center; gap:10px; background:#fff; border:1px solid #EEE; border-radius:6px; padding:8px 12px; opacity:0; transform:translateY(-8px); transition:opacity .25s, transform .25s; }
+.order-item.visible { opacity:1; transform:none; }
+.order-num { min-width:28px; height:28px; border-radius:50%; background:#B7282E; color:#fff; font-size:.72rem; font-weight:900; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.order-num.top3 { background:#000; }
+.order-name { font-size:.9rem; font-weight:700; color:#000; }
 
-.order-num {
-  min-width:28px; height:28px; border-radius:50%;
-  background:#B7282E; color:#fff; font-size:0.72rem;
-  font-weight:900; display:flex; align-items:center; justify-content:center;
-  flex-shrink:0;
+/* ===== DRUM ROLL OVERLAY ===== */
+.drum-overlay {
+  position:fixed; inset:0; z-index:1000;
+  background:rgba(0,0,0,0.96);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none;
+  transition:opacity .3s;
 }
-.order-num.top3 { background:#000; font-size:0.78rem; }
-.order-name { font-size:0.9rem; font-weight:700; color:#000; }
+.drum-overlay.active { opacity:1; pointer-events:all; }
 
+.drum-bg {
+  position:absolute; inset:0; overflow:hidden; pointer-events:none;
+}
+.bg-name {
+  position:absolute;
+  font-weight:700; letter-spacing:.05em;
+  transition:none;
+  pointer-events:none;
+}
+
+.drum-center {
+  position:relative; z-index:2;
+  display:flex; flex-direction:column; align-items:center; gap:20px;
+}
+.drum-emoji {
+  font-size:5rem; line-height:1;
+  animation:drumShake .15s ease-in-out infinite;
+  display:block;
+  filter:drop-shadow(0 0 20px rgba(183,40,46,0.6));
+}
+@keyframes drumShake {
+  0%,100% { transform:rotate(-8deg) scale(1); }
+  50%      { transform:rotate( 8deg) scale(1.06); }
+}
+.drum-rolling-text {
+  font-size:1.1rem; font-weight:700; color:rgba(255,255,255,.7);
+  letter-spacing:.2em; text-transform:uppercase;
+}
+.drum-dots span {
+  display:inline-block;
+  animation:blink .6s ease-in-out infinite;
+}
+.drum-dots span:nth-child(2){ animation-delay:.2s; }
+.drum-dots span:nth-child(3){ animation-delay:.4s; }
+@keyframes blink { 0%,80%,100%{opacity:.2} 40%{opacity:1} }
+
+.reveal-flash {
+  position:absolute; inset:0; background:#fff;
+  opacity:0; pointer-events:none; z-index:3;
+  transition:opacity .08s;
+}
+
+.reveal-text {
+  position:absolute; z-index:4;
+  font-size:4.5rem; font-weight:900; color:#B7282E;
+  letter-spacing:.15em;
+  opacity:0; transform:scale(.2);
+  transition:opacity .15s, transform .4s cubic-bezier(.175,.885,.32,1.275);
+  text-shadow:0 0 60px rgba(183,40,46,.9), 0 0 20px rgba(183,40,46,.6);
+  pointer-events:none;
+}
+.reveal-text.show { opacity:1; transform:scale(1); }
+
+/* confetti */
 .confetti-container { position:fixed; inset:0; pointer-events:none; z-index:200; overflow:hidden; }
 .confetti-piece { position:absolute; animation:fall linear forwards; }
 @keyframes fall {
   0%   { transform:translateY(-20px) rotate(0deg); opacity:1; }
-  100% { transform:translateY(100vh)  rotate(720deg); opacity:0; }
+  100% { transform:translateY(100vh) rotate(720deg); opacity:0; }
 }
 </style>
 </head>
@@ -183,7 +164,6 @@ body {
 </div>
 
 <div class="layout">
-  <!-- 左：参加者入力 -->
   <div class="panel">
     <div class="panel-title">参加者リスト</div>
     <div class="input-row">
@@ -200,13 +180,11 @@ body {
     </div>
   </div>
 
-  <!-- 右：結果 -->
   <div class="result-panel">
     <div class="shuffle-box">
       <button class="btn-shuffle" id="shuffleBtn" onclick="doShuffle()" disabled>🎤 順番を決める</button>
       <button class="btn-reset" onclick="resetAll()">リセット</button>
     </div>
-
     <div class="result-box" id="resultBox">
       <div class="result-header">
         <div class="result-title">発表順</div>
@@ -220,11 +198,20 @@ body {
   </div>
 </div>
 
+<!-- ドラムロール演出 -->
+<div class="drum-overlay" id="drumOverlay">
+  <div class="drum-bg" id="drumBg"></div>
+  <div class="drum-center" id="drumCenter">
+    <div class="drum-emoji" id="drumEmoji">🥁</div>
+    <div class="drum-rolling-text">抽選中<span class="drum-dots"><span>.</span><span>.</span><span>.</span></span></div>
+  </div>
+  <div class="reveal-flash" id="revealFlash"></div>
+  <div class="reveal-text" id="revealText">発　表！</div>
+</div>
+
 <div class="confetti-container" id="confetti"></div>
 
-<!-- PptxGenJS CDN -->
 <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
-
 <script>
 let names = [], order = [];
 const nameInput  = document.getElementById('nameInput');
@@ -234,11 +221,9 @@ const shuffleBtn = document.getElementById('shuffleBtn');
 const resultBox  = document.getElementById('resultBox');
 const orderList  = document.getElementById('orderList');
 
-nameInput.addEventListener('keydown', e => { if(e.key === 'Enter') addName(); });
+nameInput.addEventListener('keydown', e => { if (e.key === 'Enter') addName(); });
 
-function esc(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
+function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 function addName(n) {
   const v = (n || nameInput.value).trim();
@@ -249,9 +234,7 @@ function addName(n) {
   nameInput.focus();
   renderList();
 }
-
 function removeName(i) { names.splice(i, 1); renderList(); }
-
 function renderList() {
   if (!names.length) {
     nameList.innerHTML = '<li class="empty-state">まだ参加者がいません</li>';
@@ -260,22 +243,16 @@ function renderList() {
     return;
   }
   nameList.innerHTML = names.map((n, i) =>
-    `<li class="name-item">
-      <span class="name-num">${i+1}</span>
-      <span class="name-text">${esc(n)}</span>
-      <button class="btn-del" onclick="removeName(${i})">✕</button>
-    </li>`
+    `<li class="name-item"><span class="name-num">${i+1}</span><span class="name-text">${esc(n)}</span><button class="btn-del" onclick="removeName(${i})">✕</button></li>`
   ).join('');
   countBadge.textContent = names.length + ' 名';
   shuffleBtn.disabled = names.length < 2;
 }
-
 function bulkAdd() {
   const raw = document.getElementById('bulkInput').value;
   raw.split(/[\n、,，]+/).map(s => s.trim()).filter(s => s).forEach(p => addName(p));
   document.getElementById('bulkInput').value = '';
 }
-
 function shuffleArray(a) {
   a = [...a];
   for (let i = a.length - 1; i > 0; i--) {
@@ -285,21 +262,222 @@ function shuffleArray(a) {
   return a;
 }
 
+/* ===== DRUM ROLL ===== */
+let bgTimer = null;
+
 function doShuffle() {
   if (names.length < 2) return;
   order = shuffleArray(names);
-  renderOrder();
-  launchConfetti();
+  startDrumRoll();
 }
 
+function startDrumRoll() {
+  const overlay = document.getElementById('drumOverlay');
+  const drumEmoji = document.getElementById('drumEmoji');
+  const drumCenter = document.getElementById('drumCenter');
+  const revealText = document.getElementById('revealText');
+
+  drumEmoji.style.display = 'block';
+  drumCenter.style.display = 'flex';
+  revealText.classList.remove('show');
+
+  overlay.classList.add('active');
+  populateBgNames();
+  startBgFlicker();
+
+  const DRUM_DURATION = 2500;
+  playDrumRoll(DRUM_DURATION, () => {
+    showReveal();
+  });
+
+  // Accelerate drum shake animation over time
+  const startTime = Date.now();
+  function updateShake() {
+    const p = Math.min((Date.now() - startTime) / DRUM_DURATION, 1);
+    const dur = Math.max(0.05, 0.15 - p * 0.11);
+    drumEmoji.style.animationDuration = dur + 's';
+    drumEmoji.style.fontSize = (5 + p * 2.5) + 'rem';
+    if (p < 1) requestAnimationFrame(updateShake);
+  }
+  requestAnimationFrame(updateShake);
+}
+
+function populateBgNames() {
+  const bg = document.getElementById('drumBg');
+  bg.innerHTML = '';
+}
+
+function startBgFlicker() {
+  const bg = document.getElementById('drumBg');
+  let interval = 200;
+  const startTime = Date.now();
+  const DURATION = 2500;
+
+  function flicker() {
+    if (!document.getElementById('drumOverlay').classList.contains('active')) return;
+    const elapsed = Date.now() - startTime;
+    const p = Math.min(elapsed / DURATION, 1);
+
+    bg.innerHTML = '';
+    const count = Math.floor(4 + p * 8);
+    for (let i = 0; i < count; i++) {
+      const name = names[Math.floor(Math.random() * names.length)];
+      const el = document.createElement('div');
+      el.className = 'bg-name';
+      el.textContent = name;
+      el.style.left   = (5 + Math.random() * 88) + '%';
+      el.style.top    = (5 + Math.random() * 88) + '%';
+      el.style.fontSize = (0.75 + Math.random() * 0.9 + p * 0.5) + 'rem';
+      el.style.opacity  = (0.15 + Math.random() * 0.45).toFixed(2);
+      el.style.color    = Math.random() > 0.4 ? '#B7282E' : 'rgba(255,255,255,0.5)';
+      el.style.transform = `rotate(${(Math.random() - 0.5) * 30}deg)`;
+      bg.appendChild(el);
+    }
+
+    interval = Math.max(40, 200 - p * 160);
+    bgTimer = setTimeout(flicker, interval);
+  }
+  flicker();
+}
+
+function showReveal() {
+  clearTimeout(bgTimer);
+  document.getElementById('drumBg').innerHTML = '';
+
+  const drumEmoji = document.getElementById('drumEmoji');
+  const drumCenter = document.getElementById('drumCenter');
+
+  // Pulse big then hide drum
+  drumEmoji.style.animationDuration = '0.05s';
+  drumEmoji.style.fontSize = '8rem';
+  drumEmoji.style.filter = 'drop-shadow(0 0 40px rgba(183,40,46,1))';
+
+  setTimeout(() => {
+    drumCenter.style.display = 'none';
+
+    // Flash
+    const flash = document.getElementById('revealFlash');
+    flash.style.opacity = '1';
+    setTimeout(() => { flash.style.opacity = '0'; }, 120);
+
+    // 発表！
+    const rt = document.getElementById('revealText');
+    rt.classList.add('show');
+
+    // Fanfare sound
+    playFanfare();
+
+    // Hide overlay → show results
+    setTimeout(() => {
+      const overlay = document.getElementById('drumOverlay');
+      overlay.style.transition = 'opacity .5s';
+      overlay.style.opacity = '0';
+      setTimeout(() => {
+        overlay.classList.remove('active');
+        overlay.style.opacity = '';
+        overlay.style.transition = '';
+        // Reset drum state
+        drumEmoji.style.fontSize = '5rem';
+        drumEmoji.style.animationDuration = '.15s';
+        drumEmoji.style.filter = '';
+        drumCenter.style.display = 'flex';
+      }, 500);
+
+      renderOrder();
+      launchConfetti();
+    }, 700);
+  }, 200);
+}
+
+/* ===== WEB AUDIO ===== */
+function playDrumRoll(durationMs, onComplete) {
+  let ctx;
+  try { ctx = new (window.AudioContext || window.webkitAudioContext)(); }
+  catch(e) { setTimeout(onComplete, durationMs); return; }
+
+  const startT = ctx.currentTime;
+  const endT   = startT + durationMs / 1000;
+  let t = startT + 0.05;
+  let interval = 0.19;
+
+  while (t < endT) {
+    const progress = (t - startT) / (durationMs / 1000);
+    scheduleDrumHit(ctx, t, progress);
+    interval = Math.max(0.038, interval * (1 - progress * 0.006));
+    t += interval;
+  }
+
+  setTimeout(onComplete, durationMs);
+}
+
+function scheduleDrumHit(ctx, time, progress) {
+  const bufSize = Math.floor(ctx.sampleRate * 0.09);
+  const buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+  const data = buf.getChannelData(0);
+  const decay = 0.08 + progress * 0.12;
+  for (let i = 0; i < bufSize; i++) {
+    data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufSize * decay));
+  }
+  const src = ctx.createBufferSource();
+  src.buffer = buf;
+
+  const filt = ctx.createBiquadFilter();
+  filt.type = 'bandpass';
+  filt.frequency.value = 180 + progress * 80;
+  filt.Q.value = 0.7;
+
+  const gain = ctx.createGain();
+  const vol = 0.08 + progress * 0.52;
+  gain.gain.setValueAtTime(vol, time);
+  gain.gain.exponentialRampToValueAtTime(0.001, time + 0.09);
+
+  src.connect(filt); filt.connect(gain); gain.connect(ctx.destination);
+  src.start(time);
+}
+
+function playFanfare() {
+  let ctx;
+  try { ctx = new (window.AudioContext || window.webkitAudioContext)(); }
+  catch(e) { return; }
+
+  const now = ctx.currentTime;
+  const notes = [
+    { freq: 523.25, t: 0.00, dur: 0.14 },
+    { freq: 659.25, t: 0.13, dur: 0.14 },
+    { freq: 783.99, t: 0.26, dur: 0.14 },
+    { freq:1046.50, t: 0.39, dur: 0.65 },
+  ];
+  notes.forEach(({ freq, t, dur }) => {
+    const osc  = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0, now + t);
+    gain.gain.linearRampToValueAtTime(0.22, now + t + 0.025);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + t + dur);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(now + t); osc.stop(now + t + dur + 0.05);
+  });
+}
+
+/* ===== RESULTS ===== */
 function renderOrder() {
   orderList.innerHTML = order.map((n, i) =>
-    `<li class="order-item">
+    `<li class="order-item" id="oi${i}">
       <div class="order-num ${i < 3 ? 'top3' : ''}">${i + 1}</div>
       <div class="order-name">${esc(n)}</div>
     </li>`
   ).join('');
   resultBox.classList.add('show');
+
+  // Staggered cascade
+  order.forEach((_, i) => {
+    const delay = Math.min(i * 60, 900);
+    setTimeout(() => {
+      const el = document.getElementById('oi' + i);
+      if (el) el.classList.add('visible');
+    }, delay);
+  });
 }
 
 function copyResult() {
@@ -313,90 +491,81 @@ function copyResult() {
   });
 }
 
+/* ===== PPTX ===== */
 function downloadPptx() {
   if (!order.length) return;
-
   const pres = new PptxGenJS();
   pres.layout = 'LAYOUT_16x9';
 
   const slide = pres.addSlide();
+  slide.background = { color: 'FFFFFF' };
 
-  // 背景
-  slide.background = { color: '000000' };
-
-  // ヘッダー帯（茜色）
-  slide.addShape(pres.ShapeType.rect, {
-    x: 0, y: 0, w: '100%', h: 0.72,
-    fill: { color: 'B7282E' }
+  // Title
+  slide.addText('くじ引き', {
+    x: 0.45, y: 0.18, w: 7, h: 0.5,
+    fontSize: 20, bold: true, color: '1A1A1A', fontFace: 'Arial'
   });
 
-  // タイトル
-  slide.addText('発表順', {
-    x: 0.3, y: 0.04, w: 9.4, h: 0.6,
-    fontSize: 22, bold: true, color: 'FFFFFF',
-    fontFace: 'Arial', valign: 'middle'
+  // Singerly ロゴ（テキスト）
+  slide.addText('● Singerly', {
+    x: 7.5, y: 0.18, w: 2.1, h: 0.5,
+    fontSize: 11, bold: true, color: 'B7282E', fontFace: 'Arial', align: 'right'
   });
 
-  // 人数バッジ
-  slide.addText(`${order.length}名`, {
-    x: 8.8, y: 0.04, w: 1.2, h: 0.6,
-    fontSize: 14, bold: true, color: 'FFFFFF',
-    fontFace: 'Arial', valign: 'middle', align: 'right'
+  // 区切り線
+  slide.addShape(pres.ShapeType.line, {
+    x: 0.45, y: 0.72, w: 9.1, h: 0,
+    line: { color: 'DDDDDD', width: 1 }
   });
 
   const total = order.length;
-  const cols = total <= 20 ? 1 : total <= 50 ? 2 : 3;
+  const cols  = total <= 25 ? 1 : 2;
   const perCol = Math.ceil(total / cols);
-  const colW = cols === 1 ? 9.4 : cols === 2 ? 4.5 : 2.9;
-  const startX = cols === 1 ? 0.3 : 0.2;
-  const startY = 0.9;
-  const availH = 6.2;
-  const rowH = Math.min(availH / perCol, 0.36);
-  const fontSize = rowH >= 0.3 ? 13 : rowH >= 0.22 ? 11 : 9;
 
-  for (let c = 0; c < cols; c++) {
-    const xPos = startX + c * (colW + 0.2);
-    for (let r = 0; r < perCol; r++) {
-      const idx = c * perCol + r;
-      if (idx >= total) break;
-      const name = order[idx];
-      const yPos = startY + r * rowH;
-      const isTop3 = idx < 3;
-
-      // 番号
-      slide.addText(String(idx + 1), {
-        x: xPos, y: yPos, w: 0.45, h: rowH,
-        fontSize: fontSize - 1,
-        bold: true,
-        color: isTop3 ? 'B7282E' : '888888',
-        fontFace: 'Arial', valign: 'middle', align: 'right'
-      });
-
-      // 名前
-      slide.addText(name, {
-        x: xPos + 0.5, y: yPos, w: colW - 0.55, h: rowH,
-        fontSize: fontSize,
-        bold: isTop3,
-        color: isTop3 ? 'FFFFFF' : 'CCCCCC',
-        fontFace: 'Arial', valign: 'middle'
-      });
-
-      // 区切り線（最後の行以外）
-      if (r < perCol - 1 && idx + 1 < total) {
-        slide.addShape(pres.ShapeType.line, {
-          x: xPos, y: yPos + rowH - 0.01,
-          w: colW, h: 0,
-          line: { color: '333333', width: 0.5 }
-        });
-      }
+  function buildRows(start, count) {
+    const rows = [[
+      { text: '順番', options: { bold: true, align: 'center', fill: { color: 'F0F0F0' }, color: '333333', fontSize: 10, fontFace: 'Arial' } },
+      { text: '氏名',  options: { bold: true, align: 'left',   fill: { color: 'F0F0F0' }, color: '333333', fontSize: 10, fontFace: 'Arial' } }
+    ]];
+    for (let i = start; i < start + count && i < total; i++) {
+      const isFirst = i === 0;
+      const fillColor = isFirst ? 'FFF2CC' : (i % 2 === 0 ? 'FFFFFF' : 'FAFAFA');
+      const textColor = isFirst ? '333333' : '444444';
+      rows.push([
+        { text: String(i + 1), options: { align: 'center', fill: { color: fillColor }, color: textColor, bold: isFirst, fontSize: 10, fontFace: 'Arial' } },
+        { text: order[i],       options: { align: 'left',   fill: { color: fillColor }, color: textColor, bold: isFirst, fontSize: 10, fontFace: 'Arial' } }
+      ]);
     }
+    return rows;
+  }
+
+  const availH = 5.9;
+  const rowH   = Math.min(0.32, availH / (perCol + 1));
+  const borderOpt = { color: 'E0E0E0', pt: 0.5 };
+
+  if (cols === 1) {
+    slide.addTable(buildRows(0, total), {
+      x: 1.5, y: 0.85, w: 7.0,
+      colW: [1.2, 5.8], rowH,
+      border: borderOpt
+    });
+  } else {
+    slide.addTable(buildRows(0, perCol), {
+      x: 0.35, y: 0.85, w: 4.7,
+      colW: [1.1, 3.6], rowH,
+      border: borderOpt
+    });
+    slide.addTable(buildRows(perCol, total - perCol), {
+      x: 5.15, y: 0.85, w: 4.5,
+      colW: [1.1, 3.4], rowH,
+      border: borderOpt
+    });
   }
 
   // フッター
-  slide.addText('ムドメわっしょい！by Singerly', {
-    x: 0, y: 7.0, w: '100%', h: 0.3,
-    fontSize: 8, color: '444444',
-    fontFace: 'Arial', align: 'center', valign: 'middle'
+  slide.addText(`Copyright ${new Date().getFullYear()} Singerly`, {
+    x: 0.4, y: 7.1, w: 5, h: 0.25,
+    fontSize: 7, color: 'AAAAAA', fontFace: 'Arial'
   });
 
   pres.writeFile({ fileName: '発表順.pptx' });
@@ -409,22 +578,22 @@ function resetAll() {
   orderList.innerHTML = '';
 }
 
-const COLORS = ['#B7282E','#83151B','#000000','#D4756E','#E8A9A9','#CCCCCC'];
+const COLORS = ['#B7282E','#83151B','#000000','#D4756E','#E8A9A9','#CCC'];
 function launchConfetti() {
-  const confetti = document.getElementById('confetti');
-  confetti.innerHTML = '';
-  for (let i = 0; i < 60; i++) {
+  const c = document.getElementById('confetti');
+  c.innerHTML = '';
+  for (let i = 0; i < 70; i++) {
     const el = document.createElement('div');
     el.className = 'confetti-piece';
-    el.style.left = Math.random() * 100 + 'vw';
+    el.style.left       = Math.random() * 100 + 'vw';
     el.style.background = COLORS[Math.floor(Math.random() * COLORS.length)];
-    el.style.width  = (5 + Math.random() * 7) + 'px';
-    el.style.height = (5 + Math.random() * 7) + 'px';
+    el.style.width      = (5 + Math.random() * 7) + 'px';
+    el.style.height     = (5 + Math.random() * 7) + 'px';
     el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-    el.style.animation = `fall ${1.4 + Math.random() * 2}s ${Math.random() * 0.6}s ease-in forwards`;
-    confetti.appendChild(el);
+    el.style.animation  = `fall ${1.4 + Math.random() * 2}s ${Math.random() * 0.5}s ease-in forwards`;
+    c.appendChild(el);
   }
-  setTimeout(() => { confetti.innerHTML = ''; }, 4000);
+  setTimeout(() => { c.innerHTML = ''; }, 4500);
 }
 </script>
 </body>

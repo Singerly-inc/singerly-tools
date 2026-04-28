@@ -299,7 +299,7 @@ a.card { text-decoration:none; color:inherit; display:flex; }
   <p class="hero-theory">エンゲージメント × 組織マネジメント理論 × エンタメ</p>
 
   <div class="stats">
-    <div class="stat"><div class="stat-num">50</div><div class="stat-label">ツール</div></div>
+    <div class="stat"><div class="stat-num">51</div><div class="stat-label">ツール</div></div>
     <div class="stat"><div class="stat-num">6</div><div class="stat-label">カテゴリ</div></div>
     <div class="stat"><div class="stat-num" id="mudomeCount">0</div><div class="stat-label">ムドメ回数</div></div>
   </div>
@@ -312,6 +312,7 @@ a.card { text-decoration:none; color:inherit; display:flex; }
     <button class="filter-btn"        data-cat="safety"     onclick="filter('safety',this)">🛡️ 心理的安全性</button>
     <button class="filter-btn"        data-cat="motivation" onclick="filter('motivation',this)">⚡ モチベーション</button>
     <button class="filter-btn"        data-cat="discussion" onclick="filter('discussion',this)">🎯 対話・意思決定</button>
+    <button class="filter-btn"        data-cat="survey"     onclick="filter('survey',this)">📊 診断</button>
   </div>
 </section>
 
@@ -368,6 +369,7 @@ async function logout() {
 const CAT_LABEL = {
   icebreaker:'アイスブレイク', team:'チームビルド', mission:'理念・文化',
   safety:'心理的安全性', motivation:'モチベーション', discussion:'対話・意思決定',
+  survey:'診断',
 };
 
 const TOOLS = [
@@ -428,6 +430,8 @@ const TOOLS = [
   { id:'kpt-board',         icon:'📋', name:'KPTボード',                catch:'Keep/Problem/Tryを視覚整理。振り返りに',         cat:'discussion', theory:'組織学習の無限サイクル',           status:'active', path:'tools/kpt-board/index.html' },
   { id:'discussion-roulette',icon:'🎰',name:'ディスカッションテーマ抽選',catch:'話し合うテーマをルーレットで決定',             cat:'discussion', theory:'コミュニケーション活性',           status:'active', path:'tools/discussion-roulette/index.html' },
   { id:'feedback-roulette', icon:'🎭', name:'フィードバック練習ルーレット',catch:'誰が誰にフィードバックするか抽選で決定',    cat:'discussion', theory:'フィードバックの極意（4A・2.2.1）', status:'active', path:'tools/feedback-roulette/index.html' },
+
+  { id:'moodmaker-survey', icon:'🎯', name:'ムードメーカー診断',           catch:'6タイプ診断であなたのムードメイク属性を5分で分析', cat:'survey', theory:'ムードメーカー理論（Singerly）', status:'active', path:'tools/moodmaker-survey/index.html' },
 ];
 
 let currentCat = 'all';

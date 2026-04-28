@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+  <title>ムードメーカー診断 — ムドメわっしょい！</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../../index.html" class="nav-back">← ムドメわっしょい！</a>
+  <span class="nav-brand">by Singerly</span>
+</nav>
+
+<div class="page-header">
+  <span class="tool-badge">🎯 診断</span>
+  <h1 class="page-title">ムードメーカー診断</h1>
+  <p class="page-sub">6タイプ診断であなたのムードメイク属性を5分で分析</p>
+</div>
+
+<div class="container">
+  <main class="main">
+
+    <section id="step-profile" class="card">
+      <h2>1. プロフィール入力</h2>
+      <p class="muted">SNSなど、自己情報を入力してください。</p>
+      <div class="grid two">
+        <label>氏名<input id="name" type="text" placeholder="例: 奥田 真広" /></label>
+        <label>メール（任意）<input id="email" type="email" placeholder="example@singerly.co.jp" /></label>
+        <label>生年月日（任意）<input id="birthdate" type="date" /></label>
+        <label>X（旧Twitter）URL（任意）<input id="snsX" type="url" placeholder="https://x.com/..." /></label>
+        <label>Facebook URL（任意）<input id="snsFacebook" type="url" placeholder="https://facebook.com/..." /></label>
+        <label>note URL（任意）<input id="snsNote" type="url" placeholder="https://note.com/..." /></label>
+        <label>メディア掲載記事URL①（任意）<input id="mediaUrl1" type="url" placeholder="https://..." /></label>
+        <label>メディア掲載記事URL②（任意）<input id="mediaUrl2" type="url" placeholder="https://..." /></label>
+        <label>メディア掲載記事URL③（任意）<input id="mediaUrl3" type="url" placeholder="https://..." /></label>
+      </div>
+    </section>
+
+    <section id="step-survey" class="card">
+      <h2>2. 5分サーベイ</h2>
+      <p class="muted">各質問で該当する数字をラジオボタンで選んでください。</p>
+      <p class="q-scale-hint q-scale-hint-once">1 よくあてはまる 〜 5 あてはまらない</p>
+      <div class="q-section-label">おもてなし適性（全属性の前提条件）</div>
+      <div id="omoteNashiQuestions" class="questions"></div>
+      <div class="q-section-label" style="margin-top:16px;">ムードメイク属性（6タイプ診断）</div>
+      <div id="questions" class="questions"></div>
+    </section>
+
+    <section id="step-org-info" class="card">
+      <h2>3. 組織適合マトリクス（自己申告）</h2>
+      <p class="muted">選択すると分析精度が上がります。空欄でも属性スコアのみで自動計算します。</p>
+      <div class="grid two">
+        <label>目指す／フィットする組織規模
+          <select id="orgPrefSize">
+            <option value="">選択してください（任意）</option>
+            <option value="SIZE_S">小規模（〜10名）</option>
+            <option value="SIZE_SM">小中規模（11〜49名）</option>
+            <option value="SIZE_M">中堅規模（50〜299名）</option>
+            <option value="SIZE_L">大規模（300〜999名）</option>
+            <option value="SIZE_XL">巨大規模（1,000名〜）</option>
+          </select>
+        </label>
+        <label>好きな創業ステージ感
+          <select id="orgPrefFounding">
+            <option value="">選択してください（任意）</option>
+            <option value="AGE_0_5">創業期（〜5年）スタートアップ感</option>
+            <option value="AGE_6_20">成長・拡大期（6〜20年）</option>
+            <option value="AGE_21_50">成熟期（21〜50年）</option>
+            <option value="AGE_51_100">老舗（準）（51〜100年）</option>
+            <option value="AGE_101P">創業100年超の老舗</option>
+          </select>
+        </label>
+        <label>得意／希望の業界
+          <select id="orgPrefIndustry">
+            <option value="">選択してください（任意）</option>
+            <option value="IND_01">メーカー／製造業</option>
+            <option value="IND_02">商社・卸売</option>
+            <option value="IND_03">小売・流通</option>
+            <option value="IND_04">金融・保険・証券</option>
+            <option value="IND_05">建設・不動産</option>
+            <option value="IND_06">情報通信・IT・ソフト</option>
+            <option value="IND_07">マスコミ・広告・出版</option>
+            <option value="IND_08">サービス・レジャー</option>
+            <option value="IND_09">医療・介護・福祉</option>
+            <option value="IND_10">教育・コンサル・専門職</option>
+            <option value="IND_11">物流・運輸・インフラ</option>
+            <option value="IND_12">官公庁・公社・団体</option>
+          </select>
+        </label>
+        <label>職場でのポジション
+          <select id="orgPrefPosition">
+            <option value="">選択してください（任意）</option>
+            <option value="individual">個人プレイヤー</option>
+            <option value="leader">チームリーダー</option>
+            <option value="manager">マネージャー</option>
+            <option value="exec">経営層・役員</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <section id="step-narrative" class="card">
+      <h2>4. プロフィール分析入力（任意）</h2>
+      <p class="muted">入力した内容をもとに、レポートの各文言を自動生成します。空欄はサンプル文が入ります。</p>
+
+      <div class="narrative-group">
+        <div class="narrative-label">下剋上ストーリー</div>
+        <div class="grid two">
+          <label>ストーリーの型
+            <select id="narrativeStoryType">
+              <option value="">選択してください</option>
+              <option value="下剋上型">下剋上型（逆境から這い上がった）</option>
+              <option value="成長型">成長型（着実な積み重ねで力をつけた）</option>
+              <option value="転換型">転換型（大きな転機があった）</option>
+              <option value="開花型">開花型（環境の変化で才能が開花した）</option>
+            </select>
+          </label>
+          <label>一言エピソード<input id="narrativeStoryEpisode" type="text" placeholder="例：新卒で失敗続きの3年間を経て、イベント責任者として覚醒" /></label>
+        </div>
+      </div>
+
+      <div class="narrative-group">
+        <div class="narrative-label">バックグラウンド</div>
+        <label>ムードメーカーになった原体験を一言で<input id="narrativeOrigin" type="text" placeholder="例：学生時代、クラスの空気を変えた文化祭の経験" /></label>
+      </div>
+
+      <div class="narrative-group">
+        <div class="narrative-label">ウィークポイント</div>
+        <label>あてはまる傾向を選んでください
+          <select id="narrativeWeaknessPattern">
+            <option value="">選択してください</option>
+            <option value="過熱型">過熱しすぎる（テンションが空回りすることがある）</option>
+            <option value="読みすぎ型">空気を読みすぎる（自分の意見を出しにくい）</option>
+            <option value="協調過剰型">競争より協調を優先しすぎる</option>
+            <option value="論理過剰型">知識・論理に偏りすぎる</option>
+            <option value="存在感強すぎ型">存在感が出すぎて周囲が萎縮することがある</option>
+            <option value="埋もれ型">周囲に合わせすぎて個性が埋もれることがある</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="narrative-group">
+        <div class="narrative-label">一番輝いたムードメイク事例</div>
+        <label>どんな場面で、どう動いて、どんな変化が生まれたか
+          <textarea id="narrativeAchievementCase" rows="4" placeholder="例：全社総会の前日、場が重苦しい雰囲気だったのでアイスブレイクを即興で提案。200名が笑顔になり、役員から「場が変わった」と言われた。"></textarea>
+        </label>
+      </div>
+
+      <div class="narrative-group">
+        <div class="narrative-label">想い（ミッション）</div>
+        <div class="grid two">
+          <label>ミッションの方向性
+            <select id="narrativeMissionTemplate">
+              <option value="">選択してください</option>
+              <option value="組織変革">ムードメイクで組織を変える</option>
+              <option value="場づくり">誰もが輝ける場をつくる</option>
+              <option value="価値証明">ムードメーカーの価値を社会に証明する</option>
+              <option value="架け橋">人と人をつなぐ架け橋になる</option>
+              <option value="カスタム">カスタム（下に入力）</option>
+            </select>
+          </label>
+          <label>補足・自由記述<input id="narrativeMissionNote" type="text" placeholder="例：地方の中小企業にもムードメーカーを" /></label>
+        </div>
+      </div>
+    </section>
+
+    <section class="row end">
+      <button id="analyzeBtn" class="btn">分析する →</button>
+      <div class="pdf-btn-wrap hidden" id="pdfBtnWrap">
+        <button id="pdfBtn" class="btn ghost">PDFとして保存</button>
+        <p class="pdf-hint">印刷ダイアログが開きます。左下の「PDF」→「PDFとして保存」を選択してください。</p>
+      </div>
+      <button id="jsonBtn" class="btn ghost hidden">JSON保存</button>
+    </section>
+
+    <section id="result" class="card hidden report-card">
+      <p id="omoteNashiBanner" class="om-banner hidden"></p>
+      <div class="report-sheet-header row between">
+        <div>
+          <p class="report-kicker">ムードメイカー パラメータ</p>
+          <h2 id="reportTitle" class="report-title">分析結果（1枚サマリー）</h2>
+        </div>
+        <span class="brand-mark" aria-hidden="true">Singerly</span>
+      </div>
+
+      <div class="report-grid">
+        <div class="report-col report-col-a">
+          <div class="section-block">
+            <div class="section-bar">属性スコア</div>
+            <div class="section-body">
+              <canvas id="radarChart" width="340" height="280"></canvas>
+              <ul id="scores" class="scores-compact"></ul>
+              <div id="scoreTableWrap"></div>
+              <div class="mini-chart-wrap">
+                <p class="mini-chart-title">項目別の推移（疑似トレンド）</p>
+                <canvas id="trendChart" width="340" height="180"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="report-col report-col-b">
+          <div class="section-block">
+            <div class="section-bar">診断サマリー</div>
+            <div class="section-body">
+              <p id="primary" class="report-p"></p>
+              <p id="fit" class="report-p"></p>
+              <p id="guidance" class="report-p"></p>
+            </div>
+          </div>
+          <div class="section-block">
+            <div class="section-bar">必殺技</div>
+            <div class="section-body"><p id="signatureSkill" class="report-p"></p></div>
+          </div>
+          <div class="section-block">
+            <div class="section-bar">バックグラウンド</div>
+            <div class="section-body"><p id="background" class="report-p"></p></div>
+          </div>
+          <div class="section-block">
+            <div class="section-bar">ウィークポイント</div>
+            <div class="section-body"><p id="weakness" class="report-p"></p></div>
+          </div>
+        </div>
+        <div class="report-col report-col-c">
+          <div class="section-block">
+            <div class="section-bar">下剋上ストーリー</div>
+            <div class="section-body"><p id="story" class="report-p"></p></div>
+          </div>
+          <div class="section-block">
+            <div class="section-bar">一番輝いた事例</div>
+            <div class="section-body">
+              <p id="achievements" class="report-p"></p>
+              <p id="achievementsAnalysis" class="report-p achievement-analysis"></p>
+            </div>
+          </div>
+          <div class="section-block">
+            <div class="section-bar">想い</div>
+            <div class="section-body"><p id="mission" class="report-p"></p></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="orgMatrixSection" class="org-matrix-section">
+        <div class="org-matrix-head">
+          <h3 class="org-matrix-title">組織適合マトリクス（規模 × 創業ステージ × 業界）</h3>
+          <p id="orgMatrixSummary" class="org-matrix-summary"></p>
+          <p id="orgMatrixSecondary" class="org-matrix-secondary muted"></p>
+        </div>
+        <div class="org-matrix-plots">
+          <div class="org-plot-card">
+            <div class="section-bar">1. 組織規模（従業員数）</div>
+            <div class="org-plot-body" id="orgPlotSize"></div>
+          </div>
+          <div class="org-plot-card">
+            <div class="section-bar">2. 創業年数区分</div>
+            <div class="org-plot-body" id="orgPlotFounding"></div>
+          </div>
+          <div class="org-plot-card org-plot-card-wide">
+            <div class="section-bar">3. 業界区分（12カテゴリ）</div>
+            <div class="org-plot-body" id="orgPlotIndustry"></div>
+          </div>
+        </div>
+      </div>
+
+      <p class="report-footer-tagline">多面的なムードメイク力が武器になる！</p>
+    </section>
+
+    <section id="service" class="card hidden">
+      <h2>5. Singerlyサービス接続</h2>
+      <p id="orgFitText"></p>
+      <p id="serviceText"></p>
+      <div class="row">
+        <button type="button" id="contactBtn" class="btn secondary">問い合わせる</button>
+        <button type="button" id="saveReportBtn" class="btn ghost">レポートを保存</button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="org-matrix.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

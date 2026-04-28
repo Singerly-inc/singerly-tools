@@ -192,14 +192,15 @@ body {
 .ok-sec-title { font-size:16px; color:#1a2f1a; letter-spacing:5px; font-weight:400; }
 .ok-sec-rule { flex:1; height:1px; background:linear-gradient(to right,rgba(26,47,26,.25),transparent); }
 
-/* ── AI生成おにぎり1枚 ── */
+/* ── AI生成おにぎり複数並び ── */
 .ok-hero-img {
-  width:100%; height:190px; flex-shrink:0;
+  width:100%; height:200px; flex-shrink:0;
   border-radius:4px; overflow:hidden; margin-bottom:10px;
+  background:#1a1a0e; display:flex; align-items:center; justify-content:center;
 }
 .ok-hero-img img {
-  width:100%; height:100%; object-fit:cover; object-position:center 35%;
-  filter:brightness(.92) saturate(1.1) contrast(1.03);
+  width:100%; height:100%; object-fit:contain;
+  filter:brightness(.95) saturate(1.1) contrast(1.03);
 }
 
 .ok-menu { display:grid; grid-template-columns:1fr 1fr; column-gap:20px; margin-bottom:12px; flex-shrink:0; }
@@ -208,19 +209,19 @@ body {
 .ok-special {
   background:#1a2f1a; border-radius:5px;
   display:flex; align-items:stretch; overflow:hidden;
-  margin-bottom:12px; height:155px; flex-shrink:0;
+  margin-bottom:12px; height:145px; flex-shrink:0;
   border-left:4px solid #c9a84c; box-shadow:0 4px 20px rgba(26,47,26,.25);
 }
-.ok-sp-photo { position:relative; width:180px; flex-shrink:0; overflow:hidden; }
+.ok-sp-photo { position:relative; width:260px; flex-shrink:0; overflow:hidden; }
 .ok-sp-photo img { width:100%; height:100%; object-fit:cover; object-position:center 35%; filter:brightness(.88) saturate(1.15); }
-.ok-sp-body { flex:1; padding:0 24px; display:flex; align-items:center; gap:18px; }
-.ok-sp-vert { writing-mode:vertical-rl; color:#c9a84c; font-size:10px; letter-spacing:4px; flex-shrink:0; line-height:1; }
-.ok-sp-divline { width:1px; height:60px; background:rgba(201,168,76,.45); flex-shrink:0; }
+.ok-sp-body { flex:1; padding:0 18px; display:flex; align-items:center; gap:14px; }
+.ok-sp-vert { writing-mode:vertical-rl; color:#c9a84c; font-size:9px; letter-spacing:4px; flex-shrink:0; line-height:1; }
+.ok-sp-divline { width:1px; height:50px; background:rgba(201,168,76,.45); flex-shrink:0; }
 .ok-sp-text { flex:1; }
-.ok-sp-smlab { color:#c9a84c; font-size:10px; letter-spacing:5px; margin-bottom:8px; }
-.ok-sp-name { color:#fff; font-size:30px; letter-spacing:5px; font-weight:300; line-height:1.2; }
-.ok-sp-desc { color:rgba(255,255,255,.45); font-size:11px; letter-spacing:2px; margin-top:6px; }
-.ok-sp-badge { border:1px solid #c9a84c; color:#c9a84c; font-size:9px; letter-spacing:3px; padding:5px 12px; flex-shrink:0; align-self:flex-start; margin-top:4px; }
+.ok-sp-smlab { color:#c9a84c; font-size:9px; letter-spacing:4px; margin-bottom:6px; }
+.ok-sp-name { color:#fff; font-size:26px; letter-spacing:4px; font-weight:300; line-height:1.2; }
+.ok-sp-desc { color:rgba(255,255,255,.45); font-size:10px; letter-spacing:2px; margin-top:5px; }
+.ok-sp-badge { border:1px solid #c9a84c; color:#c9a84c; font-size:8px; letter-spacing:3px; padding:4px 10px; flex-shrink:0; align-self:flex-start; margin-top:4px; }
 .ok-bottom { flex:1; display:flex; border-top:1px solid rgba(26,47,26,.15); padding-top:14px; align-items:center; }
 .ok-bcol { flex:1; padding:0 20px; border-right:1px solid rgba(26,47,26,.1); }
 .ok-bcol:first-of-type { padding-left:0; }

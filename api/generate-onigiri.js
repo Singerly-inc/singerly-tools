@@ -35,13 +35,13 @@ module.exports = async function handler(req, res) {
   if (!items?.length) return res.status(400).json({ error: 'おにぎりのネタを入力してください' });
 
   const itemStr = items.slice(0, 5).join('・');
+  const count = items.length;
   const prompt =
-    `Professional Japanese food photography. A single triangular onigiri rice ball, ` +
-    `tightly wrapped in a dark crispy nori seaweed sheet, filled with ${itemStr}. ` +
-    `The onigiri has a classic triangular shape and is placed upright on a natural light wood board. ` +
-    `Some filling ingredients are visible on top as garnish. ` +
-    `Soft warm natural side lighting, shallow depth of field, close-up food magazine shot. ` +
-    `Photorealistic, no text, no watermarks. The subject must be a triangular Japanese onigiri, nothing else.`;
+    `Professional Japanese food photography. ${count} triangular onigiri rice balls arranged in a beautiful row on a natural light wood board. ` +
+    `Each onigiri is tightly wrapped in dark crispy nori seaweed and filled with different ingredients: ${itemStr}. ` +
+    `Each onigiri has a classic triangular shape. Colorful garnishes and ingredients are visible on top of each onigiri. ` +
+    `Slightly overhead angle, soft warm natural side lighting, shallow depth of field, wide landscape shot, food magazine quality. ` +
+    `Photorealistic, no text, no watermarks. The subjects must be ${count} triangular Japanese onigiri arranged in a row, nothing else.`;
 
   const imgRes = await fetch('https://api.openai.com/v1/images/generations', {
     method: 'POST',

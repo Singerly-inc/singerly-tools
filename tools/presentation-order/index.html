@@ -439,24 +439,19 @@ function playFanfare() {
   let ctx;
   try { ctx = new (window.AudioContext || window.webkitAudioContext)(); }
   catch(e) { return; }
-
   const now = ctx.currentTime;
-  const notes = [
-    { freq: 523.25, t: 0.00, dur: 0.14 },
-    { freq: 659.25, t: 0.13, dur: 0.14 },
-    { freq: 783.99, t: 0.26, dur: 0.14 },
-    { freq:1046.50, t: 0.39, dur: 0.65 },
-  ];
-  notes.forEach(({ freq, t, dur }) => {
-    const osc  = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = 'sawtooth';
-    osc.frequency.value = freq;
-    gain.gain.setValueAtTime(0, now + t);
-    gain.gain.linearRampToValueAtTime(0.22, now + t + 0.025);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + t + dur);
-    osc.connect(gain); gain.connect(ctx.destination);
-    osc.start(now + t); osc.stop(now + t + dur + 0.05);
+  // ドラクエ風レベルアップBGM（square wave chiptune）
+  [[523.25,0.00,0.10],[659.25,0.11,0.10],[783.99,0.22,0.10],[1046.5,0.33,0.10],
+   [783.99,0.46,0.08],[659.25,0.55,0.08],[523.25,0.64,0.08],[391.99,0.73,0.08],
+   [523.25,0.82,0.65]].forEach(([f,t,d]) => {
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = 'square'; o.frequency.value = f;
+    g.gain.setValueAtTime(0, now+t);
+    g.gain.linearRampToValueAtTime(0.15, now+t+0.008);
+    g.gain.setValueAtTime(0.15, now+t+d-0.012);
+    g.gain.linearRampToValueAtTime(0, now+t+d);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(now+t); o.stop(now+t+d+0.05);
   });
 }
 

@@ -163,6 +163,7 @@ function celebrate(){
   document.getElementById('inputArea').style.display='none';
   document.getElementById('celebration').classList.add('show');
 
+  playDQFanfare();
   launchConfetti();
   renderHistory();
   document.getElementById('historyArea').classList.add('show');
@@ -188,6 +189,22 @@ function renderHistory(){
   `).join('');
 }
 
+function playDQFanfare(){
+  let ctx; try{ctx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){return;}
+  const now=ctx.currentTime;
+  [[523.25,0.00,0.10],[659.25,0.11,0.10],[783.99,0.22,0.10],[1046.5,0.33,0.10],
+   [783.99,0.46,0.08],[659.25,0.55,0.08],[523.25,0.64,0.08],[391.99,0.73,0.08],
+   [523.25,0.82,0.65]].forEach(([f,t,d])=>{
+    const o=ctx.createOscillator(),g=ctx.createGain();
+    o.type='square'; o.frequency.value=f;
+    g.gain.setValueAtTime(0,now+t);
+    g.gain.linearRampToValueAtTime(0.15,now+t+0.008);
+    g.gain.setValueAtTime(0.15,now+t+d-0.012);
+    g.gain.linearRampToValueAtTime(0,now+t+d);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(now+t); o.stop(now+t+d+0.05);
+  });
+}
 const COLORS=['#B7282E','#83151B','#000000','#D4756E','#E8A9A9','#CCCCCC'];
 function launchConfetti(){
   const c=document.getElementById('confetti');

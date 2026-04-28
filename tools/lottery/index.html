@@ -341,7 +341,25 @@ function done(winner){
   winnerName.textContent=winner; winnerName.classList.add('show');
   hist.unshift(winner);
   historyList.innerHTML=hist.map(n=>`<div class="history-chip">${esc(n)}</div>`).join('');
+  playDQFanfare();
   launchConfetti();
+}
+function playDQFanfare(){
+  let ctx; try{ctx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){return;}
+  const now=ctx.currentTime;
+  // ドラクエ風レベルアップBGM（square wave chiptune）
+  [[523.25,0.00,0.10],[659.25,0.11,0.10],[783.99,0.22,0.10],[1046.5,0.33,0.10],
+   [783.99,0.46,0.08],[659.25,0.55,0.08],[523.25,0.64,0.08],[391.99,0.73,0.08],
+   [523.25,0.82,0.65]].forEach(([f,t,d])=>{
+    const o=ctx.createOscillator(),g=ctx.createGain();
+    o.type='square'; o.frequency.value=f;
+    g.gain.setValueAtTime(0,now+t);
+    g.gain.linearRampToValueAtTime(0.15,now+t+0.008);
+    g.gain.setValueAtTime(0.15,now+t+d-0.012);
+    g.gain.linearRampToValueAtTime(0,now+t+d);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(now+t); o.stop(now+t+d+0.05);
+  });
 }
 function resetAll(){
   names=[]; hist=[]; renderList(); updateReel();

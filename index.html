@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <title>ムドメわっしょい！ by Singerly</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="supabase-config.js"></script>
@@ -13,165 +13,258 @@
 * { margin:0; padding:0; box-sizing:border-box; }
 
 body {
-  background: #fff;
-  font-family: 'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif;
-  color: #000000;
+  background: #F5F2EC;
+  font-family: 'Hiragino Sans','Hiragino Kaku Gothic ProN','DM Sans',system-ui,sans-serif;
+  color: #1A1A1A;
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* HEADER */
+/* ── HEADER ── */
 .header {
-  background: #000000;
-  padding: 0 32px;
-  height: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  background: #0A0A0A;
+  padding: 0 48px;
+  height: 52px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
 }
-
 .logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
 .logo-icon {
-  width: 32px; height: 32px;
-  background: #B7282E;
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px;
+  width:30px; height:30px; background:#B7282E; border-radius:6px;
+  display:flex; align-items:center; justify-content:center; font-size:16px;
 }
-.logo-name { font-size:1rem; font-weight:900; color:#fff; letter-spacing:0.02em; }
-.logo-brand { font-size:0.6rem; color:rgba(255,255,255,0.4); letter-spacing:0.2em; }
-.header-right { font-size:0.72rem; color:rgba(255,255,255,0.35); letter-spacing:0.08em; }
+.logo-name { font-size:0.95rem; font-weight:900; color:#fff; letter-spacing:0.01em; font-family:'DM Sans',sans-serif; }
+.logo-brand { font-size:0.55rem; color:rgba(255,255,255,0.3); letter-spacing:0.22em; font-family:'DM Sans',sans-serif; }
+.user-bar { font-size:0.72rem; color:rgba(255,255,255,0.4); display:flex; align-items:center; gap:10px; }
+.logout-btn {
+  background:transparent; border:1px solid rgba(255,255,255,0.2);
+  color:rgba(255,255,255,0.45); border-radius:4px; padding:3px 10px;
+  font-size:0.66rem; cursor:pointer; font-family:inherit; transition:all 0.15s;
+}
+.logout-btn:hover { border-color:#fff; color:#fff; }
 
-/* HERO */
+/* ── HERO ── */
 .hero {
-  background: #000000;
-  padding: 48px 32px 40px;
-  text-align: center;
-  border-bottom: 3px solid #B7282E;
+  background: linear-gradient(180deg, #0A0A0A 0%, #1A0608 100%);
+  color: #fff;
+  padding: 64px 56px 52px;
+  position: relative; overflow: hidden;
+  border-bottom: 4px solid #B7282E;
 }
-.hero-inner { margin-bottom: 32px; }
+.hero::before {
+  content:''; position:absolute; inset:0;
+  background-image: radial-gradient(circle, rgba(183,40,46,0.22) 1px, transparent 1.5px);
+  background-size: 24px 24px;
+  opacity: 0.5;
+  mask-image: radial-gradient(ellipse at top right, black 0%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse at top right, black 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-inner { position:relative; }
+
 .hero-eyebrow {
-  font-size:0.7rem; letter-spacing:0.25em; color:#B7282E;
-  text-transform:uppercase; margin-bottom:16px; font-weight:600;
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; letter-spacing: 0.22em; color: #B7282E;
+  padding: 5px 12px; border: 1px solid rgba(183,40,46,0.5);
+  border-radius: 4px; margin-bottom: 24px; font-weight: 700;
+  font-family: 'DM Sans', sans-serif; text-transform: uppercase;
 }
+
 .hero-title {
-  font-size: clamp(2.8rem, 6vw, 5.5rem);
-  font-weight:900; color:#fff;
-  line-height:1.05; margin-bottom:14px;
+  font-size: clamp(48px, 8vw, 88px);
+  font-weight: 900; line-height: 0.95;
+  letter-spacing: -0.03em;
+  margin-bottom: 0;
 }
-.hero-title .accent { color:#B7282E; }
-.hero-sub { font-size:1rem; color:rgba(255,255,255,0.5); margin-bottom:8px; }
-.hero-theory { font-size:0.72rem; color:rgba(255,255,255,0.25); }
-
-.stats { display:flex; justify-content:center; gap:64px; margin-top:32px; }
-.stat-num { font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight:900; color:#B7282E; line-height:1; }
-.stat-label { font-size:0.68rem; color:rgba(255,255,255,0.35); letter-spacing:0.1em; margin-top:6px; }
-
-/* FILTER */
-.filter-bar { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; }
-.filter-btn {
-  padding:7px 16px; border-radius:4px;
-  border:1px solid rgba(255,255,255,0.2);
-  background:transparent; color:rgba(255,255,255,0.55);
-  font-size:0.78rem; font-family:inherit; cursor:pointer;
-  font-weight:600; transition:all 0.18s;
+.hero-title .line1 { display: block; color: #fff; }
+.hero-title .line2 {
+  display: inline-block; color: #B7282E;
+  position: relative;
 }
-.filter-btn:hover { border-color:rgba(255,255,255,0.5); color:#fff; }
-.filter-btn.active { background:#B7282E; border-color:#B7282E; color:#fff; }
-
-/* GRID */
-.grid-section { max-width:1380px; margin:0 auto; padding:40px 48px 80px; }
-.grid-meta { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:24px; }
-.grid-label { font-size:0.68rem; letter-spacing:0.18em; color:#999; text-transform:uppercase; }
-.tool-count { font-size:0.68rem; color:#999; }
-
-.tool-grid {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:20px;
+.hero-title .line2::after {
+  content:''; position:absolute;
+  left:0; right:15%; bottom:4px;
+  height: 5px; background: #B7282E; opacity: 0.25;
 }
-@media(max-width:900px){ .tool-grid{grid-template-columns:repeat(2,1fr);} }
-@media(max-width:560px){ .tool-grid{grid-template-columns:1fr;} }
 
-/* CARD */
+@keyframes mudome-jump {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  20%      { transform: translateY(-7px) rotate(-1.5deg); }
+  40%      { transform: translateY(0) rotate(0); }
+}
+.hero-title.animated .line1 { display:inline-block; animation: mudome-jump 2.8s cubic-bezier(.36,1.6,.64,1) infinite; }
+.hero-title.animated .line2 { animation: mudome-jump 2.8s cubic-bezier(.36,1.6,.64,1) infinite; animation-delay: 0.22s; }
+
+.hero-sub {
+  margin-top: 20px; font-size: 15px; line-height: 1.75;
+  color: rgba(255,255,255,0.6); max-width: 520px;
+}
+
+/* スコアボード */
+.scoreboard {
+  display: inline-grid;
+  grid-template-columns: repeat(3, max-content);
+  gap: 0;
+  margin-top: 40px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.scoreboard-item {
+  padding: 20px 32px;
+  border-right: 1px solid rgba(255,255,255,0.07);
+  text-align: center;
+}
+.scoreboard-item:last-child { border-right: none; }
+.scoreboard-num {
+  font-family: 'DM Sans', sans-serif;
+  font-size: clamp(32px, 3.5vw, 40px);
+  font-weight: 900; color: #B7282E;
+  line-height: 1; letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+.scoreboard-label {
+  font-size: 10px; letter-spacing: 0.22em;
+  color: rgba(255,255,255,0.35); font-weight: 700;
+  font-family: 'DM Sans', sans-serif; margin-top: 6px;
+  text-transform: uppercase;
+}
+@media(max-width:600px) {
+  .hero { padding: 40px 24px 36px; }
+  .scoreboard { grid-template-columns: repeat(3,1fr); width:100%; }
+  .scoreboard-item { padding: 16px 12px; }
+}
+
+/* ── FILTER BAR ── */
+.filter-bar {
+  background: #FAF6EE;
+  border-bottom: 1px solid #E0E0E0;
+  padding: 16px 48px;
+  display: flex; gap: 10px; flex-wrap: wrap;
+  position: sticky; top: 52px; z-index: 90;
+}
+.filter-chip {
+  height: 36px; padding: 0 14px;
+  display: inline-flex; align-items: center; gap: 7px;
+  border-radius: 9999px;
+  border: 1.5px solid #D8D4CC;
+  background: #fff; color: #555;
+  font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: all 0.12s;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  font-family: inherit; white-space: nowrap;
+}
+.filter-chip:hover { border-color: #999; color: #1A1A1A; }
+.filter-chip.active { color: #fff; border-color: transparent; box-shadow: 0 3px 0 rgba(0,0,0,0.18); }
+.filter-chip[data-cat="all"].active      { background: #1A1A1A; }
+.filter-chip[data-cat="icebreak"].active { background: #D94A3D; }
+.filter-chip[data-cat="team"].active     { background: #1E5FA8; }
+.filter-chip[data-cat="mvv"].active      { background: #7A1F2A; }
+.filter-chip[data-cat="safety"].active   { background: #C26A1F; }
+.filter-chip[data-cat="motiv"].active    { background: #6B3A8E; }
+.filter-chip[data-cat="dialog"].active   { background: #2F6B4F; }
+.filter-chip[data-cat="diagnose"].active { background: #1A1A1A; }
+.chip-count {
+  font-size: 11px; opacity: 0.6;
+  font-family: 'DM Sans', sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+@media(max-width:600px) {
+  .filter-bar { padding: 12px 16px; gap: 8px; flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x mandatory; }
+  .filter-chip { scroll-snap-align: start; flex-shrink: 0; }
+}
+
+/* ── GRID SECTION ── */
+.grid-section { max-width:1400px; margin:0 auto; padding:36px 48px 80px; }
+.grid-meta { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+.grid-label { font-size:11px; letter-spacing:0.18em; color:#888; text-transform:uppercase; font-weight:700; font-family:'DM Sans',sans-serif; }
+.tool-count { font-size:11px; color:#999; font-family:'DM Sans',sans-serif; font-weight:600; }
+
+.tool-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+@media(min-width:1300px){ .tool-grid{ grid-template-columns:repeat(4,1fr); } }
+@media(max-width:900px){  .tool-grid{ grid-template-columns:repeat(2,1fr); } }
+@media(max-width:560px){  .tool-grid{ grid-template-columns:1fr; } }
+@media(max-width:600px){ .grid-section{ padding:24px 16px 60px; } }
+
+/* ── CARD ── */
 .card {
-  background:#fff;
-  border:1px solid #E0E0E0;
-  border-radius:10px;
-  padding:22px 20px 18px;
-  display:flex; flex-direction:column; gap:10px;
-  cursor:pointer; transition:all 0.18s;
-  position:relative;
+  display: flex; flex-direction: column;
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid #E0E0E0;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  transition: transform 0.2s cubic-bezier(.2,.7,.3,1.4), box-shadow 0.2s;
+  text-decoration: none; color: #1A1A1A;
+  cursor: pointer;
 }
 .card:hover {
-  border-color:#B7282E;
-  box-shadow:0 4px 20px rgba(183,40,46,0.10);
-  transform:translateY(-2px);
+  transform: translateY(-4px);
+  box-shadow: 0 14px 32px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.06);
 }
 .card.coming { opacity:0.4; cursor:default; pointer-events:none; }
-a.card { text-decoration:none; color:inherit; display:flex; }
-
-.card-top { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; }
+.card-topbar {
+  height: 6px;
+  background: var(--cat-color, #B7282E);
+  transition: height 0.2s;
+  flex-shrink: 0;
+}
+.card:hover .card-topbar { height: 8px; }
+.card-body { padding: 18px 20px 20px; display:flex; flex-direction:column; gap:10px; flex:1; }
+.card-head { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; }
 .card-icon {
-  width:44px; height:44px; border-radius:10px;
-  background:#F6F6F6;
-  display:flex; align-items:center; justify-content:center;
-  font-size:1.5rem; flex-shrink:0;
+  width: 40px; height: 40px; border-radius: 10px;
+  background: var(--cat-bg, #FBE5E2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; flex-shrink:0;
 }
 .cat-tag {
-  font-size:0.6rem; padding:3px 9px; border-radius:3px;
-  font-weight:700; letter-spacing:0.04em; white-space:nowrap;
-  background:#FDF3F3; color:#B7282E;
+  font-size: 10px; padding: 3px 8px; border-radius: 3px;
+  font-weight: 800; letter-spacing: 0.06em; white-space: nowrap;
+  color: var(--cat-color, #B7282E);
+  background: var(--cat-bg, #FBE5E2);
+  font-family: 'DM Sans', sans-serif;
 }
-
-.card-name { font-size:0.95rem; font-weight:800; color:#000000; line-height:1.3; }
-.card-catch { font-size:0.76rem; color:#666; line-height:1.65; flex:1; }
-
-.card-footer { display:flex; align-items:center; justify-content:space-between; margin-top:4px; }
-.card-theory { font-size:0.58rem; color:#aaa; }
+.card-name { font-size: 16px; font-weight: 800; color: #1A1A1A; line-height: 1.3; }
+.card-catch { font-size: 12px; color: #666; line-height: 1.7; flex:1; }
+.card-foot {
+  margin-top: 4px; padding-top: 12px;
+  border-top: 1px dashed #E8E8E8;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.card-theory { font-size: 10px; color: #aaa; font-family: 'DM Sans', sans-serif; }
 .btn-open {
-  background:#B7282E; color:#fff; border:none;
-  border-radius:5px; padding:7px 16px;
-  font-size:0.75rem; font-weight:700; letter-spacing:0.04em;
-  cursor:pointer; font-family:inherit; transition:background 0.15s;
-  white-space:nowrap;
+  background: var(--cat-color, #B7282E); color: #fff; border: none;
+  border-radius: 5px; padding: 6px 14px;
+  font-size: 12px; font-weight: 800; letter-spacing: 0.04em;
+  cursor: pointer; font-family: inherit; white-space: nowrap;
+  transition: opacity 0.15s, transform 0.15s;
 }
-.btn-open:hover { background:#83151B; }
+.card:hover .btn-open { opacity: 0.9; transform: translateX(2px); }
 .coming-tag {
-  font-size:0.62rem; color:#bbb;
-  background:#F5F5F5; border:1px solid #E0E0E0;
-  border-radius:4px; padding:5px 12px;
-}
-.staff-tag {
-  font-size:0.6rem; color:#1a2f1a;
-  background:#e8f5e2; border:1px solid #a8d5a2;
-  border-radius:4px; padding:3px 8px;
-  font-weight:700; letter-spacing:0.04em; white-space:nowrap;
+  font-size: 11px; color: #bbb;
+  background: #F5F5F5; border: 1px solid #E0E0E0;
+  border-radius: 4px; padding: 4px 10px;
 }
 
-/* CELEBRATION */
+/* ── CELEBRATION OVERLAY ── */
 .celebration-overlay {
   position:fixed; inset:0; background:rgba(0,0,0,0.88);
   display:none; align-items:center; justify-content:center;
   z-index:2000; flex-direction:column; gap:0;
 }
 .celebration-overlay.show { display:flex; }
-.celebration-canvas {
-  position:absolute; inset:0; pointer-events:none;
-}
+.celebration-canvas { position:absolute; inset:0; pointer-events:none; }
 .celebration-content {
   position:relative; text-align:center; z-index:1;
   animation: celebPop 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
 }
-@keyframes celebPop {
-  0%{opacity:0;transform:scale(0.5)} 100%{opacity:1;transform:scale(1)}
-}
+@keyframes celebPop { 0%{opacity:0;transform:scale(0.5)} 100%{opacity:1;transform:scale(1)} }
 .celebration-emoji { font-size:4rem; animation:spin 1s ease-out; }
 @keyframes spin { from{transform:rotate(-20deg) scale(0.5)} to{transform:rotate(10deg) scale(1)} }
 .celebration-num {
-  font-size:5.5rem; font-weight:900; color:#B7282E;
+  font-size:5.5rem; font-weight:900; color:#B7282E; font-family:'DM Sans',sans-serif;
   line-height:1; text-shadow:0 0 40px rgba(183,40,46,0.6);
   animation:numGlow 1.5s ease-in-out infinite alternate;
 }
@@ -179,80 +272,59 @@ a.card { text-decoration:none; color:inherit; display:flex; }
   from{text-shadow:0 0 20px rgba(183,40,46,0.4)}
   to{text-shadow:0 0 60px rgba(183,40,46,1),0 0 100px rgba(183,40,46,0.5)}
 }
-.celebration-label {
-  font-size:1.2rem; font-weight:900; color:#fff;
-  letter-spacing:0.1em; margin-top:8px;
-}
-.celebration-msg {
-  font-size:0.9rem; color:rgba(255,255,255,0.6);
-  margin-top:8px; line-height:1.6;
-}
+.celebration-label { font-size:1.2rem; font-weight:900; color:#fff; letter-spacing:0.1em; margin-top:8px; }
+.celebration-msg { font-size:0.9rem; color:rgba(255,255,255,0.6); margin-top:8px; line-height:1.6; }
 .celebration-close {
   margin-top:28px; padding:12px 40px;
   background:#B7282E; color:#fff; border:none;
   border-radius:8px; font-size:1rem; font-weight:900;
-  font-family:inherit; cursor:pointer; letter-spacing:0.05em;
-  transition:background 0.15s;
+  font-family:inherit; cursor:pointer; letter-spacing:0.05em; transition:background 0.15s;
 }
 .celebration-close:hover { background:#83151B; }
-.firework {
-  position:absolute; width:6px; height:6px; border-radius:50%;
-  animation:firework 1s ease-out forwards;
-}
-@keyframes firework {
-  0%{opacity:1;transform:translate(0,0) scale(1)}
-  100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0)}
-}
 
-/* LOGIN OVERLAY */
+/* ── LOGIN OVERLAY ── */
 .login-overlay {
-  position:fixed; inset:0; background:rgba(0,0,0,0.85);
-  display:flex; align-items:center; justify-content:center;
-  z-index:1000;
+  position:fixed; inset:0; background:rgba(10,10,10,0.88);
+  display:flex; align-items:center; justify-content:center; z-index:1000;
 }
 .login-box {
-  background:#fff; border-radius:12px;
+  background:#fff; border-radius:14px;
   padding:40px 36px; width:100%; max-width:400px;
-  display:flex; flex-direction:column; gap:16px;
-  text-align:center;
+  display:flex; flex-direction:column; gap:16px; text-align:center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
 }
 .login-logo { font-size:2rem; margin-bottom:4px; }
-.login-title { font-size:1.3rem; font-weight:900; color:#000; }
+.login-title { font-size:1.3rem; font-weight:900; color:#1A1A1A; }
 .login-sub { font-size:0.8rem; color:#666; line-height:1.6; }
 .login-input {
-  width:100%; padding:12px 14px; border:1px solid #CCCCCC;
-  border-radius:6px; font-size:0.9rem; font-family:inherit;
+  width:100%; padding:12px 14px; border:1.5px solid #CCCCCC;
+  border-radius:8px; font-size:0.9rem; font-family:inherit;
   outline:none; transition:border-color 0.15s;
 }
 .login-input:focus { border-color:#B7282E; }
 .login-btn {
   width:100%; padding:13px; background:#B7282E; color:#fff;
-  border:none; border-radius:6px; font-size:0.9rem; font-weight:700;
+  border:none; border-radius:8px; font-size:0.9rem; font-weight:800;
   font-family:inherit; cursor:pointer; transition:background 0.15s;
 }
 .login-btn:hover { background:#83151B; }
 .login-sent { font-size:0.82rem; color:#B7282E; font-weight:700; display:none; }
 .login-note { font-size:0.7rem; color:#aaa; }
 
-/* USER BAR */
-.user-bar {
-  font-size:0.72rem; color:rgba(255,255,255,0.5);
-  display:flex; align-items:center; gap:10px;
-}
-.logout-btn {
-  background:transparent; border:1px solid rgba(255,255,255,0.25);
-  color:rgba(255,255,255,0.5); border-radius:4px;
-  padding:3px 10px; font-size:0.68rem; cursor:pointer;
-  font-family:inherit; transition:all 0.15s;
-}
-.logout-btn:hover { border-color:#fff; color:#fff; }
-
-/* FOOTER */
+/* ── FOOTER ── */
 .footer {
-  border-top:1px solid #E8E8E8;
-  padding:24px 32px; text-align:center;
-  font-size:0.7rem; color:#bbb; letter-spacing:0.1em;
+  border-top:1px solid #E0E0E0;
+  padding:24px 48px; text-align:center;
+  font-size:11px; color:#bbb; letter-spacing:0.1em;
+  font-family:'DM Sans',sans-serif; background:#F5F2EC;
 }
+
+/* ── PAGE LOAD ANIMATION ── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(12px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.card { animation: fadeUp 0.36s ease-out both; }
 </style>
 </head>
 <body>
@@ -271,6 +343,7 @@ a.card { text-decoration:none; color:inherit; display:flex; }
   </div>
 </header>
 
+<!-- Celebration overlay -->
 <div class="celebration-overlay" id="celebOverlay" onclick="closeCelebration()">
   <canvas class="celebration-canvas" id="celebCanvas"></canvas>
   <div class="celebration-content" onclick="event.stopPropagation()">
@@ -282,6 +355,7 @@ a.card { text-decoration:none; color:inherit; display:flex; }
   </div>
 </div>
 
+<!-- Login overlay -->
 <div class="login-overlay" id="loginOverlay">
   <div class="login-box">
     <div class="login-logo">🎉</div>
@@ -294,30 +368,45 @@ a.card { text-decoration:none; color:inherit; display:flex; }
   </div>
 </div>
 
+<!-- Hero -->
 <section class="hero">
   <div class="hero-inner">
-    <p class="hero-eyebrow">Mood Making Tools for Organizations</p>
-    <h1 class="hero-title">ムドメ<span class="accent">わっしょい</span>！</h1>
-    <p class="hero-sub">場を盛り上げ、チームの関係性を育てる</p>
-    <p class="hero-theory">エンゲージメント × 組織マネジメント理論 × エンタメ</p>
-    <div class="stats">
-      <div class="stat"><div class="stat-num">50</div><div class="stat-label">ツール</div></div>
-      <div class="stat"><div class="stat-num">6</div><div class="stat-label">カテゴリ</div></div>
-      <div class="stat"><div class="stat-num" id="mudomeCount">0</div><div class="stat-label">ムドメ回数</div></div>
+    <div class="hero-eyebrow">Singerly Facilitation Toolkit</div>
+    <h1 class="hero-title animated">
+      <span class="line1">ムドメ</span><span class="line2">わっしょい！</span>
+    </h1>
+    <p class="hero-sub">
+      場を盛り上げ、チームの関係性を育てる。<br>
+      50ツール × 7カテゴリのファシリテーション・コレクション。
+    </p>
+    <div class="scoreboard">
+      <div class="scoreboard-item">
+        <div class="scoreboard-num">50</div>
+        <div class="scoreboard-label">Tools</div>
+      </div>
+      <div class="scoreboard-item">
+        <div class="scoreboard-num">7</div>
+        <div class="scoreboard-label">Categories</div>
+      </div>
+      <div class="scoreboard-item">
+        <div class="scoreboard-num" id="mudomeCount">—</div>
+        <div class="scoreboard-label">Mudome!</div>
+      </div>
     </div>
   </div>
-
-  <div class="filter-bar">
-    <button class="filter-btn active" data-cat="all"        onclick="filter('all',this)">すべて</button>
-    <button class="filter-btn"        data-cat="icebreaker" onclick="filter('icebreaker',this)">🎲 アイスブレイク</button>
-    <button class="filter-btn"        data-cat="team"       onclick="filter('team',this)">👥 チームビルド</button>
-    <button class="filter-btn"        data-cat="mission"    onclick="filter('mission',this)">🧩 理念・文化</button>
-    <button class="filter-btn"        data-cat="safety"     onclick="filter('safety',this)">🛡️ 心理的安全性</button>
-    <button class="filter-btn"        data-cat="motivation" onclick="filter('motivation',this)">⚡ モチベーション</button>
-    <button class="filter-btn"        data-cat="discussion" onclick="filter('discussion',this)">🎯 対話・意思決定</button>
-    <button class="filter-btn"        data-cat="survey"     onclick="filter('survey',this)">📊 診断</button>
-  </div>
 </section>
+
+<!-- Filter bar -->
+<div class="filter-bar">
+  <button class="filter-chip active" data-cat="all"      onclick="filter('all',this)">すべて <span class="chip-count">50</span></button>
+  <button class="filter-chip" data-cat="icebreak"        onclick="filter('icebreak',this)">🎲 アイスブレイク <span class="chip-count">10</span></button>
+  <button class="filter-chip" data-cat="team"            onclick="filter('team',this)">👥 チームビルド <span class="chip-count">9</span></button>
+  <button class="filter-chip" data-cat="mvv"             onclick="filter('mvv',this)">🧩 理念・文化 <span class="chip-count">8</span></button>
+  <button class="filter-chip" data-cat="safety"          onclick="filter('safety',this)">🛡️ 心理的安全性 <span class="chip-count">8</span></button>
+  <button class="filter-chip" data-cat="motiv"           onclick="filter('motiv',this)">⚡ モチベーション <span class="chip-count">8</span></button>
+  <button class="filter-chip" data-cat="dialog"          onclick="filter('dialog',this)">🎯 対話・意思決定 <span class="chip-count">9</span></button>
+  <button class="filter-chip" data-cat="diagnose"        onclick="filter('diagnose',this)">📊 診断 <span class="chip-count">1</span></button>
+</div>
 
 <main class="grid-section">
   <div class="grid-meta">
@@ -335,9 +424,7 @@ let currentUser = null;
 
 async function initAuth() {
   const { data: { session } } = await sb.auth.getSession();
-  if (session) {
-    setUser(session.user);
-  }
+  if (session) setUser(session.user);
   sb.auth.onAuthStateChange((_event, session) => {
     if (session) setUser(session.user);
     else clearUser();
@@ -350,90 +437,90 @@ function setUser(user) {
   document.getElementById('userEmail').textContent = user.email;
   document.getElementById('logoutBtn').style.display = 'inline-block';
 }
-
 function clearUser() {
   currentUser = null;
   document.getElementById('loginOverlay').style.display = 'flex';
   document.getElementById('userEmail').textContent = '';
   document.getElementById('logoutBtn').style.display = 'none';
 }
-
 async function sendMagicLink() {
   const email = document.getElementById('emailInput').value.trim();
   if (!email) return;
   await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: location.origin + location.pathname } });
   document.getElementById('loginSent').style.display = 'block';
 }
+async function logout() { await sb.auth.signOut(); }
 
-async function logout() {
-  await sb.auth.signOut();
-}
-
-const CAT_LABEL = {
-  icebreaker:'アイスブレイク', team:'チームビルド', mission:'理念・文化',
-  safety:'心理的安全性', motivation:'モチベーション', discussion:'対話・意思決定',
-  survey:'診断',
+/* ── カテゴリ定義（B案・祭りモチーフ色） ── */
+const CAT = {
+  icebreak: { color:'#D94A3D', bg:'#FBE5E2', label:'アイスブレイク' },
+  team:     { color:'#1E5FA8', bg:'#DCE7F4', label:'チームビルド' },
+  mvv:      { color:'#7A1F2A', bg:'#EFD9DD', label:'理念・文化' },
+  safety:   { color:'#C26A1F', bg:'#F7E1CC', label:'心理的安全性' },
+  motiv:    { color:'#6B3A8E', bg:'#E5DAEC', label:'モチベーション' },
+  dialog:   { color:'#2F6B4F', bg:'#D6E5DC', label:'対話・意思決定' },
+  diagnose: { color:'#1A1A1A', bg:'#E2E2E2', label:'診断' },
 };
 
 const TOOLS = [
-  { id:'moodmaker-survey', icon:'🎯', name:'ムードメーカー診断',           catch:'6タイプ診断であなたのムードメイク属性を5分で分析', cat:'survey', theory:'ムードメーカー理論（Singerly）', status:'active', path:'tools/moodmaker-survey/index.html' },
+  { id:'moodmaker-survey', icon:'🎯', name:'ムードメーカー診断',              catch:'6タイプ診断であなたのムードメイク属性を5分で分析', cat:'diagnose', theory:'ムードメーカー理論（Singerly）',     status:'active', path:'tools/moodmaker-survey/index.html' },
 
-  { id:'lottery',           icon:'🎰', name:'抽選スロット',              catch:'誰が当たる？スロットで選ぶ緊張と興奮',          cat:'icebreaker', theory:'タックマンモデル（形成期）',        status:'active', path:'tools/lottery/index.html' },
-  { id:'presentation-order', icon:'🎤', name:'発表順くじ引き',           catch:'プレゼン発表順をランダム決定・PPTXで即出力',    cat:'icebreaker', theory:'ランダマイズ・公平性',              status:'active', path:'tools/presentation-order/index.html' },
-  { id:'saicoro',           icon:'🎲', name:'サイコロトーク',            catch:'出た目のテーマで深掘りトーク。経営者向け収録',   cat:'icebreaker', theory:'五感の文化で共感を促す',           status:'active', path:'tools/saicoro/index.html' },
-  { id:'hot-seat',          icon:'🔥', name:'ホットシート',              catch:'選ばれた人に全員から質問が飛ぶ！緊張と笑い',    cat:'icebreaker', theory:'心理的安全性・相互理解',           status:'active', path:'tools/hot-seat/index.html' },
-  { id:'surprise-fact',     icon:'😲', name:'意外な一面カミングアウト',  catch:'「実は〇〇です」全員シェアで親近感爆発',        cat:'icebreaker', theory:'自己開示・ジョハリの窓',           status:'active', path:'tools/surprise-fact/index.html' },
-  { id:'favorite-roulette', icon:'🎡', name:'好き◯◯ルーレット',        catch:'ランダムなテーマで全員が1分発表',               cat:'icebreaker', theory:'コミュニケーション活性',           status:'active', path:'tools/favorite-roulette/index.html' },
-  { id:'smalltalk',         icon:'☕', name:'雑談テーマジェネレーター',  catch:'1on1・休憩中の話題をランダム提案',              cat:'icebreaker', theory:'関係性の質を高める',               status:'active', path:'tools/smalltalk/index.html' },
-  { id:'team-cheer',        icon:'📣', name:'チームかけ声メーカー',      catch:'その場でスローガンを即生成',                    cat:'icebreaker', theory:'一体感・帰属意識',                 status:'active', path:'tools/team-cheer/index.html' },
-  { id:'three-facts',       icon:'🃏', name:'自己紹介「3つの事実」',     catch:'本当と嘘を混ぜて当てさせるゲーム',             cat:'icebreaker', theory:'タックマンモデル（形成期）',        status:'active', path:'tools/three-facts/index.html' },
+  { id:'lottery',            icon:'🎰', name:'抽選スロット',              catch:'誰が当たる？スロットで選ぶ緊張と興奮',         cat:'icebreak', theory:'タックマンモデル（形成期）',       status:'active', path:'tools/lottery/index.html' },
+  { id:'presentation-order', icon:'🎤', name:'発表順くじ引き',            catch:'プレゼン発表順をランダム決定・PPTXで即出力',   cat:'icebreak', theory:'ランダマイズ・公平性',             status:'active', path:'tools/presentation-order/index.html' },
+  { id:'saicoro',            icon:'🎲', name:'サイコロトーク',            catch:'出た目のテーマで深掘りトーク。経営者向け収録',  cat:'icebreak', theory:'五感の文化で共感を促す',          status:'active', path:'tools/saicoro/index.html' },
+  { id:'hot-seat',           icon:'🔥', name:'ホットシート',              catch:'選ばれた人に全員から質問が飛ぶ！緊張と笑い',   cat:'icebreak', theory:'心理的安全性・相互理解',          status:'active', path:'tools/hot-seat/index.html' },
+  { id:'surprise-fact',      icon:'😲', name:'意外な一面カミングアウト',  catch:'「実は〇〇です」全員シェアで親近感爆発',       cat:'icebreak', theory:'自己開示・ジョハリの窓',          status:'active', path:'tools/surprise-fact/index.html' },
+  { id:'favorite-roulette',  icon:'🎡', name:'好き◯◯ルーレット',        catch:'ランダムなテーマで全員が1分発表',              cat:'icebreak', theory:'コミュニケーション活性',          status:'active', path:'tools/favorite-roulette/index.html' },
+  { id:'smalltalk',          icon:'☕', name:'雑談テーマジェネレーター',  catch:'1on1・休憩中の話題をランダム提案',             cat:'icebreak', theory:'関係性の質を高める',              status:'active', path:'tools/smalltalk/index.html' },
+  { id:'team-cheer',         icon:'📣', name:'チームかけ声メーカー',      catch:'その場でスローガンを即生成',                   cat:'icebreak', theory:'一体感・帰属意識',               status:'active', path:'tools/team-cheer/index.html' },
+  { id:'three-facts',        icon:'🃏', name:'自己紹介「3つの事実」',    catch:'本当と嘘を混ぜて当てさせるゲーム',            cat:'icebreak', theory:'タックマンモデル（形成期）',       status:'active', path:'tools/three-facts/index.html' },
 
-  { id:'team-split',        icon:'👥', name:'チーム分けジェネレーター',  catch:'アニメーション付きランダム振り分け',            cat:'team',       theory:'成功循環モデル（関係性の質）',      status:'active', path:'tools/team-split/index.html' },
-  { id:'pair-random',       icon:'🤝', name:'ランダムペアリング',        catch:'普段話さない人と1on1ペアに自動生成',            cat:'team',       theory:'1on1・最強の研修',                status:'active', path:'tools/pair-random/index.html' },
-  { id:'role-roulette',     icon:'🎭', name:'役割ルーレット',            catch:'ファシリ・書記・タイムキーパーを抽選',          cat:'team',       theory:'タックマンモデル（機能期）',        status:'active', path:'tools/role-roulette/index.html' },
-  { id:'my-manual',         icon:'📖', name:'私のトリセツ',              catch:'得意・不得意・スタイルを宣言して相互理解',      cat:'team',       theory:'ソーシャルスタイル分析',           status:'active', path:'tools/my-manual/index.html' },
-  { id:'common-finder',     icon:'🔗', name:'共通点ファインダー',        catch:'タイムアタックで共通点を探す！',               cat:'team',       theory:'成功循環モデル',                  status:'active', path:'tools/common-finder/index.html' },
-  { id:'strength-map',      icon:'💪', name:'ストレングスマップ',        catch:'チームの強みを一覧で見える化',                  cat:'team',       theory:'ハーズバーグ二要因理論',           status:'active', path:'tools/strength-map/index.html' },
-  { id:'appreciation',      icon:'💌', name:'感謝カードビジュアライザー', catch:'匿名でありがとうをビジュアル表示',             cat:'team',       theory:'承認欲求・モチベーション',          status:'active', path:'tools/appreciation/index.html' },
-  { id:'lifeline',          icon:'📈', name:'ライフラインチャート',      catch:'人生の山と谷をチームでシェア',                  cat:'team',       theory:'自己開示・相互理解',               status:'active', path:'tools/lifeline/index.html' },
-  { id:'values-sort',       icon:'🗂️', name:'価値観カードソート',       catch:'大事にしていることを並べてシェア',              cat:'team',       theory:'価値観・多様性の罠',               status:'active', path:'tools/values-sort/index.html' },
+  { id:'team-split',         icon:'👥', name:'チーム分けジェネレーター',  catch:'アニメーション付きランダム振り分け',           cat:'team',     theory:'成功循環モデル（関係性の質）',    status:'active', path:'tools/team-split/index.html' },
+  { id:'pair-random',        icon:'🤝', name:'ランダムペアリング',        catch:'普段話さない人と1on1ペアに自動生成',           cat:'team',     theory:'1on1・最強の研修',              status:'active', path:'tools/pair-random/index.html' },
+  { id:'role-roulette',      icon:'🎭', name:'役割ルーレット',            catch:'ファシリ・書記・タイムキーパーを抽選',         cat:'team',     theory:'タックマンモデル（機能期）',      status:'active', path:'tools/role-roulette/index.html' },
+  { id:'my-manual',          icon:'📖', name:'私のトリセツ',              catch:'得意・不得意・スタイルを宣言して相互理解',     cat:'team',     theory:'ソーシャルスタイル分析',         status:'active', path:'tools/my-manual/index.html' },
+  { id:'common-finder',      icon:'🔗', name:'共通点ファインダー',        catch:'タイムアタックで共通点を探す！',              cat:'team',     theory:'成功循環モデル',                status:'active', path:'tools/common-finder/index.html' },
+  { id:'strength-map',       icon:'💪', name:'ストレングスマップ',        catch:'チームの強みを一覧で見える化',                 cat:'team',     theory:'ハーズバーグ二要因理論',         status:'active', path:'tools/strength-map/index.html' },
+  { id:'appreciation',       icon:'💌', name:'感謝カードビジュアライザー',catch:'匿名でありがとうをビジュアル表示',            cat:'team',     theory:'承認欲求・モチベーション',       status:'active', path:'tools/appreciation/index.html' },
+  { id:'lifeline',           icon:'📈', name:'ライフラインチャート',      catch:'人生の山と谷をチームでシェア',                 cat:'team',     theory:'自己開示・相互理解',            status:'active', path:'tools/lifeline/index.html' },
+  { id:'values-sort',        icon:'🗂️',name:'価値観カードソート',        catch:'大事にしていることを並べてシェア',             cat:'team',     theory:'価値観・多様性の罠',            status:'active', path:'tools/values-sort/index.html' },
 
-  { id:'why-ladder',        icon:'🪜', name:'なぜ？深掘りラダー',       catch:'Whyを5回問い直すと本音に辿り着く',             cat:'mission',    theory:'ゴールデンサークル（Why）',        status:'active', path:'tools/why-ladder/index.html' },
-  { id:'purpose-declare',   icon:'🌟', name:'MYパーパス宣言',           catch:'なぜ働くかを一言で宣言。個人と組織を接続',     cat:'mission',    theory:'ゴールデンサークル',               status:'active', path:'tools/purpose-declare/index.html' },
-  { id:'mission-quiz',      icon:'🧩', name:'理念クイズ',               catch:'自社の理念・MVVをクイズで楽しく再確認',        cat:'mission',    theory:'理念の歴史的変遷',                status:'active', path:'tools/mission-quiz/index.html' },
-  { id:'value-episode',     icon:'📢', name:'バリュー体現エピソード',   catch:'理念を体現した体験を語り合う',                  cat:'mission',    theory:'組織文化三層構造（行動習慣）',      status:'active', path:'tools/value-episode/index.html' },
-  { id:'value-vote',        icon:'🏅', name:'バリュー体現投票',         catch:'今週一番バリューを体現した人を称える',          cat:'mission',    theory:'組織カルチャー変革の4条件',        status:'active', path:'tools/value-vote/index.html' },
-  { id:'mission-interpret', icon:'💭', name:'理念解釈ディスカッション', catch:'同じ言葉でも解釈は人それぞれ。差を楽しむ',     cat:'mission',    theory:'組織文化三層構造（信念）',          status:'active', path:'tools/mission-interpret/index.html' },
-  { id:'daily-connect',     icon:'🔄', name:'理念×日常 紐付けワーク',  catch:'今日の仕事と理念を接続する5分ワーク',          cat:'mission',    theory:'組織カルチャー変革・見える化',      status:'active', path:'tools/daily-connect/index.html' },
-  { id:'culture-check',     icon:'🌳', name:'組織文化三層チェック',     catch:'人工物・行動習慣・信念を棚卸しする',           cat:'mission',    theory:'組織の三種の神器',                status:'active', path:'tools/culture-check/index.html' },
+  { id:'why-ladder',         icon:'🪜', name:'なぜ？深掘りラダー',       catch:'Whyを5回問い直すと本音に辿り着く',            cat:'mvv',      theory:'ゴールデンサークル（Why）',      status:'active', path:'tools/why-ladder/index.html' },
+  { id:'purpose-declare',    icon:'🌟', name:'MYパーパス宣言',           catch:'なぜ働くかを一言で宣言。個人と組織を接続',    cat:'mvv',      theory:'ゴールデンサークル',            status:'active', path:'tools/purpose-declare/index.html' },
+  { id:'mission-quiz',       icon:'🧩', name:'理念クイズ',               catch:'自社の理念・MVVをクイズで楽しく再確認',       cat:'mvv',      theory:'理念の歴史的変遷',              status:'active', path:'tools/mission-quiz/index.html' },
+  { id:'value-episode',      icon:'📢', name:'バリュー体現エピソード',   catch:'理念を体現した体験を語り合う',                 cat:'mvv',      theory:'組織文化三層構造（行動習慣）',   status:'active', path:'tools/value-episode/index.html' },
+  { id:'value-vote',         icon:'🏅', name:'バリュー体現投票',         catch:'今週一番バリューを体現した人を称える',         cat:'mvv',      theory:'組織カルチャー変革の4条件',     status:'active', path:'tools/value-vote/index.html' },
+  { id:'mission-interpret',  icon:'💭', name:'理念解釈ディスカッション', catch:'同じ言葉でも解釈は人それぞれ。差を楽しむ',    cat:'mvv',      theory:'組織文化三層構造（信念）',       status:'active', path:'tools/mission-interpret/index.html' },
+  { id:'daily-connect',      icon:'🔄', name:'理念×日常 紐付けワーク',  catch:'今日の仕事と理念を接続する5分ワーク',         cat:'mvv',      theory:'組織カルチャー変革・見える化',   status:'active', path:'tools/daily-connect/index.html' },
+  { id:'culture-check',      icon:'🌳', name:'組織文化三層チェック',     catch:'人工物・行動習慣・信念を棚卸しする',          cat:'mvv',      theory:'組織の三種の神器',              status:'active', path:'tools/culture-check/index.html' },
 
-  { id:'mood-check',        icon:'🌡️', name:'感情温度計チェックイン',  catch:'今の気持ちを数値・天気で表現してシェア',        cat:'safety',     theory:'心理的安全性（Google研究）',       status:'active', path:'tools/mood-check/index.html' },
-  { id:'failure-share',     icon:'🙈', name:'失敗自慢タイム',           catch:'失敗談を競い合い笑える文化を作る',              cat:'safety',     theory:'心理的安全性・失敗学習',           status:'active', path:'tools/failure-share/index.html' },
-  { id:'safety-check',      icon:'🛡️', name:'心理的安全性チェック',    catch:'4因子でチームの安全性を計測・可視化',           cat:'safety',     theory:'心理的安全性（Google）',           status:'active', path:'tools/safety-check/index.html' },
-  { id:'trigger-find',      icon:'⚡', name:'マイトリガー発見',         catch:'怒りの引き金を知るアンガーマネジメント',        cat:'safety',     theory:'アンガーマネジメント',             status:'active', path:'tools/trigger-find/index.html' },
-  { id:'help-practice',     icon:'🙋', name:'「助けて」言える練習',     catch:'助けを求めることをロールプレイで体験',          cat:'safety',     theory:'相互依存・心理的安全性',           status:'active', path:'tools/help-practice/index.html' },
-  { id:'feedback-practice', icon:'💬', name:'フィードバック練習',       catch:'2.2.1フォーマットを安全な場で体験',            cat:'safety',     theory:'フィードバックの極意（4A）',       status:'active', path:'tools/feedback-practice/index.html' },
-  { id:'anonymous-box',     icon:'📥', name:'匿名悩み相談箱',           catch:'言えないことを匿名で投稿・チームで解決',        cat:'safety',     theory:'心理的安全性・発言文化',           status:'active', path:'tools/anonymous-box/index.html' },
-  { id:'team-contract',     icon:'📜', name:'チームコントラクト作成',   catch:'チームの約束事をその場で作成・宣言',            cat:'safety',     theory:'組織カルチャー変革の4条件',        status:'active', path:'tools/team-contract/index.html' },
+  { id:'mood-check',         icon:'🌡️',name:'感情温度計チェックイン',   catch:'今の気持ちを数値・天気で表現してシェア',       cat:'safety',   theory:'心理的安全性（Google研究）',     status:'active', path:'tools/mood-check/index.html' },
+  { id:'failure-share',      icon:'🙈', name:'失敗自慢タイム',           catch:'失敗談を競い合い笑える文化を作る',             cat:'safety',   theory:'心理的安全性・失敗学習',        status:'active', path:'tools/failure-share/index.html' },
+  { id:'safety-check',       icon:'🛡️',name:'心理的安全性チェック',     catch:'4因子でチームの安全性を計測・可視化',          cat:'safety',   theory:'心理的安全性（Google）',        status:'active', path:'tools/safety-check/index.html' },
+  { id:'trigger-find',       icon:'⚡', name:'マイトリガー発見',         catch:'怒りの引き金を知るアンガーマネジメント',       cat:'safety',   theory:'アンガーマネジメント',          status:'active', path:'tools/trigger-find/index.html' },
+  { id:'help-practice',      icon:'🙋', name:'「助けて」言える練習',    catch:'助けを求めることをロールプレイで体験',         cat:'safety',   theory:'相互依存・心理的安全性',        status:'active', path:'tools/help-practice/index.html' },
+  { id:'feedback-practice',  icon:'💬', name:'フィードバック練習',       catch:'2.2.1フォーマットを安全な場で体験',           cat:'safety',   theory:'フィードバックの極意（4A）',    status:'active', path:'tools/feedback-practice/index.html' },
+  { id:'anonymous-box',      icon:'📥', name:'匿名悩み相談箱',           catch:'言えないことを匿名で投稿・チームで解決',       cat:'safety',   theory:'心理的安全性・発言文化',        status:'active', path:'tools/anonymous-box/index.html' },
+  { id:'team-contract',      icon:'📜', name:'チームコントラクト作成',   catch:'チームの約束事をその場で作成・宣言',           cat:'safety',   theory:'組織カルチャー変革の4条件',     status:'active', path:'tools/team-contract/index.html' },
 
-  { id:'achievement',       icon:'🏆', name:'達成祝福タイム',           catch:'小さな成功を紙吹雪で盛大に祝う！',             cat:'motivation', theory:'承認欲求・自己効力感',             status:'active', path:'tools/achievement/index.html' },
-  { id:'excitement-meter',  icon:'🔥', name:'ワクワクメーター',         catch:'次の取り組みへの期待値を全員で可視化',          cat:'motivation', theory:'内発的動機・変革モチベーション',   status:'active', path:'tools/excitement-meter/index.html' },
-  { id:'motivation-wave',   icon:'🌊', name:'モチベーション波グラフ',   catch:'過去の仕事への熱量変化をチームでシェア',        cat:'motivation', theory:'時間軸起点のモチベーション',       status:'active', path:'tools/motivation-wave/index.html' },
-  { id:'intrinsic-work',    icon:'🔍', name:'内発的動機探索',           catch:'やらされ感→やりたい感に変換するワーク',         cat:'motivation', theory:'モチベーションプロセス（内発的）', status:'active', path:'tools/intrinsic-work/index.html' },
-  { id:'maslow-check',      icon:'🔺', name:'マズロー欲求チェック',     catch:'今どの欲求段階か？チームでシェアして支援策へ',  cat:'motivation', theory:'マズローの五段階欲求',             status:'active', path:'tools/maslow-check/index.html' },
-  { id:'goal-declare',      icon:'🎯', name:'目標宣言タイマー',         catch:'SMART法則で目標を公言。コミット感UP',          cat:'motivation', theory:'ゴール設定（SMARTの法則）',        status:'active', path:'tools/goal-declare/index.html' },
-  { id:'strength-share',    icon:'✨', name:'強み発揮シーン共有',       catch:'最近一番輝いていた瞬間を全員が語る',            cat:'motivation', theory:'ハーズバーグ二要因理論',           status:'active', path:'tools/strength-share/index.html' },
-  { id:'change-motivation', icon:'🚀', name:'変革モチベーション診断',   catch:'変化への推進力vs抵抗感を可視化',               cat:'motivation', theory:'変革モチベーション',               status:'active', path:'tools/change-motivation/index.html' },
+  { id:'achievement',        icon:'🏆', name:'達成祝福タイム',           catch:'小さな成功を紙吹雪で盛大に祝う！',            cat:'motiv',    theory:'承認欲求・自己効力感',          status:'active', path:'tools/achievement/index.html' },
+  { id:'excitement-meter',   icon:'🔥', name:'ワクワクメーター',         catch:'次の取り組みへの期待値を全員で可視化',         cat:'motiv',    theory:'内発的動機・変革モチベーション', status:'active', path:'tools/excitement-meter/index.html' },
+  { id:'motivation-wave',    icon:'🌊', name:'モチベーション波グラフ',   catch:'過去の仕事への熱量変化をチームでシェア',       cat:'motiv',    theory:'時間軸起点のモチベーション',    status:'active', path:'tools/motivation-wave/index.html' },
+  { id:'intrinsic-work',     icon:'🔍', name:'内発的動機探索',           catch:'やらされ感→やりたい感に変換するワーク',        cat:'motiv',    theory:'モチベーションプロセス（内発的）',status:'active', path:'tools/intrinsic-work/index.html' },
+  { id:'maslow-check',       icon:'🔺', name:'マズロー欲求チェック',     catch:'今どの欲求段階か？チームでシェアして支援策へ', cat:'motiv',    theory:'マズローの五段階欲求',          status:'active', path:'tools/maslow-check/index.html' },
+  { id:'goal-declare',       icon:'🎯', name:'目標宣言タイマー',         catch:'SMART法則で目標を公言。コミット感UP',         cat:'motiv',    theory:'ゴール設定（SMARTの法則）',     status:'active', path:'tools/goal-declare/index.html' },
+  { id:'strength-share',     icon:'✨', name:'強み発揮シーン共有',       catch:'最近一番輝いていた瞬間を全員が語る',           cat:'motiv',    theory:'ハーズバーグ二要因理論',        status:'active', path:'tools/strength-share/index.html' },
+  { id:'change-motivation',  icon:'🚀', name:'変革モチベーション診断',   catch:'変化への推進力vs抵抗感を可視化',              cat:'motiv',    theory:'変革モチベーション',            status:'active', path:'tools/change-motivation/index.html' },
 
-  { id:'speech-timer',      icon:'⏱️', name:'発言タイマー',            catch:'全員均等に話せるラウンドロビン型タイマー',       cat:'discussion', theory:'コミュニケーションの極意',          status:'active', path:'tools/speech-timer/index.html' },
-  { id:'quick-vote',        icon:'🗳️', name:'多数決ボタン',            catch:'YES/NO/様子見をその場で即座に可視化',          cat:'discussion', theory:'ゲーム理論・意思決定',             status:'active', path:'tools/quick-vote/index.html' },
-  { id:'agenda-timer',      icon:'📅', name:'アジェンダタイマー',       catch:'議題ごとの時間を視覚管理。会議を時間内に',       cat:'discussion', theory:'コミュニケーションの極意',          status:'active', path:'tools/agenda-timer/index.html' },
-  { id:'oneon-roulette',    icon:'💡', name:'1on1テーマルーレット',     catch:'1on1の話題をランダム提案。マンネリ打破',        cat:'discussion', theory:'1on1（最強の研修・部下の成長）',   status:'active', path:'tools/oneon-roulette/index.html' },
-  { id:'devils-advocate',   icon:'😈', name:'悪魔の代弁者ルーレット',  catch:'反論役をランダム割当。思考の盲点を発見',        cat:'discussion', theory:'ゲーム理論（ナッシュ均衡）',       status:'active', path:'tools/devils-advocate/index.html' },
-  { id:'dot-vote',          icon:'🔵', name:'優先順位ドット投票',       catch:'N個のドットを複数案に配分。集合知を可視化',      cat:'discussion', theory:'多数決ルールvs合意形成',           status:'active', path:'tools/dot-vote/index.html' },
-  { id:'kpt-board',         icon:'📋', name:'KPTボード',                catch:'Keep/Problem/Tryを視覚整理。振り返りに',         cat:'discussion', theory:'組織学習の無限サイクル',           status:'active', path:'tools/kpt-board/index.html' },
-  { id:'discussion-roulette',icon:'🎰',name:'ディスカッションテーマ抽選',catch:'話し合うテーマをルーレットで決定',             cat:'discussion', theory:'コミュニケーション活性',           status:'active', path:'tools/discussion-roulette/index.html' },
-  { id:'feedback-roulette', icon:'🎭', name:'フィードバック練習ルーレット',catch:'誰が誰にフィードバックするか抽選で決定',    cat:'discussion', theory:'フィードバックの極意（4A・2.2.1）', status:'active', path:'tools/feedback-roulette/index.html' },
+  { id:'speech-timer',       icon:'⏱️',name:'発言タイマー',             catch:'全員均等に話せるラウンドロビン型タイマー',      cat:'dialog',   theory:'コミュニケーションの極意',      status:'active', path:'tools/speech-timer/index.html' },
+  { id:'quick-vote',         icon:'🗳️',name:'多数決ボタン',             catch:'YES/NO/様子見をその場で即座に可視化',         cat:'dialog',   theory:'ゲーム理論・意思決定',          status:'active', path:'tools/quick-vote/index.html' },
+  { id:'agenda-timer',       icon:'📅', name:'アジェンダタイマー',       catch:'議題ごとの時間を視覚管理。会議を時間内に',      cat:'dialog',   theory:'コミュニケーションの極意',      status:'active', path:'tools/agenda-timer/index.html' },
+  { id:'oneon-roulette',     icon:'💡', name:'1on1テーマルーレット',     catch:'1on1の話題をランダム提案。マンネリ打破',       cat:'dialog',   theory:'1on1（最強の研修・部下の成長）', status:'active', path:'tools/oneon-roulette/index.html' },
+  { id:'devils-advocate',    icon:'😈', name:'悪魔の代弁者ルーレット',  catch:'反論役をランダム割当。思考の盲点を発見',       cat:'dialog',   theory:'ゲーム理論（ナッシュ均衡）',    status:'active', path:'tools/devils-advocate/index.html' },
+  { id:'dot-vote',           icon:'🔵', name:'優先順位ドット投票',       catch:'N個のドットを複数案に配分。集合知を可視化',     cat:'dialog',   theory:'多数決ルールvs合意形成',        status:'active', path:'tools/dot-vote/index.html' },
+  { id:'kpt-board',          icon:'📋', name:'KPTボード',                catch:'Keep/Problem/Tryを視覚整理。振り返りに',        cat:'dialog',   theory:'組織学習の無限サイクル',        status:'active', path:'tools/kpt-board/index.html' },
+  { id:'discussion-roulette',icon:'🎰', name:'ディスカッションテーマ抽選',catch:'話し合うテーマをルーレットで決定',            cat:'dialog',   theory:'コミュニケーション活性',        status:'active', path:'tools/discussion-roulette/index.html' },
+  { id:'feedback-roulette',  icon:'🎭', name:'フィードバック練習ルーレット',catch:'誰が誰にフィードバックするか抽選で決定',   cat:'dialog',   theory:'フィードバックの極意（4A・2.2.1）',status:'active', path:'tools/feedback-roulette/index.html' },
 ];
 
 let currentCat = 'all';
@@ -445,55 +532,35 @@ function isMilestone(n) {
   if (n % 100 === 0) return true;
   return false;
 }
-
 function getMilestoneInfo(n) {
   const s = String(n);
   if (s.split('').every(c => c === s[0])) {
     const msgs = ['みんなで盛り上がってきた証！','この調子でどんどん行こう！','チームの熱量が数字に出てる！','すごい勢いだ！'];
-    return { emoji:'🎰', label:`ゾロ目達成！`, msg: msgs[Math.floor(Math.random()*msgs.length)] };
+    return { emoji:'🎰', label:'ゾロ目達成！', msg: msgs[Math.floor(Math.random()*msgs.length)] };
   }
   if (n % 1000 === 0) return { emoji:'🏆', label:`${n/1000}000回突破！`, msg:'歴史的な瞬間！チームの記録を更新！' };
-  if (n % 500 === 0) return { emoji:'🎊', label:`${n}回突破！`, msg:'節目の回数、おめでとう！' };
+  if (n % 500 === 0)  return { emoji:'🎊', label:`${n}回突破！`, msg:'節目の回数、おめでとう！' };
   return { emoji:'🎉', label:`${n}回達成！`, msg:'キリ番おめでとう！チームの熱量に感謝！' };
 }
-
 function launchFireworks() {
   const canvas = document.getElementById('celebCanvas');
   const ctx = canvas.getContext('2d');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth; canvas.height = window.innerHeight;
   const colors = ['#B7282E','#fff','#FFD700','#FF6B6B','#4ECDC4','#FF9F43'];
   const particles = [];
   for (let i = 0; i < 200; i++) {
     const angle = (Math.PI * 2 / 200) * i;
     const speed = 2 + Math.random() * 8;
-    particles.push({
-      x: canvas.width / 2 + (Math.random()-0.5) * 300,
-      y: canvas.height / 2 + (Math.random()-0.5) * 200,
-      vx: Math.cos(angle) * speed,
-      vy: Math.sin(angle) * speed - 3,
-      color: colors[Math.floor(Math.random()*colors.length)],
-      size: 3 + Math.random() * 5,
-      life: 1, decay: 0.012 + Math.random() * 0.015,
-    });
+    particles.push({ x: canvas.width/2 + (Math.random()-.5)*300, y: canvas.height/2 + (Math.random()-.5)*200, vx: Math.cos(angle)*speed, vy: Math.sin(angle)*speed-3, color: colors[Math.floor(Math.random()*colors.length)], size: 3 + Math.random()*5, life: 1, decay: 0.012 + Math.random()*0.015 });
   }
   function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    particles.forEach(p => {
-      p.x += p.vx; p.y += p.vy; p.vy += 0.15;
-      p.life -= p.decay;
-      ctx.globalAlpha = Math.max(0, p.life);
-      ctx.fillStyle = p.color;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
-      ctx.fill();
-    });
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(p => { p.x+=p.vx; p.y+=p.vy; p.vy+=0.15; p.life-=p.decay; ctx.globalAlpha=Math.max(0,p.life); ctx.fillStyle=p.color; ctx.beginPath(); ctx.arc(p.x,p.y,p.size,0,Math.PI*2); ctx.fill(); });
     if (particles.some(p => p.life > 0)) requestAnimationFrame(animate);
-    else ctx.clearRect(0, 0, canvas.width, canvas.height);
+    else ctx.clearRect(0,0,canvas.width,canvas.height);
   }
   animate();
 }
-
 function showCelebration(n) {
   const info = getMilestoneInfo(n);
   document.getElementById('celebEmoji').textContent = info.emoji;
@@ -504,19 +571,10 @@ function showCelebration(n) {
   launchFireworks();
   try {
     const ctx = new AudioContext();
-    [523,659,784,1047].forEach((f,i) => {
-      const o = ctx.createOscillator(), g = ctx.createGain();
-      o.connect(g); g.connect(ctx.destination);
-      o.frequency.value = f; g.gain.value = 0.1;
-      o.start(ctx.currentTime + i*0.12);
-      o.stop(ctx.currentTime + i*0.12 + 0.15);
-    });
+    [523,659,784,1047].forEach((f,i) => { const o=ctx.createOscillator(),g=ctx.createGain(); o.connect(g); g.connect(ctx.destination); o.frequency.value=f; g.gain.value=0.1; o.start(ctx.currentTime+i*0.12); o.stop(ctx.currentTime+i*0.12+0.15); });
   } catch(e) {}
 }
-
-function closeCelebration() {
-  document.getElementById('celebOverlay').classList.remove('show');
-}
+function closeCelebration() { document.getElementById('celebOverlay').classList.remove('show'); }
 
 async function updateMudomeDisplay(checkMilestone = false) {
   const { data } = await sb.rpc('get_total_mudome_count');
@@ -526,20 +584,15 @@ async function updateMudomeDisplay(checkMilestone = false) {
     if (checkMilestone && isMilestone(n)) showCelebration(n);
   }
 }
-
 async function incrementMudome(toolId, toolName) {
   if (currentUser) {
-    await sb.from('tool_logs').insert({
-      user_email: currentUser.email,
-      tool_id: toolId,
-      tool_name: toolName,
-    });
+    await sb.from('tool_logs').insert({ user_email: currentUser.email, tool_id: toolId, tool_name: toolName });
     updateMudomeDisplay(true);
   }
 }
 
 function filter(cat, btn) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   currentCat = cat;
   render();
@@ -548,27 +601,28 @@ function filter(cat, btn) {
 function render() {
   const list = currentCat === 'all' ? TOOLS : TOOLS.filter(t => t.cat === currentCat);
   document.getElementById('countLabel').textContent = list.length + ' ツール';
-  document.getElementById('grid').innerHTML = list.map(t => {
+  document.getElementById('grid').innerHTML = list.map((t, idx) => {
     const active = t.status === 'active';
     const tag = active ? 'a' : 'div';
     const href = active ? `href="${t.path}"` : '';
     const onclick = active ? `onclick="incrementMudome('${t.id}','${t.name}')"` : '';
+    const c = CAT[t.cat] || { color:'#B7282E', bg:'#FBE5E2', label:t.cat };
+    const delay = Math.min(idx * 30, 300);
     return `
-      <${tag} class="card ${active ? '' : 'coming'}" ${href} ${onclick}>
-        <div class="card-top">
-          <div class="card-icon">${t.icon}</div>
-          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
-            <span class="cat-tag">${CAT_LABEL[t.cat]}</span>
-            ${t.staff ? `<span class="staff-tag">🔒 Singerly限定</span>` : ''}
+      <${tag} class="card ${active ? '' : 'coming'}" ${href} ${onclick}
+        style="--cat-color:${c.color};--cat-bg:${c.bg};animation-delay:${delay}ms">
+        <div class="card-topbar"></div>
+        <div class="card-body">
+          <div class="card-head">
+            <div class="card-icon">${t.icon}</div>
+            <span class="cat-tag">${c.label}</span>
           </div>
-        </div>
-        <div class="card-name">${t.name}</div>
-        <div class="card-catch">${t.catch}</div>
-        <div class="card-footer">
-          <div class="card-theory">${t.theory}</div>
-          ${active
-            ? `<span class="btn-open">開く →</span>`
-            : `<span class="coming-tag">COMING SOON</span>`}
+          <div class="card-name">${t.name}</div>
+          <div class="card-catch">${t.catch}</div>
+          <div class="card-foot">
+            <div class="card-theory">${t.theory}</div>
+            ${active ? `<span class="btn-open">開く →</span>` : `<span class="coming-tag">COMING SOON</span>`}
+          </div>
         </div>
       </${tag}>`;
   }).join('');

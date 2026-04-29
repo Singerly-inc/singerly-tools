@@ -12,10 +12,10 @@
 body {
   min-height:100vh; background:#fff;
   font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif;
-  color:#000000; display:flex; flex-direction:column; align-items:center;
+  color:#000; display:flex; flex-direction:column; align-items:center;
 }
 .nav {
-  width:100%; padding:12px 28px; background:#000000;
+  width:100%; padding:12px 28px; background:#000;
   display:flex; align-items:center; justify-content:space-between;
 }
 .nav-back { color:rgba(255,255,255,0.55); font-size:0.78rem; text-decoration:none; transition:color 0.15s; }
@@ -23,79 +23,107 @@ body {
 .nav-brand { font-size:0.7rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; }
 
 .page-header {
-  background:#000000; width:100%;
-  padding:32px 20px 28px; text-align:center;
+  background:#000; width:100%;
+  padding:28px 20px 24px; text-align:center;
   border-bottom:3px solid #B7282E;
 }
 .tool-badge {
   display:inline-block; background:#B7282E; color:#fff;
   font-size:0.68rem; letter-spacing:0.15em; padding:3px 12px;
-  border-radius:3px; margin-bottom:12px; font-weight:700;
+  border-radius:3px; margin-bottom:10px; font-weight:700;
 }
 .page-title { font-size:1.8rem; font-weight:900; color:#fff; margin-bottom:4px; }
 .page-sub { font-size:0.8rem; color:rgba(255,255,255,0.45); }
 
-.main {
-  width:100%; max-width:720px;
-  padding:28px 24px 60px;
-  display:flex; flex-direction:column; align-items:center; gap:20px;
+/* OUTER WRAPPER */
+.outer {
+  width:100%; max-width:1200px;
+  padding:24px 24px 60px;
+  display:flex; flex-direction:column; gap:16px;
+}
+
+/* ATTRIBUTE SELECTOR */
+.attr-section {
+  background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px;
+  padding:16px 20px;
+}
+.attr-label {
+  font-size:0.63rem; letter-spacing:0.14em; color:#888;
+  text-transform:uppercase; font-weight:700; margin-bottom:10px;
+}
+.attr-btns { display:flex; gap:8px; flex-wrap:wrap; }
+.attr-btn {
+  padding:8px 20px; border-radius:6px; border:1px solid #CCC;
+  background:#fff; color:#555; font-size:0.82rem; font-weight:700;
+  font-family:inherit; cursor:pointer; transition:all 0.15s;
+}
+.attr-btn:hover { border-color:#B7282E; color:#B7282E; }
+.attr-btn.active { background:#B7282E; border-color:#B7282E; color:#fff; }
+
+/* 2-COLUMN LAYOUT on PC */
+.content-row {
+  display:grid;
+  grid-template-columns:320px 1fr;
+  gap:16px;
+  align-items:start;
+}
+@media(max-width:900px){
+  .content-row { grid-template-columns:1fr; }
+}
+
+/* LEFT: DICE COLUMN */
+.dice-col {
+  display:flex; flex-direction:column; gap:14px;
 }
 
 /* DICE AREA */
 .dice-area {
-  width:100%; background:#F6F6F6;
-  border:1px solid #E0E0E0; border-radius:10px;
-  padding:28px 24px; display:flex; flex-direction:column;
-  align-items:center; gap:24px;
+  background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px;
+  padding:24px 20px; display:flex; flex-direction:column;
+  align-items:center; gap:20px;
 }
-
-.dice-row {
-  display:flex; align-items:center;
-  justify-content:center; gap:32px;
-}
-
-.dice-block { display:flex; flex-direction:column; align-items:center; gap:8px; }
-
-.dice-label {
-  font-size:0.65rem; letter-spacing:0.14em; color:#888;
-  text-transform:uppercase; font-weight:700;
-}
-
+.dice-row { display:flex; align-items:center; justify-content:center; gap:24px; }
+.dice-block { display:flex; flex-direction:column; align-items:center; gap:7px; }
+.dice-label { font-size:0.62rem; letter-spacing:0.13em; color:#888; text-transform:uppercase; font-weight:700; }
 .dice {
-  width:88px; height:88px; background:#000000;
-  border-radius:14px; display:flex; align-items:center; justify-content:center;
-  font-size:2.8rem; font-weight:900; color:#fff;
-  box-shadow:0 2px 12px rgba(14,40,65,0.2);
-  user-select:none;
+  width:80px; height:80px; background:#000;
+  border-radius:12px; display:flex; align-items:center; justify-content:center;
+  font-size:2.6rem; font-weight:900; color:#fff;
+  box-shadow:0 2px 10px rgba(0,0,0,0.2); user-select:none;
 }
 .dice.rolling { animation:shake 0.5s ease; }
 @keyframes shake {
-  0%,100%{transform:rotate(0) scale(1)} 15%{transform:rotate(-8deg) scale(1.05)}
-  30%{transform:rotate(8deg) scale(1.07)} 60%{transform:rotate(6deg) scale(1.07)}
+  0%,100%{transform:rotate(0) scale(1)}
+  15%{transform:rotate(-8deg) scale(1.05)}
+  30%{transform:rotate(8deg) scale(1.07)}
+  60%{transform:rotate(6deg) scale(1.07)}
   75%{transform:rotate(-3deg) scale(1.04)}
 }
+.dice-sub { font-size:0.7rem; color:#555; text-align:center; max-width:90px; line-height:1.4; }
 
-.dice-sub { font-size:0.73rem; color:#555; text-align:center; max-width:96px; line-height:1.4; }
-
-/* TOPIC */
+/* TOPIC DISPLAY */
 .topic-display {
-  width:100%; background:#FDF3F3;
-  border:2px solid #B7282E; border-radius:8px;
-  padding:20px 24px; text-align:center;
-  min-height:80px; display:flex; flex-direction:column;
-  align-items:center; justify-content:center; gap:4px;
+  width:100%; background:#FDF3F3; border:2px solid #B7282E; border-radius:8px;
+  padding:18px 16px; text-align:center; min-height:76px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
 }
-.topic-label { font-size:0.62rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; }
+.topic-label { font-size:0.6rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; }
 .topic-text {
-  font-size:1.45rem; font-weight:900; color:#B7282E; line-height:1.3;
-  opacity:0; transform:scale(0.92); transition:opacity 0.3s, transform 0.3s;
+  font-size:1.25rem; font-weight:900; color:#B7282E; line-height:1.3;
+  opacity:0; transform:scale(0.92); transition:opacity 0.3s, transform 0.3s; cursor:pointer;
 }
 .topic-text.show { opacity:1; transform:scale(1); }
-.topic-rule { font-size:0.7rem; color:#888; margin-top:2px; }
+.topic-edit-input {
+  font-size:1.1rem; font-weight:900; color:#B7282E;
+  border:none; border-bottom:2px solid #B7282E; background:transparent;
+  text-align:center; width:100%; outline:none; font-family:inherit; display:none;
+}
+.topic-rule { font-size:0.68rem; color:#888; }
+.topic-edit-hint { font-size:0.6rem; color:#ccc; }
 
 .btn-roll {
-  width:100%; max-width:380px; padding:15px;
-  font-size:1rem; font-weight:900; letter-spacing:0.08em;
+  width:100%; padding:14px;
+  font-size:0.95rem; font-weight:900; letter-spacing:0.06em;
   border:none; border-radius:8px; cursor:pointer;
   background:#B7282E; color:#fff; font-family:inherit;
   transition:background 0.15s, transform 0.12s;
@@ -103,30 +131,42 @@ body {
 .btn-roll:hover { background:#83151B; transform:translateY(-1px); }
 .btn-roll:disabled { opacity:0.4; cursor:not-allowed; }
 
-/* TABLE */
+/* RIGHT: TABLE */
 .table-section {
-  width:100%; background:#F6F6F6;
-  border:1px solid #E0E0E0; border-radius:10px;
-  padding:20px; overflow-x:auto;
+  background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px;
+  padding:18px; overflow-x:auto;
 }
-.section-title {
-  font-size:0.65rem; letter-spacing:0.18em; color:#888;
-  text-transform:uppercase; margin-bottom:14px; font-weight:700;
+.table-header {
+  display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;
 }
-.topic-table { width:100%; border-collapse:separate; border-spacing:3px; font-size:0.7rem; }
+.section-title { font-size:0.63rem; letter-spacing:0.18em; color:#888; text-transform:uppercase; font-weight:700; }
+.btn-reset {
+  font-size:0.66rem; color:#999; background:transparent;
+  border:1px solid #DDD; border-radius:4px; padding:3px 10px;
+  cursor:pointer; font-family:inherit; transition:all 0.15s;
+}
+.btn-reset:hover { border-color:#B7282E; color:#B7282E; }
+.edit-hint { font-size:0.6rem; color:#bbb; margin-bottom:10px; }
+
+.topic-table { width:100%; border-collapse:separate; border-spacing:3px; font-size:0.72rem; }
 .topic-table th {
-  background:#000000; color:rgba(255,255,255,0.85);
-  padding:7px 8px; border-radius:4px; text-align:center;
-  font-weight:700; white-space:nowrap;
+  background:#000; color:rgba(255,255,255,0.85);
+  padding:7px 6px; border-radius:4px; text-align:center;
+  font-weight:700; white-space:nowrap; font-size:0.68rem;
 }
 .topic-table td {
-  background:#fff; border:1px solid #EEEEEE;
-  border-radius:4px; padding:6px 8px; text-align:center;
-  color:#666; vertical-align:middle; line-height:1.4; transition:all 0.18s;
+  background:#fff; border:1px solid #EEE;
+  border-radius:4px; padding:7px 6px; text-align:center;
+  color:#555; vertical-align:middle; line-height:1.45;
+  transition:all 0.15s; cursor:pointer;
 }
-.topic-table td.active {
-  background:#FDF3F3; border-color:#B7282E;
-  color:#000000; font-weight:700;
+.topic-table td:hover { border-color:#B7282E; color:#333; }
+.topic-table td.active { background:#FDF3F3; border-color:#B7282E; color:#000; font-weight:700; }
+.topic-table td.editing { padding:2px; }
+.topic-table td input {
+  width:100%; border:none; outline:none;
+  font-size:0.72rem; text-align:center; font-family:inherit;
+  background:transparent; color:#000; padding:4px;
 }
 </style>
 </head>
@@ -140,97 +180,268 @@ body {
 <div class="page-header">
   <div class="tool-badge">🎲 アイスブレイク</div>
   <h1 class="page-title">サイコロトーク</h1>
-  <p class="page-sub">2つのサイコロを振ってランダムなテーマで話す。理由を添えて語ろう。</p>
+  <p class="page-sub">2つのサイコロでランダムなテーマを引き出す。理由を添えて語ろう。</p>
 </div>
 
-<div class="main">
-  <div class="dice-area">
-    <div class="dice-row">
-      <div class="dice-block">
-        <div class="dice-label">サイコロ１（カテゴリ）</div>
-        <div class="dice" id="dice1">？</div>
-        <div class="dice-sub" id="dice1label">―</div>
-      </div>
-      <div style="font-size:1.6rem;color:#ccc;padding-top:18px;">×</div>
-      <div class="dice-block">
-        <div class="dice-label">サイコロ２（テーマ）</div>
-        <div class="dice" id="dice2">？</div>
-        <div class="dice-sub" id="dice2label">―</div>
-      </div>
-    </div>
+<div class="outer">
 
-    <div class="topic-display">
-      <div class="topic-label">今回のテーマ</div>
-      <div class="topic-text" id="topicText">サイコロを振ってください</div>
-      <div class="topic-rule" id="topicRule"></div>
-    </div>
-
-    <button class="btn-roll" id="rollBtn" onclick="roll()">🎲 サイコロを振る！</button>
+  <div class="attr-section">
+    <div class="attr-label">参加者の属性</div>
+    <div class="attr-btns" id="attrBtns"></div>
   </div>
 
-  <div class="table-section">
-    <div class="section-title">テーマ一覧（経営者版）</div>
-    <table class="topic-table" id="topicTable"></table>
+  <div class="content-row">
+
+    <div class="dice-col">
+      <div class="dice-area">
+        <div class="dice-row">
+          <div class="dice-block">
+            <div class="dice-label">サイコロ１（カテゴリ）</div>
+            <div class="dice" id="dice1">？</div>
+            <div class="dice-sub" id="dice1label">―</div>
+          </div>
+          <div style="font-size:1.5rem;color:#ccc;padding-top:16px;">×</div>
+          <div class="dice-block">
+            <div class="dice-label">サイコロ２（テーマ）</div>
+            <div class="dice" id="dice2">？</div>
+            <div class="dice-sub" id="dice2label">―</div>
+          </div>
+        </div>
+
+        <div class="topic-display">
+          <div class="topic-label">今回のテーマ</div>
+          <div class="topic-text" id="topicText" onclick="startEditTopic()" title="クリックで編集">サイコロを振ってください</div>
+          <input class="topic-edit-input" id="topicEditInput" type="text" />
+          <div class="topic-rule" id="topicRule"></div>
+          <div class="topic-edit-hint" id="topicEditHint"></div>
+        </div>
+
+        <button class="btn-roll" id="rollBtn" onclick="roll()">🎲 サイコロを振る！</button>
+      </div>
+    </div>
+
+    <div class="table-section">
+      <div class="table-header">
+        <div class="section-title" id="tableTitle">テーマ一覧</div>
+        <button class="btn-reset" onclick="resetEdition()">初期値に戻す</button>
+      </div>
+      <div class="edit-hint">セルをクリックして個別編集できます</div>
+      <table class="topic-table" id="topicTable"></table>
+    </div>
+
   </div>
 </div>
 
 <script>
-const CATS=['起業・創業期','経営の葛藤','人・チームの関係','お金・財務','習慣・プライベート','ビジョン・未来'];
-const TOPICS=[
-  ['起業を決意したきっかけ','社員に言えなかった本音','人生を変えた出会い','一番使って良かった投資','朝のルーティン','10年後の会社の姿'],
-  ['創業期の一番つらかった話','一番孤独だった瞬間','辞めてほしくなかったメンバー','お金の最大の失敗','最近ハマっていること','次の世代に伝えたいこと'],
-  ['最初に採用したメンバー','間違えた経営判断','チームで一番燃えた瞬間','資金繰りで一番苦しかった時','ストレス解消法','まだ挑戦していないこと'],
-  ['0→1で一番苦労したこと','経営者になって変わった価値観','採用の最大の失敗','給与・報酬への哲学','人生で一番ハマった趣味','経営を退いたら何をしたいか'],
-  ['今でも後悔している選択','もし経営者でなければ？','今も感謝している人','お金より大事にしていること','仕事とプライベートの向き合い方','自分の「理念」を一言で'],
-  ['あの頃の自分に一言','経営者でしか感じられない喜び','一緒に働きたい人物像','次に投資するとしたら？','誰にも言っていない秘密','壮大な夢'],
-];
-const DOTS=['⚀','⚁','⚂','⚃','⚄','⚅'];
-let rolling=false, curD1=null, curD2=null;
+const EDITIONS_DEFAULT = {
+  経営者: {
+    label: '経営者版',
+    cats: ['起業・創業期','経営の葛藤','人・チームの関係','お金・財務','習慣・プライベート','ビジョン・未来'],
+    topics: [
+      ['起業を決意したきっかけ','社員に言えなかった本音','人生を変えた出会い','一番使って良かった投資','朝のルーティン','10年後の会社の姿'],
+      ['創業期の一番つらかった話','一番孤独だった瞬間','辞めてほしくなかったメンバー','お金の最大の失敗','最近ハマっていること','次の世代に伝えたいこと'],
+      ['最初に採用したメンバー','間違えた経営判断','チームで一番燃えた瞬間','資金繰りで一番苦しかった時','ストレス解消法','まだ挑戦していないこと'],
+      ['0→1で一番苦労したこと','経営者になって変わった価値観','採用の最大の失敗','給与・報酬への哲学','人生で一番ハマった趣味','経営を退いたら何をしたいか'],
+      ['今でも後悔している選択','もし経営者でなければ？','今も感謝している人','お金より大事にしていること','仕事とプライベートの向き合い方','自分の「理念」を一言で'],
+      ['あの頃の自分に一言','経営者でしか感じられない喜び','一緒に働きたい人物像','次に投資するとしたら？','誰にも言っていない秘密','壮大な夢'],
+    ]
+  },
+  汎用: {
+    label: '汎用（人生まるっと）版',
+    cats: ['中学まで','高校・大学','社会人①','社会人②','今','人生まるっと'],
+    topics: [
+      ['好きな/嫌いな先生のタイプと逸話','好きな/嫌いな先生のタイプと逸話','苦手な上司のタイプと逸話','働き出してから変わった価値観','週末の過ごし方は？','一番ハマったエンタメ'],
+      ['無我夢中になっていたこと','好きな/嫌いな勉強','一番楽しいと思える仕事とは？','上司とぶつかったストーリー','15歳に戻ったら何をする？','一番ハマったスポーツ'],
+      ['初恋/失恋ストーリー','成功/失敗した恋愛ストーリー','お金の苦労話','一番悔しかった仕事とは？','生まれ変わったら新卒どこに入る？','一番ハマった趣味・遊び'],
+      ['一番嬉しかったことは？','好きな/嫌いな異性のタイプと逸話','仕事で失敗したこと','目指すキャリア','転職するとしたらどこへ？','一番ハマったギャンブル'],
+      ['先生に怒られたストーリー','思春期の思い出','仕事で成功したこと','お金を稼ぐとはどんな意味？','今、一番大切なもの','一番の無駄遣い'],
+      ['一番の思い出','当時の自分に一言だけ言うとしたら？','もっとしたい・極めたい仕事','アナタにとって仕事とは？','壮大な夢','誰にも言っていない秘密'],
+    ]
+  },
+  社会人: {
+    label: '社会人（キャリア軸）版',
+    cats: ['学生時代','社会人前半','社会人後半','経営者','今','人生まるっと'],
+    topics: [
+      ['一番成長できたこと','新卒時代の思い出','バレてしまった！','一番の苦労話','週末の過ごし方は？','一番ハマったエンタメ'],
+      ['無我夢中になっていたこと','上司とぶつかったストーリー','一番成長したことは？','顧客とぶつかったストーリー','15歳に戻ったら何をする？','一番ハマったスポーツ'],
+      ['初恋 or 失恋ストーリー','社内恋愛ストーリー','お金の苦労話','一番楽しい仕事は？','生まれ変わったら新卒どこに入る？','一番ハマった遊び'],
+      ['一番した悪いこと','一番きつかった仕事は？','仕事で失敗したこと','稼ぐ（お金）とは？','転職 or 独立するとしたら？','一番ハマったギャンブル'],
+      ['先生に怒られたストーリー','目指していたキャリア','泣いた仕事は？','今後のビジョン','今、一番大切なもの','一番の無駄使い'],
+      ['思春期の乱闘劇','当時の自分に一言だけ言うとしたら？','独立しようと思ったきっかけは？','理念','壮大な夢','誰にも言っていない秘密'],
+    ]
+  },
+  経営課題: {
+    label: '経営課題（失敗談）版',
+    cats: ['営業・マーケ','組織・人事・採用','新規事業','財務・経理・法務','IT・DX','経営'],
+    topics: [
+      ['新規顧客獲得の失敗','組織崩壊ストーリー','新規事業の失敗','お金の苦労話','アナログのままが良いことは','一番の苦労話'],
+      ['既存顧客深掘の失敗','人事制度の失敗','どんな新規事業がしたいか','資金調達の失敗','DXにおける失敗','社員とぶつかったストーリー'],
+      ['アナログ・デジタルマーケの失敗','こだわりの組織文化','どんなチームを組成すべきか','一番の無駄使い','AIを活用した失敗','一番楽しい仕事'],
+      ['価格戦略','組織エンゲージメントの失敗','調査・リサーチの失敗','給与や報酬の考え方','情報収集・学習方法','譲れない価値観'],
+      ['チームマネジメントの失敗','新卒採用の失敗','模範とする会社やサービス','販管費の使い方','過去最高・最低のツール','今後のビジョン'],
+      ['SNSを活用した失敗','中途採用の失敗','事業や社員への評価方法','最大のトラブル','IT・DX化をしたいことは','理念'],
+    ]
+  },
+};
 
-function buildTable(){
-  const t=document.getElementById('topicTable');
-  let html='<thead><tr><th>🎲2＼🎲1</th>';
-  CATS.forEach(c=>{html+=`<th>${c}</th>`;});
-  html+='</tr></thead><tbody>';
-  for(let r=0;r<6;r++){
-    html+=`<tr><th>${DOTS[r]}</th>`;
-    for(let c=0;c<6;c++){html+=`<td id="cell-${c}-${r}">${TOPICS[r][c]}</td>`;}
-    html+='</tr>';
+const STORAGE_KEY = 'saicoro-custom-v1';
+const DOTS = ['⚀','⚁','⚂','⚃','⚄','⚅'];
+let rolling = false, curD1 = null, curD2 = null;
+let currentAttr = '経営者';
+let editions = {};
+
+function loadEditions() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) editions = JSON.parse(saved);
+    for (const key of Object.keys(EDITIONS_DEFAULT)) {
+      if (!editions[key]) editions[key] = JSON.parse(JSON.stringify(EDITIONS_DEFAULT[key]));
+    }
+  } catch {
+    editions = JSON.parse(JSON.stringify(EDITIONS_DEFAULT));
   }
-  t.innerHTML=html+'</tbody>';
 }
 
-function roll(){
-  if(rolling)return; rolling=true;
-  document.getElementById('rollBtn').disabled=true;
-  if(curD1!==null) document.getElementById(`cell-${curD1}-${curD2}`).classList.remove('active');
+function saveEditions() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(editions));
+}
+
+function resetEdition() {
+  if (!confirm(`「${EDITIONS_DEFAULT[currentAttr].label}」を初期値に戻しますか？`)) return;
+  editions[currentAttr] = JSON.parse(JSON.stringify(EDITIONS_DEFAULT[currentAttr]));
+  saveEditions();
+  buildTable();
+  if (curD1 !== null) {
+    document.getElementById('topicText').textContent = editions[currentAttr].topics[curD2][curD1];
+  }
+}
+
+function buildAttrBtns() {
+  document.getElementById('attrBtns').innerHTML = Object.keys(EDITIONS_DEFAULT).map(key => {
+    const active = key === currentAttr ? ' active' : '';
+    return `<button class="attr-btn${active}" onclick="switchAttr('${key}')">${EDITIONS_DEFAULT[key].label}</button>`;
+  }).join('');
+}
+
+function switchAttr(attr) {
+  currentAttr = attr;
+  curD1 = null; curD2 = null;
+  document.getElementById('dice1').textContent = '？';
+  document.getElementById('dice2').textContent = '？';
+  document.getElementById('dice1label').textContent = '―';
+  document.getElementById('dice2label').textContent = '―';
+  const tt = document.getElementById('topicText');
+  tt.textContent = 'サイコロを振ってください';
+  tt.classList.remove('show');
+  document.getElementById('topicRule').textContent = '';
+  document.getElementById('topicEditHint').textContent = '';
+  buildAttrBtns();
+  buildTable();
+  document.getElementById('tableTitle').textContent = `テーマ一覧（${EDITIONS_DEFAULT[attr].label}）`;
+}
+
+function buildTable() {
+  const ed = editions[currentAttr];
+  const t = document.getElementById('topicTable');
+  let html = '<thead><tr><th>🎲2＼🎲1</th>';
+  ed.cats.forEach(c => { html += `<th>${c}</th>`; });
+  html += '</tr></thead><tbody>';
+  for (let r = 0; r < 6; r++) {
+    html += `<tr><th>${DOTS[r]}</th>`;
+    for (let c = 0; c < 6; c++) {
+      const active = (curD1 === c && curD2 === r) ? ' active' : '';
+      html += `<td id="cell-${c}-${r}" class="${active}" onclick="startEditCell(${c},${r})">${ed.topics[r][c]}</td>`;
+    }
+    html += '</tr>';
+  }
+  t.innerHTML = html + '</tbody>';
+}
+
+function startEditCell(col, row) {
+  const td = document.getElementById(`cell-${col}-${row}`);
+  if (td.classList.contains('editing')) return;
+  const current = editions[currentAttr].topics[row][col];
+  td.classList.add('editing');
+  td.innerHTML = `<input type="text" value="${current.replace(/"/g,'&quot;')}" id="cedit-${col}-${row}" />`;
+  const input = document.getElementById(`cedit-${col}-${row}`);
+  input.focus(); input.select();
+  function commit() {
+    const val = input.value.trim() || current;
+    editions[currentAttr].topics[row][col] = val;
+    saveEditions();
+    td.classList.remove('editing');
+    td.innerHTML = val;
+    if (curD1 === col && curD2 === row) document.getElementById('topicText').textContent = val;
+  }
+  input.addEventListener('blur', commit);
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); input.blur(); }
+    if (e.key === 'Escape') { input.value = current; input.blur(); }
+  });
+}
+
+function startEditTopic() {
+  if (curD1 === null) return;
+  const tt = document.getElementById('topicText');
+  const inp = document.getElementById('topicEditInput');
+  inp.value = tt.textContent;
+  tt.style.display = 'none';
+  inp.style.display = 'block';
+  inp.focus(); inp.select();
+  document.getElementById('topicEditHint').textContent = 'Enter で確定 / Esc で取消';
+  function commit() {
+    const val = inp.value.trim() || tt.textContent;
+    editions[currentAttr].topics[curD2][curD1] = val;
+    saveEditions();
+    tt.textContent = val;
+    tt.style.display = '';
+    inp.style.display = 'none';
+    document.getElementById('topicEditHint').textContent = 'クリックで編集';
+    const cell = document.getElementById(`cell-${curD1}-${curD2}`);
+    if (cell) cell.textContent = val;
+  }
+  inp.addEventListener('blur', commit, { once: true });
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); inp.blur(); }
+    if (e.key === 'Escape') { inp.value = tt.textContent; inp.blur(); }
+  });
+}
+
+function roll() {
+  if (rolling) return; rolling = true;
+  document.getElementById('rollBtn').disabled = true;
+  if (curD1 !== null) document.getElementById(`cell-${curD1}-${curD2}`).classList.remove('active');
   document.getElementById('topicText').classList.remove('show');
-  const d1=Math.floor(Math.random()*6), d2=Math.floor(Math.random()*6);
-  const el1=document.getElementById('dice1'), el2=document.getElementById('dice2');
+  const d1 = Math.floor(Math.random() * 6), d2 = Math.floor(Math.random() * 6);
+  const el1 = document.getElementById('dice1'), el2 = document.getElementById('dice2');
   el1.classList.add('rolling'); el2.classList.add('rolling');
-  let n=0;
-  const iv=setInterval(()=>{
-    el1.textContent=DOTS[Math.floor(Math.random()*6)];
-    el2.textContent=DOTS[Math.floor(Math.random()*6)];
-    if(++n>=12){
+  let n = 0;
+  const iv = setInterval(() => {
+    el1.textContent = DOTS[Math.floor(Math.random() * 6)];
+    el2.textContent = DOTS[Math.floor(Math.random() * 6)];
+    if (++n >= 12) {
       clearInterval(iv);
       el1.classList.remove('rolling'); el2.classList.remove('rolling');
-      el1.textContent=DOTS[d1]; el2.textContent=DOTS[d2];
-      document.getElementById('dice1label').textContent=CATS[d1];
-      document.getElementById('dice2label').textContent=(d2+1)+'番のテーマ';
-      const topic=TOPICS[d2][d1];
-      const tt=document.getElementById('topicText');
-      tt.textContent=topic;
-      setTimeout(()=>tt.classList.add('show'),40);
-      document.getElementById('topicRule').textContent='理由を添えて話しましょう 🗣️';
+      el1.textContent = DOTS[d1]; el2.textContent = DOTS[d2];
+      document.getElementById('dice1label').textContent = editions[currentAttr].cats[d1];
+      document.getElementById('dice2label').textContent = (d2 + 1) + '番のテーマ';
+      const topic = editions[currentAttr].topics[d2][d1];
+      const tt = document.getElementById('topicText');
+      tt.textContent = topic;
+      setTimeout(() => tt.classList.add('show'), 40);
+      document.getElementById('topicRule').textContent = '理由を添えて話しましょう 🗣️';
+      document.getElementById('topicEditHint').textContent = 'クリックで編集';
       document.getElementById(`cell-${d1}-${d2}`).classList.add('active');
-      curD1=d1; curD2=d2;
-      rolling=false; document.getElementById('rollBtn').disabled=false;
+      curD1 = d1; curD2 = d2;
+      rolling = false; document.getElementById('rollBtn').disabled = false;
     }
-  },80);
+  }, 80);
 }
 
+loadEditions();
+buildAttrBtns();
 buildTable();
+document.getElementById('tableTitle').textContent = `テーマ一覧（${EDITIONS_DEFAULT[currentAttr].label}）`;
 </script>
 </body>
 </html>

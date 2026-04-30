@@ -247,6 +247,14 @@ body {
   background: #F5F5F5; border: 1px solid #E0E0E0;
   border-radius: 4px; padding: 4px 10px;
 }
+.play-count {
+  font-size: 10px; font-weight: 700;
+  color: var(--cat-color, #B7282E);
+  font-family: 'DM Sans', sans-serif;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.75;
+  letter-spacing: 0.02em;
+}
 
 /* ── CELEBRATION OVERLAY ── */
 .celebration-overlay {
@@ -591,6 +599,21 @@ async function incrementMudome(toolId, toolName) {
   }
 }
 
+/* ── ツール別プレイ回数を取得してソート ── */
+let toolCounts = {};
+
+async function fetchToolCounts() {
+  try {
+    const { data } = await sb.from('tool_logs').select('tool_id');
+    if (data) {
+      data.forEach(row => {
+        toolCounts[row.tool_id] = (toolCounts[row.tool_id] || 0) + 1;
+      });
+      render();
+    }
+  } catch(e) { /* フォールバック: デフォルト順のまま */ }
+}
+
 function filter(cat, btn) {
   document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
@@ -599,7 +622,8 @@ function filter(cat, btn) {
 }
 
 function render() {
-  const list = currentCat === 'all' ? TOOLS : TOOLS.filter(t => t.cat === currentCat);
+  let list = currentCat === 'all' ? [...TOOLS] : TOOLS.filter(t => t.cat === currentCat);
+  list.sort((a, b) => (toolCounts[b.id] || 0) - (toolCounts[a.id] || 0));
   document.getElementById('countLabel').textContent = list.length + ' ツール';
   document.getElementById('grid').innerHTML = list.map((t, idx) => {
     const active = t.status === 'active';
@@ -608,6 +632,8 @@ function render() {
     const onclick = active ? `onclick="incrementMudome('${t.id}','${t.name}')"` : '';
     const c = CAT[t.cat] || { color:'#B7282E', bg:'#FBE5E2', label:t.cat };
     const delay = Math.min(idx * 30, 300);
+    const cnt = toolCounts[t.id];
+    const playBadge = cnt ? `<span class="play-count">${cnt.toLocaleString()}回</span>` : '';
     return `
       <${tag} class="card ${active ? '' : 'coming'}" ${href} ${onclick}
         style="--cat-color:${c.color};--cat-bg:${c.bg};animation-delay:${delay}ms">
@@ -615,7 +641,10 @@ function render() {
         <div class="card-body">
           <div class="card-head">
             <div class="card-icon">${t.icon}</div>
-            <span class="cat-tag">${c.label}</span>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+              <span class="cat-tag">${c.label}</span>
+              ${playBadge}
+            </div>
           </div>
           <div class="card-name">${t.name}</div>
           <div class="card-catch">${t.catch}</div>
@@ -630,6 +659,7 @@ function render() {
 
 render();
 updateMudomeDisplay();
+fetchToolCounts();
 initAuth();
 </script>
 </body>

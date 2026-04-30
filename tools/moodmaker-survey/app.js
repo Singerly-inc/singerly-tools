@@ -1,4 +1,6 @@
 const questions = [
+  // 宴会型（7問）：場を盛り上げる・テンションを引き上げる力
+  // ↔知識型トレードオフ：直感・盛り上げ重視 vs 分析・論理重視
   { id: "Q01", type: "宴会型", text: "盛り上がっていない場の空気を、自分から変えにいける", reverse: false },
   { id: "Q02", type: "宴会型", text: "初対面の集まりで、自然と中心的な役割を担っていることが多い", reverse: false },
   { id: "Q03", type: "宴会型", text: "人が多い場より、少人数か一人のほうが本来の力を発揮できる", reverse: true },
@@ -7,6 +9,8 @@ const questions = [
   { id: "Q06", type: "宴会型", text: "初対面でも短時間で打ち解けて笑いが生まれることが多い", reverse: false },
   { id: "Q07", type: "宴会型", text: "大勢の場では、場の盛り上がりを常に意識しながら行動している", reverse: false },
 
+  // 教祖型（7問）：ビジョン・理念で人を動かす力
+  // ↔宴会型トレードオフ：意味・why重視 vs 楽しさ・how重視
   { id: "Q08", type: "教祖型", text: "自分の価値観や信念を言語化して、周囲に示すことが多い", reverse: false },
   { id: "Q09", type: "教祖型", text: "理念や目的を語ることで、周囲を動かした経験が複数ある", reverse: false },
   { id: "Q10", type: "教祖型", text: "「なぜやるのか」よりも「どうやるか」に関心が向きやすい", reverse: true },
@@ -15,6 +19,8 @@ const questions = [
   { id: "Q13", type: "教祖型", text: "「あなたに影響を受けた」「考え方が変わった」と言われたことが複数ある", reverse: false },
   { id: "Q14", type: "教祖型", text: "組織や集団の向かう方向性について、自分なりの考えを持って発言している", reverse: false },
 
+  // 勝負型（7問）：競争・目標・突破力
+  // ↔柔和型トレードオフ：勝利・成果優先 vs 関係・和を優先
   { id: "Q15", type: "勝負型", text: "勝敗や順位がある状況のほうが、燃えて力が出る", reverse: false },
   { id: "Q16", type: "勝負型", text: "「負けたくない」という気持ちが、行動の原動力になっている", reverse: false },
   { id: "Q17", type: "勝負型", text: "リスクを避けて安全策を選ぶことが多く、大きな決断を先送りにしがちだ", reverse: true },
@@ -23,6 +29,9 @@ const questions = [
   { id: "Q20", type: "勝負型", text: "意識している競争相手がいるほど、集中力や行動量が増す", reverse: false },
   { id: "Q21", type: "勝負型", text: "目標を達成したときの快感が、次の挑戦へのエネルギーになっている", reverse: false },
 
+  // 知識型（7問）：情報・論理・専門性
+  // ↔宴会型トレードオフ：分析・論理 vs 感覚・盛り上がり
+  // ↔色気型トレードオフ：合理性 vs 感性
   { id: "Q22", type: "知識型", text: "何かを判断するとき、データや根拠を確認してから動くほうだ", reverse: false },
   { id: "Q23", type: "知識型", text: "自分の主張を、構造的に整理して説明することが得意だ", reverse: false },
   { id: "Q24", type: "知識型", text: "細かい分析より、直感や空気感で動くほうが自分には合っている", reverse: true },
@@ -31,6 +40,8 @@ const questions = [
   { id: "Q27", type: "知識型", text: "会議やディスカッションで、論点の整理役を担うことが多い", reverse: false },
   { id: "Q28", type: "知識型", text: "「なんとなく」「雰囲気で」物事を決めることへの抵抗感がある", reverse: false },
 
+  // 色気型（7問）：非言語的影響力・センス・存在感
+  // ↔知識型トレードオフ：感性・直感 vs 合理性・論理
   { id: "Q29", type: "色気型", text: "言葉より、雰囲気・表情・間（ま）で人を動かせると感じることがある", reverse: false },
   { id: "Q30", type: "色気型", text: "センスや世界観に「自分らしさ」があると言われる", reverse: false },
   { id: "Q31", type: "色気型", text: "効率・合理性を重視するあまり、雰囲気や感性を後回しにしがちだ", reverse: true },
@@ -39,6 +50,8 @@ const questions = [
   { id: "Q34", type: "色気型", text: "言葉にしなくても伝わる、という体験を人よりよくしている", reverse: false },
   { id: "Q35", type: "色気型", text: "「雰囲気がある」「独特の存在感がある」と言われることがある", reverse: false },
 
+  // 柔和型（7問）：対立緩和・安心感・信頼関係
+  // ↔勝負型トレードオフ：和・関係優先 vs 勝利・成果優先
   { id: "Q36", type: "柔和型", text: "対立する人の間に入り、双方が納得できる着地点を探すのが得意だ", reverse: false },
   { id: "Q37", type: "柔和型", text: "「話しかけやすい」「相談しやすい」と言われることが多い", reverse: false },
   { id: "Q38", type: "柔和型", text: "チームの和より、正しい結論を優先して自分の主張を押し通すことが多い", reverse: true },
@@ -49,6 +62,7 @@ const questions = [
 ];
 
 const omoteNashiQuestions = [
+  // おもてなし適性（8問）：他者優先・察する力・奉仕動機・場への貢献意識
   { id: "QO1", text: "誰かが困っているとき、自分のことを後回しにしてでも手を差し伸べることが多い", reverse: false },
   { id: "QO2", text: "「気が利く」「さりげない」と言われることがある", reverse: false },
   { id: "QO3", text: "自分の都合を優先して、周囲への配慮が薄れることがある", reverse: true },
@@ -60,9 +74,21 @@ const omoteNashiQuestions = [
 ];
 
 const types = ["宴会型", "教祖型", "勝負型", "知識型", "色気型", "柔和型"];
+
+const TYPE_META = {
+  "宴会型":  { color: "#D94A3D", colorDark: "#9C2A20", bg: "#FBE5E2", glyph: "宴" },
+  "教祖型":  { color: "#7A1F2A", colorDark: "#4E1019", bg: "#EDD9DC", glyph: "導" },
+  "勝負型":  { color: "#C8A050", colorDark: "#8A6C28", bg: "#F5EDD6", glyph: "攻" },
+  "知識型":  { color: "#1E5FA8", colorDark: "#133F72", bg: "#DCE7F4", glyph: "知" },
+  "色気型":  { color: "#6B3A8E", colorDark: "#44235A", bg: "#E5DAEC", glyph: "魅" },
+  "柔和型":  { color: "#2F6B4F", colorDark: "#1C4232", bg: "#D6E5DC", glyph: "和" },
+  "おもてなし": { color: "#B7282E", colorDark: "#83151B", bg: "#F4D9DA", glyph: "礼" },
+};
+
 const STORAGE_KEY = "moodmaker-survey-v1";
 const NARRATIVE_MAX = 4000;
 let latestResult = null;
+let resumeText = "";
 
 const RESUME_KEYWORDS = {
   宴会型: ["イベント", "懇親会", "チームビルディング", "コミュニケーション", "ファシリテーション", "司会", "幹事", "盛り上げ", "交流", "親睦"],
@@ -73,15 +99,61 @@ const RESUME_KEYWORDS = {
   柔和型: ["サポート", "カスタマー", "調整", "相談", "支援", "コーチ", "メンター", "傾聴", "ケア", "フォロー"]
 };
 
+function analyzeResumeText(text) {
+  if (!text) return null;
+  const scores = {};
+  const hits = {};
+  for (const [type, keywords] of Object.entries(RESUME_KEYWORDS)) {
+    const found = keywords.filter(kw => text.includes(kw));
+    scores[type] = Math.min(100, Math.round((found.length / keywords.length) * 100 * 2));
+    hits[type] = found;
+  }
+  return { scores, hits };
+}
+
+async function uploadResume(file) {
+  const statusEl = document.getElementById("resumeUploadStatus");
+  statusEl.textContent = "アップロード中...";
+  statusEl.className = "resume-status uploading";
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const base64 = e.target.result.split(",")[1];
+      try {
+        const res = await fetch(apiBase() + "/api/resume", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ filename: file.name, data: base64 })
+        });
+        const json = await res.json();
+        if (json.ok) {
+          resumeText = json.text || "";
+          statusEl.textContent = `✓ 抽出完了（${resumeText.length.toLocaleString()}文字）`;
+          statusEl.className = "resume-status success";
+        } else {
+          statusEl.textContent = `エラー: ${json.error || "unknown"}`;
+          statusEl.className = "resume-status error";
+        }
+      } catch {
+        statusEl.textContent = "通信エラー（APIが未起動の可能性があります）";
+        statusEl.className = "resume-status error";
+      }
+      resolve();
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
 function readNarrative() {
+  const g = id => { const el = document.getElementById(id); return el ? el.value : ''; };
   return {
-    storyType: document.getElementById("narrativeStoryType").value,
-    storyEpisode: document.getElementById("narrativeStoryEpisode").value.trim(),
-    originText: document.getElementById("narrativeOrigin").value.trim(),
-    weaknessPattern: document.getElementById("narrativeWeaknessPattern").value,
-    achievementCase: document.getElementById("narrativeAchievementCase").value.trim(),
-    missionTemplate: document.getElementById("narrativeMissionTemplate").value,
-    missionNote: document.getElementById("narrativeMissionNote").value.trim()
+    storyType: g("narrativeStoryType"),
+    storyEpisode: g("narrativeStoryEpisode").trim(),
+    originText: g("narrativeOrigin").trim(),
+    weaknessPattern: g("narrativeWeaknessPattern"),
+    achievementCase: g("narrativeAchievementCase").trim(),
+    missionTemplate: g("narrativeMissionTemplate"),
+    missionNote: g("narrativeMissionNote").trim()
   };
 }
 
@@ -109,6 +181,7 @@ function analyzeNarrative(nar, primaryType, secondaryType) {
     "架け橋": "人と人をつなぐ架け橋になることを信念としている。"
   };
 
+  // ストーリー生成
   let story;
   if (nar.storyType && storyTypeMap[nar.storyType]) {
     story = `【${nar.storyType}】${storyTypeMap[nar.storyType]}タイプ。`;
@@ -119,6 +192,7 @@ function analyzeNarrative(nar, primaryType, secondaryType) {
     story = `${primaryType}としての強みは、一朝一夕ではなく経験の積み重ねの中で育まれてきた。`;
   }
 
+  // バックグラウンド生成
   let background;
   if (nar.originText) {
     background = `${primaryType}としての原体験：「${nar.originText}」。この体験がムードメイクの土台となっている。`;
@@ -126,9 +200,11 @@ function analyzeNarrative(nar, primaryType, secondaryType) {
     background = `${primaryType}の特性を活かした経験の積み重ねが、現在のムードメイク力の基盤となっている。`;
   }
 
+  // ウィークポイント生成
   const weakness = weaknessMap[nar.weaknessPattern]
     || `場の文脈が見えにくいと力を出しにくいことがある。目的と役割の明確化で安定する。`;
 
+  // ミッション生成
   let mission;
   if (nar.missionTemplate && nar.missionTemplate !== "カスタム" && missionMap[nar.missionTemplate]) {
     mission = missionMap[nar.missionTemplate];
@@ -177,6 +253,13 @@ function readOrgPrefs() {
   };
 }
 
+function apiBase() {
+  if (typeof location !== "undefined" && location.hostname === "localhost" && String(location.port) === "8787") {
+    return "";
+  }
+  return "http://localhost:8787";
+}
+
 function getQuestionAnswer(questionId) {
   const el = document.querySelector(`input[name="${questionId}"]:checked`);
   return el ? el.value : "";
@@ -189,38 +272,129 @@ function setQuestionAnswer(questionId, value) {
   });
 }
 
+// ── 全質問リスト（おもてなし→属性）─ 順番に表示する用
+const allSurveyQuestions = [
+  ...omoteNashiQuestions.map(q => ({ ...q, type: "おもてなし" })),
+  ...questions
+];
+let surveyIdx = 0;
+
+function getTypeForQ(q) {
+  return TYPE_META[q.type] || TYPE_META["おもてなし"];
+}
+
+function renderCurrentQuestion() {
+  const q = allSurveyQuestions[surveyIdx];
+  const total = allSurveyQuestions.length;
+  const meta = getTypeForQ(q);
+  const saved = getQuestionAnswer(q.id);
+  const isOmote = q.type === "おもてなし";
+  const sectionLabel = isOmote ? "おもてなし適性" : `${q.type} · 適性チェック`;
+  const sectionNum = isOmote ? "SECTION 00" : `SECTION ${String(types.indexOf(q.type) + 1).padStart(2, "0")}`;
+
+  const choicesHtml = [1,2,3,4,5].map(n => {
+    const isSel = String(saved) === String(n);
+    const selStyle = isSel
+      ? `background:${meta.color};border-color:${meta.color};color:#fff;`
+      : `background:#f8f8f8;border-color:#e0e0e0;color:${meta.colorDark};`;
+    return `<button class="survey-choice${isSel ? " selected" : ""}" style="${selStyle}" onclick="selectAnswer('${q.id}', ${n})" data-n="${n}">${n}</button>`;
+  }).join("");
+
+  document.getElementById("survey-question-display").innerHTML = `
+    <div class="survey-bg" style="background:${meta.bg}">
+      <div class="survey-inner">
+        <div class="progress-stepper" style="margin-bottom:24px" id="survey-progress-bar"></div>
+        <div class="survey-section-header">
+          <div class="survey-type-glyph" style="color:${meta.colorDark}">${meta.glyph}</div>
+          <div class="survey-type-label">
+            <span class="survey-type-section" style="color:${meta.colorDark}">${sectionNum}</span>
+            <span class="survey-type-name" style="color:${meta.colorDark}">${sectionLabel}</span>
+          </div>
+          <div class="survey-counter" style="color:${meta.colorDark}">
+            <span class="survey-counter-num">${surveyIdx + 1}</span><span class="survey-counter-total"> / ${total}</span>
+          </div>
+        </div>
+        <div class="survey-card" style="border:2px solid ${meta.color}">
+          <div class="survey-q-id" style="color:${meta.colorDark}">Q.${String(surveyIdx + 1).padStart(2, "0")}</div>
+          <h2 class="survey-q-text">${q.text}</h2>
+          <div class="survey-scale-hint" style="color:${meta.colorDark}">
+            <span>← よくあてはまる</span><span>あてはまらない →</span>
+          </div>
+          <div class="survey-choices">${choicesHtml}</div>
+        </div>
+        <div class="survey-nav">
+          <button class="btn ghost" style="border-color:${meta.colorDark};color:${meta.colorDark}" onclick="surveyBack()">${surveyIdx === 0 ? "← プロフィールに戻る" : "← 戻る"}</button>
+          <span class="survey-kbd-hint" style="color:${meta.colorDark}">キーボード「1〜5」でも回答できます</span>
+          <button class="btn" id="survey-next-btn" style="background:${meta.color};box-shadow:0 3px 0 ${meta.colorDark}" onclick="surveyNext()"${!saved ? " disabled style=\"background:#ccc;box-shadow:none;cursor:not-allowed\"" : ""}>${surveyIdx === total - 1 ? "組織マトリクスへ →" : "次の質問 →"}</button>
+        </div>
+      </div>
+    </div>`;
+
+  // プログレスバー（survey内）
+  const pb = document.getElementById("survey-progress-bar");
+  if (pb) {
+    const steps = ["プロフィール","サーベイ","組織適合","鑑定書発行"];
+    pb.innerHTML = steps.map((label, idx) => {
+      const state = idx + 1 < 2 ? "done" : idx + 1 === 2 ? "active" : "todo";
+      return `<div class="progress-step ${state}">${idx + 1} ${label}</div>${idx < 3 ? '<div class="progress-sep"></div>' : ""}`;
+    }).join("");
+    pb.querySelector(".progress-step.active").style.background = meta.color;
+    pb.querySelector(".progress-step.active").style.borderColor = meta.color;
+  }
+
+  // キーボード入力
+  document.onkeydown = (e) => {
+    if (["1","2","3","4","5"].includes(e.key)) selectAnswer(q.id, Number(e.key));
+  };
+}
+
+function selectAnswer(qId, n) {
+  setQuestionAnswer(qId, n);
+  saveFormState();
+  renderCurrentQuestion();
+}
+
+function surveyNext() {
+  const q = allSurveyQuestions[surveyIdx];
+  if (!getQuestionAnswer(q.id)) return;
+  if (surveyIdx < allSurveyQuestions.length - 1) {
+    surveyIdx++;
+    renderCurrentQuestion();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  } else {
+    document.onkeydown = null;
+    if (typeof goStep === "function") goStep(3);
+  }
+}
+
+function surveyBack() {
+  if (surveyIdx === 0) {
+    document.onkeydown = null;
+    if (typeof goStep === "function") goStep(1);
+  } else {
+    surveyIdx--;
+    renderCurrentQuestion();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
+
 function renderQuestionHtml(q, num) {
-  return `
-  <div class="q-item" role="group" aria-labelledby="${q.id}_legend">
-    <p class="q-title" id="${q.id}_legend">${num}. ${q.text}</p>
-    <div class="q-radios">
-      ${[
-        [1, "よくあてはまる"],
-        [2, "ややあてはまる"],
-        [3, "どちらともいえない"],
-        [4, "あまりあてはまらない"],
-        [5, "あてはまらない"]
-      ]
-        .map(
-          ([n, lbl]) => `
-        <div class="q-radio-col">
-          <span class="q-scale-label">${lbl}</span>
-          <label class="q-radio-label">
-            <input type="radio" name="${q.id}" id="${q.id}_${n}" value="${n}" />
-            <span class="q-radio-num">${n}</span>
-          </label>
-        </div>`
-        )
-        .join("")}
-    </div>
-  </div>`;
+  return `<div style="display:none"><input type="radio" name="${q.id}" value=""/></div>`;
 }
 
 function renderQuestions() {
+  // 非表示ストアにラジオを生成（calcScores が name 属性を参照するため）
   document.getElementById("omoteNashiQuestions").innerHTML =
-    omoteNashiQuestions.map((q, i) => renderQuestionHtml(q, i + 1)).join("");
+    omoteNashiQuestions.map((q) =>
+      [1,2,3,4,5].map(n => `<input type="radio" name="${q.id}" value="${n}" style="display:none">`).join("")
+    ).join("");
   document.getElementById("questions").innerHTML =
-    questions.map((q, i) => renderQuestionHtml(q, i + 1)).join("");
+    questions.map((q) =>
+      [1,2,3,4,5].map(n => `<input type="radio" name="${q.id}" value="${n}" style="display:none">`).join("")
+    ).join("");
+  // goStep(2) が呼ばれたときに最初の問題を表示
+  const origGoStep = window.goStep;
+  window._surveyReady = true;
 }
 
 function saveFormState() {
@@ -248,7 +422,7 @@ function loadFormState() {
   if (!raw) return;
   try {
     const data = JSON.parse(raw);
-    if (data._v !== 2) return;
+    if (data._v !== 2) return; // 旧フォーマットは無視
     const p = data.profile || {};
     const set = (id, v) => {
       const el = document.getElementById(id);
@@ -298,7 +472,7 @@ function calcScores() {
   const normalized = {};
   for (const t of types) {
     const avg = score[t].count ? score[t].total / score[t].count : 0;
-    normalized[t] = Math.round((avg / 5) * 100);
+    normalized[t] = Math.round(((avg - 1) / 4) * 100);
   }
 
   let omTotal = 0;
@@ -308,7 +482,7 @@ function calcScores() {
     const adjusted = q.reverse ? v : 6 - v;
     omTotal += adjusted;
   }
-  const omoteNashiScore = Math.round((omTotal / omoteNashiQuestions.length / 5) * 100);
+  const omoteNashiScore = Math.round(((omTotal / omoteNashiQuestions.length - 1) / 4) * 100);
 
   return { typeScores: normalized, omoteNashiScore };
 }
@@ -402,16 +576,76 @@ function renderOmoteNashiBanner(omoteNashiScore) {
   el.classList.remove("hidden");
 }
 
+function renderResultHero(primary, secondary, scores) {
+  const pm = TYPE_META[primary[0]] || TYPE_META["宴会型"];
+  const sm = TYPE_META[secondary[0]] || pm;
+
+  const heroEl = document.getElementById("result-hero");
+  if (heroEl) {
+    heroEl.style.background = `linear-gradient(135deg, ${pm.colorDark} 0%, #0A0A0A 100%)`;
+    heroEl.style.borderBottom = `4px solid ${pm.color}`;
+  }
+  const glyphEl = document.getElementById("result-hero-glyph");
+  if (glyphEl) glyphEl.textContent = pm.glyph;
+
+  const nameEl = document.getElementById("result-type-name");
+  if (nameEl) {
+    if (primary[0] === secondary[0]) {
+      nameEl.innerHTML = `生粋の<span style="color:${pm.color}">${primary[0]}</span>`;
+    } else {
+      nameEl.innerHTML = `<span style="color:${sm.color}">${sm.glyph}</span> × <span style="color:${pm.color}">${primary[0]}</span>`;
+    }
+  }
+  const catchEl = document.getElementById("result-catchphrase");
+  if (catchEl) catchEl.textContent = `— 主属性: ${primary[0]}（${primary[1]}点）  副属性: ${secondary[0]}（${secondary[1]}点）`;
+
+  const badgesEl = document.getElementById("result-type-badges");
+  if (badgesEl) {
+    badgesEl.innerHTML = [
+      { label: "主属性", meta: pm, name: primary[0] },
+      { label: "副属性", meta: sm, name: secondary[0] }
+    ].map(({ label, meta, name }) => `
+      <div class="result-badge">
+        <span class="result-badge-label">${label}</span>
+        <span class="result-badge-glyph">${meta.glyph}</span>
+        <span>${name}</span>
+      </div>`).join("");
+  }
+
+}
+
 function renderResult(scores, omoteNashiScore) {
   const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
   const [primary, secondary] = sorted;
   const matrix = computeOrgMatrixFromScores(scores, readOrgPrefs());
   const fit = { fitScore: matrix.fitScore, fitLabel: matrix.fitLabel };
 
+  renderResultHero(primary, secondary, scores);
+
+  // スコアバー（sortedが使えるここで描画）
+  const barListEl = document.getElementById("result-score-bar-list");
+  if (barListEl) {
+    const scoreLabel = v => v >= 80 ? '突出' : v >= 60 ? '強め' : v >= 40 ? '標準' : '低め';
+    barListEl.innerHTML = sorted.map(([t, s]) => {
+      const m = TYPE_META[t] || {};
+      const isPrimary = t === primary[0];
+      const valColor = isPrimary ? m.color : 'var(--text-mute)';
+      const nameWeight = isPrimary ? '900' : '700';
+      const nameColor = isPrimary ? m.color : 'var(--ink)';
+      return `<div class="score-bar-row">
+        <span class="score-bar-glyph" style="color:${m.color}">${m.glyph || ""}</span>
+        <span class="score-bar-name" style="color:${nameColor};font-weight:${nameWeight}">${t}</span>
+        <div class="score-bar-track"><div class="score-bar-fill" style="width:${s}%;background:${m.color}"></div></div>
+        <span class="score-bar-val" style="color:${valColor}">${s}</span>
+        <span class="score-bar-comment" style="color:${isPrimary ? m.color : 'var(--text-mute)'}">${scoreLabel(s)}</span>
+      </div>`;
+    }).join("");
+  }
+
   renderOmoteNashiBanner(omoteNashiScore);
 
   const titleEl = document.getElementById("reportTitle");
-  if (titleEl) titleEl.textContent = `（${primary[0]}ムードメイカー）`;
+  if (titleEl) titleEl.textContent = `${primary[0]}ムードメイカー 鑑定レポート`;
 
   document.getElementById("scores").innerHTML = sorted
     .map(([t, s]) => `<li>${t}: <strong>${s}</strong></li>`)
@@ -449,14 +683,31 @@ function renderResult(scores, omoteNashiScore) {
   document.getElementById("serviceText").textContent = pickService(primary[0]);
   document.getElementById("orgFitText").textContent = matrix.summary;
   renderOrgMatrixPlots(matrix);
-  document.getElementById("result").classList.remove("hidden");
   document.getElementById("service").classList.remove("hidden");
   document.getElementById("pdfBtnWrap").classList.remove("hidden");
   document.getElementById("jsonBtn").classList.remove("hidden");
+  window._moodPrimary   = primary[0];
+  window._moodSecondary = secondary[0];
+  window._moodName      = document.getElementById('name').value.trim();
+  window._moodScores    = scores;
+  window._moodOmote     = omoteNashiScore;
+
+  // 結果画面に遷移
+  if (typeof goStep === "function") goStep(4);
   drawRadar(scores);
   drawTrendChart(scores);
 
   latestResult = buildResultPayload(scores, primary, secondary, fit, matrix, omoteNashiScore);
+  postResultToApi(latestResult);
+
+  localStorage.setItem('moodmaker-result-v1', JSON.stringify({
+    primary:   primary[0],
+    secondary: secondary[0],
+    name:      document.getElementById('name').value.trim(),
+    scores:    scores,
+    omote:     omoteNashiScore,
+    _v: 1
+  }));
 }
 
 function renderScoreTable(sorted) {
@@ -518,37 +769,72 @@ function downloadJson(filename, data) {
   URL.revokeObjectURL(url);
 }
 
+async function postResultToApi(payload) {
+  try {
+    const res = await fetch(apiBase() + "/api/results", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      console.warn("API save skipped or failed", res.status, err);
+    }
+  } catch (_) {
+    // API未起動時は無視。JSONダウンロードで代替可能。
+  }
+}
+
 function drawRadar(scores) {
   const canvas = document.getElementById("radarChart");
   const ctx = canvas.getContext("2d");
-  const w = canvas.width;
-  const h = canvas.height;
-  ctx.clearRect(0, 0, w, h);
 
-  const cx = w / 2;
-  const cy = h / 2;
-  const radius = 90;
-  const steps = 5;
-  const angleStep = (Math.PI * 2) / types.length;
+  // Retina / HiDPI support
+  const dpr = window.devicePixelRatio || 1;
+  const dw = 160, dh = 140;
+  canvas.width  = dw * dpr;
+  canvas.height = dh * dpr;
+  canvas.style.width  = dw + 'px';
+  canvas.style.height = dh + 'px';
+  ctx.scale(dpr, dpr);
 
-  ctx.strokeStyle = "#e5e7eb";
+  ctx.clearRect(0, 0, dw, dh);
+
+  const cx = dw / 2;
+  const cy = dh / 2 + 2;
+  const radius = 44;
+  const steps = 4;
+  const n = types.length;
+  const angleStep = (Math.PI * 2) / n;
+
+  // Dynamic type color from result
+  const pmInfo = (window._moodPrimary && TYPE_INFO[window._moodPrimary]) || {};
+  const typeColor = pmInfo.color || '#b7282e';
+
+  // Grid rings
+  ctx.strokeStyle = '#e0dcd5';
+  ctx.lineWidth = 0.8;
   for (let s = 1; s <= steps; s++) {
     const r = (radius / steps) * s;
     ctx.beginPath();
-    for (let i = 0; i < types.length; i++) {
+    for (let i = 0; i < n; i++) {
       const a = -Math.PI / 2 + i * angleStep;
       const x = cx + Math.cos(a) * r;
       const y = cy + Math.sin(a) * r;
-      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
     }
     ctx.closePath();
     ctx.stroke();
   }
 
-  ctx.strokeStyle = "#cbd5e1";
-  ctx.fillStyle = "#6b7280";
-  ctx.font = "12px sans-serif";
-  for (let i = 0; i < types.length; i++) {
+  // Spokes + labels
+  ctx.strokeStyle = '#d4d0ca';
+  ctx.lineWidth = 0.8;
+  ctx.fillStyle = '#888';
+  ctx.font = '700 9.5px "Hiragino Sans","Noto Sans JP",sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  for (let i = 0; i < n; i++) {
     const a = -Math.PI / 2 + i * angleStep;
     const x = cx + Math.cos(a) * radius;
     const y = cy + Math.sin(a) * radius;
@@ -556,31 +842,26 @@ function drawRadar(scores) {
     ctx.moveTo(cx, cy);
     ctx.lineTo(x, y);
     ctx.stroke();
-    const lx = cx + Math.cos(a) * (radius + 18);
-    const ly = cy + Math.sin(a) * (radius + 18);
-    ctx.fillText(types[i], lx - 14, ly + 4);
+    const lx = cx + Math.cos(a) * (radius + 13);
+    const ly = cy + Math.sin(a) * (radius + 13);
+    ctx.fillText(types[i], lx, ly);
   }
 
+  // Data polygon
   ctx.beginPath();
-  for (let i = 0; i < types.length; i++) {
+  for (let i = 0; i < n; i++) {
     const a = -Math.PI / 2 + i * angleStep;
-    const r = (Math.max(0, Math.min(100, scores[types[i]])) / 100) * radius;
+    const r = (Math.max(0, Math.min(100, scores[types[i]] || 0)) / 100) * radius;
     const x = cx + Math.cos(a) * r;
     const y = cy + Math.sin(a) * r;
-    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
   }
   ctx.closePath();
-  ctx.fillStyle = "rgba(183,40,46,0.25)";
-  ctx.strokeStyle = "#b7282e";
-  ctx.lineWidth = 2;
+  ctx.fillStyle = typeColor + '42';
+  ctx.strokeStyle = typeColor;
+  ctx.lineWidth = 1.8;
   ctx.fill();
   ctx.stroke();
-
-  ctx.fillStyle = "#374151";
-  ctx.font = "12px sans-serif";
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  ctx.fillText("おもてなし", cx, cy);
 }
 
 function drawTrendChart(scores) {
@@ -637,7 +918,9 @@ document.getElementById("analyzeBtn").addEventListener("click", () => {
       if (u) {
         try {
           const parsed = new URL(u);
-          if (parsed.protocol !== "http:" && parsed.protocol !== "https:") throw new Error();
+          if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+            throw new Error();
+          }
         } catch {
           throw new Error(`URLは http(s) で始まるURLを入力してください（${id}）`);
         }
@@ -647,12 +930,13 @@ document.getElementById("analyzeBtn").addEventListener("click", () => {
     const narrTextFields = ["storyEpisode", "originText", "achievementCase", "missionNote"];
     for (const k of narrTextFields) {
       const v = nar[k] || "";
-      if (v.length > NARRATIVE_MAX) throw new Error(`入力が長すぎます（${NARRATIVE_MAX}文字以内）`);
+      if (v.length > NARRATIVE_MAX) {
+        throw new Error(`入力が長すぎます（${NARRATIVE_MAX}文字以内）`);
+      }
     }
     const { typeScores, omoteNashiScore } = calcScores();
     renderResult(typeScores, omoteNashiScore);
     saveFormState();
-    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
   } catch (e) {
     alert(e.message);
   }
@@ -668,8 +952,69 @@ document.getElementById("jsonBtn").addEventListener("click", () => {
   downloadJson(`${base}_result.json`, latestResult);
 });
 
+function checkLastResult() {
+  const raw = localStorage.getItem('moodmaker-result-v1');
+  if (!raw) return;
+  try {
+    const data = JSON.parse(raw);
+    if (!data.primary || !data.scores || data._v !== 1) return;
+    const wrap = document.getElementById('hero-resume-wrap');
+    if (!wrap) return;
+    wrap.classList.remove('hidden');
+    const pm = (typeof TYPE_INFO !== 'undefined' && TYPE_INFO[data.primary]) || {};
+    const label = document.getElementById('hero-resume-name');
+    if (label) {
+      label.textContent = (data.name ? data.name + ' · ' : '') + (pm.glyph || '') + ' ' + data.primary;
+      label.style.color = pm.color || '';
+    }
+  } catch (_) {}
+}
+
+window.resumeLastResult = function() {
+  const raw = localStorage.getItem('moodmaker-result-v1');
+  if (!raw) return;
+  try {
+    const data = JSON.parse(raw);
+    window._moodPrimary   = data.primary;
+    window._moodSecondary = data.secondary;
+    window._moodName      = data.name;
+    window._moodScores    = data.scores;
+    window._moodOmote     = data.omote || 0;
+
+    // スコアバーを描画（通常は renderResult が担当）
+    const sorted = Object.entries(data.scores || {}).sort((a, b) => b[1] - a[1]);
+    const barListEl = document.getElementById('result-score-bar-list');
+    if (barListEl && sorted.length) {
+      const scoreLabel = v => v >= 80 ? '突出' : v >= 60 ? '強め' : v >= 40 ? '標準' : '低め';
+      barListEl.innerHTML = sorted.map(([t, s]) => {
+        const m = TYPE_META[t] || {};
+        const isPrim = t === sorted[0][0];
+        return `<div class="score-bar-row">
+          <span class="score-bar-glyph" style="color:${m.color}">${m.glyph || ''}</span>
+          <span class="score-bar-name" style="color:${isPrim ? m.color : 'var(--ink)'};font-weight:${isPrim ? '900' : '700'}">${t}</span>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:${s}%;background:${m.color}"></div></div>
+          <span class="score-bar-val" style="color:${isPrim ? m.color : 'var(--text-mute)'}">${s}</span>
+          <span class="score-bar-comment" style="color:${isPrim ? m.color : 'var(--text-mute)'}">${scoreLabel(s)}</span>
+        </div>`;
+      }).join('');
+    }
+
+    // アクションボタン類を表示（renderResult が担当する箇所）
+    ['service', 'pdfBtnWrap', 'jsonBtn'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('hidden');
+    });
+
+    goStep(4);
+    if (typeof drawRadar === 'function') drawRadar(data.scores);
+    if (typeof renderResultExtras === 'function')
+      requestAnimationFrame(() => requestAnimationFrame(renderResultExtras));
+  } catch (_) {}
+};
+
 renderQuestions();
 loadFormState();
+checkLastResult();
 document.addEventListener("change", saveFormState);
 const mainEl = document.querySelector("main");
 if (mainEl) mainEl.addEventListener("input", saveFormState);
@@ -677,7 +1022,7 @@ if (mainEl) mainEl.addEventListener("input", saveFormState);
 document.getElementById("contactBtn").addEventListener("click", () => {
   const subj = encodeURIComponent("ムードメーカーサーベイ｜問い合わせ");
   const name = document.getElementById("name").value.trim() || "（未入力）";
-  const body = encodeURIComponent(`氏名: ${name}\n\n（診断結果はJSON保存でシェアできます）\n`);
+  const body = encodeURIComponent(`氏名: ${name}\n\n（診断結果は JSON 保存または管理画面で共有できます）\n`);
   window.location.href = `mailto:info@singerly.co.jp?subject=${subj}&body=${body}`;
 });
 

@@ -1,62 +1,197 @@
 <!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
-  <title>ムードメーカー診断 — ムドメわっしょい！</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ムードメーカー診断 | Singerly</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;800;900&family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@700;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="./styles.css"/>
 </head>
 <body>
 
+<!-- NAV -->
 <nav class="nav">
-  <a href="../../index.html" class="nav-back">← ムドメわっしょい！</a>
-  <span class="nav-brand">by Singerly</span>
+  <a href="/" class="nav-back">← ムドメわっしょい！</a>
+  <div class="nav-links">
+    <a href="./dashboard" class="nav-link">ダッシュボード</a>
+    <a href="./admin"     class="nav-link">管理</a>
+  </div>
+  <span class="nav-brand">Singerly</span>
 </nav>
 
-<div class="page-header">
-  <span class="tool-badge">🎯 診断</span>
-  <h1 class="page-title">ムードメーカー診断</h1>
-  <p class="page-sub">6タイプ診断であなたのムードメイク属性を5分で分析</p>
-</div>
-
-<div class="container">
-  <main class="main">
-
-    <section id="step-profile" class="card">
-      <h2>1. プロフィール入力</h2>
-      <p class="muted">SNSなど、自己情報を入力してください。</p>
-      <div class="grid two">
-        <label>氏名<input id="name" type="text" placeholder="例: 奥田 真広" /></label>
-        <label>メール（任意）<input id="email" type="email" placeholder="example@singerly.co.jp" /></label>
-        <label>生年月日（任意）<input id="birthdate" type="date" /></label>
-        <label>X（旧Twitter）URL（任意）<input id="snsX" type="url" placeholder="https://x.com/..." /></label>
-        <label>Facebook URL（任意）<input id="snsFacebook" type="url" placeholder="https://facebook.com/..." /></label>
-        <label>note URL（任意）<input id="snsNote" type="url" placeholder="https://note.com/..." /></label>
-        <label>メディア掲載記事URL①（任意）<input id="mediaUrl1" type="url" placeholder="https://..." /></label>
-        <label>メディア掲載記事URL②（任意）<input id="mediaUrl2" type="url" placeholder="https://..." /></label>
-        <label>メディア掲載記事URL③（任意）<input id="mediaUrl3" type="url" placeholder="https://..." /></label>
+<!-- ════════════════════════
+     SCREEN 0 — HERO
+════════════════════════ -->
+<section id="screen-hero" class="screen">
+  <div class="hero">
+    <div class="hero-kanji-bg">鑑</div>
+    <div class="hero-inner">
+      <p class="hero-eyebrow">SINGERLY · MOOD DIAGNOSIS</p>
+      <h1 class="hero-title">
+        あなたの<span class="hero-accent">ムードメイク適性</span>を正式に鑑定する
+      </h1>
+      <p class="hero-sub">
+        50問・約5分のサーベイで、あなたの「場の作り方」を6属性に分類。<br>
+        最後に<strong>鑑定書形式の1枚カード</strong>をお渡しします。
+      </p>
+      <div class="hero-types">
+        <span class="type-pill" style="--tc:#D94A3D"><span class="type-pill-glyph">宴</span><span class="type-pill-name">宴会型</span></span>
+        <span class="type-pill" style="--tc:#7A1F2A"><span class="type-pill-glyph">導</span><span class="type-pill-name">教祖型</span></span>
+        <span class="type-pill" style="--tc:#C8A050"><span class="type-pill-glyph">攻</span><span class="type-pill-name">勝負型</span></span>
+        <span class="type-pill" style="--tc:#1E5FA8"><span class="type-pill-glyph">知</span><span class="type-pill-name">知識型</span></span>
+        <span class="type-pill" style="--tc:#6B3A8E"><span class="type-pill-glyph">魅</span><span class="type-pill-name">色気型</span></span>
+        <span class="type-pill" style="--tc:#2F6B4F"><span class="type-pill-glyph">和</span><span class="type-pill-name">柔和型</span></span>
       </div>
-    </section>
+      <button class="hero-cta" onclick="goStep(1)">鑑定を開始する →</button>
+      <div id="hero-resume-wrap" class="hero-resume-wrap hidden">
+        <button class="hero-resume-btn" onclick="resumeLastResult()">
+          前回の鑑定結果を見る →
+        </button>
+        <span id="hero-resume-name" class="hero-resume-name"></span>
+      </div>
+      <p class="hero-meta">所要時間：約5分</p>
+    </div>
+  </div>
+</section>
 
-    <section id="step-survey" class="card">
-      <h2>2. 5分サーベイ</h2>
-      <p class="muted">各質問で該当する数字をラジオボタンで選んでください。</p>
-      <p class="q-scale-hint q-scale-hint-once">1 よくあてはまる 〜 5 あてはまらない</p>
-      <div class="q-section-label">おもてなし適性（全属性の前提条件）</div>
-      <div id="omoteNashiQuestions" class="questions"></div>
-      <div class="q-section-label" style="margin-top:16px;">ムードメイク属性（6タイプ診断）</div>
-      <div id="questions" class="questions"></div>
-    </section>
+<!-- ════════════════════════
+     SCREEN 1 — PROFILE
+════════════════════════ -->
+<section id="screen-profile" class="screen hidden">
+  <div class="step-wrap">
+    <div id="progress-bar-1" class="progress-stepper"></div>
+    <div class="step-card">
+      <div class="step-header">
+        <div>
+          <div style="font-family:var(--font-num);font-size:11px;font-weight:800;color:var(--red);letter-spacing:.2em">STEP 01</div>
+          <h2 style="margin:4px 0 2px;font-size:22px;font-family:var(--font-serif)">お名前と、あなたを表す1枚を</h2>
+          <p style="font-size:13px;color:var(--text-sub)">鑑定書には受領者名と肖像が記載されます。お名前以外は任意です。</p>
+        </div>
+      </div>
+      <div class="step-body">
 
-    <section id="step-org-info" class="card">
-      <h2>3. 組織適合マトリクス（自己申告）</h2>
-      <p class="muted">選択すると分析精度が上がります。空欄でも属性スコアのみで自動計算します。</p>
-      <div class="grid two">
-        <label>目指す／フィットする組織規模
-          <select id="orgPrefSize">
+        <!-- SNS連携セクション -->
+        <div class="profile-sns-block">
+          <div class="profile-block-head">
+            <div class="profile-step-num">1</div>
+            <div style="font-size:14px;font-weight:900;color:var(--ink);letter-spacing:.05em">SNSアカウントから肖像を取得</div>
+          </div>
+          <p class="profile-block-sub">いずれか1つ連携してください。プロフィール画像を鑑定書の肖像枠に配置します。</p>
+          <div class="profile-sns-btns">
+            <button type="button" class="profile-sns-btn profile-sns-x">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              X で連携
+            </button>
+            <button type="button" class="profile-sns-btn profile-sns-fb">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+              Facebook で連携
+            </button>
+            <button type="button" class="profile-sns-btn profile-sns-gh">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#24292F"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.4 3-.405 1.02.005 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+              GitHub で連携
+            </button>
+          </div>
+        </div>
+
+        <!-- プロフィール情報 -->
+        <div class="profile-info-block">
+          <div class="profile-block-head" style="margin-bottom:16px">
+            <div class="profile-step-num">2</div>
+            <div style="font-size:14px;font-weight:900;color:var(--ink);letter-spacing:.05em">プロフィール情報を入力</div>
+          </div>
+          <div class="profile-info-grid">
+            <!-- 肖像プレビュー -->
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--text-sub);margin-bottom:8px;letter-spacing:.05em">取得済み肖像</div>
+              <div class="profile-avatar">
+                <svg width="44" height="44" viewBox="0 0 24 24" fill="var(--red)">
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+              </div>
+            </div>
+            <!-- フィールド -->
+            <div>
+              <div class="grid two" style="margin-bottom:12px">
+                <label>会社名<input type="text" id="company" placeholder="例：Singerly株式会社"/></label>
+                <label>役職<input type="text" id="position" placeholder="例：代表取締役"/></label>
+              </div>
+              <label style="margin-bottom:12px;display:block">会社URL
+                <input type="url" id="companyUrl" placeholder="https://example.com"/>
+              </label>
+              <label style="margin-bottom:12px;display:block">お名前 <span style="color:var(--red);font-size:11px">必須</span>
+                <input id="name" type="text" placeholder="例：山田 太郎" style="padding:14px 16px;font-size:18px;font-weight:700"/>
+              </label>
+              <div style="margin-bottom:12px">
+                <div style="font-size:12px;font-weight:700;color:var(--text-sub);margin-bottom:6px">性別 <span style="color:var(--red);font-size:11px">必須</span></div>
+                <div class="profile-gender-row">
+                  <label class="profile-gender-opt" id="gender-male-label">
+                    <input type="radio" name="gender" value="male" id="genderMale" checked onchange="updateGenderStyle()"/>
+                    男性
+                  </label>
+                  <label class="profile-gender-opt" id="gender-female-label">
+                    <input type="radio" name="gender" value="female" id="genderFemale" onchange="updateGenderStyle()"/>
+                    女性
+                  </label>
+                </div>
+              </div>
+              <label>メール（任意）
+                <input id="email" type="email" placeholder="example@example.com"/>
+              </label>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="step-footer">
+        <button class="btn ghost" onclick="goStep(0)">← 戻る</button>
+        <button class="btn" onclick="validateProfile()">次へ：サーベイへ →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════
+     SCREEN 2 — SURVEY
+════════════════════════ -->
+<section id="screen-survey" class="screen hidden">
+  <div class="survey-wrap">
+    <div id="progress-bar-2" class="progress-stepper" style="max-width:680px;margin:0 auto;padding:16px 20px 0"></div>
+    <!-- 非表示ストア（app.jsがname属性で参照） -->
+    <div id="omoteNashiQuestions" style="display:none"></div>
+    <div id="questions"           style="display:none"></div>
+    <!-- 1問表示エリア -->
+    <div id="survey-question-display"></div>
+  </div>
+</section>
+
+<!-- ════════════════════════
+     SCREEN 3 — ORG MATRIX
+════════════════════════ -->
+<section id="screen-org" class="screen hidden">
+  <div class="step-wrap">
+    <div id="progress-bar-3" class="progress-stepper"></div>
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">3</div>
+        <div class="step-title-wrap">
+          <h2>組織適合マトリクス</h2>
+          <p>選択すると分析精度が上がります。すべて任意です。</p>
+        </div>
+      </div>
+      <div class="step-body">
+
+        <div class="matrix-group">
+          <div class="matrix-label">目指す／フィットする組織規模</div>
+          <div class="matrix-toggles" id="toggle-size">
+            <button class="matrix-toggle" data-val="SIZE_S"  onclick="setToggle('size',this)"><span>〜10名</span><small>小規模</small></button>
+            <button class="matrix-toggle" data-val="SIZE_SM" onclick="setToggle('size',this)"><span>11〜49名</span><small>小中規模</small></button>
+            <button class="matrix-toggle" data-val="SIZE_M"  onclick="setToggle('size',this)"><span>50〜299名</span><small>中堅</small></button>
+            <button class="matrix-toggle" data-val="SIZE_L"  onclick="setToggle('size',this)"><span>300〜999名</span><small>大規模</small></button>
+            <button class="matrix-toggle" data-val="SIZE_XL" onclick="setToggle('size',this)"><span>1,000名〜</span><small>巨大</small></button>
+          </div>
+          <select id="orgPrefSize" class="hidden-select">
             <option value="">選択してください（任意）</option>
             <option value="SIZE_S">小規模（〜10名）</option>
             <option value="SIZE_SM">小中規模（11〜49名）</option>
@@ -64,9 +199,18 @@
             <option value="SIZE_L">大規模（300〜999名）</option>
             <option value="SIZE_XL">巨大規模（1,000名〜）</option>
           </select>
-        </label>
-        <label>好きな創業ステージ感
-          <select id="orgPrefFounding">
+        </div>
+
+        <div class="matrix-group">
+          <div class="matrix-label">好きな創業ステージ感</div>
+          <div class="matrix-toggles" id="toggle-founding">
+            <button class="matrix-toggle" data-val="AGE_0_5"   onclick="setToggle('founding',this)"><span>〜5年</span><small>創業期</small></button>
+            <button class="matrix-toggle" data-val="AGE_6_20"  onclick="setToggle('founding',this)"><span>6〜20年</span><small>成長期</small></button>
+            <button class="matrix-toggle" data-val="AGE_21_50" onclick="setToggle('founding',this)"><span>21〜50年</span><small>成熟期</small></button>
+            <button class="matrix-toggle" data-val="AGE_51_100" onclick="setToggle('founding',this)"><span>51〜100年</span><small>老舗</small></button>
+            <button class="matrix-toggle" data-val="AGE_101P"  onclick="setToggle('founding',this)"><span>100年〜</span><small>超老舗</small></button>
+          </div>
+          <select id="orgPrefFounding" class="hidden-select">
             <option value="">選択してください（任意）</option>
             <option value="AGE_0_5">創業期（〜5年）スタートアップ感</option>
             <option value="AGE_6_20">成長・拡大期（6〜20年）</option>
@@ -74,9 +218,25 @@
             <option value="AGE_51_100">老舗（準）（51〜100年）</option>
             <option value="AGE_101P">創業100年超の老舗</option>
           </select>
-        </label>
-        <label>得意／希望の業界
-          <select id="orgPrefIndustry">
+        </div>
+
+        <div class="matrix-group">
+          <div class="matrix-label">得意／希望の業界</div>
+          <div class="matrix-toggles" id="toggle-industry" style="flex-wrap:wrap">
+            <button class="matrix-toggle" data-val="IND_01" onclick="setToggle('industry',this)"><span>メーカー</span></button>
+            <button class="matrix-toggle" data-val="IND_02" onclick="setToggle('industry',this)"><span>商社・卸売</span></button>
+            <button class="matrix-toggle" data-val="IND_03" onclick="setToggle('industry',this)"><span>小売・流通</span></button>
+            <button class="matrix-toggle" data-val="IND_04" onclick="setToggle('industry',this)"><span>金融・保険</span></button>
+            <button class="matrix-toggle" data-val="IND_05" onclick="setToggle('industry',this)"><span>建設・不動産</span></button>
+            <button class="matrix-toggle" data-val="IND_06" onclick="setToggle('industry',this)"><span>IT・ソフト</span></button>
+            <button class="matrix-toggle" data-val="IND_07" onclick="setToggle('industry',this)"><span>広告・出版</span></button>
+            <button class="matrix-toggle" data-val="IND_08" onclick="setToggle('industry',this)"><span>サービス</span></button>
+            <button class="matrix-toggle" data-val="IND_09" onclick="setToggle('industry',this)"><span>医療・介護</span></button>
+            <button class="matrix-toggle" data-val="IND_10" onclick="setToggle('industry',this)"><span>教育・専門職</span></button>
+            <button class="matrix-toggle" data-val="IND_11" onclick="setToggle('industry',this)"><span>物流・運輸</span></button>
+            <button class="matrix-toggle" data-val="IND_12" onclick="setToggle('industry',this)"><span>官公庁</span></button>
+          </div>
+          <select id="orgPrefIndustry" class="hidden-select">
             <option value="">選択してください（任意）</option>
             <option value="IND_01">メーカー／製造業</option>
             <option value="IND_02">商社・卸売</option>
@@ -91,198 +251,922 @@
             <option value="IND_11">物流・運輸・インフラ</option>
             <option value="IND_12">官公庁・公社・団体</option>
           </select>
-        </label>
-        <label>職場でのポジション
-          <select id="orgPrefPosition">
+        </div>
+
+        <div class="matrix-group">
+          <div class="matrix-label">職場でのポジション</div>
+          <div class="matrix-toggles" id="toggle-position">
+            <button class="matrix-toggle" data-val="individual" onclick="setToggle('position',this)"><span>個人プレイヤー</span></button>
+            <button class="matrix-toggle" data-val="leader"     onclick="setToggle('position',this)"><span>チームリーダー</span></button>
+            <button class="matrix-toggle" data-val="manager"    onclick="setToggle('position',this)"><span>マネージャー</span></button>
+            <button class="matrix-toggle" data-val="exec"       onclick="setToggle('position',this)"><span>経営層・役員</span></button>
+          </div>
+          <select id="orgPrefPosition" class="hidden-select">
             <option value="">選択してください（任意）</option>
             <option value="individual">個人プレイヤー</option>
             <option value="leader">チームリーダー</option>
             <option value="manager">マネージャー</option>
             <option value="exec">経営層・役員</option>
           </select>
-        </label>
-      </div>
-    </section>
-
-    <section id="step-narrative" class="card">
-      <h2>4. プロフィール分析入力（任意）</h2>
-      <p class="muted">入力した内容をもとに、レポートの各文言を自動生成します。空欄はサンプル文が入ります。</p>
-
-      <div class="narrative-group">
-        <div class="narrative-label">下剋上ストーリー</div>
-        <div class="grid two">
-          <label>ストーリーの型
-            <select id="narrativeStoryType">
-              <option value="">選択してください</option>
-              <option value="下剋上型">下剋上型（逆境から這い上がった）</option>
-              <option value="成長型">成長型（着実な積み重ねで力をつけた）</option>
-              <option value="転換型">転換型（大きな転機があった）</option>
-              <option value="開花型">開花型（環境の変化で才能が開花した）</option>
-            </select>
-          </label>
-          <label>一言エピソード<input id="narrativeStoryEpisode" type="text" placeholder="例：新卒で失敗続きの3年間を経て、イベント責任者として覚醒" /></label>
         </div>
-      </div>
 
-      <div class="narrative-group">
-        <div class="narrative-label">バックグラウンド</div>
-        <label>ムードメーカーになった原体験を一言で<input id="narrativeOrigin" type="text" placeholder="例：学生時代、クラスの空気を変えた文化祭の経験" /></label>
       </div>
-
-      <div class="narrative-group">
-        <div class="narrative-label">ウィークポイント</div>
-        <label>あてはまる傾向を選んでください
-          <select id="narrativeWeaknessPattern">
-            <option value="">選択してください</option>
-            <option value="過熱型">過熱しすぎる（テンションが空回りすることがある）</option>
-            <option value="読みすぎ型">空気を読みすぎる（自分の意見を出しにくい）</option>
-            <option value="協調過剰型">競争より協調を優先しすぎる</option>
-            <option value="論理過剰型">知識・論理に偏りすぎる</option>
-            <option value="存在感強すぎ型">存在感が出すぎて周囲が萎縮することがある</option>
-            <option value="埋もれ型">周囲に合わせすぎて個性が埋もれることがある</option>
-          </select>
-        </label>
+      <div class="step-footer">
+        <button class="btn ghost" onclick="goStep(2)">← 戻る</button>
+        <!-- id="analyzeBtn" を付けることで app.js のイベントリスナーがここを使う -->
+        <button id="analyzeBtn" class="btn">鑑定書を発行する →</button>
       </div>
+    </div>
+  </div>
+</section>
 
-      <div class="narrative-group">
-        <div class="narrative-label">一番輝いたムードメイク事例</div>
-        <label>どんな場面で、どう動いて、どんな変化が生まれたか
-          <textarea id="narrativeAchievementCase" rows="4" placeholder="例：全社総会の前日、場が重苦しい雰囲気だったのでアイスブレイクを即興で提案。200名が笑顔になり、役員から「場が変わった」と言われた。"></textarea>
-        </label>
-      </div>
+<!-- ════════════════════════
+     SCREEN 4 — RESULT
+════════════════════════ -->
+<section id="screen-result" class="screen hidden">
+  <div class="result-wrap">
 
-      <div class="narrative-group">
-        <div class="narrative-label">想い（ミッション）</div>
-        <div class="grid two">
-          <label>ミッションの方向性
-            <select id="narrativeMissionTemplate">
-              <option value="">選択してください</option>
-              <option value="組織変革">ムードメイクで組織を変える</option>
-              <option value="場づくり">誰もが輝ける場をつくる</option>
-              <option value="価値証明">ムードメーカーの価値を社会に証明する</option>
-              <option value="架け橋">人と人をつなぐ架け橋になる</option>
-              <option value="カスタム">カスタム（下に入力）</option>
-            </select>
-          </label>
-          <label>補足・自由記述<input id="narrativeMissionNote" type="text" placeholder="例：地方の中小企業にもムードメーカーを" /></label>
-        </div>
-      </div>
-    </section>
+    <!-- ══ DARK HERO ══ -->
+    <div id="result-hero-dark" class="result-hero-dark">
+      <div id="result-bg-kanji" class="result-bg-kanji-dark"></div>
+      <div class="result-hero-grid">
 
-    <section class="row end">
-      <button id="analyzeBtn" class="btn">分析する →</button>
-      <div class="pdf-btn-wrap hidden" id="pdfBtnWrap">
-        <button id="pdfBtn" class="btn ghost">PDFとして保存</button>
-        <p class="pdf-hint">印刷ダイアログが開きます。左下の「PDF」→「PDFとして保存」を選択してください。</p>
-      </div>
-      <button id="jsonBtn" class="btn ghost hidden">JSON保存</button>
-    </section>
-
-    <section id="result" class="card hidden report-card">
-      <p id="omoteNashiBanner" class="om-banner hidden"></p>
-      <div class="report-sheet-header row between">
+        <!-- LEFT: V3 カード -->
         <div>
-          <p class="report-kicker">ムードメイカー パラメータ</p>
-          <h2 id="reportTitle" class="report-title">分析結果（1枚サマリー）</h2>
+          <div class="result-hero-card-label">MOOD CARD</div>
+          <div id="result-card-container"></div>
         </div>
-        <span class="brand-mark" aria-hidden="true">Singerly</span>
-      </div>
 
-      <div class="report-grid">
-        <div class="report-col report-col-a">
-          <div class="section-block">
-            <div class="section-bar">属性スコア</div>
-            <div class="section-body">
-              <canvas id="radarChart" width="340" height="280"></canvas>
-              <ul id="scores" class="scores-compact"></ul>
-              <div id="scoreTableWrap"></div>
-              <div class="mini-chart-wrap">
-                <p class="mini-chart-title">項目別の推移（疑似トレンド）</p>
-                <canvas id="trendChart" width="340" height="180"></canvas>
+        <!-- RIGHT: コンテンツ -->
+        <div class="result-hero-right">
+          <div class="result-ogp-eyebrow">YOUR MOOD-MAKER TYPE</div>
+          <h1 id="result-ogp-h1" class="result-ogp-h1"></h1>
+          <p id="result-ogp-sub" class="result-ogp-sub"></p>
+          <div id="result-ogp-badges" class="result-ogp-badges"></div>
+
+          <!-- Stats: おもてなし指数 ÷ ムドメ戦闘力 -->
+          <div class="result-hero-stats">
+            <div class="result-stat-block">
+              <div class="result-stat-label">おもてなし指数</div>
+              <div class="result-stat-omote">
+                <span id="result-omote-val" class="result-omote-big"></span>
+                <span class="result-omote-denom">/10</span>
+              </div>
+              <div id="result-omote-stage" class="result-omote-stage"></div>
+            </div>
+            <div class="result-stat-sep"></div>
+            <div class="result-stat-block result-stat-block-power">
+              <div class="result-stat-label">ムドメ戦闘力</div>
+              <div id="result-hero-power" class="result-hero-power" data-battle-target="0" data-battle-color="#fff">0</div>
+              <div id="result-hero-tier" class="result-hero-tier"></div>
+            </div>
+          </div>
+
+          <!-- 武将ヒーローカード -->
+          <div id="result-hero-warrior-card" class="result-hero-warrior-card"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ ANALYSIS SECTION (light) ══ -->
+    <div class="result-analysis-section">
+      <p id="omoteNashiBanner" class="om-banner hidden" style="max-width:1040px;margin:0 auto 12px"></p>
+      <div class="result-analysis-inner">
+
+        <!-- LEFT: 武将 -->
+        <div class="result-warrior-col">
+          <div id="result-warriors-container"></div>
+        </div>
+
+        <!-- RIGHT: 分析 -->
+        <div class="result-right-col">
+          <!-- レーダー + スコアバー（横並び） -->
+          <div class="result-panel result-panel-radar">
+            <div class="result-panel-body">
+              <canvas id="radarChart" width="160" height="140"></canvas>
+              <div class="score-bars-wrap">
+                <div style="font-size:9px;font-weight:800;letter-spacing:.18em;color:var(--text-mute);margin-bottom:6px">6属性スコア</div>
+                <div id="result-score-bar-list"></div>
+                <div id="score-bars-comment" class="score-bars-comment"></div>
               </div>
             </div>
           </div>
+          <div id="result-keyword-card" class="result-keyword-card"></div>
+          <div id="result-type-desc"    class="result-type-desc-card"></div>
+          <div id="result-type-details" class="result-detail-row"></div>
         </div>
-        <div class="report-col report-col-b">
-          <div class="section-block">
-            <div class="section-bar">診断サマリー</div>
-            <div class="section-body">
-              <p id="primary" class="report-p"></p>
-              <p id="fit" class="report-p"></p>
-              <p id="guidance" class="report-p"></p>
+      </div>
+    </div>
+
+    <!-- ══ SCENES + GROWTH ══ -->
+    <div class="result-growth-section">
+      <div class="result-growth-inner">
+        <div id="result-scenes-card" class="result-scenes-card"></div>
+        <div id="result-growth-card" class="result-growth-card"></div>
+      </div>
+    </div>
+
+    <!-- ══ COMPAT ══ -->
+    <div class="result-compat-wrap">
+      <div id="result-compat-section" class="result-compat-inner"></div>
+    </div>
+
+    <!-- ══ MATRIX / ACTIONS ══ -->
+    <div class="result-matrix-section">
+      <div class="result-matrix-inner">
+        <div id="orgMatrixSection" class="org-matrix-section">
+          <div class="org-matrix-head">
+            <h3 class="org-matrix-title">組織適合</h3>
+            <p id="orgMatrixSummary" class="org-matrix-summary"></p>
+          </div>
+          <div class="org-fit-row">
+            <div class="org-fit-card org-fit-good">
+              <div class="org-fit-label">✓ 適合する組織</div>
+              <div class="org-fit-text" id="orgFitGood"></div>
+            </div>
+            <div class="org-fit-card org-fit-bad">
+              <div class="org-fit-label">✕ 適合しない組織</div>
+              <div class="org-fit-text" id="orgFitBad"></div>
             </div>
           </div>
-          <div class="section-block">
-            <div class="section-bar">必殺技</div>
-            <div class="section-body"><p id="signatureSkill" class="report-p"></p></div>
-          </div>
-          <div class="section-block">
-            <div class="section-bar">バックグラウンド</div>
-            <div class="section-body"><p id="background" class="report-p"></p></div>
-          </div>
-          <div class="section-block">
-            <div class="section-bar">ウィークポイント</div>
-            <div class="section-body"><p id="weakness" class="report-p"></p></div>
+          <!-- compat hidden -->
+          <div style="display:none">
+            <p id="orgMatrixSecondary"></p>
+            <div id="orgPlotSize"></div>
+            <div id="orgPlotFounding"></div>
+            <div id="orgPlotIndustry"></div>
           </div>
         </div>
-        <div class="report-col report-col-c">
-          <div class="section-block">
-            <div class="section-bar">下剋上ストーリー</div>
-            <div class="section-body"><p id="story" class="report-p"></p></div>
-          </div>
-          <div class="section-block">
-            <div class="section-bar">一番輝いた事例</div>
-            <div class="section-body">
-              <p id="achievements" class="report-p"></p>
-              <p id="achievementsAnalysis" class="report-p achievement-analysis"></p>
-            </div>
-          </div>
-          <div class="section-block">
-            <div class="section-bar">想い</div>
-            <div class="section-body"><p id="mission" class="report-p"></p></div>
+        <div id="service" class="service-block hidden">
+          <h3>Singerlyサービス接続</h3>
+          <p id="orgFitText"></p><p id="serviceText"></p>
+          <div class="actions-row">
+            <button type="button" id="contactBtn"    class="btn secondary">問い合わせる</button>
+            <button type="button" id="saveReportBtn" class="btn ghost">レポートを保存</button>
+            <div class="hidden" id="pdfBtnWrap"><button id="pdfBtn" class="btn ghost">PDF保存</button></div>
+            <button id="jsonBtn" class="btn ghost hidden">JSON保存</button>
           </div>
         </div>
+        <p class="report-footer-tagline">多面的なムードメイク力が武器になる — Singerly</p>
       </div>
+    </div>
 
-      <div id="orgMatrixSection" class="org-matrix-section">
-        <div class="org-matrix-head">
-          <h3 class="org-matrix-title">組織適合マトリクス（規模 × 創業ステージ × 業界）</h3>
-          <p id="orgMatrixSummary" class="org-matrix-summary"></p>
-          <p id="orgMatrixSecondary" class="org-matrix-secondary muted"></p>
-        </div>
-        <div class="org-matrix-plots">
-          <div class="org-plot-card">
-            <div class="section-bar">1. 組織規模（従業員数）</div>
-            <div class="org-plot-body" id="orgPlotSize"></div>
-          </div>
-          <div class="org-plot-card">
-            <div class="section-bar">2. 創業年数区分</div>
-            <div class="org-plot-body" id="orgPlotFounding"></div>
-          </div>
-          <div class="org-plot-card org-plot-card-wide">
-            <div class="section-bar">3. 業界区分（12カテゴリ）</div>
-            <div class="org-plot-body" id="orgPlotIndustry"></div>
-          </div>
-        </div>
-      </div>
+    <!-- ── compat hidden ── -->
+    <div style="display:none">
+      <div id="result-hero"><div id="result-hero-glyph"></div><div id="result-type-name"></div><div id="result-catchphrase"></div></div>
+      <div id="result-type-badges"></div>
+      <h2 id="reportTitle"></h2>
+      <p id="primary"></p><p id="fit"></p><p id="guidance"></p><p id="signatureSkill"></p>
+      <p id="story"></p><p id="background"></p><p id="weakness"></p><p id="mission"></p>
+      <p id="achievements"></p><p id="achievementsAnalysis"></p>
+      <ul id="scores"></ul><div id="scoreTableWrap"></div>
+      <div class="mini-chart-wrap"><canvas id="trendChart" width="280" height="140"></canvas></div>
+      <div class="report-grid"></div>
+    </div>
 
-      <p class="report-footer-tagline">多面的なムードメイク力が武器になる！</p>
-    </section>
+  </div>
+</section>
 
-    <section id="service" class="card hidden">
-      <h2>5. Singerlyサービス接続</h2>
-      <p id="orgFitText"></p>
-      <p id="serviceText"></p>
-      <div class="row">
-        <button type="button" id="contactBtn" class="btn secondary">問い合わせる</button>
-        <button type="button" id="saveReportBtn" class="btn ghost">レポートを保存</button>
-      </div>
-    </section>
-
-  </main>
+<!-- ── app.js compat: hidden narrative inputs ── -->
+<div style="display:none">
+  <select  id="narrativeStoryType"></select>
+  <input   id="narrativeStoryEpisode"   type="text"/>
+  <input   id="narrativeOrigin"         type="text"/>
+  <select  id="narrativeWeaknessPattern"></select>
+  <textarea id="narrativeAchievementCase"></textarea>
+  <select  id="narrativeMissionTemplate"></select>
+  <input   id="narrativeMissionNote"    type="text"/>
+  <!-- profile optional fields (hidden, kept for app.js compat) -->
+  <input id="birthdate"    type="date"/>
+  <input id="snsX"         type="url"/>
+  <input id="snsFacebook"  type="url"/>
+  <input id="snsNote"      type="url"/>
+  <input id="mediaUrl1"    type="url"/>
+  <input id="mediaUrl2"    type="url"/>
+  <input id="mediaUrl3"    type="url"/>
+  <div   id="resumeDropZone"><input type="file" id="resumeFile"/></div>
+  <p     id="resumeUploadStatus"></p>
 </div>
 
-<script src="org-matrix.js"></script>
-<script src="app.js"></script>
+<script src="./org-matrix.js"></script>
+<script src="./app.js"></script>
+
+<script>
+// ══════════════════════════════════════
+// ナビゲーション
+// ══════════════════════════════════════
+const SCREENS = ['hero', 'profile', 'survey', 'org', 'result'];
+let currentStep = 0;
+
+function goStep(n) {
+  document.getElementById('screen-' + SCREENS[currentStep]).classList.add('hidden');
+  document.getElementById('screen-' + SCREENS[n]).classList.remove('hidden');
+  currentStep = n;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  renderProgressBars(n);
+  if (n === 2 && typeof renderCurrentQuestion === 'function') {
+    renderCurrentQuestion();
+  }
+  if (n === 4) {
+    requestAnimationFrame(() => requestAnimationFrame(renderResultExtras));
+  }
+}
+
+const STEP_LABELS = ['プロフィール', 'サーベイ', '組織適合', '鑑定書発行'];
+function renderProgressBars(step) {
+  for (let i = 1; i <= 4; i++) {
+    const el = document.getElementById('progress-bar-' + i);
+    if (!el) continue;
+    el.innerHTML = STEP_LABELS.map((label, idx) => {
+      const state = idx + 1 < step ? 'done' : idx + 1 === step ? 'active' : 'todo';
+      return `<div class="progress-step ${state}">${idx + 1} ${label}</div>${idx < 3 ? '<div class="progress-sep"></div>' : ''}`;
+    }).join('');
+  }
+}
+
+function validateProfile() {
+  const name = document.getElementById('name').value.trim();
+  if (!name) { alert('氏名を入力してください'); return; }
+  goStep(2);
+}
+
+function toggleOptional(btn) {
+  btn.classList.toggle('open');
+  btn.nextElementSibling.classList.toggle('open');
+}
+
+function updateGenderStyle() {
+  const male   = document.getElementById('genderMale');
+  const female = document.getElementById('genderFemale');
+  document.getElementById('gender-male-label').classList.toggle('selected',   male.checked);
+  document.getElementById('gender-female-label').classList.toggle('selected', female.checked);
+}
+// 初期状態を反映
+document.addEventListener('DOMContentLoaded', updateGenderStyle);
+
+// ── マトリクス トグル ──
+const toggleVals = { size: '', founding: '', industry: '', position: '' };
+const toggleSelectMap = { size: 'orgPrefSize', founding: 'orgPrefFounding', industry: 'orgPrefIndustry', position: 'orgPrefPosition' };
+function setToggle(key, btn) {
+  const container = btn.closest('.matrix-toggles');
+  const isSame = btn.classList.contains('active');
+  container.querySelectorAll('.matrix-toggle').forEach(b => b.classList.remove('active'));
+  if (!isSame) {
+    btn.classList.add('active');
+    toggleVals[key] = btn.dataset.val;
+  } else {
+    toggleVals[key] = '';
+  }
+  document.getElementById(toggleSelectMap[key]).value = toggleVals[key];
+}
+
+renderProgressBars(1);
+
+// ══════════════════════════════════════
+// デザインデータ
+// ══════════════════════════════════════
+const TYPE_INFO = {
+  '宴会型': {
+    color:'#D94A3D', colorDark:'#9C2A20', bg:'#FBE5E2', glyph:'宴',
+    catch:'場を温め、波を起こす者', emblem:'mug', en:'ENKAI',
+    modifier:'熱量帯びた', pairLine:'興を点け、勢いを付ける',
+    description:'場の熱量を一瞬で引き上げ、停滞した空気を打ち破る存在。チームに「動き出すきっかけ」を与えることに長けている。',
+    strengths:['即興性','巻き込み力','感情伝染力'],
+    cautions:['過熱しやすい','繊細な場面で空回り'],
+    fitOrg:'創業期スタートアップ・成長期の組織',
+    notFitOrg:'高度な専門職集団・静寂を重んじる現場・官僚的な大企業',
+    bestRole:'キックオフ／オフサイト／表彰式の場づくり',
+    rank:'A',
+    scenes:[
+      {tag:'KICKOFF', label:'プロジェクトキックオフ', desc:'初対面メンバーの緊張を解き、最初の1週間の生産性を底上げする。'},
+      {tag:'OFFSITE', label:'オフサイト・合宿',       desc:'夜の懇親会の主役。翌朝の議論の濃さが段違いになる。'},
+      {tag:'CRISIS',  label:'炎上案件のリカバリ',     desc:'空気が悪い局面で笑いと熱量で再起動させる。'},
+    ],
+    nowNext:{now:'「全員で盛り上がる」ことを優先しがち', next:'「内省したい人」の時間を尊重し、場に静寂をデザインできるようになる'},
+    compat:{good:['知識型','柔和型'], delta:['勝負型','宴会型']},
+  },
+  '教祖型': {
+    color:'#7A1F2A', colorDark:'#4F1018', bg:'#EFD9DD', glyph:'導',
+    catch:'理念を語り、人を動かす者', emblem:'temple', en:'KYOSO',
+    modifier:'志高き', pairLine:'意味を語り、軸を通す',
+    description:'ビジョンを言語化し、人々の方向性を揃える求心力の持ち主。組織の軸となる物語を語ることができる。',
+    strengths:['ビジョン構築','語り部としての説得力','長期視点'],
+    cautions:['存在感で周囲が萎縮','異論を受け止める意識が必要'],
+    fitOrg:'成長期から成熟期の組織・理念経営の企業',
+    notFitOrg:'数字優先の短期目標組織・変化を嫌う守成型の組織',
+    bestRole:'ミッション浸透／クレド策定／全社総会',
+    rank:'S',
+    scenes:[
+      {tag:'VISION',  label:'ミッション浸透・全社総会', desc:'言葉に魂を吹き込み、空気そのものを変える。'},
+      {tag:'PIVOT',   label:'事業ピボット時',           desc:'「何を残し何を捨てるか」の軸を作り、納得感を生む。'},
+      {tag:'HIRING',  label:'採用面談',                 desc:'理念フィットの見極めで強い力を発揮する。'},
+    ],
+    nowNext:{now:'理念で人を引っ張ろうとしがち', next:'反対意見を「裏切り」ではなく「健全な摩擦」として歓迎できるようになる'},
+    compat:{good:['知識型','柔和型'], delta:['教祖型','勝負型']},
+  },
+  '勝負型': {
+    color:'#C8A050', colorDark:'#8C6A24', bg:'#F5E8C9', glyph:'攻',
+    catch:'前線で旗を立てる者', emblem:'flag', en:'SHOBU',
+    modifier:'闘志を秘めた', pairLine:'勝負の原理を調える',
+    description:'勝ち負けの構造を持ち込み、チームの闘志に火をつける推進役。数字や成果を意識した行動を引き出す。',
+    strengths:['推進力','目標達成志向','ピンチに強い'],
+    cautions:['協調を壊しやすい','勝負を持ち込みすぎる'],
+    fitOrg:'スタートアップ・成長期・営業組織',
+    notFitOrg:'和を重んじるコンサバ組織・創造性重視の職場・成熟した大企業',
+    bestRole:'目標設定／コンペ／プロジェクト立ち上げ',
+    rank:'A',
+    scenes:[
+      {tag:'TARGET',  label:'目標設定・四半期締め',   desc:'数字に対する強いコミットを引き出す。'},
+      {tag:'COMPETE', label:'コンペ・受注競争',        desc:'勝ち筋を共有しチーム全体を勝負モードに。'},
+      {tag:'LAUNCH',  label:'プロジェクト立ち上げ',   desc:'初速の速さで組織の信用を作る。'},
+    ],
+    nowNext:{now:'スピードを優先し、合議より突破を選ぶ', next:'勝ちの定義を「自分の勝利」から「チームの勝利」に置き直せる'},
+    compat:{good:['知識型','柔和型'], delta:['勝負型','宴会型']},
+  },
+  '知識型': {
+    color:'#1E5FA8', colorDark:'#0F3866', bg:'#DCE7F4', glyph:'知',
+    catch:'理で場を整える者', emblem:'book', en:'CHISHIKI',
+    modifier:'学術派の', pairLine:'理を逞え、構造を与える',
+    description:'感情ではなくデータと論理で場を整える司令塔。複雑な議論を構造化し、納得感のある合意を導く。',
+    strengths:['構造化','冷静さ','中立性'],
+    cautions:['感情面のケアが弱い','熱量を伝えにくい'],
+    fitOrg:'成熟期・老舗・専門職集団',
+    notFitOrg:'直感・感情が意思決定を左右する組織・スピード最優先のスタートアップ',
+    bestRole:'戦略策定／意思決定会議／ファシリテーション',
+    rank:'A',
+    scenes:[
+      {tag:'STRATEGY',   label:'戦略策定・経営会議', desc:'複雑な問いを構造化し、選択肢を提示する。'},
+      {tag:'DECIDE',     label:'意思決定会議',       desc:'論点と判断基準を整理して、合意を導く。'},
+      {tag:'POSTMORTEM', label:'ポストモーテム',     desc:'感情的にならず学びを抽出する。'},
+    ],
+    nowNext:{now:'正論で議論をリードしがち', next:'「論理的に正しい」より「メンバーが納得して動ける」を優先できるようになる'},
+    compat:{good:['宴会型','教祖型'], delta:['色気型','知識型']},
+  },
+  '色気型': {
+    color:'#6B3A8E', colorDark:'#3F1E5A', bg:'#E5DAEC', glyph:'魅',
+    catch:'一対一で人を動かす者', emblem:'petal', en:'IROKE',
+    modifier:'艶やかな', pairLine:'一対一での信頼を編む',
+    description:'一対一の魅力で関係性を構築する存在。場の空気を読み、相手に合わせた振る舞いで信頼を獲得する。',
+    strengths:['観察力','対人感受性','信頼構築'],
+    cautions:['空気を読みすぎる','自分を出しにくい'],
+    fitOrg:'サービス業・小規模・接客系・営業',
+    notFitOrg:'大規模・数字一辺倒の競争的営業組織・ハードワーク型企業',
+    bestRole:'顧客折衝／1on1／関係性の修復',
+    rank:'B+',
+    scenes:[
+      {tag:'ONE-ON-ONE', label:'1on1・キャリア面談',   desc:'相手が安心して本音を話せる場を作る。'},
+      {tag:'CLIENT',     label:'顧客折衝・関係修復',   desc:'失った信頼を一対一で取り戻す。'},
+      {tag:'ONBOARDING', label:'新メンバー受け入れ',   desc:'不安を察知し、寄り添いで定着率を上げる。'},
+    ],
+    nowNext:{now:'相手に合わせ過ぎて、自分を出しにくい', next:'相手を慮りつつも、自分の意見を場に置けるようになる'},
+    compat:{good:['知識型','教祖型'], delta:['知識型','色気型']},
+  },
+  '柔和型': {
+    color:'#2F6B4F', colorDark:'#163828', bg:'#D6E5DC', glyph:'和',
+    catch:'土台となり、全員を支える者', emblem:'breeze', en:'NYUWA',
+    modifier:'腕の広い', pairLine:'受容と安定を与える',
+    description:'すべてを受け止め、誰もが話せる場を作る存在。派手さはないが、組織の心理的安全性の土台になる。',
+    strengths:['受容性','心理的安全性の創出','継続性'],
+    cautions:['個性が埋もれやすい','主張する場面では弱い'],
+    fitOrg:'成熟期・老舗・大規模・中堅マネージャー',
+    notFitOrg:'攻め一辺倒のスタートアップ・競争激化のセールス組織・短期決戦型プロジェクト',
+    bestRole:'チーム合宿／心理的安全性の醸成／長期プロジェクト',
+    rank:'A',
+    scenes:[
+      {tag:'ONBOARDING', label:'新人オンボーディング', desc:'不安を吸収し、長期的な定着の土台を作る。'},
+      {tag:'CONFLICT',   label:'対立の調停',           desc:'両者の言い分を受け止め、共通の地点を見つける。'},
+      {tag:'LONG-RUN',   label:'長期プロジェクト',     desc:'燃え尽きを防ぎ、安定した推進力を提供する。'},
+    ],
+    nowNext:{now:'受け止めすぎて、自分の主張が埋もれる', next:'受容と主張のバランスを取り、「優しいリーダー」になれる'},
+    compat:{good:['教祖型','勝負型'], delta:['柔和型','色気型']},
+  },
+};
+const MODIFIERS = {
+  '宴会型':'熱量帯びた', '教祖型':'志高き', '勝負型':'闘志を秘めた',
+  '知識型':'学術派の',   '色気型':'艶やかな', '柔和型':'腕の広い',
+};
+function composeName(pJa, sJa) {
+  if (pJa === sJa) return '生粋の' + pJa;
+  return (MODIFIERS[sJa] || '') + pJa;
+}
+const WARRIORS = {
+  '宴会型': {
+    shogun: { name:'豊臣 秀吉', yomi:'TOYOTOMI HIDEYOSHI', title:'人たらしの天下人',       img:'enkai-shogun-hideyoshi.png',    tier:'総大将', quote:'人を動かすには、まず喜ばせよ。' },
+    taisho: { name:'前田 利家', yomi:'MAEDA TOSHIIE',       title:'槍の又左',              img:'enkai-taisho-toshiie.png',      tier:'侍大将', quote:'上下にも傍輩にも、真心をもって接すべし。' },
+  },
+  '教祖型': {
+    shogun: { name:'織田 信長', yomi:'ODA NOBUNAGA',         title:'時代を撃ち抜く革新者',  img:'kyoso-shogun-nobunaga.png',     tier:'総大将', quote:'是非もなし。' },
+    taisho: { name:'明智 光秀', yomi:'AKECHI MITSUHIDE',     title:'理知の人',              img:'kyoso-taisho-mitsuhide.png',    tier:'侍大将', quote:'時は今、あめが下しる五月かな。' },
+  },
+  '勝負型': {
+    shogun: { name:'武田 信玄', yomi:'TAKEDA SHINGEN',       title:'前線に旗を立てる将',    img:'shobu-shogun-shingen.png',      tier:'総大将', quote:'人は城、人は石垣、人は堀。' },
+    taisho: { name:'真田 幸村', yomi:'SANADA YUKIMURA',      title:'日本一の兵',            img:'shobu-taisho-yukimura.png',     tier:'侍大将', quote:'武士たる者、義を見てせざるは勇なきなり。' },
+  },
+  '知識型': {
+    shogun: { name:'黒田 官兵衛', yomi:'KURODA KANBEI',      title:'戦略を編む軍師',        img:'chishiki-shogun-kanbei.png',    tier:'総大将', quote:'神の罰より、主君の罰おそるべし。' },
+    taisho: { name:'石田 三成',   yomi:'ISHIDA MITSUNARI',   title:'義の知将',              img:'chishiki-taisho-mitsunari.png', tier:'侍大将', quote:'大一大万大吉。' },
+  },
+  '色気型': {
+    shogun: { name:'伊達 政宗', yomi:'DATE MASAMUNE',        title:'華と機知の独眼竜',      img:'iroke-shogun-masamune.png',     tier:'総大将', quote:'時を待つに似たるはなし。' },
+    taisho: { name:'加藤 清正', yomi:'KATO KIYOMASA',        title:'虎退治の築城名人',      img:'iroke-taisho-kiyomasa.png',    tier:'侍大将', quote:'一生懸命、ただひとすじ。' },
+  },
+  '柔和型': {
+    shogun: { name:'徳川 家康', yomi:'TOKUGAWA IEYASU',      title:'太平を築いた包容の人',  img:'nyuwa-shogun-ieyasu.png',       tier:'総大将', quote:'人の一生は重荷を負うて遠き道を行くが如し。' },
+    taisho: { name:'直江 兼続', yomi:'NAOE KANETSUGU',       title:'愛の前立を掲げた義の宰相', img:'nyuwa-taisho-kanetsugu.png', tier:'侍大将', quote:'愛は仁愛、義は信義。' },
+  },
+};
+
+// ══════════════════════════════════════
+// SVG エンブレム生成
+// ══════════════════════════════════════
+function getEmblemSVG(kind, color) {
+  const c = color;
+  const base = `width="80" height="80" viewBox="0 0 80 80" fill="none" stroke="${c}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"`;
+  let inner = '';
+  switch (kind) {
+    case 'mug':
+      inner = `<circle cx="40" cy="40" r="36"/><circle cx="40" cy="40" r="30"/>
+        <path d="M26 30 L50 30 L48 60 L28 60 Z"/>
+        <path d="M50 36 Q 60 36,60 44 Q 60 52,50 52"/>
+        <path d="M26 30 Q 28 26,32 28 Q 36 24,40 28 Q 44 24,48 28 Q 52 26,50 30"/>
+        <circle cx="31" cy="24" r="1.6" fill="${c}"/>
+        <circle cx="40" cy="22" r="1.6" fill="${c}"/>
+        <circle cx="46" cy="24" r="1.4" fill="${c}"/>
+        <path d="M30 38 L46 38" stroke-width="1.05"/>
+        <path d="M30 46 L46 46" stroke-width="1.05"/>
+        <path d="M30 54 L46 54" stroke-width="1.05"/>`;
+      break;
+    case 'temple':
+      inner = `<circle cx="40" cy="40" r="36"/><circle cx="40" cy="40" r="30"/>
+        <circle cx="40" cy="20" r="1.5" fill="${c}"/>
+        <path d="M40 21.5 L40 23"/>
+        <path d="M22 30 Q 40 22,58 30 L54 32 L26 32 Z"/>
+        <path d="M20 44 Q 40 38,60 44 L56 46 L24 46 Z"/>
+        <path d="M28 46 L28 58"/><path d="M40 46 L40 58"/><path d="M52 46 L52 58"/>
+        <path d="M22 58 L58 58"/><path d="M20 60 L60 60"/>`;
+      break;
+    case 'flag':
+      inner = `<circle cx="40" cy="40" r="36"/><circle cx="40" cy="40" r="30"/>
+        <path d="M28 18 L28 62"/>
+        <circle cx="28" cy="18" r="2" fill="${c}"/>
+        <path d="M28 22 L56 28 L52 36 L56 44 L28 38 Z"/>
+        <circle cx="42" cy="33" r="3.5" fill="${c}"/>
+        <path d="M20 62 L40 62" stroke-width="1.65"/>
+        <path d="M22 65 L38 65" stroke-width="1.2"/>`;
+      break;
+    case 'book':
+      inner = `<circle cx="40" cy="40" r="36"/><circle cx="40" cy="40" r="30"/>
+        <path d="M22 28 Q 30 26,40 30 Q 50 26,58 28 L58 54 Q 50 52,40 56 Q 30 52,22 54 Z"/>
+        <path d="M40 30 L40 56"/>
+        <path d="M28 36 L36 37" stroke-width="1.2"/>
+        <path d="M28 42 L36 43" stroke-width="1.2"/>
+        <path d="M28 48 L36 49" stroke-width="1.2"/>
+        <path d="M44 37 L52 36" stroke-width="1.2"/>
+        <path d="M44 43 L52 42" stroke-width="1.2"/>
+        <path d="M44 49 L52 48" stroke-width="1.2"/>`;
+      break;
+    case 'petal': {
+      const pts = [
+        {cx:40,cy:31,deg:0},{cx:48.6,cy:37.2,deg:72},{cx:45.3,cy:47.3,deg:144},
+        {cx:34.7,cy:47.3,deg:216},{cx:31.4,cy:37.2,deg:288}
+      ];
+      inner = `<circle cx="40" cy="40" r="36"/><circle cx="40" cy="40" r="30"/>
+        ${pts.map(p=>`<ellipse cx="${p.cx}" cy="${p.cy}" rx="6" ry="11" transform="rotate(${p.deg} ${p.cx} ${p.cy})"/>`).join('')}
+        <circle cx="40" cy="40" r="3" fill="${c}"/>`;
+      break;
+    }
+    case 'breeze':
+      inner = `<circle cx="40" cy="40" r="36"/><circle cx="40" cy="40" r="30"/>
+        <path d="M22 26 Q 36 22,50 26 Q 54 27,56 30"/>
+        <path d="M22 32 Q 32 30,44 32"/>
+        <path d="M52 30 Q 56 30,56 34 Q 56 38,52 38" stroke-width="1.35"/>
+        <path d="M22 46 Q 28 40,34 46 T 46 46 T 58 46"/>
+        <path d="M22 54 Q 28 48,34 54 T 46 54 T 58 54"/>`;
+      break;
+    default:
+      inner = `<circle cx="40" cy="40" r="34"/>`;
+  }
+  return `<svg ${base}>${inner}</svg>`;
+}
+
+// ══════════════════════════════════════
+// V3 鑑定書カード
+// ══════════════════════════════════════
+function buildV3Card(primary, secondary, name) {
+  const pm = TYPE_INFO[primary] || TYPE_INFO['宴会型'];
+  const date = new Date().toLocaleDateString('ja-JP', { year:'numeric', month:'long', day:'numeric' });
+  const subname = composeName(primary, secondary);
+  const serial = 'MM-' + String(Date.now()).slice(-6).padStart(6,'0');
+  const emblem = getEmblemSVG(pm.emblem, '#C8A050');
+  return `
+    <div class="v3-card">
+      <div class="v3-card-top">
+        <div class="v3-card-seal">免許皆伝</div>
+        <div class="v3-card-en">${pm.en}</div>
+      </div>
+      <div class="v3-card-emblem">${emblem}</div>
+      <div class="v3-card-glyph" style="color:${pm.color}">${pm.glyph}</div>
+      <div class="v3-card-type"  style="color:rgba(255,255,255,.9)">${primary}</div>
+      <div class="v3-card-catch">${pm.catch}</div>
+      <div class="v3-card-divider"></div>
+      <div class="v3-card-subname">${subname}</div>
+      <div class="v3-card-bottom">
+        <div class="v3-card-serial">${serial}</div>
+        <div class="v3-card-brand">SINGERLY WORKS</div>
+      </div>
+    </div>`;
+}
+
+// ══════════════════════════════════════
+// 武将カード
+// ══════════════════════════════════════
+function getBattlePower(typeJa, tier) {
+  const seed = {'宴会型':0,'教祖型':1,'勝負型':2,'知識型':3,'色気型':4,'柔和型':5}[typeJa] || 0;
+  const base  = tier === 'shogun' ? 300000 : 220000;
+  const range = tier === 'shogun' ? 230000 : 60000;
+  return base + ((seed * 13337 + 7919) % range);
+}
+
+function animateBattlePower() {
+  document.querySelectorAll('[data-battle-target]').forEach(el => {
+    const target = parseInt(el.dataset.battleTarget, 10);
+    const color  = el.dataset.battleColor;
+    const start  = Date.now();
+    const dur    = 4500;
+    el.textContent = '0';
+    el.style.color = 'var(--text-mute)';
+    function tick() {
+      const t    = Math.min((Date.now() - start) / dur, 1);
+      // ease-in-out: slow start → accelerate → slight ease at end
+      const ease = t < 0.7 ? (t / 0.7) * (t / 0.7) * 0.7 : 0.7 + (t - 0.7) / 0.3 * 0.3;
+      const cur  = Math.round(target * Math.min(ease, 1));
+      el.textContent = cur.toLocaleString('ja-JP');
+      // 色は目標値の60%を超えたあたりで解放
+      if (t > 0.4) el.style.color = color;
+      if (t < 1) requestAnimationFrame(tick);
+      else { el.textContent = target.toLocaleString('ja-JP'); el.style.color = color; }
+    }
+    requestAnimationFrame(tick);
+  });
+}
+
+const TYPE_LIST = ['宴会型','教祖型','勝負型','知識型','色気型','柔和型'];
+
+function getCompat(from, to) {
+  if (from === to) return '★';
+  const c = (TYPE_INFO[from] || {}).compat || {};
+  if ((c.good  || []).includes(to)) return '◎';
+  if ((c.delta || []).includes(to)) return '△';
+  return '○';
+}
+
+function buildWhoPairWith(primary) {
+  const pm = TYPE_INFO[primary] || {};
+  const good  = (pm.compat || {}).good  || [];
+  const delta = ((pm.compat || {}).delta || []).filter(t => t !== primary);
+  const other = TYPE_LIST.filter(t => t !== primary && !good.includes(t) && !delta.includes(t));
+
+  function pairCard(t, sym, symClass) {
+    const m = TYPE_INFO[t] || {};
+    return `<div class="pair-card" style="border-color:${m.color}44;background:${m.color}0E">
+      <div class="pair-card-top">
+        <span class="pair-card-glyph" style="color:${m.color}">${m.glyph}</span>
+        <span class="pair-card-name">${t}</span>
+        <span class="pair-card-sym ${symClass}">${sym}</span>
+      </div>
+      <div class="pair-card-catch">${m.catch || ''}</div>
+    </div>`;
+  }
+
+  const sections = [
+    good.length  ? `<div class="pair-group"><div class="pair-group-hd pair-best"><span>◎</span> 最高の相棒<small>重ねると相乗効果が最大に</small></div><div class="pair-grid">${good.map(t=>pairCard(t,'◎','sym-best')).join('')}</div></div>` : '',
+    other.length ? `<div class="pair-group"><div class="pair-group-hd pair-good"><span>○</span> 良い相棒<small>重ねると補完し合う組み合わせ</small></div><div class="pair-grid">${other.map(t=>pairCard(t,'○','sym-good')).join('')}</div></div>` : '',
+    delta.length ? `<div class="pair-group"><div class="pair-group-hd pair-delta"><span>△</span> 噛み合いにくい<small>役割分担と工夫が必要 — 意識すれば化ける</small></div><div class="pair-grid">${delta.map(t=>pairCard(t,'△','sym-delta')).join('')}</div></div>` : '',
+  ].join('');
+
+  return `<div class="who-pair-col">
+    <div class="result-section-ew">WHO TO PAIR WITH</div>
+    <h3 class="who-pair-title"><span style="color:${pm.color}">${primary}</span>のあなたが<br>組むと面白いタイプ</h3>
+    <p class="who-pair-sub">チーム編成・ペアワーク・1on1の相手選びの参考に。</p>
+    ${sections}
+  </div>`;
+}
+
+function buildCompatMatrix(primary) {
+  const LABEL = {'★':'生粋','◎':'最高の相棒','○':'良い相棒','△':'噛み合いにくい'};
+  const CLS   = {'★':'cm-star','◎':'cm-best','○':'cm-good','△':'cm-delta'};
+
+  const header = TYPE_LIST.map(t => {
+    const m = TYPE_INFO[t] || {};
+    const me = t === primary;
+    return `<th class="cm-th${me?' cm-me':''}" ${me?`style="color:${m.color}"`:''}><span class="cm-g" style="color:${m.color}">${m.glyph}</span><br><span class="cm-n">${t}</span></th>`;
+  }).join('');
+
+  const rows = TYPE_LIST.map(from => {
+    const fm = TYPE_INFO[from] || {};
+    const myRow = from === primary;
+    const cells = TYPE_LIST.map(to => {
+      const sym = getCompat(from, to);
+      return `<td class="cm-td ${CLS[sym]}${myRow?' cm-my-row':''}"><span class="cm-sym">${sym}</span><span class="cm-lbl">${LABEL[sym]}</span></td>`;
+    }).join('');
+    return `<tr><th class="cm-row-th${myRow?' cm-me':''}" ${myRow?`style="color:${fm.color}"`:''}><span class="cm-g" style="color:${fm.color}">${fm.glyph}</span><span class="cm-n">${from}</span></th>${cells}</tr>`;
+  }).join('');
+
+  return `<div class="compat-matrix-col">
+    <div class="result-section-ew">COMPATIBILITY MATRIX</div>
+    <h3 class="compat-matrix-title">相性表 — 6属性 × 6属性</h3>
+    <p class="compat-matrix-sub">縦＝主属性、横＝相手の属性。◎は相乗効果最大、△は役割分担の工夫が必要。</p>
+    <div class="cm-scroll"><table class="cm-table">
+      <thead><tr><th class="cm-corner">主＼相手</th>${header}</tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div>
+    <div class="cm-legend">
+      <span><span class="cm-leg cm-best">◎</span>最高の相棒</span>
+      <span><span class="cm-leg cm-good">○</span>良い相棒</span>
+      <span><span class="cm-leg cm-star">★</span>生粋</span>
+      <span><span class="cm-leg cm-delta">△</span>噛み合いにくい</span>
+    </div>
+  </div>`;
+}
+
+function buildWarriorCard(w, typeJa, typeMeta, tier) {
+  const power = getBattlePower(typeJa, tier);
+  const rank  = typeMeta.rank || 'A';
+  return `
+    <div class="warlord-card">
+      <div class="warlord-portrait-wrap">
+        <img src="./portraits/${w.img}" alt="${w.name}" loading="lazy" onerror="this.style.background='#111';this.style.minHeight='200px'">
+        <div class="warlord-portrait-badges">
+          <span class="warlord-type-badge" style="background:${typeMeta.color}">${typeJa}</span>
+          <span class="warlord-tier-badge">${w.tier}</span>
+        </div>
+        <div class="warlord-overlay">
+          <div class="warlord-yomi">${w.yomi}</div>
+          <div class="warlord-name">${w.name}</div>
+        </div>
+      </div>
+      <div class="warlord-body">
+        <div class="warlord-rank-row">
+          <span class="warlord-rank-badge" style="background:${typeMeta.color}">RANK ${rank}</span>
+          <span class="warlord-title">${w.title}</span>
+        </div>
+        ${w.quote ? `<div class="warlord-quote">「${w.quote}」</div>` : ''}
+        <div class="warlord-power-label">ムドメ戦闘力</div>
+        <div class="warlord-power" data-battle-target="${power}" data-battle-color="${typeMeta.color}">0</div>
+      </div>
+    </div>`;
+}
+
+function buildWarriors(primary, secondary) {
+  const pm = TYPE_INFO[primary] || {};
+  const pw = WARRIORS[primary];
+  if (!pw) return '';
+  return `
+    <div class="warriors-section">
+      <div class="warriors-head">
+        <div class="warriors-label">YOUR WARLORD</div>
+        <div class="warriors-title">対応武将</div>
+      </div>
+      <div class="warrior-single">
+        ${buildWarriorCard(pw.shogun, primary, pm, 'shogun')}
+      </div>
+    </div>`;
+}
+
+// ══════════════════════════════════════
+// 結果画面の追加描画
+// ══════════════════════════════════════
+function renderResultExtras() {
+  const primary   = window._moodPrimary;
+  const secondary = window._moodSecondary;
+  const name      = window._moodName || '';
+  if (!primary) return;
+
+  const pm = TYPE_INFO[primary] || {};
+  const sm = TYPE_INFO[secondary] || pm;
+  const isPure = primary === secondary;
+
+  // ── DARK HERO ──────────────────────────────────
+  // 背景グラデーション
+  const heroEl = document.getElementById('result-hero-dark');
+  if (heroEl && pm.colorDark) {
+    heroEl.style.background = `radial-gradient(ellipse at 60% 20%, ${pm.colorDark}DD 0%, #1A0808 60%, #0A0605 100%)`;
+  }
+
+  // 背景漢字
+  const bgKanjiEl = document.getElementById('result-bg-kanji');
+  if (bgKanjiEl) { bgKanjiEl.textContent = pm.glyph || ''; bgKanjiEl.style.color = '#fff'; }
+
+  // 大見出し「私の真の姿は「〇〇型」でした。」
+  const h1El = document.getElementById('result-ogp-h1');
+  if (h1El) {
+    h1El.innerHTML = `私の真の姿は「<span style="color:${pm.color}">${primary}</span>」でした。`;
+  }
+
+  // サブタイトル
+  const subEl = document.getElementById('result-ogp-sub');
+  if (subEl) subEl.textContent = `— ${pm.catch} — ${isPure ? '一芸を極めし者' : sm.pairLine}`;
+
+  // 主属性 × 副属性バッジ
+  const ogpBadges = document.getElementById('result-ogp-badges');
+  if (ogpBadges) {
+    ogpBadges.innerHTML = `
+      <div class="result-ogp-badge-item" style="border-color:${pm.color}66">
+        <span class="result-ogp-badge-label">主属性</span>
+        <span class="result-ogp-badge-glyph" style="color:${pm.color}">${pm.glyph}</span>
+        <span>${primary}</span>
+      </div>
+      <span style="color:rgba(255,255,255,.3);font-size:14px">×</span>
+      <div class="result-ogp-badge-item" style="border-color:${sm.color}66">
+        <span class="result-ogp-badge-label">副属性</span>
+        <span class="result-ogp-badge-glyph" style="color:${sm.color}">${sm.glyph}</span>
+        <span>${secondary || primary}</span>
+      </div>`;
+  }
+
+  // おもてなし指数
+  const omote = window._moodOmote || 0;
+  const omoteVal = Math.max(1, Math.round(omote / 10));
+  const omoteStage = omote >= 80 ? '覚醒期' : omote >= 60 ? '活動期' : omote >= 40 ? '成長期' : '静穏期';
+  const omoteEl = document.getElementById('result-omote-val');
+  const omoteStEl = document.getElementById('result-omote-stage');
+  if (omoteEl)  omoteEl.textContent  = omoteVal;
+  if (omoteStEl) omoteStEl.textContent = omoteStage;
+
+  // ムドメ戦闘力（ヒーロー用）
+  const pw = WARRIORS[primary];
+  const heroPower = pw ? getBattlePower(primary, 'shogun') : 0;
+  const heroPowerEl = document.getElementById('result-hero-power');
+  const heroTierEl  = document.getElementById('result-hero-tier');
+  if (heroPowerEl) {
+    heroPowerEl.dataset.battleTarget = heroPower;
+    heroPowerEl.dataset.battleColor  = pm.color || '#fff';
+  }
+  if (heroTierEl) heroTierEl.textContent = '総大将';
+
+  // 武将ヒーローカード（ヒーロー内：名前＋名言）
+  const heroWarriorEl = document.getElementById('result-hero-warrior-card');
+  if (heroWarriorEl && pw) {
+    const w = pw.shogun;
+    heroWarriorEl.style.background = `linear-gradient(135deg, ${pm.colorDark}88 0%, rgba(0,0,0,.55) 100%)`;
+    heroWarriorEl.innerHTML = `
+      <img src="./portraits/${w.img}" alt="${w.name}" class="hero-warrior-portrait"
+           onerror="this.style.display='none'">
+      <div class="hero-warrior-info">
+        <div class="hero-warrior-yomi">${w.yomi}</div>
+        <div class="hero-warrior-name">${w.name}</div>
+        ${w.quote ? `<div class="hero-warrior-quote">「${w.quote}」</div>` : ''}
+      </div>`;
+  }
+
+  // V3カード（hidden compat）
+  const cardEl = document.getElementById('result-card-container');
+  if (cardEl) cardEl.innerHTML = buildV3Card(primary, secondary, name);
+
+  // 武将（1人）
+  const warriorEl = document.getElementById('result-warriors-container');
+  if (warriorEl) warriorEl.innerHTML = buildWarriors(primary, secondary);
+
+  // キーワードカード
+  const kwEl = document.getElementById('result-keyword-card');
+  if (kwEl && pm.strengths) {
+    const tags = [...(pm.strengths || []).slice(0, 2), ...(sm !== pm ? (sm.strengths || []).slice(0, 1) : [])];
+    kwEl.style.borderLeftColor = pm.color;
+    kwEl.innerHTML = `
+      <span class="result-kw-label" style="background:${pm.color}">KEYWORD</span>
+      <div class="result-kw-catchphrase" style="color:${pm.colorDark}">${pm.catch}</div>
+      <div class="result-kw-tags">${tags.map((s, i) => {
+        const c = i < 2 ? pm : sm;
+        return `<span class="result-kw-tag" style="background:${c.color}18;color:${c.colorDark};border:1px solid ${c.color}55">#${s}</span>`;
+      }).join('')}</div>`;
+  }
+
+  // 解説
+  const descEl = document.getElementById('result-type-desc');
+  if (descEl && pm.description) {
+    const extra = !isPure && sm.pairLine
+      ? `そこに<em>${sm.modifier}</em>要素が加わり、<em>${sm.pairLine}</em>ことができるタイプ。`
+      : '';
+    descEl.innerHTML = `
+      <div class="result-detail-label">詳しい解説</div>
+      <div class="result-desc-text">${pm.description}${extra}</div>`;
+  }
+
+  // 留意点 + フィット
+  const detailsEl = document.getElementById('result-type-details');
+  if (detailsEl && pm.cautions) {
+    detailsEl.innerHTML = `
+      <div class="result-detail-card">
+        <div class="result-detail-label">留意点</div>
+        <div class="result-detail-items">
+          ${(pm.cautions || []).map(c => `<div class="result-caution-item">· ${c}</div>`).join('')}
+        </div>
+      </div>
+      <div class="result-detail-card">
+        <div class="result-detail-label">フィットする組織</div>
+        <div class="result-detail-items result-fit-text">${pm.fitOrg || ''}</div>
+        <div class="result-detail-label" style="margin-top:8px">最も力を発揮する場面</div>
+        <div class="result-detail-items">${pm.bestRole || ''}</div>
+      </div>`;
+  }
+
+  // スコアバー下コメント
+  const commentEl = document.getElementById('score-bars-comment');
+  if (commentEl) {
+    const scores = window._moodScores || {};
+    const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+    const topScore  = sorted[0]  ? sorted[0][1]  : 0;
+    const lowEntry  = sorted[sorted.length - 1] || [];
+    const lowType   = lowEntry[0] || '';
+    const lowScore  = lowEntry[1] || 0;
+    const lowInfo   = TYPE_INFO[lowType] || {};
+
+    const level = topScore >= 80 ? '突出した数値' : topScore >= 60 ? '高い数値' : '標準的な数値';
+    const topLine = `主属性「<strong style="color:${pm.color}">${primary}</strong>」は${level}を記録。${pm.catch}という特性が、スコアに正直に表れています。`;
+
+    let midLine = '';
+    if (!isPure && sm !== pm) {
+      midLine = `副属性「<strong style="color:${sm.color}">${secondary}</strong>」との複合型で、${sm.pairLine}という側面も兼ね備えているのが特徴です。`;
+    } else {
+      midLine = `主副ともに同属性の純粋型。特性の一貫性が高く、ムードの方向性がぶれにくいタイプです。`;
+    }
+
+    let lowLine = '';
+    if (lowType && lowType !== primary && lowScore < 50) {
+      lowLine = `一方、${lowType}は相対的に低め（${lowScore}点）。${lowInfo.catch || 'この特性'}を意識的に取り入れると、ムードメイクの幅がさらに広がります。`;
+    } else if (sorted.length >= 3) {
+      const gap = topScore - (sorted[2] ? sorted[2][1] : topScore);
+      if (gap > 20) {
+        lowLine = `上位スコアへの集中度が高く、特定場面での爆発力が期待できます。`;
+      }
+    }
+
+    commentEl.innerHTML = `<p>${topLine}</p><p>${midLine}</p>${lowLine ? `<p>${lowLine}</p>` : ''}`;
+  }
+
+  // 輝くシーン
+  const scenesEl = document.getElementById('result-scenes-card');
+  if (scenesEl && pm.scenes) {
+    scenesEl.innerHTML = `
+      <div class="result-card-label">輝くシーン</div>
+      <div class="result-scenes-list">
+        ${pm.scenes.map(s => `
+          <div class="result-scene-item">
+            <span class="result-scene-tag" style="background:${pm.color}18;color:${pm.colorDark};border:1px solid ${pm.color}44">${s.tag}</span>
+            <div class="result-scene-body">
+              <div class="result-scene-name">${s.label}</div>
+              <div class="result-scene-desc">${s.desc}</div>
+            </div>
+          </div>`).join('')}
+      </div>`;
+  }
+
+  // 成長ヒント NOW → NEXT
+  const growthEl = document.getElementById('result-growth-card');
+  if (growthEl && pm.nowNext) {
+    growthEl.innerHTML = `
+      <div class="result-card-label">成長ヒント</div>
+      <div class="result-growth-flow">
+        <div class="result-growth-now">
+          <span class="result-growth-badge">NOW</span>
+          <p class="result-growth-text">${pm.nowNext.now}</p>
+        </div>
+        <div class="result-growth-arrow" style="color:${pm.color}">→</div>
+        <div class="result-growth-next">
+          <span class="result-growth-badge result-growth-badge-next" style="background:${pm.color}">NEXT</span>
+          <p class="result-growth-text">${pm.nowNext.next}</p>
+        </div>
+      </div>
+      ${pm.compat ? `
+      <div class="result-compat-row">
+        <span class="result-compat-label">相性◎</span>
+        ${(pm.compat.good || []).map(t => {
+          const ci = TYPE_INFO[t] || {};
+          return `<span class="result-compat-tag" style="background:${ci.color}18;color:${ci.colorDark || ci.color};border:1px solid ${ci.color}44">${ci.glyph || ''} ${t}</span>`;
+        }).join('')}
+        <span class="result-compat-label result-compat-label-delta">相性△</span>
+        ${(pm.compat.delta || []).map(t => {
+          const ci = TYPE_INFO[t] || {};
+          return `<span class="result-compat-tag result-compat-tag-delta">${ci.glyph || ''} ${t}</span>`;
+        }).join('')}
+      </div>` : ''}`;
+  }
+
+  // 相性マトリクス
+  const compatEl = document.getElementById('result-compat-section');
+  if (compatEl) {
+    compatEl.innerHTML = buildWhoPairWith(primary) + buildCompatMatrix(primary);
+  }
+
+  // 組織適合カード
+  const fitGoodEl = document.getElementById('orgFitGood');
+  const fitBadEl  = document.getElementById('orgFitBad');
+  if (fitGoodEl) fitGoodEl.textContent = pm.fitOrg    || '';
+  if (fitBadEl)  fitBadEl.textContent  = pm.notFitOrg || '';
+
+  requestAnimationFrame(animateBattlePower);
+}
+</script>
 </body>
 </html>

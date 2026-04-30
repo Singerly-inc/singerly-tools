@@ -367,6 +367,21 @@
       </div>
     </div>
 
+    <!-- ══ WARLORD MESSAGE + SCENE ADVICE ══ -->
+    <div class="result-rich-section">
+      <div class="result-rich-inner">
+        <div id="result-warlord-message"></div>
+        <div id="result-scene-advice"></div>
+      </div>
+    </div>
+
+    <!-- ══ SNS SHARE ══ -->
+    <div class="result-share-bar">
+      <span class="result-share-label">結果をシェアする</span>
+      <button class="btn sns-btn sns-x" onclick="shareToX()">𝕏 でシェア</button>
+      <button class="btn sns-btn sns-fb" onclick="shareToFb()">Facebook でシェア</button>
+    </div>
+
     <!-- ══ COMPAT ══ -->
     <div class="result-compat-wrap">
       <div id="result-compat-section" class="result-compat-inner"></div>
@@ -723,6 +738,84 @@ const WARRIORS = {
 };
 
 // ══════════════════════════════════════
+// 武将メッセージ（スコアレベル別）
+// ══════════════════════════════════════
+const WARLORD_MESSAGES = {
+  '宴会型': {
+    突出: { body: '場の熱量を一瞬で引き上げ、その空気を人の心に刻む——それがそなたの真の力じゃ。数値が示す通り、ムードメイク力は突き抜けておる。存分に場を制せ。', sign: '天下人 豊臣 秀吉' },
+    強め: { body: '人を喜ばせる才は、そなたに宿っておる。飲み会の場も、会議の場も——そなたが一歩踏み出せば、空気は変わる。その力を惜しまず使え。', sign: '天下人 豊臣 秀吉' },
+    標準: { body: 'まだ眠れる才がある。日々の小さな場から意識して温め続けよ。繰り返すうちに、本来の力が目を覚ます。', sign: '天下人 豊臣 秀吉' },
+  },
+  '教祖型': {
+    突出: { body: 'そなたの言葉には人を動かす磁力がある。ビジョンを語るとき、周囲は無意識に旗のもとへ集まってくる。この力の重さを知り、慎重に、そして大胆に振るえ。', sign: '不動の智将 武田 信玄' },
+    強め: { body: '旗を掲げよ。そなたの言葉を待っている者が、必ずおる。一人の心を動かせば、それは十人に伝播する。確信を持って語ることを恐れるな。', sign: '不動の智将 武田 信玄' },
+    標準: { body: 'まず己のビジョンを明文化せよ。語れぬものは伝わらぬ。書くことから始めれば、言葉に芯が通ってくる。', sign: '不動の智将 武田 信玄' },
+  },
+  '勝負型': {
+    突出: { body: '勝負どころを嗅ぎ取る嗅覚、これは天賦の才じゃ。数値が証明しておる。攻め時を逃すな——そなたが前に出れば、局面は動く。', sign: '覇王 織田 信長' },
+    強め: { body: '局面を動かす胆力がある。ただしスピードだけでなく読みの精度も磨け。勝負師とは、最後まで冷静であり続ける者じゃ。', sign: '覇王 織田 信長' },
+    標準: { body: '勝負の嗅覚を研ぎ澄ますには、小さな判断を積み重ねることじゃ。日々の選択を「勝ちにいく」意識で行え。', sign: '覇王 織田 信長' },
+  },
+  '知識型': {
+    突出: { body: 'そなたの知の蓄積は、組織の羅針盤となる。数値が示す通り、その分析眼は並外れておる。問われる前に語れ——知識は黙っていては伝わらぬ。', sign: '軍師 黒田 官兵衛' },
+    強め: { body: '情報を知識に、知識を知恵に変える力がある。あとはそれを人に伝える技術を磨くことじゃ。知だけでは組織は動かぬ。言葉に変えてこそ力となる。', sign: '軍師 黒田 官兵衛' },
+    標準: { body: 'まず一つの分野を深掘りせよ。広く浅くより、深く一点。その深みが、そなたの知の起点となる。', sign: '軍師 黒田 官兵衛' },
+  },
+  '色気型': {
+    突出: { body: 'そなたの存在感は、言葉より先に届く。これは才能じゃ。そなたから漂う「何か」が人を引き寄せる。その引力を自覚して使え。', sign: '傾奇者 前田 慶次' },
+    強め: { body: '人を引きつける力がある。だが引きつけたあとが勝負じゃ。魅力は入口——その先に何を提供するかを磨け。', sign: '傾奇者 前田 慶次' },
+    標準: { body: 'まず自分自身を面白くせよ。経験を積み、物語を持て。惹きつける存在は、内側から滲み出るものじゃ。', sign: '傾奇者 前田 慶次' },
+  },
+  '柔和型': {
+    突出: { body: '人の痛みを感じ取り、静かに傍に立つ——これができる者は少ない。そなたの存在が組織の安全地帯になっておる。この力は派手ではないが、確かに組織を支えておる。', sign: '和の守護者 徳川 家康' },
+    強め: { body: 'そなたがいるだけで、場の空気が柔らかくなる。この力を過小評価するでないぞ。関係を繋ぎ場を安全にする者こそ、組織の縁の下の力持ちじゃ。', sign: '和の守護者 徳川 家康' },
+    標準: { body: 'まず一人を大切にせよ。丁寧に聴き、丁寧に応える。その積み重ねがそなたの信頼の礎となる。', sign: '和の守護者 徳川 家康' },
+  },
+};
+
+// ══════════════════════════════════════
+// シーン別アドバイス
+// ══════════════════════════════════════
+const SCENE_ADVICE = {
+  '宴会型': {
+    '会議':   { tips: ['冒頭の場を温める一言を事前に準備しておく', '発言が途切れたら「例えば〜」で空気を回す', '終了後に小さなポジティブフィードバックを贈る'], quote: '準備した一言が、会議の色を決める。' },
+    '採用':   { tips: ['候補者の緊張を10分以内にほぐすことを意識する', '自社の「楽しい現場」の具体エピソードを2つ用意する', 'カジュアル面談で本領発揮——積極的に担当に名乗り出る'], quote: '採用は最初の宴会。場の温度が印象になる。' },
+    '1on1':   { tips: ['最初の3分は雑談に使う（評価が目的ではないと示す）', '相手の「最近よかったこと」から入る', 'フィードバックは「場面＋効果」で具体的に伝える'], quote: '話しやすさが、1on1の質を決める。' },
+    '危機対応': { tips: ['チームの不安を言語化して「見えるもの」にする', 'ユーモアで一瞬だけ場を緩める（深刻さを消すためではなく、力を抜くため）', '「一緒にやろう」の声かけでチームを束ねる'], quote: '嵐の中でも、場を温められる者が船を救う。' },
+  },
+  '教祖型': {
+    '会議':   { tips: ['冒頭に「今日この会議で決めること」をビジョンで語る', '反論には「その視点は大事。なぜなら〜」と受け止めから入る', '締めはチームが向かう先を再確認して終わる'], quote: '方向を示す者が、会議の主役になる。' },
+    '採用':   { tips: ['ミッション・ビジョンを自分の言葉で語れるよう準備する', '候補者の「なぜ働くか」を深掘りして共鳴点を探す', '「この会社で実現できること」を情熱を持って伝える'], quote: '共感した人材が、最も強い仲間になる。' },
+    '1on1':   { tips: ['「あなたに期待していること」を具体的に言語化して伝える', '相手のやりたいことと組織の方向性の接続点を探す', '成長の「なぜ」を問い、内発動機を引き出す'], quote: '人を動かすのは、命令ではなく意味だ。' },
+    '危機対応': { tips: ['まず「なぜ乗り越えるべきか」を語り、チームの意志を揃える', '自分が最初に動き、背中でビジョンを示す', '勝ち筋を見つけたら「これだ」と迷いなく指し示す'], quote: '嵐の中でも、旗を立て続ける者がいる。' },
+  },
+  '勝負型': {
+    '会議':   { tips: ['論点を絞り込み「今日のゴール」を宣言してから始める', '決断を先延ばしにする空気を感じたら即介入する', 'アクションと期日を必ず明示して締める'], quote: '会議は戦場。勝ちを決めて入れ。' },
+    '採用':   { tips: ['候補者の「結果へのこだわり」を具体的エピソードで見抜く', 'オファー判断は素早く——優秀人材に迷いは禁物', '「この人と一緒に戦えるか」の直感を信じる'], quote: '採用の勝ち負けは、スピードが決める。' },
+    '1on1':   { tips: ['KPIの現在地を数字で確認し、差分を率直に話す', '「次の一手」を一緒に決めることに時間を使う', '称賛も改善点も、曖昧にせずはっきり伝える'], quote: '正直な言葉が、人を最も速く成長させる。' },
+    '危機対応': { tips: ['状況把握は素早く——情報収集の時間を決めたら動く', '選択肢を3つ出してベストを即断する', '「自分が先陣を切る」と明示してからチームを動かす'], quote: '危機は勝負師が輝く舞台だ。' },
+  },
+  '知識型': {
+    '会議':   { tips: ['事前に論点と根拠データを整理して臨む', '感情論になった場面で事実ベースに戻す役割を担う', '「調べて次回」より「今ここで結論を出す準備をして来る」を意識する'], quote: '知識は、会議の混乱を鎮める刀だ。' },
+    '採用':   { tips: ['候補者の「思考の深さ」を掘り下げる質問を用意する', '自社の課題と候補者の知見がかみ合う点を見つける', 'ロジカルな対話で信頼を築き、誠実さを示す'], quote: '賢者は賢者を見抜く。' },
+    '1on1':   { tips: ['相手の課題を構造化して「整理されたフィードバック」を届ける', '「なぜそうなのか」の分析を一緒に行い、深い気づきを促す', '次のアクションは具体的な行動レベルまで落とし込む'], quote: '整理された言葉が、人の行動を変える。' },
+    '危機対応': { tips: ['感情的な判断を防ぐために事実と仮説を分離する', '過去の類似ケースを参照し、打ち手の確度を上げる', '「今わかっていること・わかっていないこと」を整理してチームに共有する'], quote: '混乱した場ほど、知識が羅針盤になる。' },
+  },
+  '色気型': {
+    '会議':   { tips: ['場の空気を読み、発言のタイミングを見極める', '鋭い一言で論点を動かす——長く語る必要はない', '沈黙を怖れず、考える間を与える余裕を持つ'], quote: '場を制する者は、言葉より間で語る。' },
+    '採用':   { tips: ['候補者との「空気感」を大切に——緊張は見透かされる', '自分の経験談で引きつけ、候補者の本音を引き出す', '「この人が加わったら場がどう変わるか」を想像しながら話す'], quote: '惹きつける力が、採用の場でも武器になる。' },
+    '1on1':   { tips: ['相手が話し出したら、引き取らず最後まで聴く', 'フィードバックは言葉より「届け方」にこだわる', '褒め方に個性を出す——画一的な称賛は伝わらない'], quote: '魅力は聴き方にも宿る。' },
+    '危機対応': { tips: ['冷静な存在感でチームを落ち着かせる', '表情と声のトーンで「大丈夫だ」という空気を作る', '一番不安なメンバーの隣に立つことを意識する'], quote: '嵐の夜に、灯台の光が見えるように。' },
+  },
+  '柔和型': {
+    '会議':   { tips: ['発言しにくい人に「どう思いますか？」と声をかける', '対立が生じたら共通点を探して橋渡しをする', '会議後に一言フォローを入れて関係を温める'], quote: '全員が話せた会議が、最もいい会議だ。' },
+    '採用':   { tips: ['候補者の不安や懸念を丁寧に受け止める', '「うちで働くことへの心配事はありますか？」と必ず聞く', '選考中から「この人がいて良かった」と感じさせる関わりをする'], quote: '安心させられる担当が、最もいい人材を呼ぶ。' },
+    '1on1':   { tips: ['評価モードに入らず、まず「最近どう？」から始める', '沈黙を埋めようとせず、待つ姿勢を大切にする', '相手の感情を言語化して「そう感じてるんだね」と返す'], quote: '聴くことは、最も深いケアだ。' },
+    '危機対応': { tips: ['不安を抱えているメンバーを一人ひとり確認する', '「一緒に考えよう」という姿勢でチームを包む', 'ケアと業務遂行を両立できる稀有な存在として役割を担う'], quote: '嵐の中で誰かの手を握れる者が、チームを救う。' },
+  },
+};
+
+// ══════════════════════════════════════
 // SVG エンブレム生成
 // ══════════════════════════════════════
 function getEmblemSVG(kind, color) {
@@ -1023,6 +1116,100 @@ function closeWarriorModal() {
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeWarriorModal(); });
 
 // ══════════════════════════════════════
+// 武将メッセージカード
+// ══════════════════════════════════════
+function buildWarriorMessage(primary, scores) {
+  const data = WARLORD_MESSAGES[primary];
+  if (!data) return '';
+  const pm  = TYPE_INFO[primary] || {};
+  const pw  = (WARRIORS[primary] || {}).shogun;
+  const top = scores ? (scores[primary] || 0) : 0;
+  const lvl = top >= 80 ? '突出' : top >= 60 ? '強め' : '標準';
+  const msg = data[lvl] || data['標準'];
+  return `
+    <div class="wmsg-card" style="border-color:${pm.color}55">
+      <div class="wmsg-header">
+        ${pw ? `<img src="./portraits/${pw.img}" class="wmsg-portrait" alt="${pw.name}" onerror="this.style.display='none'">` : ''}
+        <div class="wmsg-header-text">
+          <div class="wmsg-eyebrow" style="color:${pm.color}">WARLORD MESSAGE</div>
+          <div class="wmsg-from">「${primary}」のそなたへ——</div>
+        </div>
+      </div>
+      <div class="wmsg-body">${msg.body}</div>
+      <div class="wmsg-sign" style="color:${pm.color}">— ${msg.sign}</div>
+    </div>`;
+}
+
+// ══════════════════════════════════════
+// シーン別アドバイス
+// ══════════════════════════════════════
+const SA_SCENES = [
+  { key: '会議',   icon: '⚔️' },
+  { key: '採用',   icon: '🤝' },
+  { key: '1on1',  icon: '💬' },
+  { key: '危機対応', icon: '🔥' },
+];
+
+function buildSceneAdvice(primary) {
+  const data = SCENE_ADVICE[primary];
+  if (!data) return '';
+  const pm = TYPE_INFO[primary] || {};
+  const tabs = SA_SCENES.map((s, i) =>
+    `<button class="sa-tab${i===0?' sa-tab-active':''}" onclick="switchScene('${s.key}',this,event)" style="${i===0?`border-color:${pm.color};color:${pm.color}`:''}">${s.icon} ${s.key}</button>`
+  ).join('');
+  const panels = SA_SCENES.map((s, i) => {
+    const d = data[s.key] || {};
+    return `
+      <div class="sa-panel${i===0?'':' sa-hidden'}" data-scene="${s.key}">
+        <ul class="sa-tips">
+          ${(d.tips || []).map(t => `<li>${t}</li>`).join('')}
+        </ul>
+        ${d.quote ? `<div class="sa-quote" style="border-left-color:${pm.color}">"${d.quote}"</div>` : ''}
+      </div>`;
+  }).join('');
+  return `
+    <div class="sa-card">
+      <div class="sa-header">
+        <div class="sa-eyebrow">SCENE ADVICE</div>
+        <div class="sa-title">仕事シーン別アドバイス</div>
+      </div>
+      <div class="sa-tabs">${tabs}</div>
+      <div class="sa-panels">${panels}</div>
+    </div>`;
+}
+
+function switchScene(key, btn) {
+  const card = btn.closest('.sa-card');
+  const pm   = TYPE_INFO[window._moodPrimary] || {};
+  card.querySelectorAll('.sa-tab').forEach(t => {
+    t.classList.remove('sa-tab-active');
+    t.style.borderColor = '';
+    t.style.color = '';
+  });
+  btn.classList.add('sa-tab-active');
+  btn.style.borderColor = pm.color;
+  btn.style.color = pm.color;
+  card.querySelectorAll('.sa-panel').forEach(p => {
+    p.classList.toggle('sa-hidden', p.dataset.scene !== key);
+  });
+}
+
+// ══════════════════════════════════════
+// SNS シェア
+// ══════════════════════════════════════
+function shareToX() {
+  const primary = window._moodPrimary || '';
+  const power   = primary ? getBattlePower(primary, 'shogun') : 0;
+  const text    = `私のムードメーカータイプは「${primary}」でした！ムドメ戦闘力 ${power.toLocaleString()} ⚔️ #ムードメーカーサーベイ #MoodMaker`;
+  const url     = 'https://singerly-tools.vercel.app/tools/moodmaker-survey/';
+  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+}
+function shareToFb() {
+  const url = 'https://singerly-tools.vercel.app/tools/moodmaker-survey/';
+  window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+}
+
+// ══════════════════════════════════════
 // 結果画面の追加描画
 // ══════════════════════════════════════
 function renderResultExtras() {
@@ -1241,6 +1428,14 @@ function renderResultExtras() {
         }).join('')}
       </div>` : ''}`;
   }
+
+  // 武将メッセージ
+  const wmsgEl = document.getElementById('result-warlord-message');
+  if (wmsgEl) wmsgEl.innerHTML = buildWarriorMessage(primary, window._moodScores);
+
+  // シーン別アドバイス
+  const saEl = document.getElementById('result-scene-advice');
+  if (saEl) saEl.innerHTML = buildSceneAdvice(primary);
 
   // 相性マトリクス
   const compatEl = document.getElementById('result-compat-section');

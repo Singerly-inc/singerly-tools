@@ -521,10 +521,7 @@ textarea { resize: vertical; }
 .warriors-label { font-size: 10px; font-weight: 800; letter-spacing: .16em; color: var(--text-mute); margin-bottom: 3px; }
 .warriors-title { font-family: var(--font-serif); font-size: 16px; font-weight: 900; }
 .warrior-single { max-width: 260px; }
-.warrior-pair {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
-}
-@media (max-width: 560px) { .warrior-pair { grid-template-columns: 1fr; } }
+
 .warlord-card {
   background: var(--bg-card); border-radius: var(--r-card);
   box-shadow: var(--shadow-card); overflow: hidden;
@@ -1036,19 +1033,13 @@ textarea { resize: vertical; }
 }
 
 /* MATRIX PORTRAIT THUMBNAILS */
-.cm-portraits {
-  display: flex; justify-content: center; gap: 4px; margin-bottom: 4px;
-}
 .cm-portrait {
   width: 34px; height: 34px; object-fit: cover;
-  border-radius: 50%; display: block;
+  border-radius: 50%; display: block; margin: 0 auto 4px;
   cursor: pointer; border: 2px solid var(--border);
   transition: transform .15s, border-color .15s;
 }
-.cm-portrait-sub {
-  opacity: .75; border-style: dashed;
-}
-.cm-portrait:hover { transform: scale(1.15); border-color: var(--ink); opacity: 1; }
+.cm-portrait:hover { transform: scale(1.15); border-color: var(--ink); }
 .cm-row-portrait {
   width: 22px; height: 22px; object-fit: cover;
   border-radius: 50%; display: inline-block; vertical-align: middle;

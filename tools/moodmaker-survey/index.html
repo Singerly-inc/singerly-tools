@@ -903,13 +903,8 @@ function buildCompatMatrix(primary) {
   const header = TYPE_LIST.map(t => {
     const m  = TYPE_INFO[t] || {};
     const ws = (WARRIORS[t] || {}).shogun;
-    const wt = (WARRIORS[t] || {}).taisho;
     const me = t === primary;
-    const portraits = (ws || wt) ? `
-      <div class="cm-portraits">
-        ${ws ? `<img src="./portraits/${ws.img}" class="cm-portrait" onclick="event.stopPropagation();openWarriorModal('${t}','shogun')" onerror="this.style.display='none'" title="総大将 ${ws.name}">` : ''}
-        ${wt ? `<img src="./portraits/${wt.img}" class="cm-portrait cm-portrait-sub" onclick="event.stopPropagation();openWarriorModal('${t}','taisho')" onerror="this.style.display='none'" title="侍大将 ${wt.name}">` : ''}
-      </div>` : '';
+    const portraits = ws ? `<img src="./portraits/${ws.img}" class="cm-portrait" onclick="event.stopPropagation();openWarriorModal('${t}','shogun')" onerror="this.style.display='none'" title="${ws.name}">` : '';
     return `<th class="cm-th${me?' cm-me':''}" ${me?`style="color:${m.color}"`:''}>${portraits}<span class="cm-g" style="color:${m.color}">${m.glyph}</span><br><span class="cm-n">${t}</span></th>`;
   }).join('');
 
@@ -980,12 +975,9 @@ function buildWarriors(primary, secondary) {
     <div class="warriors-section">
       <div class="warriors-head">
         <div class="warriors-label">YOUR WARLORDS</div>
-        <div class="warriors-title">対応武将 — 2名</div>
+        <div class="warriors-title">対応武将</div>
       </div>
-      <div class="warrior-pair">
-        ${buildWarriorCard(pw.shogun, primary, pm, 'shogun')}
-        ${buildWarriorCard(pw.taisho, primary, pm, 'taisho')}
-      </div>
+      ${buildWarriorCard(pw.shogun, primary, pm, 'shogun')}
     </div>`;
 }
 

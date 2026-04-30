@@ -521,6 +521,10 @@ textarea { resize: vertical; }
 .warriors-label { font-size: 10px; font-weight: 800; letter-spacing: .16em; color: var(--text-mute); margin-bottom: 3px; }
 .warriors-title { font-family: var(--font-serif); font-size: 16px; font-weight: 900; }
 .warrior-single { max-width: 260px; }
+.warrior-pair {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+@media (max-width: 560px) { .warrior-pair { grid-template-columns: 1fr; } }
 .warlord-card {
   background: var(--bg-card); border-radius: var(--r-card);
   box-shadow: var(--shadow-card); overflow: hidden;
@@ -940,6 +944,118 @@ textarea { resize: vertical; }
   color: rgba(255,255,255,.5); line-height: 1.65;
   font-style: italic; margin-top: 4px;
 }
+
+/* ── WARRIOR MODAL ── */
+.warrior-modal {
+  position: fixed; inset: 0; z-index: 1000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.warrior-modal.hidden { display: none; }
+.warrior-modal-backdrop {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,.72); backdrop-filter: blur(6px);
+}
+.warrior-modal-panel {
+  position: relative; z-index: 1;
+  background: #fff; border-radius: 18px;
+  max-width: 400px; width: 100%;
+  max-height: 88vh; overflow-y: auto;
+  box-shadow: 0 32px 80px rgba(0,0,0,.5);
+  animation: wm-in .22s cubic-bezier(.34,1.4,.64,1);
+}
+@keyframes wm-in {
+  from { transform: translateY(24px) scale(.96); opacity: 0; }
+  to   { transform: none; opacity: 1; }
+}
+.warrior-modal-close {
+  position: sticky; top: 10px; float: right; margin: 10px 10px 0 0;
+  background: rgba(0,0,0,.28); color: #fff; border: none;
+  width: 28px; height: 28px; border-radius: 50%;
+  font-size: 15px; cursor: pointer; line-height: 1;
+  transition: background .12s; z-index: 2;
+}
+.warrior-modal-close:hover { background: rgba(0,0,0,.5); }
+
+/* MODAL PORTRAIT */
+.wm-portrait-wrap { position: relative; }
+.wm-portrait {
+  width: 100%; aspect-ratio: 3/4; object-fit: cover;
+  border-radius: 18px 18px 0 0; display: block;
+}
+.wm-portrait-overlay {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 48px 16px 16px; border-radius: 0;
+}
+.wm-tier-badge {
+  font-family: var(--font-num); font-size: 9px; font-weight: 900;
+  letter-spacing: .14em; color: #fff; padding: 3px 10px; border-radius: 3px;
+  display: inline-block; margin-bottom: 6px;
+}
+.wm-yomi {
+  font-family: var(--font-num); font-size: 9px; font-weight: 700;
+  letter-spacing: .14em; color: rgba(255,255,255,.6); margin-bottom: 2px;
+}
+.wm-name {
+  font-family: var(--font-serif); font-size: 24px; font-weight: 900;
+  color: #fff; line-height: 1.2; margin-bottom: 2px;
+}
+.wm-title {
+  font-size: 11px; color: rgba(255,255,255,.65); font-weight: 700;
+}
+
+/* MODAL BODY */
+.wm-body { padding: 16px 20px 28px; }
+.wm-type-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px;
+}
+.wm-type-badge {
+  font-size: 12px; font-weight: 800;
+  padding: 4px 14px; border-radius: 100px;
+}
+.wm-power {
+  font-family: var(--font-num); font-size: 13px; font-weight: 900;
+  color: var(--text-sub); letter-spacing: .02em;
+}
+.wm-line {
+  font-size: 13px; color: var(--ink); line-height: 1.85;
+  margin: 0 0 14px;
+}
+.wm-quote {
+  font-family: var(--font-serif); font-size: 13px; font-style: italic;
+  color: var(--text-sub); border-left: 3px solid var(--border);
+  padding: 2px 0 2px 12px; margin: 0 0 16px;
+}
+.wm-affinity-label {
+  font-size: 9px; font-weight: 900; letter-spacing: .18em;
+  color: var(--text-mute); margin-bottom: 4px;
+}
+.wm-affinity {
+  font-size: 12px; font-weight: 700; color: var(--ink);
+}
+
+/* MATRIX PORTRAIT THUMBNAILS */
+.cm-portraits {
+  display: flex; justify-content: center; gap: 4px; margin-bottom: 4px;
+}
+.cm-portrait {
+  width: 34px; height: 34px; object-fit: cover;
+  border-radius: 50%; display: block;
+  cursor: pointer; border: 2px solid var(--border);
+  transition: transform .15s, border-color .15s;
+}
+.cm-portrait-sub {
+  opacity: .75; border-style: dashed;
+}
+.cm-portrait:hover { transform: scale(1.15); border-color: var(--ink); opacity: 1; }
+.cm-row-portrait {
+  width: 22px; height: 22px; object-fit: cover;
+  border-radius: 50%; display: inline-block; vertical-align: middle;
+  margin-right: 4px; cursor: pointer; border: 1.5px solid var(--border);
+  transition: transform .15s;
+}
+.cm-row-portrait:hover { transform: scale(1.2); }
 
 /* PRINT */
 @media print {

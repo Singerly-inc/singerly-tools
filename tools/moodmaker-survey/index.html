@@ -428,6 +428,15 @@
   </div>
 </section>
 
+<!-- ══ 武将詳細モーダル ══ -->
+<div id="warrior-modal" class="warrior-modal hidden" role="dialog" aria-modal="true">
+  <div class="warrior-modal-backdrop" onclick="closeWarriorModal()"></div>
+  <div class="warrior-modal-panel">
+    <button class="warrior-modal-close" onclick="closeWarriorModal()" aria-label="閉じる">×</button>
+    <div id="warrior-modal-body"></div>
+  </div>
+</div>
+
 <!-- ── app.js compat: hidden narrative inputs ── -->
 <div style="display:none">
   <select  id="narrativeStoryType"></select>
@@ -892,19 +901,30 @@ function buildCompatMatrix(primary) {
   const CLS   = {'★':'cm-star','◎':'cm-best','○':'cm-good','△':'cm-delta'};
 
   const header = TYPE_LIST.map(t => {
-    const m = TYPE_INFO[t] || {};
+    const m  = TYPE_INFO[t] || {};
+    const ws = (WARRIORS[t] || {}).shogun;
+    const wt = (WARRIORS[t] || {}).taisho;
     const me = t === primary;
-    return `<th class="cm-th${me?' cm-me':''}" ${me?`style="color:${m.color}"`:''}><span class="cm-g" style="color:${m.color}">${m.glyph}</span><br><span class="cm-n">${t}</span></th>`;
+    const portraits = (ws || wt) ? `
+      <div class="cm-portraits">
+        ${ws ? `<img src="./portraits/${ws.img}" class="cm-portrait" onclick="event.stopPropagation();openWarriorModal('${t}','shogun')" onerror="this.style.display='none'" title="総大将 ${ws.name}">` : ''}
+        ${wt ? `<img src="./portraits/${wt.img}" class="cm-portrait cm-portrait-sub" onclick="event.stopPropagation();openWarriorModal('${t}','taisho')" onerror="this.style.display='none'" title="侍大将 ${wt.name}">` : ''}
+      </div>` : '';
+    return `<th class="cm-th${me?' cm-me':''}" ${me?`style="color:${m.color}"`:''}>${portraits}<span class="cm-g" style="color:${m.color}">${m.glyph}</span><br><span class="cm-n">${t}</span></th>`;
   }).join('');
 
   const rows = TYPE_LIST.map(from => {
     const fm = TYPE_INFO[from] || {};
+    const fw = (WARRIORS[from] || {}).shogun;
     const myRow = from === primary;
+    const rowPortrait = fw
+      ? `<img src="./portraits/${fw.img}" class="cm-row-portrait" onclick="event.stopPropagation();openWarriorModal('${from}','shogun')" onerror="this.style.display='none'" title="${fw.name}">`
+      : '';
     const cells = TYPE_LIST.map(to => {
       const sym = getCompat(from, to);
       return `<td class="cm-td ${CLS[sym]}${myRow?' cm-my-row':''}"><span class="cm-sym">${sym}</span><span class="cm-lbl">${LABEL[sym]}</span></td>`;
     }).join('');
-    return `<tr><th class="cm-row-th${myRow?' cm-me':''}" ${myRow?`style="color:${fm.color}"`:''}><span class="cm-g" style="color:${fm.color}">${fm.glyph}</span><span class="cm-n">${from}</span></th>${cells}</tr>`;
+    return `<tr><th class="cm-row-th${myRow?' cm-me':''}" ${myRow?`style="color:${fm.color}"`:''}>${rowPortrait}<span class="cm-g" style="color:${fm.color}">${fm.glyph}</span><span class="cm-n">${from}</span></th>${cells}</tr>`;
   }).join('');
 
   return `<div class="compat-matrix-col">
@@ -928,7 +948,7 @@ function buildWarriorCard(w, typeJa, typeMeta, tier) {
   const power = getBattlePower(typeJa, tier);
   const rank  = typeMeta.rank || 'A';
   return `
-    <div class="warlord-card">
+    <div class="warlord-card" onclick="openWarriorModal('${typeJa}','${tier}')" style="cursor:pointer" title="${w.name}の詳細を見る">
       <div class="warlord-portrait-wrap">
         <img src="./portraits/${w.img}" alt="${w.name}" loading="lazy" onerror="this.style.background='#111';this.style.minHeight='200px'">
         <div class="warlord-portrait-badges">
@@ -959,14 +979,56 @@ function buildWarriors(primary, secondary) {
   return `
     <div class="warriors-section">
       <div class="warriors-head">
-        <div class="warriors-label">YOUR WARLORD</div>
-        <div class="warriors-title">対応武将</div>
+        <div class="warriors-label">YOUR WARLORDS</div>
+        <div class="warriors-title">対応武将 — 2名</div>
       </div>
-      <div class="warrior-single">
+      <div class="warrior-pair">
         ${buildWarriorCard(pw.shogun, primary, pm, 'shogun')}
+        ${buildWarriorCard(pw.taisho, primary, pm, 'taisho')}
       </div>
     </div>`;
 }
+
+// ══════════════════════════════════════
+// 武将詳細モーダル
+// ══════════════════════════════════════
+function openWarriorModal(typeJa, tier) {
+  const pw = WARRIORS[typeJa];
+  if (!pw) return;
+  const w  = pw[tier] || pw.shogun;
+  const tm = TYPE_INFO[typeJa] || {};
+  const power = getBattlePower(typeJa, tier);
+
+  document.getElementById('warrior-modal-body').innerHTML = `
+    <div class="wm-portrait-wrap">
+      <img src="./portraits/${w.img}" class="wm-portrait" onerror="this.style.display='none'" alt="${w.name}">
+      <div class="wm-portrait-overlay" style="background:linear-gradient(to top,${tm.colorDark || '#000'}EE 0%,transparent 60%)">
+        <span class="wm-tier-badge" style="background:${tm.color || '#888'}">${w.tier}</span>
+        <div class="wm-yomi">${w.yomi}${w.era ? ' · ' + w.era : ''}</div>
+        <div class="wm-name">${w.name}</div>
+        <div class="wm-title">${w.title}</div>
+      </div>
+    </div>
+    <div class="wm-body">
+      <div class="wm-type-row">
+        <span class="wm-type-badge" style="background:${tm.color || '#888'}18;color:${tm.colorDark || tm.color};border:1px solid ${tm.color || '#888'}55">${tm.glyph || ''} ${typeJa}</span>
+        <span class="wm-power">⚡ ${power.toLocaleString('ja-JP')}</span>
+      </div>
+      ${w.line ? `<p class="wm-line">${w.line}</p>` : ''}
+      ${w.quote ? `<blockquote class="wm-quote">「${w.quote}」</blockquote>` : ''}
+      ${w.affinity ? `<div class="wm-affinity-label">組織での役割</div><div class="wm-affinity">${w.affinity}</div>` : ''}
+    </div>`;
+
+  document.getElementById('warrior-modal').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeWarriorModal() {
+  document.getElementById('warrior-modal').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeWarriorModal(); });
 
 // ══════════════════════════════════════
 // 結果画面の追加描画

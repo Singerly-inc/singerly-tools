@@ -937,6 +937,14 @@ document.getElementById("analyzeBtn").addEventListener("click", () => {
     const { typeScores, omoteNashiScore } = calcScores();
     renderResult(typeScores, omoteNashiScore);
     saveFormState();
+    // ムドメわっしょいカウント（1日1回・デバイス単位）
+    (function() {
+      const key = 'mudome-mm-' + new Date().toLocaleDateString('ja-JP');
+      if (localStorage.getItem(key)) return;
+      fetch('/api/track-mudome', { method: 'POST' })
+        .then(function(r) { if (r.ok) localStorage.setItem(key, '1'); })
+        .catch(function() {});
+    })();
   } catch (e) {
     alert(e.message);
   }

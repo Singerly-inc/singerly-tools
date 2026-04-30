@@ -652,28 +652,64 @@ function composeName(pJa, sJa) {
 }
 const WARRIORS = {
   '宴会型': {
-    shogun: { name:'豊臣 秀吉', yomi:'TOYOTOMI HIDEYOSHI', title:'人たらしの天下人',       img:'enkai-shogun-hideyoshi.png',    tier:'総大将', quote:'人を動かすには、まず喜ばせよ。' },
-    taisho: { name:'前田 利家', yomi:'MAEDA TOSHIIE',       title:'槍の又左',              img:'enkai-taisho-toshiie.png',      tier:'侍大将', quote:'上下にも傍輩にも、真心をもって接すべし。' },
+    shogun: { name:'豊臣 秀吉', yomi:'TOYOTOMI HIDEYOSHI', era:'1537–1598', title:'人たらしの天下人',
+              line:'誰もが認める場づくりの天才。明るい熱量と機転で身分を超えて人を巻き込み、天下を獲った。',
+              quote:'人を動かすには、まず喜ばせよ。', affinity:'組織の起爆剤・モチベーター',
+              img:'enkai-shogun-hideyoshi.png', tier:'総大将', powerBase:480000 },
+    taisho: { name:'前田 利家', yomi:'MAEDA TOSHIIE', era:'1538–1599', title:'槍の又左、加賀百万石の祖',
+              line:'秀吉の親友にして気のいい兄貴分。豪快な槍働きと人望で、若い頃から人を巻き込んで離さなかった。',
+              quote:'上下にも、傍輩にも、ひとしく真心をもって接すべし。', affinity:'現場の盛り上げ役・チームの兄貴',
+              img:'enkai-taisho-toshiie.png', tier:'侍大将', powerBase:250000 },
   },
   '教祖型': {
-    shogun: { name:'織田 信長', yomi:'ODA NOBUNAGA',         title:'時代を撃ち抜く革新者',  img:'kyoso-shogun-nobunaga.png',     tier:'総大将', quote:'是非もなし。' },
-    taisho: { name:'明智 光秀', yomi:'AKECHI MITSUHIDE',     title:'理知の人',              img:'kyoso-taisho-mitsuhide.png',    tier:'侍大将', quote:'時は今、あめが下しる五月かな。' },
+    shogun: { name:'織田 信長', yomi:'ODA NOBUNAGA', era:'1534–1582', title:'時代を撃ち抜く革新者',
+              line:'既存秩序を打ち破る強烈なビジョンと求心力で、時代そのものを引き寄せた稀代のカリスマ。',
+              quote:'是非もなし。', affinity:'理念経営・全社ビジョンの語り手',
+              img:'kyoso-shogun-nobunaga.png', tier:'総大将', powerBase:530000 },
+    taisho: { name:'明智 光秀', yomi:'AKECHI MITSUHIDE', era:'1528–1582', title:'本能寺に火を放った理知の人',
+              line:'教養と理知で信長に重用された秀才。だが理想と現実の溝が深まり、ついに主君に刃を向けた革命家。',
+              quote:'時は今、あめが下しる五月かな。', affinity:'次世代リーダー・改革推進・理念体現',
+              img:'kyoso-taisho-mitsuhide.png', tier:'侍大将', powerBase:260000 },
   },
   '勝負型': {
-    shogun: { name:'武田 信玄', yomi:'TAKEDA SHINGEN',       title:'前線に旗を立てる将',    img:'shobu-shogun-shingen.png',      tier:'総大将', quote:'人は城、人は石垣、人は堀。' },
-    taisho: { name:'真田 幸村', yomi:'SANADA YUKIMURA',      title:'日本一の兵',            img:'shobu-taisho-yukimura.png',     tier:'侍大将', quote:'武士たる者、義を見てせざるは勇なきなり。' },
+    shogun: { name:'武田 信玄', yomi:'TAKEDA SHINGEN', era:'1521–1573', title:'前線に旗を立てる将',
+              line:'「風林火山」を掲げ、勝負の場で常に最前線に立った。闘志と推進力の象徴。',
+              quote:'人は城、人は石垣、人は堀。', affinity:'営業組織・プロジェクト立ち上げ',
+              img:'shobu-shogun-shingen.png', tier:'総大将', powerBase:410000 },
+    taisho: { name:'真田 幸村', yomi:'SANADA YUKIMURA', era:'1567–1615', title:'日本一の兵（つわもの）',
+              line:'関ヶ原で敗れてもなお、大坂の陣で家康の本陣を脅かした不撓不屈の闘将。赤備えの代名詞。',
+              quote:'武士たる者、義を見てせざるは勇なきなり。', affinity:'逆境からの突破役・諦めない推進力',
+              img:'shobu-taisho-yukimura.png', tier:'侍大将', powerBase:280000 },
   },
   '知識型': {
-    shogun: { name:'黒田 官兵衛', yomi:'KURODA KANBEI',      title:'戦略を編む軍師',        img:'chishiki-shogun-kanbei.png',    tier:'総大将', quote:'神の罰より、主君の罰おそるべし。' },
-    taisho: { name:'石田 三成',   yomi:'ISHIDA MITSUNARI',   title:'義の知将',              img:'chishiki-taisho-mitsunari.png', tier:'侍大将', quote:'大一大万大吉。' },
+    shogun: { name:'黒田 官兵衛', yomi:'KURODA KANBEI', era:'1546–1604', title:'戦略を編む軍師',
+              line:'冷静な戦略眼と緻密な構造設計で、秀吉の天下取りを陰から支えた稀代の参謀。',
+              quote:'神の罰より、主君の罰おそるべし。', affinity:'戦略策定・参謀・経営企画',
+              img:'chishiki-shogun-kanbei.png', tier:'総大将', powerBase:380000 },
+    taisho: { name:'石田 三成', yomi:'ISHIDA MITSUNARI', era:'1560–1600', title:'関ヶ原に義を貫いた知将',
+              line:'実務と論理で豊臣政権を支えた行政官。利を捨て義に殉じ、関ヶ原で西軍の大将となった信念の人。',
+              quote:'大一大万大吉。', affinity:'緻密な制度設計・公正なルール運用',
+              img:'chishiki-taisho-mitsunari.png', tier:'侍大将', powerBase:230000 },
   },
   '色気型': {
-    shogun: { name:'伊達 政宗', yomi:'DATE MASAMUNE',        title:'華と機知の独眼竜',      img:'iroke-shogun-masamune.png',     tier:'総大将', quote:'時を待つに似たるはなし。' },
-    taisho: { name:'加藤 清正', yomi:'KATO KIYOMASA',        title:'虎退治の築城名人',      img:'iroke-taisho-kiyomasa.png',    tier:'侍大将', quote:'一生懸命、ただひとすじ。' },
+    shogun: { name:'伊達 政宗', yomi:'DATE MASAMUNE', era:'1567–1636', title:'華と機知の独眼竜',
+              line:'派手な演出と機知に富んだ外交で、一対一の場を制した。粋と気品で人を惹きつけた。',
+              quote:'時を待つに似たるはなし。', affinity:'ブランディング・対外折衝・1on1',
+              img:'iroke-shogun-masamune.png', tier:'総大将', powerBase:340000 },
+    taisho: { name:'加藤 清正', yomi:'KATO KIYOMASA', era:'1562–1611', title:'虎退治の築城名人',
+              line:'秀吉子飼いの猛将。朝鮮出兵での虎退治、熊本城築城の手腕、共に語り継がれる豪傑武将。',
+              quote:'一生懸命、ただひとすじ。', affinity:'熱意で押し切る・骨太な実行力',
+              img:'iroke-taisho-kiyomasa.png', tier:'侍大将', powerBase:240000 },
   },
   '柔和型': {
-    shogun: { name:'徳川 家康', yomi:'TOKUGAWA IEYASU',      title:'太平を築いた包容の人',  img:'nyuwa-shogun-ieyasu.png',       tier:'総大将', quote:'人の一生は重荷を負うて遠き道を行くが如し。' },
-    taisho: { name:'直江 兼続', yomi:'NAOE KANETSUGU',       title:'愛の前立を掲げた義の宰相', img:'nyuwa-taisho-kanetsugu.png', tier:'侍大将', quote:'愛は仁愛、義は信義。' },
+    shogun: { name:'徳川 家康', yomi:'TOKUGAWA IEYASU', era:'1543–1616', title:'太平を築いた包容の人',
+              line:'忍耐と包容力で全員を受け止め、長期戦の末に太平の世を築いた。動かざる支柱。',
+              quote:'人の一生は重荷を負うて遠き道を行くが如し。', affinity:'心理的安全性・長期マネジメント・組織安定化',
+              img:'nyuwa-shogun-ieyasu.png', tier:'総大将', powerBase:460000 },
+    taisho: { name:'直江 兼続', yomi:'NAOE KANETSUGU', era:'1560–1620', title:'愛の前立を掲げた義の宰相',
+              line:'上杉景勝の懐刀。前立に「愛」の一文字を掲げ、義と仁で家中を束ねた。家康にも一歩も引かぬ硬骨。',
+              quote:'愛は仁愛、義は信義。', affinity:'組織の調整役・義を以て統べる宰相',
+              img:'nyuwa-taisho-kanetsugu.png', tier:'侍大将', powerBase:220000 },
   },
 };
 
@@ -782,10 +818,8 @@ function buildV3Card(primary, secondary, name) {
 // 武将カード
 // ══════════════════════════════════════
 function getBattlePower(typeJa, tier) {
-  const seed = {'宴会型':0,'教祖型':1,'勝負型':2,'知識型':3,'色気型':4,'柔和型':5}[typeJa] || 0;
-  const base  = tier === 'shogun' ? 300000 : 220000;
-  const range = tier === 'shogun' ? 230000 : 60000;
-  return base + ((seed * 13337 + 7919) % range);
+  const w = (WARRIORS[typeJa] || {})[tier];
+  return w ? w.powerBase : (tier === 'shogun' ? 350000 : 200000);
 }
 
 function animateBattlePower() {
@@ -1014,8 +1048,9 @@ function renderResultExtras() {
       <img src="./portraits/${w.img}" alt="${w.name}" class="hero-warrior-portrait"
            onerror="this.style.display='none'">
       <div class="hero-warrior-info">
-        <div class="hero-warrior-yomi">${w.yomi}</div>
+        <div class="hero-warrior-yomi">${w.yomi}${w.era ? ' · ' + w.era : ''}</div>
         <div class="hero-warrior-name">${w.name}</div>
+        ${w.line ? `<div class="hero-warrior-line">${w.line}</div>` : ''}
         ${w.quote ? `<div class="hero-warrior-quote">「${w.quote}」</div>` : ''}
       </div>`;
   }

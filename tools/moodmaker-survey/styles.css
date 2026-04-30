@@ -931,10 +931,14 @@ textarea { resize: vertical; }
   font-family: var(--font-serif); font-size: 18px; font-weight: 900;
   color: #fff; line-height: 1.2;
 }
+.hero-warrior-line {
+  font-size: 10px; color: rgba(255,255,255,.45);
+  line-height: 1.6; margin-top: 3px;
+}
 .hero-warrior-quote {
   font-family: var(--font-serif); font-size: 10.5px;
   color: rgba(255,255,255,.5); line-height: 1.65;
-  font-style: italic; margin-top: 2px;
+  font-style: italic; margin-top: 4px;
 }
 
 /* PRINT */

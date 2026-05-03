@@ -371,6 +371,7 @@
           </div>
           <div id="result-keyword-card" class="result-keyword-card"></div>
           <div id="result-type-desc"    class="result-type-desc-card"></div>
+          <div id="result-academic-layer1" class="result-academic-layer1-card hidden"></div>
           <div id="result-type-details" class="result-detail-row"></div>
         </div>
       </div>
@@ -840,6 +841,19 @@ const SCENE_ADVICE = {
     '1on1':   { tips: ['評価モードに入らず、まず「最近どう？」から始める', '沈黙を埋めようとせず、待つ姿勢を大切にする', '相手の感情を言語化して「そう感じてるんだね」と返す'], quote: '聴くことは、最も深いケアだ。' },
     '危機対応': { tips: ['不安を抱えているメンバーを一人ひとり確認する', '「一緒に考えよう」という姿勢でチームを包む', 'ケアと業務遂行を両立できる稀有な存在として役割を担う'], quote: '嵐の中で誰かの手を握れる者が、チームを救う。' },
   },
+};
+
+// ══════════════════════════════════════
+// 学術注釈 Layer 1（タイプ別 1〜2文）
+// 出典: memory/moodmaker_research_academic.md の36文献リサーチより
+// ══════════════════════════════════════
+const ACADEMIC_LAYER1 = {
+  '宴会型': '心理学のビッグファイブ（OCEAN）における外向性（Extraversion）の高位型と対応します。Barsade（2002）の感情伝染（emotional contagion）研究が示す「場のエネルギーを伝染させる人物像」と一致します。',
+  '教祖型': '変革型リーダーシップ理論（Bass &amp; Avolio, 1995）のインスピレーショナル・モチベーション次元と対応します。価値観を言語化し、他者を動機づける力に強みがあります。',
+  '勝負型': '達成動機理論（McClelland, 1961）と Grit Scale（Duckworth, 2007）が捉える達成志向性 × やり抜く力の高位型です。困難な局面で粘り強さを発揮するタイプ。',
+  '知識型': '認知欲求（Need for Cognition：Cacioppo &amp; Petty, 1982）の高位型と対応します。複雑な問題を構造化して考えることに知的快楽を感じる傾向があります。',
+  '色気型': 'セルフモニタリング理論（Snyder, 1974）と美意識（Openness/Aesthetics）の組み合わせ型。場の温度を読み、自分の見せ方を意図的に調整できるタイプです。',
+  '柔和型': 'ビッグファイブの協調性（Agreeableness）高位型 ＋ 共感的関心（Empathic Concern：Davis, 1983）の組み合わせ。組織の心理的安全性を支える土台となるタイプ。',
 };
 
 // ══════════════════════════════════════
@@ -1397,6 +1411,17 @@ function renderResultExtras() {
     descEl.innerHTML = `
       <div class="result-detail-label">詳しい解説</div>
       <div class="result-desc-text">${pm.description}${extra}</div>`;
+  }
+
+  // 学術注釈 Layer 1（主属性に対する 1～2 文の学術的裏付け）
+  const acadEl = document.getElementById('result-academic-layer1');
+  if (acadEl && typeof ACADEMIC_LAYER1 !== 'undefined') {
+    const acadText = ACADEMIC_LAYER1[primary];
+    if (acadText) {
+      acadEl.innerHTML = `<span class="academic-label">ACADEMIC</span><p class="academic-text">${acadText}</p>`;
+      acadEl.style.borderLeftColor = pm.color || 'rgba(255,255,255,.2)';
+      acadEl.classList.remove('hidden');
+    }
   }
 
   // 留意点 + フィット

@@ -1152,3 +1152,31 @@ textarea { resize: vertical; }
   .nav, .hero-cta, .step-footer, .actions-row { display: none; }
   .result-hero-dark { padding-top: 0; }
 }
+
+/* ══════════════════════════════════════
+   学術注釈 Layer 1（タイプカード下のACADEMICラベル）
+   ══════════════════════════════════════ */
+.result-academic-layer1-card {
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.08);
+  border-left: 3px solid rgba(255,255,255,.2);
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-top: 10px;
+}
+.result-academic-layer1-card.hidden { display: none; }
+.academic-label {
+  display: inline-block;
+  font-size: 8.5px;
+  font-weight: 800;
+  letter-spacing: .18em;
+  color: var(--text-mute, #999);
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+.academic-text {
+  font-size: 11px;
+  line-height: 1.75;
+  color: var(--text-sub, #6F6E6A);
+  margin: 0;
+}

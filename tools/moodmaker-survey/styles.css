@@ -1284,3 +1284,118 @@ textarea { resize: vertical; }
   padding: 8px 12px;
   margin-top: 8px !important;
 }
+
+
+/* ══════════════════════════════════════
+   Episode Collection — 書籍ムードメイク事例蓄積UI
+   ══════════════════════════════════════ */
+/* Episode Collection (PR7) */
+.episode-wrap {
+  max-width: 860px;
+  margin: 40px auto 0;
+  padding: 0 16px;
+  border: 1px solid rgba(201,56,56,.2);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.episode-header {
+  background: linear-gradient(135deg, rgba(201,56,56,.08) 0%, transparent 100%);
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid rgba(201,56,56,.15);
+}
+.episode-eyebrow {
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: .18em;
+  color: #c93838;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+.episode-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--ink, #1A1A1A);
+  margin-bottom: 4px;
+}
+.episode-sub {
+  font-size: 12px;
+  color: var(--text-sub, #6F6E6A);
+}
+.episode-body { padding: 20px 24px 24px; }
+.episode-q { margin-bottom: 18px; }
+.episode-qlabel {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink, #1A1A1A);
+  margin-bottom: 6px;
+}
+.episode-opt {
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--text-mute, #999);
+  margin-left: 6px;
+}
+.episode-ta {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--ink, #1A1A1A);
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 6px;
+  resize: vertical;
+  font-family: inherit;
+  transition: border-color .2s;
+}
+.episode-ta:focus { outline: none; border-color: #c93838; }
+.episode-count {
+  font-size: 10px;
+  color: var(--text-mute, #999);
+  text-align: right;
+  margin-top: 3px;
+}
+.episode-consent {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 12px;
+  color: var(--text-sub, #6F6E6A);
+  line-height: 1.6;
+  margin: 16px 0 18px;
+  cursor: pointer;
+}
+.episode-consent input[type="checkbox"] { flex-shrink: 0; margin-top: 2px; accent-color: #c93838; }
+.episode-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.episode-submit {
+  background: #c93838;
+  color: #fff;
+  border-color: #a82e2e;
+  font-weight: 700;
+}
+.episode-submit:hover { background: #a82e2e; }
+.episode-skip { font-size: 13px; }
+.episode-result {
+  margin-top: 14px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.episode-result-ok {
+  background: rgba(56,180,56,.08);
+  border: 1px solid rgba(56,180,56,.25);
+  color: #2a7a2a;
+}
+.episode-result-err {
+  background: rgba(201,56,56,.07);
+  border: 1px solid rgba(201,56,56,.2);
+  color: #c93838;
+}
+@media (max-width: 560px) {
+  .episode-body { padding: 16px 16px 20px; }
+  .episode-header { padding: 16px 16px 14px; }
+}
+

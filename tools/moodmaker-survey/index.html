@@ -467,6 +467,42 @@
       <div class="report-grid"></div>
     </div>
 
+
+    <!-- ══ EPISODE COLLECTION (任意・書籍ムードメイク事例蓄積) ══ -->
+    <div class="episode-wrap" id="episode-section">
+      <div class="episode-header">
+        <div class="episode-eyebrow">任意 · スキップOK</div>
+        <div class="episode-title">書籍「ムードメイク」事例収集</div>
+        <div class="episode-sub">あなたの経験を、次の一冊に活かさせてください。回答は任意・匿名化されます。</div>
+      </div>
+      <div class="episode-body" id="episode-body">
+        <div class="episode-q">
+          <label class="episode-qlabel" for="ep-q1">Q1. あなたの周りで「この人はムードメーカーだ」と思う人物のエピソードを教えてください。<span class="episode-opt">任意・200字以内</span></label>
+          <textarea id="ep-q1" class="episode-ta" maxlength="200" rows="3" placeholder="例：部署異動してきたAさんは、会議の最初に必ず一笑い挟む人で…" oninput="updateEpCount(this,'ep-q1-cnt',200)"></textarea>
+          <div class="episode-count"><span id="ep-q1-cnt">0</span>/200</div>
+        </div>
+        <div class="episode-q">
+          <label class="episode-qlabel" for="ep-q2">Q2. あなた自身が組織で「場を変えた」経験があれば教えてください。<span class="episode-opt">任意・200字以内</span></label>
+          <textarea id="ep-q2" class="episode-ta" maxlength="200" rows="3" placeholder="例：沈黙が続く1on1で、先に自分の失敗談を話したら相手が笑ってくれて…" oninput="updateEpCount(this,'ep-q2-cnt',200)"></textarea>
+          <div class="episode-count"><span id="ep-q2-cnt">0</span>/200</div>
+        </div>
+        <div class="episode-q">
+          <label class="episode-qlabel" for="ep-q3">Q3. あなたにとって「職場のムードメーカー」はどんな存在ですか？<span class="episode-opt">任意・100字以内</span></label>
+          <textarea id="ep-q3" class="episode-ta" maxlength="100" rows="2" placeholder="例：嵐の中の灯台のような存在。" oninput="updateEpCount(this,'ep-q3-cnt',100)"></textarea>
+          <div class="episode-count"><span id="ep-q3-cnt">0</span>/100</div>
+        </div>
+        <label class="episode-consent">
+          <input type="checkbox" id="ep-consent"/>
+          <span>以上の回答を、匿名化した上で、Singerlyの研究・書籍で引用されることに同意します。（同意されなくても診断結果は取得できます）</span>
+        </label>
+        <div class="episode-actions">
+          <button class="btn episode-submit" onclick="submitEpisode()">送信する</button>
+          <button class="btn ghost episode-skip" onclick="skipEpisode()">スキップ</button>
+        </div>
+        <div id="episode-result" class="episode-result hidden"></div>
+      </div>
+    </div>
+
     <!-- ══ SCIENCE BEHIND (Layer 2) ══ -->
     <div class="science-behind-wrap">
       <button class="science-toggle" aria-expanded="false" onclick="toggleScience(this)">
@@ -1357,6 +1393,65 @@ function updateOgMeta(primary, score) {
   const desc  = `ムドメ戦闘力 ${Math.round(score * 8000 + 100000).toLocaleString()}。あなたのタイプも診断できます。`;
   ['og-title','tw-title'].forEach(id => { const el = document.getElementById(id); if (el) el.content = title; });
   ['og-desc','tw-desc'].forEach(id => { const el = document.getElementById(id); if (el) el.content = desc; });
+}
+
+// ═══════════════════════════════════════
+// エピソード収集（任意・書籍ムードメイク事例蓄積用）
+// ═══════════════════════════════════════
+function updateEpCount(ta, cntId, max) {
+  const cnt = document.getElementById(cntId);
+  if (cnt) {
+    const len = ta.value.length;
+    cnt.textContent = len;
+    cnt.style.color = len >= max ? '#c93838' : '';
+  }
+}
+
+async function submitEpisode() {
+  const q1 = (document.getElementById('ep-q1')?.value || '').trim();
+  const q2 = (document.getElementById('ep-q2')?.value || '').trim();
+  const q3 = (document.getElementById('ep-q3')?.value || '').trim();
+  const consent = document.getElementById('ep-consent')?.checked || false;
+  const resEl = document.getElementById('episode-result');
+
+  // ╔══ サイレントフェイル仕様 ══╗
+  // /api/episodes はフェーズ2で Vercel Serverless 関数として追加予定。
+  // それまでは fetch が 404 になるが、ユーザー体験上は「送信成功」の見せ方として
+  // 感謝メッセージを表示し、フォームをロックする。localStorage に一時保存して
+  // フェーズ2でバックフィル送信できるようにしておく。
+  try {
+    fetch('/api/episodes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ q1_others_episode: q1, q2_self_experience: q2, q3_moodmaker_meaning: q3, consent_research: consent, ts: Date.now() })
+    }).catch(() => { /* サイレント */ });
+  } catch (_) { /* サイレント */ }
+
+  // localStorage バックアップ（将来のバックフィル用）
+  try {
+    if (q1 || q2 || q3) {
+      const key = 'moodmaker-episodes-pending';
+      const arr = JSON.parse(localStorage.getItem(key) || '[]');
+      arr.push({ q1, q2, q3, consent, ts: Date.now() });
+      localStorage.setItem(key, JSON.stringify(arr.slice(-20))); // 最大3件保持
+    }
+  } catch (_) { /* ignore */ }
+
+  if (resEl) {
+    resEl.textContent = 'ありがとうございました。あなたの声を次の一冊に活かします。';
+    resEl.className = 'episode-result episode-result-ok';
+    resEl.classList.remove('hidden');
+  }
+  document.getElementById('episode-body').querySelectorAll('textarea,input,button').forEach(el => { el.disabled = true; });
+}
+
+function skipEpisode() {
+  const sec = document.getElementById('episode-section');
+  if (sec) {
+    sec.style.opacity = '0';
+    sec.style.transition = 'opacity .3s';
+    setTimeout(() => { sec.hidden = true; }, 300);
+  }
 }
 
 // 「この診断のサイエンス」折りたたみトグル

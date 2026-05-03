@@ -67,8 +67,10 @@ const TYPE_META = {
 const STORAGE_KEY = "moodmaker-survey-v1";
 const NARRATIVE_MAX = 4000;
 let latestResult = null;
-let resumeText = "";
 
+// RESUME_KEYWORDS: 実績エピソードの自動分類に使用（analyzeAchievementCase内部）。
+// レジュメPDF抽出機能本体はフェーズ2で撤去したが、このキーワード辞書は
+// オススストチームビルディングとして残存させておく。
 const RESUME_KEYWORDS = {
   宴会型: ["イベント", "懇親会", "チームビルディング", "コミュニケーション", "ファシリテーション", "司会", "幹事", "盛り上げ", "交流", "親睦"],
   教祖型: ["ビジョン", "戦略", "理念", "マネジメント", "リーダー", "組織", "変革", "方針", "文化", "経営"],
@@ -78,50 +80,8 @@ const RESUME_KEYWORDS = {
   柔和型: ["サポート", "カスタマー", "調整", "相談", "支援", "コーチ", "メンター", "傾聴", "ケア", "フォロー"]
 };
 
-function analyzeResumeText(text) {
-  if (!text) return null;
-  const scores = {};
-  const hits = {};
-  for (const [type, keywords] of Object.entries(RESUME_KEYWORDS)) {
-    const found = keywords.filter(kw => text.includes(kw));
-    scores[type] = Math.min(100, Math.round((found.length / keywords.length) * 100 * 2));
-    hits[type] = found;
-  }
-  return { scores, hits };
-}
-
-async function uploadResume(file) {
-  const statusEl = document.getElementById("resumeUploadStatus");
-  statusEl.textContent = "アップロード中...";
-  statusEl.className = "resume-status uploading";
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-      const base64 = e.target.result.split(",")[1];
-      try {
-        const res = await fetch(apiBase() + "/api/resume", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ filename: file.name, data: base64 })
-        });
-        const json = await res.json();
-        if (json.ok) {
-          resumeText = json.text || "";
-          statusEl.textContent = `✓ 抽出完了（${resumeText.length.toLocaleString()}文字）`;
-          statusEl.className = "resume-status success";
-        } else {
-          statusEl.textContent = `エラー: ${json.error || "unknown"}`;
-          statusEl.className = "resume-status error";
-        }
-      } catch {
-        statusEl.textContent = "通信エラー（APIが未起動の可能性があります）";
-        statusEl.className = "resume-status error";
-      }
-      resolve();
-    };
-    reader.readAsDataURL(file);
-  });
-}
+// レジュメPDF抽出機能はフェーズ2で撤去された（論点F2-A）。
+// 運用実績なし・Vercel互換性不明、実績エピソードのテキスト入力で代替しているため。
 
 function readNarrative() {
   const g = id => { const el = document.getElementById(id); return el ? el.value : ''; };

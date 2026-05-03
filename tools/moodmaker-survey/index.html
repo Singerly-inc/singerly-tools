@@ -696,10 +696,10 @@ const WARRIORS = {
               img:'kyoso-taisho-mitsuhide.png', tier:'侍大将', powerBase:260000 },
   },
   '勝負型': {
-    shogun: { name:'武田 信玄', yomi:'TAKEDA SHINGEN', era:'1521–1573', title:'前線に旗を立てる将',
-              line:'「風林火山」を掲げ、勝負の場で常に最前線に立った。闘志と推進力の象徴。',
-              quote:'人は城、人は石垣、人は堀。', affinity:'営業組織・プロジェクト立ち上げ',
-              img:'shobu-shogun-shingen.png', tier:'総大将', powerBase:410000 },
+    shogun: { name:'徳川 家康', yomi:'TOKUGAWA IEYASU', era:'1543–1616', title:'鳴くまで待った天下獲り',
+              line:'三方ヶ原の大敗を肖像画に刻み、忍耐と長期戦略で天下を掌中に収めた最終勝者。諦めない達成志向の象徴。',
+              quote:'人の一生は重荷を負うて遠き道を行くがごとし。', affinity:'長期目標・逆境突破・達成志向',
+              img:'nyuwa-shogun-ieyasu.png', tier:'総大将', powerBase:460000 },
     taisho: { name:'真田 幸村', yomi:'SANADA YUKIMURA', era:'1567–1615', title:'日本一の兵（つわもの）',
               line:'関ヶ原で敗れてもなお、大坂の陣で家康の本陣を脅かした不撓不屈の闘将。赤備えの代名詞。',
               quote:'武士たる者、義を見てせざるは勇なきなり。', affinity:'逆境からの突破役・諦めない推進力',
@@ -726,10 +726,10 @@ const WARRIORS = {
               img:'iroke-taisho-kiyomasa.png', tier:'侍大将', powerBase:240000 },
   },
   '柔和型': {
-    shogun: { name:'徳川 家康', yomi:'TOKUGAWA IEYASU', era:'1543–1616', title:'太平を築いた包容の人',
-              line:'忍耐と包容力で全員を受け止め、長期戦の末に太平の世を築いた。動かざる支柱。',
-              quote:'人の一生は重荷を負うて遠き道を行くが如し。', affinity:'心理的安全性・長期マネジメント・組織安定化',
-              img:'nyuwa-shogun-ieyasu.png', tier:'総大将', powerBase:460000 },
+    shogun: { name:'武田 信玄', yomi:'TAKEDA SHINGEN', era:'1521–1573', title:'人を城とした土壌型の統率者',
+              line:'「人は城」の名言に宿るとおり、家臣一人ひとりへの配慮と尊重で最強軍団を率いた。組織の心理的安全性を支える静かな統率者。',
+              quote:'人は城、人は石垣、人は堀。情けは味方、仇は敵なり。', affinity:'心理的安全性・人材育成・サーバント型リーダー',
+              img:'shobu-shogun-shingen.png', tier:'総大将', powerBase:410000 },
     taisho: { name:'直江 兼続', yomi:'NAOE KANETSUGU', era:'1560–1620', title:'愛の前立を掲げた義の宰相',
               line:'上杉景勝の懐刀。前立に「愛」の一文字を掲げ、義と仁で家中を束ねた。家康にも一歩も引かぬ硬骨。',
               quote:'愛は仁愛、義は信義。', affinity:'組織の調整役・義を以て統べる宰相',
@@ -747,9 +747,9 @@ const WARLORD_MESSAGES = {
     標準: { body: 'まだ眠れる才がある。日々の小さな場から意識して温め続けよ。繰り返すうちに、本来の力が目を覚ます。', sign: '天下人 豊臣 秀吉' },
   },
   '教祖型': {
-    突出: { body: 'そなたの言葉には人を動かす磁力がある。ビジョンを語るとき、周囲は無意識に旗のもとへ集まってくる。この力の重さを知り、慎重に、そして大胆に振るえ。', sign: '不動の智将 武田 信玄' },
-    強め: { body: '旗を掲げよ。そなたの言葉を待っている者が、必ずおる。一人の心を動かせば、それは十人に伝播する。確信を持って語ることを恐れるな。', sign: '不動の智将 武田 信玄' },
-    標準: { body: 'まず己のビジョンを明文化せよ。語れぬものは伝わらぬ。書くことから始めれば、言葉に芯が通ってくる。', sign: '不動の智将 武田 信玄' },
+    突出: { body: 'そなたの言葉には人を動かす磁力がある。ビジョンを語るとき、周囲は無意識に旗のもとへ集まってくる。この力の重さを知り、慎重に、そして大胆に振るえ。', sign: '最後の勝者 徳川 家康' },
+    強め: { body: '旗を掲げよ。そなたの言葉を待っている者が、必ずおる。一人の心を動かせば、それは十人に伝播する。確信を持って語ることを恐れるな。', sign: '最後の勝者 徳川 家康' },
+    標準: { body: 'まず己のビジョンを明文化せよ。語れぬものは伝わらぬ。書くことから始めれば、言葉に芯が通ってくる。', sign: '最後の勝者 徳川 家康' },
   },
   '勝負型': {
     突出: { body: '勝負どころを嗅ぎ取る嗅覚、これは天賦の才じゃ。数値が証明しておる。攻め時を逃すな——そなたが前に出れば、局面は動く。', sign: '覇王 織田 信長' },
@@ -767,9 +767,9 @@ const WARLORD_MESSAGES = {
     標準: { body: 'まず自分自身を面白くせよ。経験を積み、物語を持て。惹きつける存在は、内側から滲み出るものじゃ。', sign: '傾奇者 前田 慶次' },
   },
   '柔和型': {
-    突出: { body: '人の痛みを感じ取り、静かに傍に立つ——これができる者は少ない。そなたの存在が組織の安全地帯になっておる。この力は派手ではないが、確かに組織を支えておる。', sign: '和の守護者 徳川 家康' },
-    強め: { body: 'そなたがいるだけで、場の空気が柔らかくなる。この力を過小評価するでないぞ。関係を繋ぎ場を安全にする者こそ、組織の縁の下の力持ちじゃ。', sign: '和の守護者 徳川 家康' },
-    標準: { body: 'まず一人を大切にせよ。丁寧に聴き、丁寧に応える。その積み重ねがそなたの信頼の礎となる。', sign: '和の守護者 徳川 家康' },
+    突出: { body: '人の痛みを感じ取り、静かに傍に立つ——これができる者は少ない。そなたの存在が組織の安全地帯になっておる。この力は派手ではないが、確かに組織を支えておる。', sign: '和の守護者 武田 信玄' },
+    強め: { body: 'そなたがいるだけで、場の空気が柔らかくなる。この力を過小評価するでないぞ。関係を繋ぎ場を安全にする者こそ、組織の縁の下の力持ちじゃ。', sign: '和の守護者 武田 信玄' },
+    標準: { body: 'まず一人を大切にせよ。丁寧に聴き、丁寧に応える。その積み重ねがそなたの信頼の礎となる。', sign: '和の守護者 武田 信玄' },
   },
 };
 
@@ -924,6 +924,14 @@ function getBattlePower(typeJa, tier) {
   return w ? w.powerBase : (tier === 'shogun' ? 350000 : 200000);
 }
 
+function calcTier(score) {
+  if (score >= 80) return { key: 'shogun',      label: '総大将' };
+  if (score >= 65) return { key: 'taisho',      label: '侍大将' };
+  if (score >= 50) return { key: 'kumigashira', label: '組頭'   };
+  if (score >= 35) return { key: 'shibun',      label: '士分'   };
+  return                   { key: 'ashigaru',   label: '足軽'   };
+}
+
 function animateBattlePower() {
   document.querySelectorAll('[data-battle-target]').forEach(el => {
     const target = parseInt(el.dataset.battleTarget, 10);
@@ -1063,14 +1071,17 @@ function buildWarriorCard(w, typeJa, typeMeta, tier) {
 function buildWarriors(primary, secondary) {
   const pm = TYPE_INFO[primary] || {};
   const pw = WARRIORS[primary];
-  if (!pw) return '';
+  const primaryScore = (window._moodScores || {})[primary] || 0;
+  const tier = calcTier(primaryScore);
+  const hasWarrior = tier.key === 'shogun' || tier.key === 'taisho';
+  if (!pw || !hasWarrior) return '';
   return `
     <div class="warriors-section">
       <div class="warriors-head">
         <div class="warriors-label">YOUR WARLORDS</div>
         <div class="warriors-title">対応武将</div>
       </div>
-      ${buildWarriorCard(pw.shogun, primary, pm, 'shogun')}
+      ${buildWarriorCard(pw[tier.key], primary, pm, tier.key)}
     </div>`;
 }
 
@@ -1199,7 +1210,10 @@ function switchScene(key, btn) {
 // ══════════════════════════════════════
 function shareToX() {
   const primary = window._moodPrimary || '';
-  const power   = primary ? getBattlePower(primary, 'shogun') : 0;
+  const primaryScore = (window._moodScores || {})[primary] || 0;
+  const shareTier = calcTier(primaryScore);
+  const hasWarriorShare = shareTier.key === 'shogun' || shareTier.key === 'taisho';
+  const power = primary ? (hasWarriorShare ? getBattlePower(primary, shareTier.key) : Math.round(primaryScore * 3000)) : 0;
   const text    = `私のムードメーカータイプは「${primary}」でした！ムドメ戦闘力 ${power.toLocaleString()} ⚔️ #ムードメーカーサーベイ #MoodMaker`;
   const url     = 'https://singerly-tools.vercel.app/tools/moodmaker-survey/';
   window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
@@ -1271,19 +1285,22 @@ function renderResultExtras() {
 
   // ムドメ戦闘力（ヒーロー用）
   const pw = WARRIORS[primary];
-  const heroPower = pw ? getBattlePower(primary, 'shogun') : 0;
+  const primaryScore = (window._moodScores || {})[primary] || 0;
+  const tier = calcTier(primaryScore);
+  const hasWarrior = tier.key === 'shogun' || tier.key === 'taisho';
+  const heroPower = hasWarrior ? getBattlePower(primary, tier.key) : Math.round(primaryScore * 3000);
   const heroPowerEl = document.getElementById('result-hero-power');
   const heroTierEl  = document.getElementById('result-hero-tier');
   if (heroPowerEl) {
     heroPowerEl.dataset.battleTarget = heroPower;
     heroPowerEl.dataset.battleColor  = pm.color || '#fff';
   }
-  if (heroTierEl) heroTierEl.textContent = '総大将';
+  if (heroTierEl) heroTierEl.textContent = tier.label;
 
-  // 武将ヒーローカード（ヒーロー内：名前＋名言）
+  // 武将ヒーローカード（総大将・侍大将のみ表示）
   const heroWarriorEl = document.getElementById('result-hero-warrior-card');
-  if (heroWarriorEl && pw) {
-    const w = pw.shogun;
+  if (heroWarriorEl && pw && hasWarrior) {
+    const w = pw[tier.key];
     heroWarriorEl.style.background = `linear-gradient(135deg, ${pm.colorDark}88 0%, rgba(0,0,0,.55) 100%)`;
     heroWarriorEl.innerHTML = `
       <img src="./portraits/${w.img}" alt="${w.name}" class="hero-warrior-portrait"
@@ -1294,6 +1311,9 @@ function renderResultExtras() {
         ${w.line ? `<div class="hero-warrior-line">${w.line}</div>` : ''}
         ${w.quote ? `<div class="hero-warrior-quote">「${w.quote}」</div>` : ''}
       </div>`;
+  } else if (heroWarriorEl) {
+    heroWarriorEl.style.background = '';
+    heroWarriorEl.innerHTML = '';
   }
 
   // V3カード（hidden compat）

@@ -467,6 +467,78 @@
       <div class="report-grid"></div>
     </div>
 
+    <!-- ══ SCIENCE BEHIND (Layer 2) ══ -->
+    <div class="science-behind-wrap">
+      <button class="science-toggle" aria-expanded="false" onclick="toggleScience(this)">
+        <span class="science-toggle-icon">🔬</span>
+        <span class="science-toggle-text">この診断のサイエンス</span>
+        <span class="science-toggle-hint">クリックで展開</span>
+        <span class="science-toggle-chevron">▼</span>
+      </button>
+      <div class="science-content" id="science-content" hidden>
+        <div class="science-inner">
+
+          <div class="science-section">
+            <h3 class="science-h3">1. ムードメーカーとは何か——学術的定義</h3>
+            <p>「ムードメーカー」を、本診断では以下の学術概念の複合として定義しています：</p>
+            <p class="science-formula">ムードメーカー ＝ 特性ポジティブ感情 × 感情伝染力 × 関係性エネルギー創出力</p>
+            <p>これは現代の組織心理学における <em>Positive Organizational Scholarship</em>（POS）の中核的な発見と整合します。つまり「ムードメーカー」とは「明るい性格の人」ではなく、<strong>「他者のエネルギー水準を引き上げる人」</strong>である、というのが本診断の出発点です。</p>
+            <ul class="science-refs">
+              <li>Barsade, S. G. (2002). The ripple effect: Emotional contagion and its influence on group behavior. <em>Administrative Science Quarterly, 47</em>(4), 644–675.</li>
+              <li>Owens et al. (2016). Relational energy at work. <em>Journal of Applied Psychology, 101</em>(1), 35–49.</li>
+            </ul>
+          </div>
+
+          <div class="science-section">
+            <h3 class="science-h3">2. 採用している3つの理論的フレーム</h3>
+            <p>本診断は、世界の組織心理学・パーソナリティ心理学で確立された3つの理論を Singerly の現場知（あさげの会で2,300社・3,200名との対話）と接続して構築されています。</p>
+            <ol class="science-list">
+              <li><strong>ビッグファイブ理論（Big Five / OCEAN）</strong><br>人のパーソナリティを5因子（開放性・誠実性・外向性・協調性・神経症傾向）で捉える、心理学で最も実証研究の多いフレームワーク。6タイプの主軸となる理論。</li>
+              <li><strong>Positive Organizational Scholarship（POS）</strong><br>ミシガン大学を中心に発展した、組織の「ポジティブな例外的成果」を研究する学問領域。Cameron（2012）の Positive Leadership が代表書。「ムードメーカーが組織に与える影響」を測る理論基盤。</li>
+              <li><strong>サーバント・リーダーシップ理論（Greenleaf, 1977）</strong><br>「他者に仕えることから始まるリーダーシップ」という概念。日本語の「おもてなし」と概念的に深く重なる。おもてなし指数の理論的根拠。</li>
+            </ol>
+          </div>
+
+          <div class="science-section">
+            <h3 class="science-h3">3. 22問の質問項目はどう設計されたか</h3>
+            <p>本診断の22問は、以下の確立された学術尺度を参照しながら設計されています：</p>
+            <ul class="science-list">
+              <li>BFI-2（Soto &amp; John, 2017）── ビッグファイブの最新版尺度</li>
+              <li>Need for Cognition Scale（Cacioppo &amp; Petty, 1982）── 認知欲求</li>
+              <li>IRI: Interpersonal Reactivity Index（Davis, 1983）── 共感性4因子尺度</li>
+              <li>MLQ: Multifactor Leadership Questionnaire（Bass &amp; Avolio, 1995）── 変革型リーダーシップ</li>
+              <li>Grit Scale（Duckworth et al., 2007）── やり抜く力</li>
+            </ul>
+            <p>各タイプ3問・おもてなし指数4問、計22問の構成。逆転項目（reverse-keyed item）を4問配置し、社会的望ましさバイアスの影響を抑える設計です。</p>
+          </div>
+
+          <div class="science-section">
+            <h3 class="science-h3">4. スコアの算出ロジック</h3>
+            <ol class="science-list">
+              <li>各質問への回答（1〜5の5件法）を取得</li>
+              <li>逆転項目は値を反転（6 − v）</li>
+              <li>タイプごとに3問の平均値を算出</li>
+              <li>0〜100に正規化：score = ((avg − 1) / 4) × 100</li>
+            </ol>
+            <p class="science-note">将来的には、データ蓄積後（N≥300）に確認的因子分析（CFA）を実施し、項目の因子負荷量に基づく重み付けスコアリングに移行予定です。</p>
+          </div>
+
+          <div class="science-section">
+            <h3 class="science-h3">5. 引用文献 TOP 5</h3>
+            <ol class="science-citations">
+              <li>Barsade, S. G. (2002). The ripple effect: Emotional contagion and its influence on group behavior. <em>Administrative Science Quarterly, 47</em>(4), 644–675.</li>
+              <li>Cameron, K. S. (2012). <em>Positive Leadership: Strategies for Extraordinary Performance</em> (2nd ed.). Berrett-Koehler.</li>
+              <li>Fredrickson, B. L. (2001). The role of positive emotions in positive psychology. <em>American Psychologist, 56</em>(3), 218–226.</li>
+              <li>Greenleaf, R. K. (1977). <em>Servant Leadership.</em> Paulist Press.</li>
+              <li>Owens, B. P., Baker, W. E., Sumpter, D. M., &amp; Cameron, K. S. (2016). Relational energy at work. <em>Journal of Applied Psychology, 101</em>(1), 35–49.</li>
+            </ol>
+            <p class="science-note">全文献リスト（30本以上）は研究背景ページで公開予定です。</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -1285,6 +1357,16 @@ function updateOgMeta(primary, score) {
   const desc  = `ムドメ戦闘力 ${Math.round(score * 8000 + 100000).toLocaleString()}。あなたのタイプも診断できます。`;
   ['og-title','tw-title'].forEach(id => { const el = document.getElementById(id); if (el) el.content = title; });
   ['og-desc','tw-desc'].forEach(id => { const el = document.getElementById(id); if (el) el.content = desc; });
+}
+
+// 「この診断のサイエンス」折りたたみトグル
+function toggleScience(btn) {
+  const expanded = btn.getAttribute('aria-expanded') === 'true';
+  btn.setAttribute('aria-expanded', String(!expanded));
+  const content = document.getElementById('science-content');
+  if (content) content.hidden = expanded;
+  const chevron = btn.querySelector('.science-toggle-chevron');
+  if (chevron) chevron.textContent = expanded ? '▼' : '▲';
 }
 
 // ══════════════════════════════════════

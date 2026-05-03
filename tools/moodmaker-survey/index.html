@@ -10,9 +10,11 @@
   <meta property="og:description" content="約3分で、あなたのムードメイク適性を6属性に鑑定します。" id="og-desc"/>
   <meta property="og:url"   content="https://singerly-tools.vercel.app/tools/moodmaker-survey/" id="og-url"/>
   <meta property="og:type"  content="website"/>
-  <meta name="twitter:card"        content="summary"/>
+  <meta property="og:image" content="https://singerly-tools.vercel.app/api/og?type=%E5%AE%B4%E4%BC%9A%E5%9E%8B&score=50" id="og-image"/>
+  <meta name="twitter:card"        content="summary_large_image"/>
   <meta name="twitter:title"       content="ムードメーカー診断 | Singerly" id="tw-title"/>
   <meta name="twitter:description" content="約3分で、あなたのムードメイク適性を6属性に鑑定します。" id="tw-desc"/>
+  <meta name="twitter:image" content="https://singerly-tools.vercel.app/api/og?type=%E5%AE%B4%E4%BC%9A%E5%9E%8B&score=50" id="tw-image"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;800;900&family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@700;900&display=swap" rel="stylesheet"/>
@@ -1509,12 +1511,15 @@ async function copyShareUrl() {
     prompt('URLをコピーしてください', url);
   }
 }
-// OGP メタを結果に合わせて動的更新
+// OGP メタを結果に合わせて動的更新。
+// /api/og は Vercel Serverless 関数としてタイプ別 SVG を動的生成する。
 function updateOgMeta(primary, score) {
   const title = `私の真の姿は「${primary}」でした | ムードメーカー診断`;
   const desc  = `ムドメ戦闘力 ${Math.round(score * 8000 + 100000).toLocaleString()}。あなたのタイプも診断できます。`;
+  const ogImg = `https://singerly-tools.vercel.app/api/og?type=${encodeURIComponent(primary)}&score=${Math.max(0, Math.min(100, Math.round(score)))}`;
   ['og-title','tw-title'].forEach(id => { const el = document.getElementById(id); if (el) el.content = title; });
   ['og-desc','tw-desc'].forEach(id => { const el = document.getElementById(id); if (el) el.content = desc; });
+  ['og-image','tw-image'].forEach(id => { const el = document.getElementById(id); if (el) el.content = ogImg; });
 }
 
 // ═══════════════════════════════════════
@@ -1536,35 +1541,65 @@ async function submitEpisode() {
   const consent = document.getElementById('ep-consent')?.checked || false;
   const resEl = document.getElementById('episode-result');
 
-  // ╔══ サイレントフェイル仕様 ══╗
-  // /api/episodes はフェーズ2で Vercel Serverless 関数として追加予定。
-  // それまでは fetch が 404 になるが、ユーザー体験上は「送信成功」の見せ方として
-  // 感謝メッセージを表示し、フォームをロックする。localStorage に一時保存して
-  // フェーズ2でバックフィル送信できるようにしておく。
+  // 何も書いていない場合は送信しない
+  if (!q1 && !q2 && !q3) {
+    if (resEl) {
+      resEl.textContent = '何か一つでもご記入いただけるとありがたいです。';
+      resEl.className = 'episode-result episode-result-err';
+      resEl.classList.remove('hidden');
+    }
+    return;
+  }
+
+  // 全リクエストに含めるメタデータ
+  const deviceId = (typeof getDeviceId === 'function') ? getDeviceId() : null;
+  let surveyResultId = window._moodLastSurveyId || null;
+  if (!surveyResultId) {
+    try { surveyResultId = localStorage.getItem('moodmaker-last-survey-id'); } catch (_) {}
+  }
+
+  const payload = {
+    q1_others_episode   : q1,
+    q2_self_experience  : q2,
+    q3_moodmaker_meaning: q3,
+    consent_research    : !!consent,
+    primary_type        : window._moodPrimary || null,
+    survey_result_id    : surveyResultId,
+    device_id           : deviceId,
+  };
+
   try {
-    fetch('/api/episodes', {
+    const res = await fetch('/api/episodes', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ q1_others_episode: q1, q2_self_experience: q2, q3_moodmaker_meaning: q3, consent_research: consent, ts: Date.now() })
-    }).catch(() => { /* サイレント */ });
-  } catch (_) { /* サイレント */ }
-
-  // localStorage バックアップ（将来のバックフィル用）
-  try {
-    if (q1 || q2 || q3) {
+      body: JSON.stringify(payload),
+    });
+    if (res.ok) {
+      if (resEl) {
+        resEl.textContent = 'ありがとうございました。あなたの声を次の一冊に活かします。';
+        resEl.className = 'episode-result episode-result-ok';
+        resEl.classList.remove('hidden');
+      }
+      // 送信成功したので pending バックアップは不要
+      try { localStorage.removeItem('moodmaker-episodes-pending'); } catch (_) {}
+      document.getElementById('episode-body').querySelectorAll('textarea,input,button').forEach(el => { el.disabled = true; });
+    } else {
+      throw new Error('status ' + res.status);
+    }
+  } catch (e) {
+    // サーバー送信失敗時は localStorage にバックアップしてリトライできるようにする
+    try {
       const key = 'moodmaker-episodes-pending';
       const arr = JSON.parse(localStorage.getItem(key) || '[]');
-      arr.push({ q1, q2, q3, consent, ts: Date.now() });
-      localStorage.setItem(key, JSON.stringify(arr.slice(-20))); // 最大3件保持
+      arr.push({ ...payload, ts: Date.now() });
+      localStorage.setItem(key, JSON.stringify(arr.slice(-20)));
+    } catch (_) {}
+    if (resEl) {
+      resEl.textContent = '一時的な送信エラーです。データは保存されたため、もう一度「送信する」を押してください。';
+      resEl.className = 'episode-result episode-result-err';
+      resEl.classList.remove('hidden');
     }
-  } catch (_) { /* ignore */ }
-
-  if (resEl) {
-    resEl.textContent = 'ありがとうございました。あなたの声を次の一冊に活かします。';
-    resEl.className = 'episode-result episode-result-ok';
-    resEl.classList.remove('hidden');
   }
-  document.getElementById('episode-body').querySelectorAll('textarea,input,button').forEach(el => { el.disabled = true; });
 }
 
 function skipEpisode() {

@@ -254,10 +254,11 @@ function readOrgPrefs() {
 }
 
 function apiBase() {
-  if (typeof location !== "undefined" && location.hostname === "localhost" && String(location.port) === "8787") {
-    return "";
-  }
-  return "http://localhost:8787";
+  // 同一オリジンを返す。本番（Vercel）では将来 /api/results /api/resume を
+  // Vercel Serverless 関数として追加予定。それまでは fetch が 404 になるが、
+  // 呼び出し側 (postResultToApi / uploadResume) は try/catch でサイレントに処理する。
+  // 旧実装は本番で http://localhost:8787 を返していたため fetch がエラーになっていた。
+  return "";
 }
 
 function getQuestionAnswer(questionId) {

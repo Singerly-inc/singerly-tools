@@ -4,6 +4,15 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ムードメーカー診断 | Singerly</title>
+  <meta name="description" content="ムードメーカー診断 — あなたの場の作り方を6属性で鑑定。Singerly提供。"/>
+  <meta property="og:site_name" content="Singerly"/>
+  <meta property="og:title"       content="ムードメーカー診断 | Singerly"      id="og-title"/>
+  <meta property="og:description" content="約3分で、あなたのムードメイク適性を6属性に鑑定します。" id="og-desc"/>
+  <meta property="og:url"   content="https://singerly-tools.vercel.app/tools/moodmaker-survey/" id="og-url"/>
+  <meta property="og:type"  content="website"/>
+  <meta name="twitter:card"        content="summary"/>
+  <meta name="twitter:title"       content="ムードメーカー診断 | Singerly" id="tw-title"/>
+  <meta name="twitter:description" content="約3分で、あなたのムードメイク適性を6属性に鑑定します。" id="tw-desc"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;800;900&family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@700;900&display=swap" rel="stylesheet"/>
@@ -124,15 +133,23 @@
                 <input id="name" type="text" placeholder="例：山田 太郎" style="padding:14px 16px;font-size:18px;font-weight:700"/>
               </label>
               <div style="margin-bottom:12px">
-                <div style="font-size:12px;font-weight:700;color:var(--text-sub);margin-bottom:6px">性別 <span style="color:var(--red);font-size:11px">必須</span></div>
+                <div style="font-size:12px;font-weight:700;color:var(--text-sub);margin-bottom:6px">性別 <span style="font-size:11px;color:var(--text-mute)">(任意)</span></div>
                 <div class="profile-gender-row">
                   <label class="profile-gender-opt" id="gender-male-label">
-                    <input type="radio" name="gender" value="male" id="genderMale" checked onchange="updateGenderStyle()"/>
+                    <input type="radio" name="gender" value="male" id="genderMale" onchange="updateGenderStyle()"/>
                     男性
                   </label>
                   <label class="profile-gender-opt" id="gender-female-label">
                     <input type="radio" name="gender" value="female" id="genderFemale" onchange="updateGenderStyle()"/>
                     女性
+                  </label>
+                  <label class="profile-gender-opt" id="gender-other-label">
+                    <input type="radio" name="gender" value="other" id="genderOther" onchange="updateGenderStyle()"/>
+                    その他
+                  </label>
+                  <label class="profile-gender-opt" id="gender-noanswer-label">
+                    <input type="radio" name="gender" value="noanswer" id="genderNoAnswer" onchange="updateGenderStyle()"/>
+                    回答しない
                   </label>
                 </div>
               </div>
@@ -378,8 +395,10 @@
     <!-- ══ SNS SHARE ══ -->
     <div class="result-share-bar">
       <span class="result-share-label">結果をシェアする</span>
-      <button class="btn sns-btn sns-x" onclick="shareToX()">𝕏 でシェア</button>
-      <button class="btn sns-btn sns-fb" onclick="shareToFb()">Facebook でシェア</button>
+      <button class="btn sns-btn sns-x"    onclick="shareToX()">𝕏 でシェア</button>
+      <button class="btn sns-btn sns-fb"   onclick="shareToFb()">Facebook でシェア</button>
+      <button class="btn sns-btn sns-line" onclick="shareToLine()">LINE でシェア</button>
+      <button class="btn sns-btn sns-copy" id="copy-url-btn" onclick="copyShareUrl()">URLをコピー</button>
     </div>
 
     <!-- ══ COMPAT ══ -->
@@ -416,6 +435,13 @@
         <div id="service" class="service-block hidden">
           <h3>Singerlyサービス接続</h3>
           <p id="orgFitText"></p><p id="serviceText"></p>
+          <!-- 黒田官兵衛 2026-05-04: 最終CTAエリアにもSNSシェアを配置 -->
+          <div class="result-share-bar" style="margin:8px 0 16px">
+            <span class="result-share-label">この鑑定書をシェア</span>
+            <button class="btn sns-btn sns-x"    onclick="shareToX()">𝕏 でシェア</button>
+            <button class="btn sns-btn sns-fb"   onclick="shareToFb()">Facebook でシェア</button>
+            <button class="btn sns-btn sns-line" onclick="shareToLine()">LINE でシェア</button>
+          </div>
           <div class="actions-row">
             <button type="button" id="contactBtn"    class="btn secondary">問い合わせる</button>
             <button type="button" id="saveReportBtn" class="btn ghost">レポートを保存</button>
@@ -521,10 +547,11 @@ function toggleOptional(btn) {
 }
 
 function updateGenderStyle() {
-  const male   = document.getElementById('genderMale');
-  const female = document.getElementById('genderFemale');
-  document.getElementById('gender-male-label').classList.toggle('selected',   male.checked);
-  document.getElementById('gender-female-label').classList.toggle('selected', female.checked);
+  ['male','female','other','noanswer'].forEach(v => {
+    const el = document.getElementById('gender' + v.charAt(0).toUpperCase() + v.slice(1));
+    const lb = document.getElementById('gender-' + v + '-label');
+    if (el && lb) lb.classList.toggle('selected', el.checked);
+  });
 }
 // 初期状態を反映
 document.addEventListener('DOMContentLoaded', updateGenderStyle);
@@ -1221,6 +1248,29 @@ function shareToX() {
 function shareToFb() {
   const url = 'https://singerly-tools.vercel.app/tools/moodmaker-survey/';
   window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+}
+function shareToLine() {
+  const primary = window._moodPrimary || '';
+  const text = `私のムードメーカータイプは「${primary}」でした！ムードメーカー診断 by Singerly`;
+  const url  = 'https://singerly-tools.vercel.app/tools/moodmaker-survey/';
+  window.open(`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`, '_blank');
+}
+async function copyShareUrl() {
+  const url = 'https://singerly-tools.vercel.app/tools/moodmaker-survey/';
+  try {
+    await navigator.clipboard.writeText(url);
+    const btn = document.getElementById('copy-url-btn');
+    if (btn) { btn.textContent = '✓ コピーしました'; setTimeout(() => { btn.textContent = 'URLをコピー'; }, 2000); }
+  } catch (_) {
+    prompt('URLをコピーしてください', url);
+  }
+}
+// OGP メタを結果に合わせて動的更新
+function updateOgMeta(primary, score) {
+  const title = `私の真の姿は「${primary}」でした | ムードメーカー診断`;
+  const desc  = `ムドメ戦闘力 ${Math.round(score * 8000 + 100000).toLocaleString()}。あなたのタイプも診断できます。`;
+  ['og-title','tw-title'].forEach(id => { const el = document.getElementById(id); if (el) el.content = title; });
+  ['og-desc','tw-desc'].forEach(id => { const el = document.getElementById(id); if (el) el.content = desc; });
 }
 
 // ══════════════════════════════════════

@@ -1,76 +1,55 @@
 const questions = [
-  // 宴会型（7問）：場を盛り上げる・テンションを引き上げる力
-  // ↔知識型トレードオフ：直感・盛り上げ重視 vs 分析・論理重視
-  { id: "Q01", type: "宴会型", text: "盛り上がっていない場の空気を、自分から変えにいける", reverse: false },
-  { id: "Q02", type: "宴会型", text: "初対面の集まりで、自然と中心的な役割を担っていることが多い", reverse: false },
-  { id: "Q03", type: "宴会型", text: "人が多い場より、少人数か一人のほうが本来の力を発揮できる", reverse: true },
-  { id: "Q04", type: "宴会型", text: "笑いや軽さで重い空気をほぐすのが得意だ", reverse: false },
-  { id: "Q05", type: "宴会型", text: "飲み会やイベントの幹事・仕切り役を頼まれることが多い", reverse: false },
-  { id: "Q06", type: "宴会型", text: "初対面でも短時間で打ち解けて笑いが生まれることが多い", reverse: false },
-  { id: "Q07", type: "宴会型", text: "大勢の場では、場の盛り上がりを常に意識しながら行動している", reverse: false },
+  // ════════════════════════════════════════════════════════════
+  // 30問版（v3・組織あるある文体・タイプ表記なし・シャッフル前提）
+  // 6タイプ × 4問 = 24問 + おもてなし6問 = 計30問
+  // type プロパティは内部スコア計算用。画面には表示しない。
+  // ════════════════════════════════════════════════════════════
 
-  // 教祖型（7問）：ビジョン・理念で人を動かす力
-  // ↔宴会型トレードオフ：意味・why重視 vs 楽しさ・how重視
-  { id: "Q08", type: "教祖型", text: "自分の価値観や信念を言語化して、周囲に示すことが多い", reverse: false },
-  { id: "Q09", type: "教祖型", text: "理念や目的を語ることで、周囲を動かした経験が複数ある", reverse: false },
-  { id: "Q10", type: "教祖型", text: "「なぜやるのか」よりも「どうやるか」に関心が向きやすい", reverse: true },
-  { id: "Q11", type: "教祖型", text: "将来のビジョンについて、自分の言葉で語れるものがある", reverse: false },
-  { id: "Q12", type: "教祖型", text: "自分の考えに共感してくれる人が増えると、強くモチベーションが上がる", reverse: false },
-  { id: "Q13", type: "教祖型", text: "「あなたに影響を受けた」「考え方が変わった」と言われたことが複数ある", reverse: false },
-  { id: "Q14", type: "教祖型", text: "組織や集団の向かう方向性について、自分なりの考えを持って発言している", reverse: false },
+  // ── 宴会型 ── 場のテンション・盛り上げ
+  { id: "Q01", type: "宴会型", text: "会議で気まずい沈黙が10秒続いたら、つい自分から何か言ってしまう", reverse: false },
+  { id: "Q02", type: "宴会型", text: "新メンバー歓迎会で、最初に話しかけに行くのは自分のことが多い", reverse: false },
+  { id: "Q03", type: "宴会型", text: "全社イベントは、できれば早めに切り上げて静かに過ごしたい", reverse: true },
+  { id: "Q04", type: "宴会型", text: "「あの人が来るとなんか場が動く」と言われたことがある", reverse: false },
 
-  // 勝負型（7問）：競争・目標・突破力
-  // ↔柔和型トレードオフ：勝利・成果優先 vs 関係・和を優先
-  { id: "Q15", type: "勝負型", text: "勝敗や順位がある状況のほうが、燃えて力が出る", reverse: false },
-  { id: "Q16", type: "勝負型", text: "「負けたくない」という気持ちが、行動の原動力になっている", reverse: false },
-  { id: "Q17", type: "勝負型", text: "リスクを避けて安全策を選ぶことが多く、大きな決断を先送りにしがちだ", reverse: true },
-  { id: "Q18", type: "勝負型", text: "不利な状況でも、最後まで勝ちにいく姿勢を崩さないほうだ", reverse: false },
-  { id: "Q19", type: "勝負型", text: "数字や成果で自分の貢献を示せる場面のほうが、力が出やすい", reverse: false },
-  { id: "Q20", type: "勝負型", text: "意識している競争相手がいるほど、集中力や行動量が増す", reverse: false },
-  { id: "Q21", type: "勝負型", text: "目標を達成したときの快感が、次の挑戦へのエネルギーになっている", reverse: false },
+  // ── 教祖型 ── 意味づけ・ビジョン・信念
+  { id: "Q05", type: "教祖型", text: "部下や後輩に「なぜこの仕事をやるのか」を語ったことが何度もある", reverse: false },
+  { id: "Q06", type: "教祖型", text: "飲みの席で気づくと、自分の理想や信念について熱く語っている", reverse: false },
+  { id: "Q07", type: "教祖型", text: "会議では「やり方」より「意義」の議論を優先したいタイプだ", reverse: false },
+  { id: "Q08", type: "教祖型", text: "「あなたの言葉で考えが変わった」と言われた経験がある", reverse: false },
 
-  // 知識型（7問）：情報・論理・専門性
-  // ↔宴会型トレードオフ：分析・論理 vs 感覚・盛り上がり
-  // ↔色気型トレードオフ：合理性 vs 感性
-  { id: "Q22", type: "知識型", text: "何かを判断するとき、データや根拠を確認してから動くほうだ", reverse: false },
-  { id: "Q23", type: "知識型", text: "自分の主張を、構造的に整理して説明することが得意だ", reverse: false },
-  { id: "Q24", type: "知識型", text: "細かい分析より、直感や空気感で動くほうが自分には合っている", reverse: true },
-  { id: "Q25", type: "知識型", text: "専門性を深めることに、時間やエネルギーを積極的に使っている", reverse: false },
-  { id: "Q26", type: "知識型", text: "話の前提や定義が曖昧なまま進むと、違和感や不快感を覚える", reverse: false },
-  { id: "Q27", type: "知識型", text: "会議やディスカッションで、論点の整理役を担うことが多い", reverse: false },
-  { id: "Q28", type: "知識型", text: "「なんとなく」「雰囲気で」物事を決めることへの抵抗感がある", reverse: false },
+  // ── 勝負型 ── 競争・成果・突破
+  { id: "Q09", type: "勝負型", text: "営業数字やKPIが見える化されると、ついランキングを意識してしまう", reverse: false },
+  { id: "Q10", type: "勝負型", text: "プレゼンの前に「絶対に通す」と心の中で気合を入れている", reverse: false },
+  { id: "Q11", type: "勝負型", text: "大きな決断を求められたとき、慎重になりすぎて先送りしがちだ", reverse: true },
+  { id: "Q12", type: "勝負型", text: "同期や同年代の活躍を見ると、自分も負けてられないと火がつく", reverse: false },
 
-  // 色気型（7問）：非言語的影響力・センス・存在感
-  // ↔知識型トレードオフ：感性・直感 vs 合理性・論理
-  { id: "Q29", type: "色気型", text: "言葉より、雰囲気・表情・間（ま）で人を動かせると感じることがある", reverse: false },
-  { id: "Q30", type: "色気型", text: "センスや世界観に「自分らしさ」があると言われる", reverse: false },
-  { id: "Q31", type: "色気型", text: "効率・合理性を重視するあまり、雰囲気や感性を後回しにしがちだ", reverse: true },
-  { id: "Q32", type: "色気型", text: "場の温度感を読み、自分の存在感でそれを変えることができる", reverse: false },
-  { id: "Q33", type: "色気型", text: "服装・話し方・空間づくりに「美意識」や「こだわり」がある", reverse: false },
-  { id: "Q34", type: "色気型", text: "言葉にしなくても伝わる、という体験を人よりよくしている", reverse: false },
-  { id: "Q35", type: "色気型", text: "「雰囲気がある」「独特の存在感がある」と言われることがある", reverse: false },
+  // ── 知識型 ── 構造化・分析・専門性
+  { id: "Q13", type: "知識型", text: "議論が感情論になってきたら、いったん論点を整理し直したくなる", reverse: false },
+  { id: "Q14", type: "知識型", text: "何か新しいことを始める前に、まず本やデータで調べることが多い", reverse: false },
+  { id: "Q15", type: "知識型", text: "直感で動くより、根拠が揃ってから動くほうが自分らしい", reverse: false },
+  { id: "Q16", type: "知識型", text: "細かい根拠より、まず手を動かしてしまうほうが性に合っている", reverse: true },
 
-  // 柔和型（7問）：対立緩和・安心感・信頼関係
-  // ↔勝負型トレードオフ：和・関係優先 vs 勝利・成果優先
-  { id: "Q36", type: "柔和型", text: "対立する人の間に入り、双方が納得できる着地点を探すのが得意だ", reverse: false },
-  { id: "Q37", type: "柔和型", text: "「話しかけやすい」「相談しやすい」と言われることが多い", reverse: false },
-  { id: "Q38", type: "柔和型", text: "チームの和より、正しい結論を優先して自分の主張を押し通すことが多い", reverse: true },
-  { id: "Q39", type: "柔和型", text: "人の話を最後まで聞くことが、自然とできている", reverse: false },
-  { id: "Q40", type: "柔和型", text: "揉めそうな場面で、自分が一歩引いて場を収めることが多い", reverse: false },
-  { id: "Q41", type: "柔和型", text: "誰かが孤立していると感じたとき、自然と気にかけて動いてしまう", reverse: false },
-  { id: "Q42", type: "柔和型", text: "「あなたがいると場が安定する」と言われた経験がある", reverse: false },
+  // ── 色気型 ── 場の温度感知・印象設計
+  { id: "Q17", type: "色気型", text: "商談相手によって、自分のキャラや見せ方を意識的に変えている", reverse: false },
+  { id: "Q18", type: "色気型", text: "1対1の対話のほうが、大人数の会議より自分の力が出る", reverse: false },
+  { id: "Q19", type: "色気型", text: "会議室に入った瞬間、その日の場の温度を感じ取れるほうだ", reverse: false },
+  { id: "Q20", type: "色気型", text: "服装や立ち居振る舞いで、自分の見え方を意識することが多い", reverse: false },
+
+  // ── 柔和型 ── 包容・心理的安全性・支え
+  { id: "Q21", type: "柔和型", text: "部下が落ち込んでいたら、業務を止めてでもまず話を聞きにいく", reverse: false },
+  { id: "Q22", type: "柔和型", text: "会議で発言できずにいる人に気づくと、振る話題をつくってあげたくなる", reverse: false },
+  { id: "Q23", type: "柔和型", text: "チームでギスギスした空気になると、自分が間に入って和ませることが多い", reverse: false },
+  { id: "Q24", type: "柔和型", text: "自分の主張を通すより、関係性が壊れないことを優先しがちだ", reverse: false },
 ];
 
 const omoteNashiQuestions = [
-  // おもてなし適性（8問）：他者優先・察する力・奉仕動機・場への貢献意識
-  { id: "QO1", text: "誰かが困っているとき、自分のことを後回しにしてでも手を差し伸べることが多い", reverse: false },
-  { id: "QO2", text: "「気が利く」「さりげない」と言われることがある", reverse: false },
-  { id: "QO3", text: "自分の都合を優先して、周囲への配慮が薄れることがある", reverse: true },
-  { id: "QO4", text: "相手の感情の変化に敏感で、表情や雰囲気の変化によく気づく", reverse: false },
-  { id: "QO5", text: "頼まれていなくても、場の状況を見て自然と動いていることが多い", reverse: false },
-  { id: "QO6", text: "自分が疲れていても、周囲が快適かどうかを気にしてしまう", reverse: false },
-  { id: "QO7", text: "自分が得する場面より、周囲が喜ぶ場面を優先しがちだ", reverse: false },
-  { id: "QO8", text: "相手に喜んでもらえることより、自分の達成感や満足を優先しがちだ", reverse: true },
+  // ── おもてなし指数（6問）：気配り・他者優先・場への貢献
+  { id: "QO1", text: "会議のお茶やお弁当が足りなかったら、自分が動いて補充している", reverse: false },
+  { id: "QO2", text: "来客があると気づいたら、出迎えや案内が自然にできる", reverse: false },
+  { id: "QO3", text: "自分が疲れていても、つい同僚の体調や機嫌を気にしてしまう", reverse: false },
+  { id: "QO4", text: "「あなたがいると場が回る」と言われたことがある", reverse: false },
+  { id: "QO5", text: "自分の都合より、相手に喜んでもらえることを優先しがちだ", reverse: false },
+  { id: "QO6", text: "「気が利く」「さりげない」と言われたことがある", reverse: false },
 ];
 
 const types = ["宴会型", "教祖型", "勝負型", "知識型", "色気型", "柔和型"];
@@ -273,15 +252,50 @@ function setQuestionAnswer(questionId, value) {
   });
 }
 
-// ── 全質問リスト（おもてなし→属性）─ 順番に表示する用
-const allSurveyQuestions = [
+// ── 全質問リスト──
+// タイプを意識させないためシャッフルして表示する。
+// 表示順は localStorage に保存し、リロードしても同じ順番を保つ。
+const _baseSurveyQuestions = [
   ...omoteNashiQuestions.map(q => ({ ...q, type: "おもてなし" })),
   ...questions
 ];
+
+function _shuffleOrderFor(questions) {
+  const ORDER_KEY = 'moodmaker-survey-order-v3';
+  // 保存済みの順を復元
+  try {
+    const saved = JSON.parse(localStorage.getItem(ORDER_KEY) || 'null');
+    if (Array.isArray(saved) && saved.length === questions.length) {
+      const map = new Map(questions.map(q => [q.id, q]));
+      const restored = saved.map(id => map.get(id)).filter(Boolean);
+      if (restored.length === questions.length) return restored;
+    }
+  } catch (_) { /* ignore */ }
+  // Fisher-Yates シャッフル
+  const arr = questions.slice();
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  try { localStorage.setItem(ORDER_KEY, JSON.stringify(arr.map(q => q.id))); } catch (_) {}
+  return arr;
+}
+
+const allSurveyQuestions = _shuffleOrderFor(_baseSurveyQuestions);
+
 let surveyIdx = 0;
 
+// ニュートラル表示用の単一テーマ（Singerly 赤・タイプを区別しない）
+const NEUTRAL_THEME = {
+  color: "#B7282E",
+  colorDark: "#83151B",
+  bg: "#F4D9DA",
+  glyph: ""  // タイプグリフは表示しない
+};
+
 function getTypeForQ(q) {
-  return TYPE_META[q.type] || TYPE_META["おもてなし"];
+  // ずっと同じ色ステーマを返す（タイプを意識させないため）
+  return NEUTRAL_THEME;
 }
 
 function renderCurrentQuestion() {
@@ -289,9 +303,6 @@ function renderCurrentQuestion() {
   const total = allSurveyQuestions.length;
   const meta = getTypeForQ(q);
   const saved = getQuestionAnswer(q.id);
-  const isOmote = q.type === "おもてなし";
-  const sectionLabel = isOmote ? "おもてなし適性" : `${q.type} · 適性チェック`;
-  const sectionNum = isOmote ? "SECTION 00" : `SECTION ${String(types.indexOf(q.type) + 1).padStart(2, "0")}`;
 
   const choicesHtml = [1,2,3,4,5].map(n => {
     const isSel = String(saved) === String(n);
@@ -306,10 +317,8 @@ function renderCurrentQuestion() {
       <div class="survey-inner">
         <div class="progress-stepper" style="margin-bottom:24px" id="survey-progress-bar"></div>
         <div class="survey-section-header">
-          <div class="survey-type-glyph" style="color:${meta.colorDark}">${meta.glyph}</div>
           <div class="survey-type-label">
-            <span class="survey-type-section" style="color:${meta.colorDark}">${sectionNum}</span>
-            <span class="survey-type-name" style="color:${meta.colorDark}">${sectionLabel}</span>
+            <span class="survey-type-name" style="color:${meta.colorDark}">ムードメーカー診断</span>
           </div>
           <div class="survey-counter" style="color:${meta.colorDark}">
             <span class="survey-counter-num">${surveyIdx + 1}</span><span class="survey-counter-total"> / ${total}</span>

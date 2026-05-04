@@ -254,10 +254,11 @@ function readOrgPrefs() {
 }
 
 function apiBase() {
-  if (typeof location !== "undefined" && location.hostname === "localhost" && String(location.port) === "8787") {
-    return "";
-  }
-  return "http://localhost:8787";
+  // 同一オリジンを返す。本番（Vercel）では将来 /api/results /api/resume を
+  // Vercel Serverless 関数として追加予定。それまでは fetch が 404 になるが、
+  // 呼び出し側 (postResultToApi / uploadResume) は try/catch でサイレントに処理する。
+  // 旧実装は本番で http://localhost:8787 を返していたため fetch がエラーになっていた。
+  return "";
 }
 
 function getQuestionAnswer(questionId) {
@@ -318,14 +319,13 @@ function renderCurrentQuestion() {
           <div class="survey-q-id" style="color:${meta.colorDark}">Q.${String(surveyIdx + 1).padStart(2, "0")}</div>
           <h2 class="survey-q-text">${q.text}</h2>
           <div class="survey-scale-hint" style="color:${meta.colorDark}">
-            <span>← よくあてはまる</span><span>あてはまらない →</span>
+            <span>← あてはまらない</span><span>よくあてはまる →</span>
           </div>
           <div class="survey-choices">${choicesHtml}</div>
         </div>
         <div class="survey-nav">
           <button class="btn ghost" style="border-color:${meta.colorDark};color:${meta.colorDark}" onclick="surveyBack()">${surveyIdx === 0 ? "← プロフィールに戻る" : "← 戻る"}</button>
-          <span class="survey-kbd-hint" style="color:${meta.colorDark}">キーボード「1〜5」でも回答できます</span>
-          <button class="btn" id="survey-next-btn" style="background:${meta.color};box-shadow:0 3px 0 ${meta.colorDark}" onclick="surveyNext()"${!saved ? " disabled style=\"background:#ccc;box-shadow:none;cursor:not-allowed\"" : ""}>${surveyIdx === total - 1 ? "組織マトリクスへ →" : "次の質問 →"}</button>
+          <span class="survey-kbd-hint" style="color:${meta.colorDark}">1〜5を選ぶと自動で次へ進みます</span>
         </div>
       </div>
     </div>`;
@@ -348,10 +348,23 @@ function renderCurrentQuestion() {
   };
 }
 
+// 自動遷移タイマーと連打防止ロック
+let _autoAdvanceTimer = null;
+let _advanceLocked = false;
+
 function selectAnswer(qId, n) {
+  if (_advanceLocked) return;
   setQuestionAnswer(qId, n);
   saveFormState();
   renderCurrentQuestion();
+
+  // 350ms 後に自動遷移（連打防止ロック付き）
+  clearTimeout(_autoAdvanceTimer);
+  _advanceLocked = true;
+  _autoAdvanceTimer = setTimeout(() => {
+    _advanceLocked = false;
+    surveyNext();
+  }, 350);
 }
 
 function surveyNext() {
@@ -458,14 +471,18 @@ function loadFormState() {
   }
 }
 
+// v2 標準スケール: 5=よくあてはまる（高スコア） / reverse項目のみ反転
+function adjustedScore(v, reverse) {
+  return reverse ? 6 - v : v;
+}
+
 function calcScores() {
   const score = Object.fromEntries(types.map((t) => [t, { total: 0, count: 0 }]));
 
   for (const q of questions) {
     const v = Number(getQuestionAnswer(q.id));
     if (!v) throw new Error("未回答の質問があります");
-    const adjusted = q.reverse ? v : 6 - v;
-    score[q.type].total += adjusted;
+    score[q.type].total += adjustedScore(v, q.reverse);
     score[q.type].count += 1;
   }
 
@@ -479,8 +496,7 @@ function calcScores() {
   for (const q of omoteNashiQuestions) {
     const v = Number(getQuestionAnswer(q.id));
     if (!v) throw new Error("未回答の質問があります");
-    const adjusted = q.reverse ? v : 6 - v;
-    omTotal += adjusted;
+    omTotal += adjustedScore(v, q.reverse);
   }
   const omoteNashiScore = Math.round(((omTotal / omoteNashiQuestions.length - 1) / 4) * 100);
 
@@ -621,6 +637,11 @@ function renderResult(scores, omoteNashiScore) {
   const fit = { fitScore: matrix.fitScore, fitLabel: matrix.fitLabel };
 
   renderResultHero(primary, secondary, scores);
+
+  // OGP メタタグを結果に合わせて更新（SNSシェア時のタイトル・説明・画像を切り替え）
+  if (typeof updateOgMeta === 'function') {
+    try { updateOgMeta(primary[0], primary[1] || 0); } catch (_) { /* ignore */ }
+  }
 
   // スコアバー（sortedが使えるここで描画）
   const barListEl = document.getElementById("result-score-bar-list");

@@ -4,6 +4,15 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ムードメーカー診断 | Singerly</title>
+  <meta name="description" content="ムードメーカー診断 — あなたの場の作り方を6属性で鑑定。Singerly提供。"/>
+  <meta property="og:site_name" content="Singerly"/>
+  <meta property="og:title"       content="ムードメーカー診断 | Singerly"      id="og-title"/>
+  <meta property="og:description" content="約3分で、あなたのムードメイク適性を6属性に鑑定します。" id="og-desc"/>
+  <meta property="og:url"   content="https://singerly-tools.vercel.app/tools/moodmaker-survey/" id="og-url"/>
+  <meta property="og:type"  content="website"/>
+  <meta name="twitter:card"        content="summary"/>
+  <meta name="twitter:title"       content="ムードメーカー診断 | Singerly" id="tw-title"/>
+  <meta name="twitter:description" content="約3分で、あなたのムードメイク適性を6属性に鑑定します。" id="tw-desc"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;800;900&family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@700;900&display=swap" rel="stylesheet"/>
@@ -72,26 +81,28 @@
       </div>
       <div class="step-body">
 
-        <!-- SNS連携セクション -->
+        <!-- SNSアカウント入力（X / Facebook、いずれも任意） -->
         <div class="profile-sns-block">
           <div class="profile-block-head">
             <div class="profile-step-num">1</div>
-            <div style="font-size:14px;font-weight:900;color:var(--ink);letter-spacing:.05em">SNSアカウントから肖像を取得</div>
+            <div style="font-size:14px;font-weight:900;color:var(--ink);letter-spacing:.05em">SNSアカウントをご記入ください</div>
           </div>
-          <p class="profile-block-sub">いずれか1つ連携してください。プロフィール画像を鑑定書の肖像枠に配置します。</p>
-          <div class="profile-sns-btns">
-            <button type="button" class="profile-sns-btn profile-sns-x">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-              X で連携
-            </button>
-            <button type="button" class="profile-sns-btn profile-sns-fb">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-              Facebook で連携
-            </button>
-            <button type="button" class="profile-sns-btn profile-sns-gh">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="#24292F"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.4 3-.405 1.02.005 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-              GitHub で連携
-            </button>
+          <p class="profile-block-sub">URLまたは@ユーザー名をご記入ください（いずれも任意）。</p>
+          <div class="profile-sns-fields">
+            <label class="profile-sns-field">
+              <span class="profile-sns-icon profile-sns-icon-x">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              </span>
+              <span class="profile-sns-label">X (Twitter)</span>
+              <input type="text" id="snsXVisible" class="profile-sns-input" placeholder="@username または https://x.com/username" oninput="syncSnsField('X')"/>
+            </label>
+            <label class="profile-sns-field">
+              <span class="profile-sns-icon profile-sns-icon-fb">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+              </span>
+              <span class="profile-sns-label">Facebook</span>
+              <input type="text" id="snsFacebookVisible" class="profile-sns-input" placeholder="ユーザー名 または https://facebook.com/username" oninput="syncSnsField('Facebook')"/>
+            </label>
           </div>
         </div>
 
@@ -124,15 +135,23 @@
                 <input id="name" type="text" placeholder="例：山田 太郎" style="padding:14px 16px;font-size:18px;font-weight:700"/>
               </label>
               <div style="margin-bottom:12px">
-                <div style="font-size:12px;font-weight:700;color:var(--text-sub);margin-bottom:6px">性別 <span style="color:var(--red);font-size:11px">必須</span></div>
+                <div style="font-size:12px;font-weight:700;color:var(--text-sub);margin-bottom:6px">性別 <span style="font-size:11px;color:var(--text-mute)">(任意)</span></div>
                 <div class="profile-gender-row">
                   <label class="profile-gender-opt" id="gender-male-label">
-                    <input type="radio" name="gender" value="male" id="genderMale" checked onchange="updateGenderStyle()"/>
+                    <input type="radio" name="gender" value="male" id="genderMale" onchange="updateGenderStyle()"/>
                     男性
                   </label>
                   <label class="profile-gender-opt" id="gender-female-label">
                     <input type="radio" name="gender" value="female" id="genderFemale" onchange="updateGenderStyle()"/>
                     女性
+                  </label>
+                  <label class="profile-gender-opt" id="gender-other-label">
+                    <input type="radio" name="gender" value="other" id="genderOther" onchange="updateGenderStyle()"/>
+                    その他
+                  </label>
+                  <label class="profile-gender-opt" id="gender-noanswer-label">
+                    <input type="radio" name="gender" value="noanswer" id="genderNoAnswer" onchange="updateGenderStyle()"/>
+                    回答しない
                   </label>
                 </div>
               </div>
@@ -354,6 +373,7 @@
           </div>
           <div id="result-keyword-card" class="result-keyword-card"></div>
           <div id="result-type-desc"    class="result-type-desc-card"></div>
+          <div id="result-academic-layer1" class="result-academic-layer1-card hidden"></div>
           <div id="result-type-details" class="result-detail-row"></div>
         </div>
       </div>
@@ -378,8 +398,10 @@
     <!-- ══ SNS SHARE ══ -->
     <div class="result-share-bar">
       <span class="result-share-label">結果をシェアする</span>
-      <button class="btn sns-btn sns-x" onclick="shareToX()">𝕏 でシェア</button>
-      <button class="btn sns-btn sns-fb" onclick="shareToFb()">Facebook でシェア</button>
+      <button class="btn sns-btn sns-x"    onclick="shareToX()">𝕏 でシェア</button>
+      <button class="btn sns-btn sns-fb"   onclick="shareToFb()">Facebook でシェア</button>
+      <button class="btn sns-btn sns-line" onclick="shareToLine()">LINE でシェア</button>
+      <button class="btn sns-btn sns-copy" id="copy-url-btn" onclick="copyShareUrl()">URLをコピー</button>
     </div>
 
     <!-- ══ COMPAT ══ -->
@@ -416,6 +438,13 @@
         <div id="service" class="service-block hidden">
           <h3>Singerlyサービス接続</h3>
           <p id="orgFitText"></p><p id="serviceText"></p>
+          <!-- 黒田官兵衛 2026-05-04: 最終CTAエリアにもSNSシェアを配置 -->
+          <div class="result-share-bar" style="margin:8px 0 16px">
+            <span class="result-share-label">この鑑定書をシェア</span>
+            <button class="btn sns-btn sns-x"    onclick="shareToX()">𝕏 でシェア</button>
+            <button class="btn sns-btn sns-fb"   onclick="shareToFb()">Facebook でシェア</button>
+            <button class="btn sns-btn sns-line" onclick="shareToLine()">LINE でシェア</button>
+          </div>
           <div class="actions-row">
             <button type="button" id="contactBtn"    class="btn secondary">問い合わせる</button>
             <button type="button" id="saveReportBtn" class="btn ghost">レポートを保存</button>
@@ -438,6 +467,114 @@
       <ul id="scores"></ul><div id="scoreTableWrap"></div>
       <div class="mini-chart-wrap"><canvas id="trendChart" width="280" height="140"></canvas></div>
       <div class="report-grid"></div>
+    </div>
+
+
+    <!-- ══ EPISODE COLLECTION (任意・書籍ムードメイク事例蓄積) ══ -->
+    <div class="episode-wrap" id="episode-section">
+      <div class="episode-header">
+        <div class="episode-eyebrow">任意 · スキップOK</div>
+        <div class="episode-title">書籍「ムードメイク」事例収集</div>
+        <div class="episode-sub">あなたの経験を、次の一冊に活かさせてください。回答は任意・匿名化されます。</div>
+      </div>
+      <div class="episode-body" id="episode-body">
+        <div class="episode-q">
+          <label class="episode-qlabel" for="ep-q1">Q1. あなたの周りで「この人はムードメーカーだ」と思う人物のエピソードを教えてください。<span class="episode-opt">任意・200字以内</span></label>
+          <textarea id="ep-q1" class="episode-ta" maxlength="200" rows="3" placeholder="例：部署異動してきたAさんは、会議の最初に必ず一笑い挟む人で…" oninput="updateEpCount(this,'ep-q1-cnt',200)"></textarea>
+          <div class="episode-count"><span id="ep-q1-cnt">0</span>/200</div>
+        </div>
+        <div class="episode-q">
+          <label class="episode-qlabel" for="ep-q2">Q2. あなた自身が組織で「場を変えた」経験があれば教えてください。<span class="episode-opt">任意・200字以内</span></label>
+          <textarea id="ep-q2" class="episode-ta" maxlength="200" rows="3" placeholder="例：沈黙が続く1on1で、先に自分の失敗談を話したら相手が笑ってくれて…" oninput="updateEpCount(this,'ep-q2-cnt',200)"></textarea>
+          <div class="episode-count"><span id="ep-q2-cnt">0</span>/200</div>
+        </div>
+        <div class="episode-q">
+          <label class="episode-qlabel" for="ep-q3">Q3. あなたにとって「職場のムードメーカー」はどんな存在ですか？<span class="episode-opt">任意・100字以内</span></label>
+          <textarea id="ep-q3" class="episode-ta" maxlength="100" rows="2" placeholder="例：嵐の中の灯台のような存在。" oninput="updateEpCount(this,'ep-q3-cnt',100)"></textarea>
+          <div class="episode-count"><span id="ep-q3-cnt">0</span>/100</div>
+        </div>
+        <label class="episode-consent">
+          <input type="checkbox" id="ep-consent"/>
+          <span>以上の回答を、匿名化した上で、Singerlyの研究・書籍で引用されることに同意します。（同意されなくても診断結果は取得できます）</span>
+        </label>
+        <div class="episode-actions">
+          <button class="btn episode-submit" onclick="submitEpisode()">送信する</button>
+          <button class="btn ghost episode-skip" onclick="skipEpisode()">スキップ</button>
+        </div>
+        <div id="episode-result" class="episode-result hidden"></div>
+      </div>
+    </div>
+
+    <!-- ══ SCIENCE BEHIND (Layer 2) ══ -->
+    <div class="science-behind-wrap">
+      <button class="science-toggle" aria-expanded="false" onclick="toggleScience(this)">
+        <span class="science-toggle-icon">🔬</span>
+        <span class="science-toggle-text">この診断のサイエンス</span>
+        <span class="science-toggle-hint">クリックで展開</span>
+        <span class="science-toggle-chevron">▼</span>
+      </button>
+      <div class="science-content" id="science-content" hidden>
+        <div class="science-inner">
+
+          <div class="science-section">
+            <h3 class="science-h3">1. ムードメーカーとは何か——学術的定義</h3>
+            <p>「ムードメーカー」を、本診断では以下の学術概念の複合として定義しています：</p>
+            <p class="science-formula">ムードメーカー ＝ 特性ポジティブ感情 × 感情伝染力 × 関係性エネルギー創出力</p>
+            <p>これは現代の組織心理学における <em>Positive Organizational Scholarship</em>（POS）の中核的な発見と整合します。つまり「ムードメーカー」とは「明るい性格の人」ではなく、<strong>「他者のエネルギー水準を引き上げる人」</strong>である、というのが本診断の出発点です。</p>
+            <ul class="science-refs">
+              <li>Barsade, S. G. (2002). The ripple effect: Emotional contagion and its influence on group behavior. <em>Administrative Science Quarterly, 47</em>(4), 644–675.</li>
+              <li>Owens et al. (2016). Relational energy at work. <em>Journal of Applied Psychology, 101</em>(1), 35–49.</li>
+            </ul>
+          </div>
+
+          <div class="science-section">
+            <h3 class="science-h3">2. 採用している3つの理論的フレーム</h3>
+            <p>本診断は、世界の組織心理学・パーソナリティ心理学で確立された3つの理論を Singerly の現場知（あさげの会で2,300社・3,200名との対話）と接続して構築されています。</p>
+            <ol class="science-list">
+              <li><strong>ビッグファイブ理論（Big Five / OCEAN）</strong><br>人のパーソナリティを5因子（開放性・誠実性・外向性・協調性・神経症傾向）で捉える、心理学で最も実証研究の多いフレームワーク。6タイプの主軸となる理論。</li>
+              <li><strong>Positive Organizational Scholarship（POS）</strong><br>ミシガン大学を中心に発展した、組織の「ポジティブな例外的成果」を研究する学問領域。Cameron（2012）の Positive Leadership が代表書。「ムードメーカーが組織に与える影響」を測る理論基盤。</li>
+              <li><strong>サーバント・リーダーシップ理論（Greenleaf, 1977）</strong><br>「他者に仕えることから始まるリーダーシップ」という概念。日本語の「おもてなし」と概念的に深く重なる。おもてなし指数の理論的根拠。</li>
+            </ol>
+          </div>
+
+          <div class="science-section">
+            <h3 class="science-h3">3. 50問の質問項目はどう設計されたか</h3>
+            <p>本診断の50問は、以下の確立された学術尺度を参照しながら設計されています：</p>
+            <ul class="science-list">
+              <li>BFI-2（Soto &amp; John, 2017）── ビッグファイブの最新版尺度</li>
+              <li>Need for Cognition Scale（Cacioppo &amp; Petty, 1982）── 認知欲求</li>
+              <li>IRI: Interpersonal Reactivity Index（Davis, 1983）── 共感性4因子尺度</li>
+              <li>MLQ: Multifactor Leadership Questionnaire（Bass &amp; Avolio, 1995）── 変革型リーダーシップ</li>
+              <li>Grit Scale（Duckworth et al., 2007）── やり抜く力</li>
+            </ul>
+            <p>各タイプ7問（6タイプ×7問＝42問）· おもてなし指数8問、計50問の構成。逆転項目（reverse-keyed item）を適宜配置し、社会的望ましさバイアスの影響を抑える設計です。</p>
+          </div>
+
+          <div class="science-section">
+            <h3 class="science-h3">4. スコアの算出ロジック</h3>
+            <ol class="science-list">
+              <li>各質問への回答（1〜5の5件法）を取得</li>
+              <li>逆転項目は値を反転（6 − v）</li>
+              <li>タイプごとに3問の平均値を算出</li>
+              <li>0〜100に正規化：score = ((avg − 1) / 4) × 100</li>
+            </ol>
+            <p class="science-note">将来的には、データ蓄積後（N≥300）に確認的因子分析（CFA）を実施し、項目の因子負荷量に基づく重み付けスコアリングに移行予定です。</p>
+          </div>
+
+          <div class="science-section">
+            <h3 class="science-h3">5. 引用文献 TOP 5</h3>
+            <ol class="science-citations">
+              <li>Barsade, S. G. (2002). The ripple effect: Emotional contagion and its influence on group behavior. <em>Administrative Science Quarterly, 47</em>(4), 644–675.</li>
+              <li>Cameron, K. S. (2012). <em>Positive Leadership: Strategies for Extraordinary Performance</em> (2nd ed.). Berrett-Koehler.</li>
+              <li>Fredrickson, B. L. (2001). The role of positive emotions in positive psychology. <em>American Psychologist, 56</em>(3), 218–226.</li>
+              <li>Greenleaf, R. K. (1977). <em>Servant Leadership.</em> Paulist Press.</li>
+              <li>Owens, B. P., Baker, W. E., Sumpter, D. M., &amp; Cameron, K. S. (2016). Relational energy at work. <em>Journal of Applied Psychology, 101</em>(1), 35–49.</li>
+            </ol>
+            <p class="science-note">全文献リスト（30本以上）は研究背景ページで公開予定です。</p>
+          </div>
+
+        </div>
+      </div>
     </div>
 
   </div>
@@ -463,8 +600,8 @@
   <input   id="narrativeMissionNote"    type="text"/>
   <!-- profile optional fields (hidden, kept for app.js compat) -->
   <input id="birthdate"    type="date"/>
-  <input id="snsX"         type="url"/>
-  <input id="snsFacebook"  type="url"/>
+  <input id="snsX"         type="text"/>
+  <input id="snsFacebook"  type="text"/>
   <input id="snsNote"      type="url"/>
   <input id="mediaUrl1"    type="url"/>
   <input id="mediaUrl2"    type="url"/>
@@ -521,10 +658,34 @@ function toggleOptional(btn) {
 }
 
 function updateGenderStyle() {
-  const male   = document.getElementById('genderMale');
-  const female = document.getElementById('genderFemale');
-  document.getElementById('gender-male-label').classList.toggle('selected',   male.checked);
-  document.getElementById('gender-female-label').classList.toggle('selected', female.checked);
+  ['male','female','other','noanswer'].forEach(v => {
+    const el = document.getElementById('gender' + v.charAt(0).toUpperCase() + v.slice(1));
+    const lb = document.getElementById('gender-' + v + '-label');
+    if (el && lb) lb.classList.toggle('selected', el.checked);
+  });
+}
+
+// SNS入力欄の表示用 input を隠し input (id="snsX" / "snsFacebook") に同期させる。
+// その際、@ユーザー名だけの入力もURLに補正して保存する。
+function syncSnsField(kind) {
+  const visibleEl = document.getElementById('sns' + kind + 'Visible');
+  const hiddenEl  = document.getElementById('sns' + kind);
+  if (!visibleEl || !hiddenEl) return;
+  const raw = (visibleEl.value || '').trim();
+  if (!raw) { hiddenEl.value = ''; return; }
+  // すでにURL形式ならそのまま保存
+  if (/^https?:\/\//i.test(raw)) { hiddenEl.value = raw; return; }
+  // @を除去
+  const handle = raw.replace(/^@/, '').trim();
+  if (!handle) { hiddenEl.value = ''; return; }
+  // タイプ別にURLを生成
+  if (kind === 'X') {
+    hiddenEl.value = 'https://x.com/' + handle;
+  } else if (kind === 'Facebook') {
+    hiddenEl.value = 'https://facebook.com/' + handle;
+  } else {
+    hiddenEl.value = handle;
+  }
 }
 // 初期状態を反映
 document.addEventListener('DOMContentLoaded', updateGenderStyle);
@@ -684,6 +845,21 @@ const WARRIORS = {
               line:'秀吉の親友にして気のいい兄貴分。豪快な槍働きと人望で、若い頃から人を巻き込んで離さなかった。',
               quote:'上下にも、傍輩にも、ひとしく真心をもって接すべし。', affinity:'現場の盛り上げ役・チームの兄貴',
               img:'enkai-taisho-toshiie.png', tier:'侍大将', powerBase:250000 },
+    kumigashira: { name:'福島 正則', yomi:'FUKUSHIMA MASANORI', era:'1561–1624', title:'賤ヶ岳七本槍筆頭',
+              line:'秀吉子飼いの猛将にして豪放磊落な現場指揮官。一文字三星の旗印のもと、部隊の士気を一声で立て直した。',
+              quote:'皆、声を上げよ！景気のいい掛け声ひとつで、戦いの勝敗は半分決まるものぞ。',
+              affinity:'現場の士気高揚・部隊指揮・盛り上げ役',
+              img:'enkai-kumigashira-masanori.png', tier:'組頭', powerBase:175000 },
+    shibun: { name:'蜂須賀 小六（正勝）', yomi:'HACHISUKA KOROKU', era:'1526–1586', title:'秀吉の盟友・阿波徳島藩の祖',
+              line:'野盗の頭領から秀吉の懐刀へ。身分を超えて人と人を繋ぐ稀有な才で、秀吉の天下取りを下支えした。',
+              quote:'身分など関係ない。人を信じ、信じ合うことで、道は拓けるものぞ。',
+              affinity:'立場を超えた人脈構築・信頼の架け橋',
+              img:'enkai-shibun-koroku.png', tier:'士分', powerBase:110000 },
+    ashigaru: { name:'木下 藤吉郎', yomi:'KINOSHITA TOKICHIRO', era:'1537頃–', title:'秀吉の若年期・草履取り時代',
+              line:'まだ何者でもない一介の草履取り。されど、人を喜ばせる才ひとつで信長の心を掴み、後の天下人への道を歩み始めた。',
+              quote:'まだ何者でもござらん。されど、人を喜ばせる才は、必ず道を切り開きまする。',
+              affinity:'駆け出しの希望・人懐こさで道を切り開く',
+              img:'enkai-ashigaru-tokichiro.png', tier:'足軽', powerBase:55000 },
   },
   '教祖型': {
     shogun: { name:'織田 信長', yomi:'ODA NOBUNAGA', era:'1534–1582', title:'時代を撃ち抜く革新者',
@@ -694,6 +870,21 @@ const WARRIORS = {
               line:'教養と理知で信長に重用された秀才。だが理想と現実の溝が深まり、ついに主君に刃を向けた革命家。',
               quote:'時は今、あめが下しる五月かな。', affinity:'次世代リーダー・改革推進・理念体現',
               img:'kyoso-taisho-mitsuhide.png', tier:'侍大将', powerBase:260000 },
+    kumigashira: { name:'滝川 一益', yomi:'TAKIGAWA KAZUMASU', era:'1525–1586', title:'信長の方面軍司令官',
+              line:'信長の宿老にして関東方面軍を任された男。鉄砲の名手・実務の達人として、ビジョンを現実に変える働きを担った。',
+              quote:'ビジョンを現実にするのは、ただ夢を語る者ではない。実務で組織を動かす者ぞ。',
+              affinity:'ビジョンの実装・方面軍司令・実行力',
+              img:'kyoso-kumigashira-kazumasu.png', tier:'組頭', powerBase:170000 },
+    shibun: { name:'松永 久秀', yomi:'MATSUNAGA HISAHIDE', era:'1508–1577', title:'信長に二度反逆した梟雄',
+              line:'常識に縛られず、茶器を愛し、自ら火薬庫に火を放って散った異端の人。世の規範を疑う者の象徴。',
+              quote:'常識など、所詮は弱き者の杖にすぎぬ。己の道を行け、世が後からついてくる。',
+              affinity:'常識破壊・異端の独創性・自己流の貫徹',
+              img:'kyoso-shibun-hisahide.png', tier:'士分', powerBase:115000 },
+    ashigaru: { name:'織田 三郎信長（若年期）', yomi:'ODA SABURO', era:'1546–1559', title:'うつけ者と呼ばれた青年期',
+              line:'家督相続前の信長。「うつけ者」と呼ばれ、奇抜な装束で街を闊歩した青年は、まだ天下布武のビジョンを内に秘めていた。',
+              quote:'世の常識を疑え。人と違うことを恐れるな。それがいずれ時代を撃ち抜く力となる。',
+              affinity:'常識を疑う若さ・型破りの萌芽',
+              img:'kyoso-ashigaru-saburo.png', tier:'足軽', powerBase:60000 },
   },
   '勝負型': {
     shogun: { name:'徳川 家康', yomi:'TOKUGAWA IEYASU', era:'1543–1616', title:'鳴くまで待った天下獲り',
@@ -704,6 +895,21 @@ const WARRIORS = {
               line:'関ヶ原で敗れてもなお、大坂の陣で家康の本陣を脅かした不撓不屈の闘将。赤備えの代名詞。',
               quote:'武士たる者、義を見てせざるは勇なきなり。', affinity:'逆境からの突破役・諦めない推進力',
               img:'shobu-taisho-yukimura.png', tier:'侍大将', powerBase:280000 },
+    kumigashira: { name:'可児 才蔵（吉長）', yomi:'KANI SAIZO', era:'1554–1613', title:'笹の才蔵',
+              line:'関ヶ原で十七もの首を取った猛者。背中に挿した笹で討ち取った首を識別したという、戦果でしか語らぬ武人。',
+              quote:'結果でしか語れぬものがある。武人は、戦場での働きで己を語るのみ。',
+              affinity:'結果主義・戦場の証明・実績で語る',
+              img:'shobu-kumigashira-saizo.png', tier:'組頭', powerBase:165000 },
+    shibun: { name:'服部 半蔵（正成）', yomi:'HATTORI HANZO', era:'1542–1597', title:'家康の影・伊賀忍者の頭領',
+              line:'本能寺の変後、家康の伊賀越えを救った忍頭領。光あるところに必ず影があり、表に出ぬ働きが組織を支える。',
+              quote:'光あるところに影あり。表に出ぬ者の地道な働きが、組織を支えるものぞ。',
+              affinity:'裏方の徹底・影の支援・忠義の実装',
+              img:'shobu-shibun-hanzo.png', tier:'士分', powerBase:105000 },
+    ashigaru: { name:'三河小僧（家康若年期・松平元康）', yomi:'MIKAWA KOZO', era:'1547–1560', title:'駿府人質期の家康',
+              line:'駿府で人質として過ごした少年期の家康。屈辱を肖像画に刻む後年の精神は、この時代に培われた。',
+              quote:'今の屈辱を、生涯忘れぬ戒めとせよ。耐えた者だけが、最後に立っておるものぞ。',
+              affinity:'忍耐の原点・屈辱を糧にする力',
+              img:'shobu-ashigaru-mikawakozo.png', tier:'足軽', powerBase:50000 },
   },
   '知識型': {
     shogun: { name:'黒田 官兵衛', yomi:'KURODA KANBEI', era:'1546–1604', title:'戦略を編む軍師',
@@ -714,6 +920,21 @@ const WARRIORS = {
               line:'実務と論理で豊臣政権を支えた行政官。利を捨て義に殉じ、関ヶ原で西軍の大将となった信念の人。',
               quote:'大一大万大吉。', affinity:'緻密な制度設計・公正なルール運用',
               img:'chishiki-taisho-mitsunari.png', tier:'侍大将', powerBase:230000 },
+    kumigashira: { name:'島 左近（清興）', yomi:'SHIMA SAKON', era:'?–1600', title:'治部少に過ぎたるもの',
+              line:'石田三成の懐刀。「三成に過ぎたるもの」と称された名軍師。主君を選び、命を懸けるに足ると見極めた義の人。',
+              quote:'主君を選ぶは家臣の権利ぞ。三成殿の志に、命を懸けるに足ると見た。',
+              affinity:'主君選択の見極め・義に殉じる軍師',
+              img:'chishiki-kumigashira-sakon.png', tier:'組頭', powerBase:160000 },
+    shibun: { name:'黒田 長政', yomi:'KURODA NAGAMASA', era:'1568–1623', title:'福岡藩初代藩主・関ヶ原の調略実行者',
+              line:'軍師官兵衛の長子。父の知略を継ぎつつ、関ヶ原で東軍勝利の決め手となる調略を自らの器で実行した。',
+              quote:'父の知を継ぐだけでは足りぬ。己の器で、新たな戦を読まねばならぬ。',
+              affinity:'継承と独自性・調略の実装力',
+              img:'chishiki-shibun-nagamasa.png', tier:'士分', powerBase:120000 },
+    ashigaru: { name:'黒田 万吉（官兵衛若年期）', yomi:'KURODA MANKICHI', era:'1546–1567', title:'播磨小寺家家臣時代',
+              line:'軍師としての才を磨き始めた青年期の官兵衛。書物と兵法書に没頭し、後の天下を読む眼を養った。',
+              quote:'軍略は一朝一夕には成らぬ。知を磨き続ける者だけが、道を拓くものぞ。',
+              affinity:'知の積み上げ・修練の継続',
+              img:'chishiki-ashigaru-mankichi.png', tier:'足軽', powerBase:45000 },
   },
   '色気型': {
     shogun: { name:'伊達 政宗', yomi:'DATE MASAMUNE', era:'1567–1636', title:'華と機知の独眼竜',
@@ -724,6 +945,21 @@ const WARRIORS = {
               line:'秀吉子飼いの猛将。朝鮮出兵での虎退治、熊本城築城の手腕、共に語り継がれる豪傑武将。',
               quote:'一生懸命、ただひとすじ。', affinity:'熱意で押し切る・骨太な実行力',
               img:'iroke-taisho-kiyomasa.png', tier:'侍大将', powerBase:240000 },
+    kumigashira: { name:'立花 宗茂', yomi:'TACHIBANA MUNESHIGE', era:'1567–1643', title:'西国無双・改易から大名復帰',
+              line:'関ヶ原で西軍につき改易されるも、唯一の大名復帰を果たした不撓の名将。気品と実力を両立させた稀代の武人。',
+              quote:'勝ち続けることより、負けても品位を保つことの方が難しい。',
+              affinity:'品位ある復活・気品と実力の両立',
+              img:'iroke-kumigashira-muneshige.png', tier:'組頭', powerBase:170000 },
+    shibun: { name:'古田 織部（重然）', yomi:'FURUTA ORIBE', era:'1543–1615', title:'茶人武将・織部焼の祖',
+              line:'利休七哲の一人にして、型を破る歪みの美を生んだ独創の茶人。武と美意識を融合させた革新者。',
+              quote:'型を知り、型を破れ。歪みの中にこそ、真の美が宿るものぞ。',
+              affinity:'型を破る独創・美意識の革新',
+              img:'iroke-shibun-oribe.png', tier:'士分', powerBase:115000 },
+    ashigaru: { name:'細川 忠興', yomi:'HOSOKAWA TADAOKI', era:'1563–1646', title:'細川家の若武者・ガラシャの夫',
+              line:'茶の湯・和歌・武芸すべてに通じた若武者。利休七哲の一人として、所作の美しさで人の心を寄せた。',
+              quote:'美しさは武辺と相反するものではない。所作ひとつで、人は心を寄せるものぞ。',
+              affinity:'所作の美・気品の若さ',
+              img:'iroke-ashigaru-tadaoki.png', tier:'足軽', powerBase:55000 },
   },
   '柔和型': {
     shogun: { name:'武田 信玄', yomi:'TAKEDA SHINGEN', era:'1521–1573', title:'人を城とした土壌型の統率者',
@@ -734,6 +970,21 @@ const WARRIORS = {
               line:'上杉景勝の懐刀。前立に「愛」の一文字を掲げ、義と仁で家中を束ねた。家康にも一歩も引かぬ硬骨。',
               quote:'愛は仁愛、義は信義。', affinity:'組織の調整役・義を以て統べる宰相',
               img:'nyuwa-taisho-kanetsugu.png', tier:'侍大将', powerBase:220000 },
+    kumigashira: { name:'馬場 信春（信房）', yomi:'BABA NOBUHARU', era:'1515–1575', title:'武田四名臣の老臣',
+              line:'三方ヶ原で家康を追い詰め、長篠で殿を務めて散った歴戦の老将。経験を重ねた仁の指揮官。',
+              quote:'年を重ねるほど、人を信じる力は深まる。経験は、最大の徳となる。',
+              affinity:'老練な仁・経験で支える静かな指揮',
+              img:'nyuwa-kumigashira-nobuharu.png', tier:'組頭', powerBase:170000 },
+    shibun: { name:'山県 昌景', yomi:'YAMAGATA MASAKAGE', era:'1529–1575', title:'武田四名臣・赤備えの先駆け',
+              line:'武田四名臣の闘将にして、後の井伊赤備えの先駆けとなった赤備え部隊の祖。配下を信じる強さを体現した。',
+              quote:'強さの本質は、配下を信じる力にあり。一人ひとりが、組織の城じゃ。',
+              affinity:'配下への信頼・部隊統率の心得',
+              img:'nyuwa-shibun-masakage.png', tier:'士分', powerBase:115000 },
+    ashigaru: { name:'高坂 昌信（春日虎綱・若年期）', yomi:'KOSAKA MASANOBU', era:'1527頃–', title:'武田信玄の小姓出身',
+              line:'信玄の小姓として仕え、後に武田四名臣に名を連ねた仁の人。主君と心で繋がる関係性の原点。',
+              quote:'主君に仕えるとは、ただ命に従うことではない。心で繋がることぞ。',
+              affinity:'忠誠の原点・心で繋がる関係性',
+              img:'nyuwa-ashigaru-masanobu.png', tier:'足軽', powerBase:50000 },
   },
 };
 
@@ -813,6 +1064,19 @@ const SCENE_ADVICE = {
     '1on1':   { tips: ['評価モードに入らず、まず「最近どう？」から始める', '沈黙を埋めようとせず、待つ姿勢を大切にする', '相手の感情を言語化して「そう感じてるんだね」と返す'], quote: '聴くことは、最も深いケアだ。' },
     '危機対応': { tips: ['不安を抱えているメンバーを一人ひとり確認する', '「一緒に考えよう」という姿勢でチームを包む', 'ケアと業務遂行を両立できる稀有な存在として役割を担う'], quote: '嵐の中で誰かの手を握れる者が、チームを救う。' },
   },
+};
+
+// ══════════════════════════════════════
+// 学術注釈 Layer 1（タイプ別 1〜2文）
+// 出典: memory/moodmaker_research_academic.md の36文献リサーチより
+// ══════════════════════════════════════
+const ACADEMIC_LAYER1 = {
+  '宴会型': '心理学のビッグファイブ（OCEAN）における外向性（Extraversion）の高位型と対応します。Barsade（2002）の感情伝染（emotional contagion）研究が示す「場のエネルギーを伝染させる人物像」と一致します。',
+  '教祖型': '変革型リーダーシップ理論（Bass &amp; Avolio, 1995）のインスピレーショナル・モチベーション次元と対応します。価値観を言語化し、他者を動機づける力に強みがあります。',
+  '勝負型': '達成動機理論（McClelland, 1961）と Grit Scale（Duckworth, 2007）が捉える達成志向性 × やり抜く力の高位型です。困難な局面で粘り強さを発揮するタイプ。',
+  '知識型': '認知欲求（Need for Cognition：Cacioppo &amp; Petty, 1982）の高位型と対応します。複雑な問題を構造化して考えることに知的快楽を感じる傾向があります。',
+  '色気型': 'セルフモニタリング理論（Snyder, 1974）と美意識（Openness/Aesthetics）の組み合わせ型。場の温度を読み、自分の見せ方を意図的に調整できるタイプです。',
+  '柔和型': 'ビッグファイブの協調性（Agreeableness）高位型 ＋ 共感的関心（Empathic Concern：Davis, 1983）の組み合わせ。組織の心理的安全性を支える土台となるタイプ。',
 };
 
 // ══════════════════════════════════════
@@ -1046,7 +1310,12 @@ function buildWarriorCard(w, typeJa, typeMeta, tier) {
   return `
     <div class="warlord-card" onclick="openWarriorModal('${typeJa}','${tier}')" style="cursor:pointer" title="${w.name}の詳細を見る">
       <div class="warlord-portrait-wrap">
-        <img src="./portraits/${w.img}" alt="${w.name}" loading="lazy" onerror="this.style.background='#111';this.style.minHeight='200px'">
+        <img src="./portraits/${w.img}" alt="${w.name}" loading="lazy"
+             onerror="this.style.display='none';const f=this.nextElementSibling;if(f)f.style.display='flex'">
+        <div class="warlord-fallback" style="display:none;">
+          <div class="warlord-glyph" style="color:${typeMeta.color}">${typeMeta.glyph}</div>
+          <div class="warlord-tier-label">${w.tier}</div>
+        </div>
         <div class="warlord-portrait-badges">
           <span class="warlord-type-badge" style="background:${typeMeta.color}">${typeJa}</span>
           <span class="warlord-tier-badge">${w.tier}</span>
@@ -1073,8 +1342,10 @@ function buildWarriors(primary, secondary) {
   const pw = WARRIORS[primary];
   const primaryScore = (window._moodScores || {})[primary] || 0;
   const tier = calcTier(primaryScore);
-  const hasWarrior = tier.key === 'shogun' || tier.key === 'taisho';
-  if (!pw || !hasWarrior) return '';
+  // 30武将化したため、データ存在チェックを hasWarrior の判定に使う
+  // (事前の shogun/taisho 限定を外し、kumigashira/shibun/ashigaru も表示可能に)
+  const hasWarrior = !!(pw && pw[tier.key]);
+  if (!hasWarrior) return '';
   return `
     <div class="warriors-section">
       <div class="warriors-head">
@@ -1222,6 +1493,98 @@ function shareToFb() {
   const url = 'https://singerly-tools.vercel.app/tools/moodmaker-survey/';
   window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
 }
+function shareToLine() {
+  const primary = window._moodPrimary || '';
+  const text = `私のムードメーカータイプは「${primary}」でした！ムードメーカー診断 by Singerly`;
+  const url  = 'https://singerly-tools.vercel.app/tools/moodmaker-survey/';
+  window.open(`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`, '_blank');
+}
+async function copyShareUrl() {
+  const url = 'https://singerly-tools.vercel.app/tools/moodmaker-survey/';
+  try {
+    await navigator.clipboard.writeText(url);
+    const btn = document.getElementById('copy-url-btn');
+    if (btn) { btn.textContent = '✓ コピーしました'; setTimeout(() => { btn.textContent = 'URLをコピー'; }, 2000); }
+  } catch (_) {
+    prompt('URLをコピーしてください', url);
+  }
+}
+// OGP メタを結果に合わせて動的更新
+function updateOgMeta(primary, score) {
+  const title = `私の真の姿は「${primary}」でした | ムードメーカー診断`;
+  const desc  = `ムドメ戦闘力 ${Math.round(score * 8000 + 100000).toLocaleString()}。あなたのタイプも診断できます。`;
+  ['og-title','tw-title'].forEach(id => { const el = document.getElementById(id); if (el) el.content = title; });
+  ['og-desc','tw-desc'].forEach(id => { const el = document.getElementById(id); if (el) el.content = desc; });
+}
+
+// ═══════════════════════════════════════
+// エピソード収集（任意・書籍ムードメイク事例蓄積用）
+// ═══════════════════════════════════════
+function updateEpCount(ta, cntId, max) {
+  const cnt = document.getElementById(cntId);
+  if (cnt) {
+    const len = ta.value.length;
+    cnt.textContent = len;
+    cnt.style.color = len >= max ? '#c93838' : '';
+  }
+}
+
+async function submitEpisode() {
+  const q1 = (document.getElementById('ep-q1')?.value || '').trim();
+  const q2 = (document.getElementById('ep-q2')?.value || '').trim();
+  const q3 = (document.getElementById('ep-q3')?.value || '').trim();
+  const consent = document.getElementById('ep-consent')?.checked || false;
+  const resEl = document.getElementById('episode-result');
+
+  // ╔══ サイレントフェイル仕様 ══╗
+  // /api/episodes はフェーズ2で Vercel Serverless 関数として追加予定。
+  // それまでは fetch が 404 になるが、ユーザー体験上は「送信成功」の見せ方として
+  // 感謝メッセージを表示し、フォームをロックする。localStorage に一時保存して
+  // フェーズ2でバックフィル送信できるようにしておく。
+  try {
+    fetch('/api/episodes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ q1_others_episode: q1, q2_self_experience: q2, q3_moodmaker_meaning: q3, consent_research: consent, ts: Date.now() })
+    }).catch(() => { /* サイレント */ });
+  } catch (_) { /* サイレント */ }
+
+  // localStorage バックアップ（将来のバックフィル用）
+  try {
+    if (q1 || q2 || q3) {
+      const key = 'moodmaker-episodes-pending';
+      const arr = JSON.parse(localStorage.getItem(key) || '[]');
+      arr.push({ q1, q2, q3, consent, ts: Date.now() });
+      localStorage.setItem(key, JSON.stringify(arr.slice(-20))); // 最大3件保持
+    }
+  } catch (_) { /* ignore */ }
+
+  if (resEl) {
+    resEl.textContent = 'ありがとうございました。あなたの声を次の一冊に活かします。';
+    resEl.className = 'episode-result episode-result-ok';
+    resEl.classList.remove('hidden');
+  }
+  document.getElementById('episode-body').querySelectorAll('textarea,input,button').forEach(el => { el.disabled = true; });
+}
+
+function skipEpisode() {
+  const sec = document.getElementById('episode-section');
+  if (sec) {
+    sec.style.opacity = '0';
+    sec.style.transition = 'opacity .3s';
+    setTimeout(() => { sec.hidden = true; }, 300);
+  }
+}
+
+// 「この診断のサイエンス」折りたたみトグル
+function toggleScience(btn) {
+  const expanded = btn.getAttribute('aria-expanded') === 'true';
+  btn.setAttribute('aria-expanded', String(!expanded));
+  const content = document.getElementById('science-content');
+  if (content) content.hidden = expanded;
+  const chevron = btn.querySelector('.science-toggle-chevron');
+  if (chevron) chevron.textContent = expanded ? '▼' : '▲';
+}
 
 // ══════════════════════════════════════
 // 結果画面の追加描画
@@ -1287,7 +1650,8 @@ function renderResultExtras() {
   const pw = WARRIORS[primary];
   const primaryScore = (window._moodScores || {})[primary] || 0;
   const tier = calcTier(primaryScore);
-  const hasWarrior = tier.key === 'shogun' || tier.key === 'taisho';
+  // 30武将化したため、データ存在チェックで hasWarrior を判定
+  const hasWarrior = !!(pw && pw[tier.key]);
   const heroPower = hasWarrior ? getBattlePower(primary, tier.key) : Math.round(primaryScore * 3000);
   const heroPowerEl = document.getElementById('result-hero-power');
   const heroTierEl  = document.getElementById('result-hero-tier');
@@ -1297,14 +1661,18 @@ function renderResultExtras() {
   }
   if (heroTierEl) heroTierEl.textContent = tier.label;
 
-  // 武将ヒーローカード（総大将・侍大将のみ表示）
+  // 武将ヒーローカード（全階層表示。portrait不在時はフォールバック表示に切り替え）
   const heroWarriorEl = document.getElementById('result-hero-warrior-card');
   if (heroWarriorEl && pw && hasWarrior) {
     const w = pw[tier.key];
     heroWarriorEl.style.background = `linear-gradient(135deg, ${pm.colorDark}88 0%, rgba(0,0,0,.55) 100%)`;
     heroWarriorEl.innerHTML = `
       <img src="./portraits/${w.img}" alt="${w.name}" class="hero-warrior-portrait"
-           onerror="this.style.display='none'">
+           onerror="this.style.display='none';const f=this.nextElementSibling;if(f)f.style.display='flex'">
+      <div class="warlord-fallback" style="display:none;background:transparent;">
+        <div class="warlord-glyph" style="color:${pm.color}">${pm.glyph}</div>
+        <div class="warlord-tier-label">${tier.label}</div>
+      </div>
       <div class="hero-warrior-info">
         <div class="hero-warrior-yomi">${w.yomi}${w.era ? ' · ' + w.era : ''}</div>
         <div class="hero-warrior-name">${w.name}</div>
@@ -1347,6 +1715,17 @@ function renderResultExtras() {
     descEl.innerHTML = `
       <div class="result-detail-label">詳しい解説</div>
       <div class="result-desc-text">${pm.description}${extra}</div>`;
+  }
+
+  // 学術注釈 Layer 1（主属性に対する 1～2 文の学術的裏付け）
+  const acadEl = document.getElementById('result-academic-layer1');
+  if (acadEl && typeof ACADEMIC_LAYER1 !== 'undefined') {
+    const acadText = ACADEMIC_LAYER1[primary];
+    if (acadText) {
+      acadEl.innerHTML = `<span class="academic-label">ACADEMIC</span><p class="academic-text">${acadText}</p>`;
+      acadEl.style.borderLeftColor = pm.color || 'rgba(255,255,255,.2)';
+      acadEl.classList.remove('hidden');
+    }
   }
 
   // 留意点 + フィット

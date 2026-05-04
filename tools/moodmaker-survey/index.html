@@ -81,26 +81,28 @@
       </div>
       <div class="step-body">
 
-        <!-- SNS連携セクション -->
+        <!-- SNSアカウント入力（X / Facebook、いずれも任意） -->
         <div class="profile-sns-block">
           <div class="profile-block-head">
             <div class="profile-step-num">1</div>
-            <div style="font-size:14px;font-weight:900;color:var(--ink);letter-spacing:.05em">SNSアカウントから肖像を取得</div>
+            <div style="font-size:14px;font-weight:900;color:var(--ink);letter-spacing:.05em">SNSアカウントをご記入ください</div>
           </div>
-          <p class="profile-block-sub">いずれか1つ連携してください。プロフィール画像を鑑定書の肖像枠に配置します。</p>
-          <div class="profile-sns-btns">
-            <button type="button" class="profile-sns-btn profile-sns-x">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-              X で連携
-            </button>
-            <button type="button" class="profile-sns-btn profile-sns-fb">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-              Facebook で連携
-            </button>
-            <button type="button" class="profile-sns-btn profile-sns-gh">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="#24292F"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.4 3-.405 1.02.005 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-              GitHub で連携
-            </button>
+          <p class="profile-block-sub">URLまたは@ユーザー名をご記入ください（いずれも任意）。</p>
+          <div class="profile-sns-fields">
+            <label class="profile-sns-field">
+              <span class="profile-sns-icon profile-sns-icon-x">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              </span>
+              <span class="profile-sns-label">X (Twitter)</span>
+              <input type="text" id="snsXVisible" class="profile-sns-input" placeholder="@username または https://x.com/username" oninput="syncSnsField('X')"/>
+            </label>
+            <label class="profile-sns-field">
+              <span class="profile-sns-icon profile-sns-icon-fb">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+              </span>
+              <span class="profile-sns-label">Facebook</span>
+              <input type="text" id="snsFacebookVisible" class="profile-sns-input" placeholder="ユーザー名 または https://facebook.com/username" oninput="syncSnsField('Facebook')"/>
+            </label>
           </div>
         </div>
 
@@ -536,8 +538,8 @@
           </div>
 
           <div class="science-section">
-            <h3 class="science-h3">3. 22問の質問項目はどう設計されたか</h3>
-            <p>本診断の22問は、以下の確立された学術尺度を参照しながら設計されています：</p>
+            <h3 class="science-h3">3. 50問の質問項目はどう設計されたか</h3>
+            <p>本診断の50問は、以下の確立された学術尺度を参照しながら設計されています：</p>
             <ul class="science-list">
               <li>BFI-2（Soto &amp; John, 2017）── ビッグファイブの最新版尺度</li>
               <li>Need for Cognition Scale（Cacioppo &amp; Petty, 1982）── 認知欲求</li>
@@ -545,7 +547,7 @@
               <li>MLQ: Multifactor Leadership Questionnaire（Bass &amp; Avolio, 1995）── 変革型リーダーシップ</li>
               <li>Grit Scale（Duckworth et al., 2007）── やり抜く力</li>
             </ul>
-            <p>各タイプ3問・おもてなし指数4問、計22問の構成。逆転項目（reverse-keyed item）を4問配置し、社会的望ましさバイアスの影響を抑える設計です。</p>
+            <p>各タイプ7問（6タイプ×7問＝42問）· おもてなし指数8問、計50問の構成。逆転項目（reverse-keyed item）を適宜配置し、社会的望ましさバイアスの影響を抑える設計です。</p>
           </div>
 
           <div class="science-section">
@@ -598,8 +600,8 @@
   <input   id="narrativeMissionNote"    type="text"/>
   <!-- profile optional fields (hidden, kept for app.js compat) -->
   <input id="birthdate"    type="date"/>
-  <input id="snsX"         type="url"/>
-  <input id="snsFacebook"  type="url"/>
+  <input id="snsX"         type="text"/>
+  <input id="snsFacebook"  type="text"/>
   <input id="snsNote"      type="url"/>
   <input id="mediaUrl1"    type="url"/>
   <input id="mediaUrl2"    type="url"/>
@@ -661,6 +663,29 @@ function updateGenderStyle() {
     const lb = document.getElementById('gender-' + v + '-label');
     if (el && lb) lb.classList.toggle('selected', el.checked);
   });
+}
+
+// SNS入力欄の表示用 input を隠し input (id="snsX" / "snsFacebook") に同期させる。
+// その際、@ユーザー名だけの入力もURLに補正して保存する。
+function syncSnsField(kind) {
+  const visibleEl = document.getElementById('sns' + kind + 'Visible');
+  const hiddenEl  = document.getElementById('sns' + kind);
+  if (!visibleEl || !hiddenEl) return;
+  const raw = (visibleEl.value || '').trim();
+  if (!raw) { hiddenEl.value = ''; return; }
+  // すでにURL形式ならそのまま保存
+  if (/^https?:\/\//i.test(raw)) { hiddenEl.value = raw; return; }
+  // @を除去
+  const handle = raw.replace(/^@/, '').trim();
+  if (!handle) { hiddenEl.value = ''; return; }
+  // タイプ別にURLを生成
+  if (kind === 'X') {
+    hiddenEl.value = 'https://x.com/' + handle;
+  } else if (kind === 'Facebook') {
+    hiddenEl.value = 'https://facebook.com/' + handle;
+  } else {
+    hiddenEl.value = handle;
+  }
 }
 // 初期状態を反映
 document.addEventListener('DOMContentLoaded', updateGenderStyle);

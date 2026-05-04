@@ -1429,3 +1429,66 @@ textarea { resize: vertical; }
   letter-spacing: .1em;
   color: rgba(245,230,211,.85);
 }
+
+
+/* ══════════════════════════════════════
+   SNS入力フィールド（プロフィール画面）
+   X / Facebook のテキスト入力欄
+   ══════════════════════════════════════ */
+.profile-sns-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+}
+.profile-sns-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 8px;
+  padding: 10px 14px;
+  transition: border-color .2s, background .2s;
+  cursor: text;
+}
+.profile-sns-field:focus-within {
+  border-color: var(--red, #c93838);
+  background: rgba(255,255,255,.06);
+}
+.profile-sns-icon {
+  flex-shrink: 0;
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink, #1A1A1A);
+}
+.profile-sns-icon-x { color: var(--ink, #1A1A1A); }
+.profile-sns-label {
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-sub, #6F6E6A);
+  min-width: 78px;
+  letter-spacing: .03em;
+}
+.profile-sns-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 13px;
+  color: var(--ink, #1A1A1A);
+  padding: 4px 0;
+  font-family: inherit;
+}
+.profile-sns-input::placeholder {
+  color: var(--text-mute, #999);
+  font-size: 12px;
+}
+@media (max-width: 560px) {
+  .profile-sns-field { flex-wrap: wrap; padding: 8px 12px; }
+  .profile-sns-label { min-width: 0; font-size: 11px; }
+  .profile-sns-input { width: 100%; flex: 0 0 100%; padding-top: 6px; }
+}

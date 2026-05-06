@@ -64,6 +64,16 @@ const TYPE_META = {
   "おもてなし": { color: "#B7282E", colorDark: "#83151B", bg: "#F4D9DA", glyph: "礼" },
 };
 
+// Layer 1 学術注釈：各タイプの結果カード直下に表示する 1〜2 文の学術的裏付け
+const ACADEMIC_LAYER1 = {
+  "宴会型":  "心理学のビッグファイブ（OCEAN）における<strong>外向性（Extraversion）</strong>の高位型と対応します。Barsade（2002）の感情伝染（emotional contagion）研究が示す「場のエネルギーを伝染させる人物像」と一致します。",
+  "教祖型":  "変革型リーダーシップ理論（Bass &amp; Avolio, 1995）の<strong>インスピレーショナル・モチベーション</strong>次元と対応します。価値観を言語化し、他者を動機づける力に強みがあります。",
+  "勝負型":  "達成動機理論（McClelland, 1961）と Grit Scale（Duckworth, 2007）が捉える<strong>達成志向性 × やり抜く力</strong>の高位型です。困難な局面で粘り強さを発揮するタイプ。",
+  "知識型":  "認知欲求（Need for Cognition：Cacioppo &amp; Petty, 1982）の高位型と対応します。複雑な問題を構造化して考えることに<strong>知的快楽</strong>を感じる傾向があります。",
+  "色気型":  "セルフモニタリング理論（Snyder, 1974）と美意識（Openness/Aesthetics）の組み合わせ型。場の温度を読み、<strong>自分の見せ方を意図的に調整</strong>できるタイプです。",
+  "柔和型":  "ビッグファイブの<strong>協調性（Agreeableness）</strong>高位型 ＋ 共感的関心（Empathic Concern：Davis, 1983）の組み合わせ。組織の心理的安全性を支える土台となるタイプ。",
+};
+
 const STORAGE_KEY = "moodmaker-survey-v1";
 const NARRATIVE_MAX = 4000;
 let latestResult = null;
@@ -674,6 +684,22 @@ function renderResult(scores, omoteNashiScore) {
     柔和型: "信頼関係を作る力が武器です。対立が起きやすい場面で積極的に橋渡し役を担いましょう。"
   };
   document.getElementById("guidance").textContent = guidanceByType[primary[0]] || "あなたのムードメイク力を職場でぜひ活かしてください。";
+
+  // Layer 1 学術注釈：主属性に対応するワンライナーを結果カードに挿入
+  const acadEl = document.getElementById('result-academic-layer1');
+  if (acadEl) {
+    const acadText = ACADEMIC_LAYER1[primary[0]];
+    if (acadText) {
+      acadEl.innerHTML = `
+        <div class="academic-layer1-inner">
+          <span class="academic-layer1-icon">🔬</span>
+          <span class="academic-layer1-body">${acadText}</span>
+        </div>`;
+      acadEl.classList.remove('hidden');
+    } else {
+      acadEl.classList.add('hidden');
+    }
+  }
   document.getElementById("signatureSkill").textContent =
     `${primary[0]}として、場の状態を読みながら人を前向きに巻き込む力が高い傾向です。`;
 

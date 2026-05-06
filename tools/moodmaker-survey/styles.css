@@ -1165,6 +1165,21 @@ textarea { resize: vertical; }
   margin-top: 10px;
 }
 .result-academic-layer1-card.hidden { display: none; }
+.academic-layer1-inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.academic-layer1-icon {
+  font-size: 13px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.academic-layer1-body {
+  font-size: 11px;
+  line-height: 1.75;
+  color: var(--text-sub, #6F6E6A);
+}
 .academic-label {
   display: inline-block;
   font-size: 8.5px;

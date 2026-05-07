@@ -64,11 +64,23 @@ const TYPE_META = {
   "おもてなし": { color: "#B7282E", colorDark: "#83151B", bg: "#F4D9DA", glyph: "礼" },
 };
 
+// Layer 1 学術注釈：各タイプの結果カード直下に表示する 1〜2 文の学術的裏付け
+const ACADEMIC_LAYER1 = {
+  "宴会型":  "心理学のビッグファイブ（OCEAN）における<strong>外向性（Extraversion）</strong>の高位型と対応します。Barsade（2002）の感情伝染（emotional contagion）研究が示す「場のエネルギーを伝染させる人物像」と一致します。",
+  "教祖型":  "変革型リーダーシップ理論（Bass &amp; Avolio, 1995）の<strong>インスピレーショナル・モチベーション</strong>次元と対応します。価値観を言語化し、他者を動機づける力に強みがあります。",
+  "勝負型":  "達成動機理論（McClelland, 1961）と Grit Scale（Duckworth, 2007）が捉える<strong>達成志向性 × やり抜く力</strong>の高位型です。困難な局面で粘り強さを発揮するタイプ。",
+  "知識型":  "認知欲求（Need for Cognition：Cacioppo &amp; Petty, 1982）の高位型と対応します。複雑な問題を構造化して考えることに<strong>知的快楽</strong>を感じる傾向があります。",
+  "色気型":  "セルフモニタリング理論（Snyder, 1974）と美意識（Openness/Aesthetics）の組み合わせ型。場の温度を読み、<strong>自分の見せ方を意図的に調整</strong>できるタイプです。",
+  "柔和型":  "ビッグファイブの<strong>協調性（Agreeableness）</strong>高位型 ＋ 共感的関心（Empathic Concern：Davis, 1983）の組み合わせ。組織の心理的安全性を支える土台となるタイプ。",
+};
+
 const STORAGE_KEY = "moodmaker-survey-v1";
 const NARRATIVE_MAX = 4000;
 let latestResult = null;
-let resumeText = "";
 
+// RESUME_KEYWORDS: 実績エピソードの自動分類に使用（analyzeAchievementCase内部）。
+// レジュメPDF抽出機能本体はフェーズ2で撤去したが、このキーワード辞書は
+// オススストチームビルディングとして残存させておく。
 const RESUME_KEYWORDS = {
   宴会型: ["イベント", "懇親会", "チームビルディング", "コミュニケーション", "ファシリテーション", "司会", "幹事", "盛り上げ", "交流", "親睦"],
   教祖型: ["ビジョン", "戦略", "理念", "マネジメント", "リーダー", "組織", "変革", "方針", "文化", "経営"],
@@ -78,50 +90,8 @@ const RESUME_KEYWORDS = {
   柔和型: ["サポート", "カスタマー", "調整", "相談", "支援", "コーチ", "メンター", "傾聴", "ケア", "フォロー"]
 };
 
-function analyzeResumeText(text) {
-  if (!text) return null;
-  const scores = {};
-  const hits = {};
-  for (const [type, keywords] of Object.entries(RESUME_KEYWORDS)) {
-    const found = keywords.filter(kw => text.includes(kw));
-    scores[type] = Math.min(100, Math.round((found.length / keywords.length) * 100 * 2));
-    hits[type] = found;
-  }
-  return { scores, hits };
-}
-
-async function uploadResume(file) {
-  const statusEl = document.getElementById("resumeUploadStatus");
-  statusEl.textContent = "アップロード中...";
-  statusEl.className = "resume-status uploading";
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-      const base64 = e.target.result.split(",")[1];
-      try {
-        const res = await fetch(apiBase() + "/api/resume", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ filename: file.name, data: base64 })
-        });
-        const json = await res.json();
-        if (json.ok) {
-          resumeText = json.text || "";
-          statusEl.textContent = `✓ 抽出完了（${resumeText.length.toLocaleString()}文字）`;
-          statusEl.className = "resume-status success";
-        } else {
-          statusEl.textContent = `エラー: ${json.error || "unknown"}`;
-          statusEl.className = "resume-status error";
-        }
-      } catch {
-        statusEl.textContent = "通信エラー（APIが未起動の可能性があります）";
-        statusEl.className = "resume-status error";
-      }
-      resolve();
-    };
-    reader.readAsDataURL(file);
-  });
-}
+// レジュメPDF抽出機能はフェーズ2で撤去された（論点F2-A）。
+// 運用実績なし・Vercel互換性不明、実績エピソードのテキスト入力で代替しているため。
 
 function readNarrative() {
   const g = id => { const el = document.getElementById(id); return el ? el.value : ''; };
@@ -233,11 +203,31 @@ function readOrgPrefs() {
 }
 
 function apiBase() {
-  // 同一オリジンを返す。本番（Vercel）では将来 /api/results /api/resume を
-  // Vercel Serverless 関数として追加予定。それまでは fetch が 404 になるが、
-  // 呼び出し側 (postResultToApi / uploadResume) は try/catch でサイレントに処理する。
-  // 旧実装は本番で http://localhost:8787 を返していたため fetch がエラーになっていた。
+  // 同一オリジン（Vercel 本番・プレビュー・ローカル vercel dev すべてで動作）。
+  // フェーズ2で /api/results /api/episodes /api/og を Vercel Serverless 関数として追加済み。
+  // 万一のフェッチ失敗に備えて呼び出し側 (postResultToApi) は try/catch でサイレントに処理する。
   return "";
+}
+
+// device_id: 同一ユーザーの複数回回答を名寄せするための識別子
+// 個人特定情報ではなく、localStorage に保持される UUID v4
+function getDeviceId() {
+  try {
+    const KEY = 'moodmaker-device-id';
+    let id = localStorage.getItem(KEY);
+    if (!id) {
+      // RFC 4122 v4 UUID 生成（例外時はタイムスタンプ使用）
+      if (window.crypto && typeof crypto.randomUUID === 'function') {
+        id = crypto.randomUUID();
+      } else {
+        id = 'mm-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
+      }
+      localStorage.setItem(KEY, id);
+    }
+    return id;
+  } catch (_) {
+    return null;
+  }
 }
 
 function getQuestionAnswer(questionId) {
@@ -694,6 +684,22 @@ function renderResult(scores, omoteNashiScore) {
     柔和型: "信頼関係を作る力が武器です。対立が起きやすい場面で積極的に橋渡し役を担いましょう。"
   };
   document.getElementById("guidance").textContent = guidanceByType[primary[0]] || "あなたのムードメイク力を職場でぜひ活かしてください。";
+
+  // Layer 1 学術注釈：主属性に対応するワンライナーを結果カードに挿入
+  const acadEl = document.getElementById('result-academic-layer1');
+  if (acadEl) {
+    const acadText = ACADEMIC_LAYER1[primary[0]];
+    if (acadText) {
+      acadEl.innerHTML = `
+        <div class="academic-layer1-inner">
+          <span class="academic-layer1-icon">🔬</span>
+          <span class="academic-layer1-body">${acadText}</span>
+        </div>`;
+      acadEl.classList.remove('hidden');
+    } else {
+      acadEl.classList.add('hidden');
+    }
+  }
   document.getElementById("signatureSkill").textContent =
     `${primary[0]}として、場の状態を読みながら人を前向きに巻き込む力が高い傾向です。`;
 
@@ -728,7 +734,8 @@ function renderResult(scores, omoteNashiScore) {
   drawTrendChart(scores);
 
   latestResult = buildResultPayload(scores, primary, secondary, fit, matrix, omoteNashiScore);
-  postResultToApi(latestResult);
+  // サーバーへは PII なしの要約データのみ送信。完全な payload は localStorage / JSON ダウンロード用。
+  postResultToApi(buildSurveyResultPayloadForApi(scores, primary, secondary, omoteNashiScore));
 
   localStorage.setItem('moodmaker-result-v1', JSON.stringify({
     primary:   primary[0],
@@ -799,6 +806,30 @@ function downloadJson(filename, data) {
   URL.revokeObjectURL(url);
 }
 
+// サーバー送信用ペイロードを生成。個人特定情報は一切含めない。
+// 送信項目は Supabase survey_results テーブルのスキーマと一致。
+function buildSurveyResultPayloadForApi(scores, primary, secondary, omoteNashiScore) {
+  const orgPrefs = readOrgPrefs() || {};
+  const primaryScore = primary?.[1] || 0;
+  const tier = (typeof calcTier === 'function')
+    ? calcTier(primaryScore).key
+    : null;
+  return {
+    primary_type   : primary?.[0],
+    secondary_type : secondary?.[0],
+    scores         : scores,
+    omoteNashiScore: omoteNashiScore,
+    tier           : tier,
+    age_range      : null,  // 現在UI未収集、将来追加予定
+    gender         : (document.querySelector('input[name="gender"]:checked') || {}).value || null,
+    industry       : orgPrefs.preferredIndustry || null,
+    position       : orgPrefs.position           || null,
+    org_size       : orgPrefs.preferredSize      || null,
+    founding       : orgPrefs.preferredFounding  || null,
+    device_id      : getDeviceId(),
+  };
+}
+
 async function postResultToApi(payload) {
   try {
     const res = await fetch(apiBase() + "/api/results", {
@@ -806,7 +837,15 @@ async function postResultToApi(payload) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     });
-    if (!res.ok) {
+    if (res.ok) {
+      // 保存成功時は survey_result_id を localStorage に保持し、
+      // 後続のエピソード送信で紐付けられるようにする。
+      const data = await res.json().catch(() => ({}));
+      if (data && data.id) {
+        try { localStorage.setItem('moodmaker-last-survey-id', data.id); } catch (_) {}
+        window._moodLastSurveyId = data.id;
+      }
+    } else {
       const err = await res.json().catch(() => ({}));
       console.warn("API save skipped or failed", res.status, err);
     }

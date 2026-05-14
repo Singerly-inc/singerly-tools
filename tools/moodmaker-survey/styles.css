@@ -1507,3 +1507,117 @@ textarea { resize: vertical; }
   .profile-sns-label { min-width: 0; font-size: 11px; }
   .profile-sns-input { width: 100%; flex: 0 0 100%; padding-top: 6px; }
 }
+
+/* ══════════════════════════════════════
+   スマホ対応 (max-width: 480px)
+   ══════════════════════════════════════ */
+@media (max-width: 480px) {
+  /* Hero */
+  .hero { padding: 72px 20px 40px; }
+  .hero-cta { width: 100%; justify-content: center; }
+  .hero-resume-wrap { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .hero-types { gap: 6px; }
+  .type-pill { font-size: 11px; padding: 5px 10px; }
+
+  /* Steps */
+  .step-wrap { padding: 64px 12px 40px; }
+  .step-header { padding: 16px 16px 12px; gap: 10px; }
+  .step-body { padding: 16px; }
+  .step-footer {
+    padding: 12px 16px;
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+  .step-footer .btn { width: 100%; justify-content: center; }
+
+  /* Progress stepper */
+  .progress-step { font-size: 9px; padding: 6px 2px; }
+  .progress-sep { width: 8px; }
+
+  /* Survey */
+  .survey-bg { padding: 60px 12px 40px; }
+  .survey-card { padding: 20px 16px; }
+  .survey-q-text { font-size: 17px; line-height: 1.5; }
+  .survey-choice { font-size: 18px; padding: 12px 0; }
+  .survey-kbd-hint { display: none; }
+  .survey-nav { gap: 8px; }
+  .survey-nav .btn { flex: 1; justify-content: center; }
+  .survey-counter-num { font-size: 24px; }
+  .survey-section-header { gap: 8px; margin-bottom: 14px; }
+  .survey-type-glyph { font-size: 28px; }
+
+  /* Matrix toggles */
+  .matrix-toggle { min-width: 64px; padding: 8px 10px; }
+  .matrix-toggle span { font-size: 12px; }
+
+  /* Result hero dark */
+  .result-hero-dark { padding: 64px 16px 40px; }
+  .result-composite-hero { font-size: clamp(28px, 8vw, 56px); }
+  .result-hero-stats { flex-direction: column; max-width: 100%; }
+  .result-stat-block { flex-direction: row; justify-content: space-between; align-items: center; padding: 12px 16px; }
+  .result-stat-sep { width: 100%; height: 1px; margin: 0; }
+  .result-omote-big { font-size: 36px; }
+  .result-hero-power { font-size: 28px; }
+  .result-hero-warrior-card { padding: 12px 14px; max-width: 100%; }
+
+  /* Result OGP */
+  .result-ogp-h1 { white-space: normal; font-size: clamp(18px, 5vw, 32px); }
+  .result-hero-grid { grid-template-columns: 1fr; gap: 20px; }
+  .result-ogp-badges { flex-wrap: wrap; gap: 8px; }
+
+  /* Result body */
+  .result-body { padding: 8px 12px 32px; }
+  .result-title-block { padding: 28px 12px 16px; }
+  .result-composite-h1 { font-size: clamp(26px, 8vw, 48px); }
+  .result-keyword-card { padding: 14px 14px; }
+  .result-kw-catchphrase { font-size: 18px; }
+
+  /* V3 card */
+  .v3-card { max-width: 100%; }
+
+  /* Score bars */
+  .score-bars-wrap { max-width: 100%; }
+
+  /* Warlord card */
+  .warlord-name { font-size: 13px; }
+
+  /* Org matrix */
+  .org-matrix-section { padding: 14px; }
+  .org-matrix-plots { gap: 12px; }
+  .org-bar-track { width: 60px; }
+
+  /* Rich section */
+  .result-rich-section { padding: 28px 12px; }
+  .wmsg-card { padding: 18px 14px; }
+  .sa-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .sa-tab { min-width: 80px; flex-shrink: 0; }
+
+  /* Share bar */
+  .result-share-bar { flex-direction: column; gap: 8px; }
+  .sns-btn { width: 100%; justify-content: center; }
+
+  /* Compat */
+  .pair-grid { grid-template-columns: 1fr; }
+  .result-compat-wrap { padding: 24px 12px; }
+
+  /* Growth / Scenes */
+  .result-growth-section { padding: 0 12px 24px; }
+  .result-analysis-section { padding: 24px 12px 20px; }
+
+  /* Service block */
+  .service-block { padding: 16px; }
+  .actions-row { flex-direction: column; }
+  .actions-row .btn { width: 100%; justify-content: center; }
+
+  /* Nav */
+  .nav { padding: 0 14px; }
+  .nav-links { gap: 10px; }
+  .nav-link { font-size: 11px; }
+
+  /* Profile */
+  .profile-sns-block { padding: 14px; }
+  .profile-sns-btns { padding-left: 0; }
+  .profile-block-sub { padding-left: 0; }
+  .profile-avatar { width: 80px; height: 80px; }
+}

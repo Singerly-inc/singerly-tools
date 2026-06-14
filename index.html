@@ -387,11 +387,11 @@ body {
     </h1>
     <p class="hero-sub">
       場を盛り上げ、チームの関係性を育てる。<br>
-      50ツール × 7カテゴリのファシリテーション・コレクション。
+      52ツール × 7カテゴリのファシリテーション・コレクション。
     </p>
     <div class="scoreboard">
       <div class="scoreboard-item">
-        <div class="scoreboard-num">50</div>
+        <div class="scoreboard-num">52</div>
         <div class="scoreboard-label">Tools</div>
       </div>
       <div class="scoreboard-item">
@@ -408,14 +408,14 @@ body {
 
 <!-- Filter bar -->
 <div class="filter-bar">
-  <button class="filter-chip active" data-cat="all"      onclick="filter('all',this)">すべて <span class="chip-count">50</span></button>
+  <button class="filter-chip active" data-cat="all"      onclick="filter('all',this)">すべて <span class="chip-count">52</span></button>
   <button class="filter-chip" data-cat="icebreak"        onclick="filter('icebreak',this)">🎲 アイスブレイク <span class="chip-count">10</span></button>
   <button class="filter-chip" data-cat="team"            onclick="filter('team',this)">👥 チームビルド <span class="chip-count">9</span></button>
   <button class="filter-chip" data-cat="mvv"             onclick="filter('mvv',this)">🧩 理念・文化 <span class="chip-count">8</span></button>
   <button class="filter-chip" data-cat="safety"          onclick="filter('safety',this)">🛡️ 心理的安全性 <span class="chip-count">8</span></button>
   <button class="filter-chip" data-cat="motiv"           onclick="filter('motiv',this)">⚡ モチベーション <span class="chip-count">8</span></button>
   <button class="filter-chip" data-cat="dialog"          onclick="filter('dialog',this)">🎯 対話・意思決定 <span class="chip-count">9</span></button>
-  <button class="filter-chip" data-cat="diagnose"        onclick="filter('diagnose',this)">📊 診断 <span class="chip-count">1</span></button>
+  <button class="filter-chip" data-cat="diagnose"        onclick="filter('diagnose',this)">📊 診断 <span class="chip-count">3</span></button>
 </div>
 
 <main class="grid-section">
@@ -474,6 +474,8 @@ const CAT = {
 
 const TOOLS = [
   { id:'moodmaker-survey', icon:'🎯', name:'ムードメーカー診断',              catch:'6タイプ診断であなたのムードメイク属性を5分で分析', cat:'diagnose', theory:'ムードメーカー理論（Singerly）',     status:'active', path:'tools/moodmaker-survey/index.html' },
+  { id:'culture-survey',   icon:'🏯', name:'組織カルチャー診断',              catch:'24問で理念・主体性・挑戦・対話のギャップを可視化', cat:'diagnose', theory:'組織カルチャー診断（Singerly）',     status:'active', path:'https://culture-survey-sigma.vercel.app/' },
+  { id:'nittei-daijin',    icon:'📅', name:'日程調整大臣',                  catch:'30分枠を選ぶだけ。Zoom発行とGoogle予定送信まで一気通貫', cat:'diagnose', theory:'Google Calendar × Zoom連携',     status:'active', path:'tools/nittei-daijin/index.html' },
 
   { id:'lottery',            icon:'🎰', name:'抽選スロット',              catch:'誰が当たる？スロットで選ぶ緊張と興奮',         cat:'icebreak', theory:'タックマンモデル（形成期）',       status:'active', path:'tools/lottery/index.html' },
   { id:'presentation-order', icon:'🎤', name:'発表順くじ引き',            catch:'プレゼン発表順をランダム決定・PPTXで即出力',   cat:'icebreak', theory:'ランダマイズ・公平性',             status:'active', path:'tools/presentation-order/index.html' },

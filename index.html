@@ -319,6 +319,7 @@ body {
 }
 .login-btn:hover { background:#83151B; }
 .login-sent { font-size:0.82rem; color:#B7282E; font-weight:700; display:none; }
+.login-error { font-size:0.78rem; color:#B7282E; font-weight:700; display:none; line-height:1.5; }
 .login-note { font-size:0.7rem; color:#aaa; }
 
 /* ── FOOTER ── */
@@ -374,6 +375,7 @@ body {
     <input class="login-input" id="emailInput" type="email" placeholder="your@email.com">
     <button class="login-btn" onclick="sendMagicLink()">ログインリンクを送る</button>
     <div class="login-sent" id="loginSent">メールを送信しました！リンクをクリックしてください。</div>
+    <div class="login-error" id="loginError"></div>
     <div class="login-note">初回のみ必要です。次回以降は自動でログインされます。</div>
   </div>
 </div>
@@ -430,6 +432,10 @@ body {
 
 <script>
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const AUTH_REDIRECT_URL =
+  location.hostname === 'localhost' || location.hostname === '127.0.0.1'
+    ? location.origin + location.pathname
+    : 'https://singerly-tools.vercel.app/';
 let currentUser = null;
 
 async function initAuth() {
@@ -456,8 +462,18 @@ function clearUser() {
 async function sendMagicLink() {
   const email = document.getElementById('emailInput').value.trim();
   if (!email) return;
-  await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: location.origin + location.pathname } });
-  document.getElementById('loginSent').style.display = 'block';
+  const sent = document.getElementById('loginSent');
+  const errBox = document.getElementById('loginError');
+  sent.style.display = 'none';
+  errBox.style.display = 'none';
+  errBox.textContent = '';
+  const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: AUTH_REDIRECT_URL } });
+  if (error) {
+    errBox.textContent = `送信できませんでした: ${error.message}`;
+    errBox.style.display = 'block';
+    return;
+  }
+  sent.style.display = 'block';
 }
 async function logout() { await sb.auth.signOut(); }
 

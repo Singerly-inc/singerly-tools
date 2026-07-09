@@ -44,7 +44,7 @@
         あなたの<span class="hero-accent">ムードメイク適性</span>を正式に鑑定する
       </h1>
       <p class="hero-sub">
-        50問・約5分のサーベイで、あなたの「場の作り方」を6属性に分類。<br>
+        30問・約5分のサーベイで、あなたの「場の作り方」を6属性に分類。<br>
         最後に<strong>鑑定書形式の1枚カード</strong>をお渡しします。
       </p>
       <div class="hero-types">
@@ -162,18 +162,6 @@
               </label>
             </div>
           </div>
-        </div>
-
-        <div class="profile-privacy-note" role="note">
-          <div class="profile-privacy-kicker">保存について</div>
-          <p>
-            診断精度の改善と統計分析のため、属性スコア・組織条件・ブラウザ情報などを匿名化して保存します。
-            氏名・メール・会社名・SNSは、診断結果のサーバー保存には含めません。
-          </p>
-          <label class="profile-consent-line">
-            <input type="checkbox" id="leadConsent"/>
-            <span>Singerlyからの連絡を希望する場合のみ、問い合わせ時に入力情報を本文へ含めます。</span>
-          </label>
         </div>
 
       </div>
@@ -418,14 +406,6 @@
       <button class="btn sns-btn sns-copy" id="copy-url-btn" onclick="copyShareUrl()">URLをコピー</button>
     </div>
 
-    <div class="result-data-control" id="result-data-control">
-      <div>
-        <div class="result-data-label">保存データ</div>
-        <p>この端末には前回結果と入力途中の内容が保存されます。共有PCで使った場合は削除できます。</p>
-      </div>
-      <button type="button" class="btn ghost result-clear-btn" onclick="clearMoodmakerLocalData()">この端末の保存データを削除</button>
-    </div>
-
     <!-- ══ COMPAT ══ -->
     <div class="result-compat-wrap">
       <div id="result-compat-section" class="result-compat-inner"></div>
@@ -560,8 +540,8 @@
           </div>
 
           <div class="science-section">
-            <h3 class="science-h3">3. 50問の質問項目はどう設計されたか</h3>
-            <p>本診断の50問は、以下の確立された学術尺度を参照しながら設計されています：</p>
+            <h3 class="science-h3">3. 30問の質問項目はどう設計されたか</h3>
+            <p>本診断の30問は、以下の確立された学術尺度を参照しながら設計されています：</p>
             <ul class="science-list">
               <li>BFI-2（Soto &amp; John, 2017）── ビッグファイブの最新版尺度</li>
               <li>Need for Cognition Scale（Cacioppo &amp; Petty, 1982）── 認知欲求</li>
@@ -569,7 +549,7 @@
               <li>MLQ: Multifactor Leadership Questionnaire（Bass &amp; Avolio, 1995）── 変革型リーダーシップ</li>
               <li>Grit Scale（Duckworth et al., 2007）── やり抜く力</li>
             </ul>
-            <p>各タイプ7問（6タイプ×7問＝42問）· おもてなし指数8問、計50問の構成。逆転項目（reverse-keyed item）を適宜配置し、社会的望ましさバイアスの影響を抑える設計です。</p>
+            <p>各タイプ4問（6タイプ×4問＝24問）· おもてなし指数6問、計30問の構成。タイプを意識させないため表示順はシャッフルして提示します。逆転項目（reverse-keyed item）を適宜配置し、社会的望ましさバイアスの影響を抑える設計です。</p>
           </div>
 
           <div class="science-section">
@@ -628,7 +608,6 @@
   <input id="mediaUrl1"    type="url"/>
   <input id="mediaUrl2"    type="url"/>
   <input id="mediaUrl3"    type="url"/>
-  <input id="leadConsentHidden" type="hidden"/>
   <!-- 黒田官兵衛 2026-05-04: レジュメPDF抽出機能はフェーズ2で撤去（論点F2-A） -->
 </div>
 

@@ -95,11 +95,33 @@ async function checkSupabaseDashboardConfig() {
   assert(!redirectText.includes('localhost'), 'Supabase Redirect URLs contain localhost');
 }
 
+async function checkMoodmakerSurveyLength() {
+  const appUrl = new URL('/tools/moodmaker-survey/app.js', SITE_URL).toString();
+  const pageUrl = new URL('/tools/moodmaker-survey/index.html', SITE_URL).toString();
+  const [{ response: appResponse, text: appText }, { response: pageResponse, text: pageText }] =
+    await Promise.all([fetchText(appUrl), fetchText(pageUrl)]);
+
+  assert(appResponse.ok, `Moodmaker app.js is not available: ${appResponse.status}`);
+  assert(pageResponse.ok, `Moodmaker index.html is not available: ${pageResponse.status}`);
+  if (!appResponse.ok || !pageResponse.ok) return;
+
+  const normalQuestionCount = [...appText.matchAll(/id:\s*"Q(\d+)"/g)].length;
+  const omotenashiQuestionCount = [...appText.matchAll(/id:\s*"QO(\d+)"/g)].length;
+  const totalQuestionCount = normalQuestionCount + omotenashiQuestionCount;
+
+  assert(
+    totalQuestionCount === 30,
+    `Moodmaker Survey should have 30 questions, but has ${totalQuestionCount}`,
+  );
+  assert(!pageText.includes('50問'), 'Moodmaker Survey page still contains 50問 wording');
+}
+
 async function main() {
   await checkSite();
   await checkSupabaseConfig();
   await checkSupabaseAuthSettings();
   await checkSupabaseDashboardConfig();
+  await checkMoodmakerSurveyLength();
 
   for (const warning of warnings) {
     console.warn(`warning: ${warning}`);

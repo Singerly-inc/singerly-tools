@@ -1,0 +1,32 @@
+name: Production auth health
+
+on:
+  push:
+    branches:
+      - main
+      - restore-supabase-auth-20260709
+  pull_request:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  production-auth-health:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Check production auth
+        env:
+          SITE_URL: https://singerly-tools.vercel.app
+          EXPECTED_SUPABASE_URL: https://snkoiisiaevhknajirol.supabase.co
+          EXPECTED_REDIRECT_URL: https://singerly-tools.vercel.app
+          SUPABASE_PROJECT_REF: snkoiisiaevhknajirol
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          REQUIRE_SUPABASE_ACCESS_TOKEN: true
+        run: node scripts/check-production-auth.mjs

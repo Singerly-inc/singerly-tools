@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>日程調整大臣 | ムドメわっしょい！</title>
+  <meta name="description" content="Googleアドレスから空き時間を30分単位で抽出し、ZoomパーソナルURL付きの送信用文面を作る日程調整モック。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../shared.css">
+  <style>
+    * { box-sizing: border-box; }
+    :root {
+      --ink: #161311;
+      --paper: #F5F2EC;
+      --red: #B7282E;
+      --red-dark: #83151B;
+      --line: #E4E0D8;
+      --muted: #766F66;
+      --soft-red: #FBE7E5;
+      --green: #2F6B4F;
+    }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'DM Sans', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .main { padding: 34px 48px 72px; }
+    .shell { max-width: 1240px; margin: 0 auto; }
+    .status-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--line);
+      margin-bottom: 22px;
+    }
+    .status-item {
+      min-height: 78px;
+      background: #fff;
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+    }
+    .status-label {
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    .status-value { font-size: 15px; font-weight: 900; line-height: 1.35; }
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 372px) minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+    .panel { border-radius: 8px !important; overflow: hidden; }
+    .panel-head {
+      padding: 18px 20px 16px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .panel-title { margin: 0; font-size: 18px; font-weight: 900; letter-spacing: .01em; }
+    .panel-note { margin: 6px 0 0; color: var(--muted); font-size: 12px; line-height: 1.7; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: #F2EEE7;
+      color: #5D554B;
+      font-size: 11px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .form { padding: 20px; display: grid; gap: 16px; }
+    label, .field-label { display: grid; gap: 7px; color: #2B2520; font-size: 12px; font-weight: 900; }
+    input, textarea, select {
+      width: 100%;
+      border: 1.5px solid #CCC !important;
+      border-radius: 8px !important;
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+      font-size: 14px !important;
+      padding: 12px 13px;
+    }
+    textarea { min-height: 82px; resize: vertical; line-height: 1.65; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .member-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #FFFCF7;
+      padding: 13px;
+      display: grid;
+      gap: 5px;
+    }
+    .member-card b { font-size: 14px; }
+    .member-card span { color: var(--muted); font-size: 12px; line-height: 1.55; }
+    .check-list { display: grid; gap: 8px; }
+    .check-row {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 8px 10px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .check-row input { width: 16px; height: 16px; padding: 0; }
+    .fixed-type {
+      border: 1.5px solid var(--red);
+      border-radius: 8px;
+      background: var(--soft-red);
+      color: var(--red);
+      padding: 11px 13px;
+      font-size: 14px;
+      font-weight: 900;
+    }
+    .extract-button {
+      width: 100%;
+      min-height: 46px;
+      border: none;
+      border-radius: 8px;
+      background: var(--red);
+      color: #fff;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 3px 0 var(--red-dark);
+    }
+    .extract-button:hover { background: var(--red-dark); transform: translateY(1px); box-shadow: 0 2px 0 #5C0E12; }
+    .option-row {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 8px 10px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .option-row input { width: 16px; height: 16px; padding: 0; }
+    .result-head {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+      background: #FFFCF7;
+    }
+    .result-stat {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 14px;
+    }
+    .result-stat span {
+      display: block;
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+    .result-stat strong { font-size: 18px; font-weight: 900; }
+    .result-body { padding: 20px; }
+    .candidate-list { display: grid; gap: 12px; }
+    .candidate-day {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      overflow: hidden;
+    }
+    .candidate-date {
+      padding: 12px 14px;
+      background: #1A0A0B;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 900;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .candidate-times {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px;
+    }
+    .candidate-time {
+      border: 1px solid #DDD5CB;
+      border-radius: 999px;
+      padding: 7px 10px;
+      background: #FFFCF7;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .message-box {
+      margin-top: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .message-head {
+      padding: 13px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      background: #111;
+      color: #fff;
+    }
+    .message-title { font-size: 13px; font-weight: 900; }
+    .copy-btn {
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: 6px;
+      background: transparent;
+      color: #fff;
+      padding: 7px 10px;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .copy-btn:hover { background: rgba(255,255,255,.12); }
+    .message-text {
+      width: 100%;
+      min-height: 220px;
+      border: none !important;
+      border-radius: 0 !important;
+      padding: 16px;
+      line-height: 1.8;
+      font-size: 13px !important;
+    }
+    .calendar-panel { display: grid; grid-template-rows: auto auto 1fr; }
+    .calendar-wrap {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+      background: #FFFCF7;
+    }
+    .calendar-top {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+    .calendar-title { font-size: 15px; font-weight: 900; }
+    .calendar-note { color: var(--muted); font-size: 12px; font-weight: 700; }
+    .month-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .dow {
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-align: center;
+      padding-bottom: 2px;
+    }
+    .date-cell {
+      min-height: 66px;
+      border: 1.5px solid #DDD5CB;
+      border-radius: 8px;
+      background: #fff;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      font-weight: 900;
+      transition: .15s ease;
+    }
+    .date-cell:hover { border-color: var(--red); transform: translateY(-1px); }
+    .date-cell.active { border-color: var(--red); background: #1A0A0B; color: #fff; box-shadow: 0 4px 0 var(--red); }
+    .date-cell.low { background: #F4EFE8; color: #A39A90; }
+    .date-cell small { color: inherit; opacity: .62; font-family: 'DM Sans', sans-serif; font-size: 10px; letter-spacing: .06em; }
+    .slot-area { padding: 20px; }
+    .slot-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .slot-title { font-size: 15px; font-weight: 900; }
+    .slot-meta { color: var(--muted); font-size: 12px; font-weight: 700; }
+    .slots {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .slot {
+      min-height: 54px;
+      border: 1.5px solid #DDD5CB;
+      border-radius: 8px;
+      background: #fff;
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: .15s ease;
+    }
+    .slot:hover { border-color: var(--red); transform: translateY(-1px); }
+    .slot.active { background: var(--red); border-color: var(--red); color: #fff; box-shadow: 0 4px 0 var(--red-dark); }
+    .slot.busy { background: #F1EDE6; color: #A39A90; cursor: not-allowed; text-decoration: line-through; }
+    .slot.busy:hover { border-color: #DDD5CB; transform: none; }
+    .preview {
+      margin-top: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #111;
+      color: #fff;
+      overflow: hidden;
+    }
+    .preview-head {
+      padding: 13px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+    }
+    .preview-title { font-weight: 900; font-size: 13px; }
+    .mock-label { color: #FFCF66; font-size: 10px; font-weight: 900; letter-spacing: .12em; }
+    .preview-body { padding: 16px; display: grid; gap: 12px; }
+    .preview-line { display: flex; justify-content: space-between; gap: 16px; color: rgba(255,255,255,.68); font-size: 12px; }
+    .preview-line strong { color: #fff; font-size: 13px; text-align: right; max-width: 70%; line-height: 1.5; }
+    .actions {
+      padding: 18px 20px 20px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      background: #FFFCF7;
+    }
+    .btn-primary, .btn-secondary { min-height: 44px; padding: 0 18px; font-size: 14px; font-weight: 900; cursor: pointer; }
+    .btn-primary { color: #fff; }
+    .btn-secondary { font-weight: 800; }
+    .complete {
+      display: none;
+      margin-top: 22px;
+      border: 1px solid #CFE2D7;
+      border-radius: 8px;
+      background: #F5FBF7;
+      padding: 18px;
+    }
+    .complete.show { display: block; animation: lift .26s ease-out both; }
+    @keyframes lift { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .complete h3 { margin: 0 0 8px; color: var(--green); font-size: 17px; }
+    .complete p { margin: 0; color: #4A6B58; font-size: 13px; line-height: 1.75; }
+    .integration-map {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .integration-step {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 13px;
+      min-height: 92px;
+    }
+    .integration-step b { display: block; font-size: 13px; margin-bottom: 6px; }
+    .integration-step span { color: var(--muted); font-size: 12px; line-height: 1.55; }
+    @media (max-width: 980px) {
+      .main { padding: 24px 18px 54px; }
+      .workspace { grid-template-columns: 1fr; }
+      .status-strip { grid-template-columns: repeat(2, 1fr); }
+      .slots { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .status-strip, .row, .integration-map { grid-template-columns: 1fr; }
+      .month-grid { gap: 5px; }
+      .date-cell { min-height: 54px; }
+      .slots { grid-template-columns: repeat(2, 1fr); }
+      .actions { flex-direction: column; }
+      .btn-primary, .btn-secondary { width: 100%; }
+      .page-sub br { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-back">← ムドメわっしょい！</a>
+    <span class="nav-brand">Singerly</span>
+  </nav>
+
+  <header class="page-header">
+    <div class="tool-badge">MOCKUP · AVAILABILITY EXTRACTOR</div>
+    <h1 class="page-title">日程調整大臣</h1>
+    <p class="page-sub">自分のGoogleアドレスから空き時間を30分単位で抽出。<br>ZoomパーソナルURL付きで、相手にそのまま送れる候補文面を作ります。</p>
+  </header>
+
+  <main class="main">
+    <div class="shell">
+      <section class="status-strip" aria-label="連携ステータス">
+        <div class="status-item"><span class="status-label">Input</span><strong class="status-value">Googleアドレス</strong></div>
+        <div class="status-item"><span class="status-label">Range</span><strong class="status-value">最大1ヶ月先まで</strong></div>
+        <div class="status-item"><span class="status-label">Duration</span><strong class="status-value">30分単位で抽出</strong></div>
+        <div class="status-item"><span class="status-label">Zoom</span><strong class="status-value">パーソナルURLを添付</strong></div>
+      </section>
+
+      <section class="workspace">
+        <aside class="panel">
+          <div class="panel-head">
+            <div>
+              <h2 class="panel-title">抽出条件</h2>
+              <p class="panel-note">本番ではGoogle Calendar freeBusyで空き枠を取得します。</p>
+            </div>
+            <span class="badge">30min</span>
+          </div>
+          <form class="form" id="bookingForm">
+            <label>自分のGoogleメールアドレス
+              <input id="calendarEmail" type="email" value="masahiro.okuda@singerly.co.jp" autocomplete="email">
+            </label>
+            <label>ZoomパーソナルURL
+              <input id="zoomUrl" type="url" value="https://zoom.us/my/singerly" autocomplete="url">
+            </label>
+            <div class="row">
+              <label>抽出期間
+                <select id="rangeDays">
+                  <option value="7">1週間</option>
+                  <option value="14">2週間</option>
+                  <option value="30" selected>1ヶ月</option>
+                </select>
+              </label>
+              <label>候補数
+                <select id="maxCandidates">
+                  <option value="8">8件</option>
+                  <option value="12" selected>12件</option>
+                  <option value="20">20件</option>
+                </select>
+              </label>
+            </div>
+            <div class="row">
+              <label>開始時刻
+                <select id="startHour">
+                  <option value="9" selected>09:00</option>
+                  <option value="10">10:00</option>
+                  <option value="11">11:00</option>
+                  <option value="12">12:00</option>
+                </select>
+              </label>
+              <label>終了時刻
+                <select id="endHour">
+                  <option value="17">17:00</option>
+                  <option value="18" selected>18:00</option>
+                  <option value="19">19:00</option>
+                  <option value="20">20:00</option>
+                </select>
+              </label>
+            </div>
+            <label class="option-row">
+              <input id="excludeHolidays" type="checkbox" checked>
+              <span>土日祝を除外する</span>
+            </label>
+            <button class="extract-button" type="button" onclick="extractAvailability()">空き時間を抽出する</button>
+          </form>
+        </aside>
+
+        <section class="panel calendar-panel">
+          <div class="panel-head">
+            <div>
+              <h2 class="panel-title">抽出結果</h2>
+              <p class="panel-note">空いている30分枠を一覧化し、送信用文面に変換します。</p>
+            </div>
+            <span class="badge">Asia/Tokyo</span>
+          </div>
+
+          <div class="result-head">
+            <div class="result-stat"><span>Calendar</span><strong id="statEmail">-</strong></div>
+            <div class="result-stat"><span>Range</span><strong id="statRange">30日</strong></div>
+            <div class="result-stat"><span>Slots</span><strong id="statSlots">0件</strong></div>
+          </div>
+
+          <div class="result-body">
+            <div class="candidate-list" id="candidateList"></div>
+
+            <div class="message-box">
+              <div class="message-head">
+                <div class="message-title">相手に送る文面</div>
+                <button class="copy-btn" type="button" onclick="copyMessage()" id="copyButton">コピー</button>
+              </div>
+              <textarea class="message-text" id="messageText" readonly></textarea>
+            </div>
+
+            <div class="integration-map">
+              <div class="integration-step"><b>1. 空き時間取得</b><span>本番では入力したGoogleアドレスのCalendar freeBusyを参照します。</span></div>
+              <div class="integration-step"><b>2. 候補整形</b><span>予定がない30分枠だけを抽出し、日付ごとに一覧化します。</span></div>
+              <div class="integration-step"><b>3. 文面生成</b><span>ZoomパーソナルURLを添えて、そのまま送れる文章にします。</span></div>
+            </div>
+          </div>
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const dowLabels = ['日', '月', '火', '水', '木', '金', '土'];
+    let extractedSlots = [];
+
+    function buildDates(rangeDays) {
+      const base = new Date();
+      base.setHours(0, 0, 0, 0);
+      return Array.from({ length: rangeDays }, (_, index) => {
+        const date = new Date(base);
+        date.setDate(base.getDate() + index);
+        return date;
+      });
+    }
+
+    function dateLabel(date) {
+      return `${date.getMonth() + 1}/${date.getDate()}（${dowLabels[date.getDay()]}）`;
+    }
+
+    function holidayKey(date) {
+      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    }
+
+    function isJapaneseHoliday(date) {
+      const holidays2026 = new Set([
+        '2026-01-01', '2026-01-12', '2026-02-11', '2026-02-23', '2026-03-20',
+        '2026-04-29', '2026-05-03', '2026-05-04', '2026-05-05', '2026-05-06',
+        '2026-07-20', '2026-08-11', '2026-09-21', '2026-09-22', '2026-09-23',
+        '2026-10-12', '2026-11-03', '2026-11-23'
+      ]);
+      return holidays2026.has(holidayKey(date));
+    }
+
+    function isExcludedDay(date) {
+      return date.getDay() === 0 || date.getDay() === 6 || isJapaneseHoliday(date);
+    }
+
+    function emailSeed(email) {
+      return [...email].reduce((sum, char) => sum + char.charCodeAt(0), 0);
+    }
+
+    function buildTimes(startHour, endHour) {
+      const times = [];
+      for (let hour = startHour; hour < endHour; hour++) {
+        times.push(`${String(hour).padStart(2, '0')}:00`);
+        times.push(`${String(hour).padStart(2, '0')}:30`);
+      }
+      return times;
+    }
+
+    function addThirtyMinutes(time) {
+      const [hour, minute] = time.split(':').map(Number);
+      const date = new Date(2026, 0, 1, hour, minute + 30);
+      return `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+    }
+
+    function isFreeSlot(date, time, seed) {
+      const [hour, minute] = time.split(':').map(Number);
+      const score = seed + date.getDate() * 3 + date.getDay() * 11 + hour * 7 + minute;
+      return score % 4 !== 0 && score % 7 !== 0;
+    }
+
+    function extractAvailability() {
+      const email = document.getElementById('calendarEmail').value.trim() || 'yourname@example.com';
+      const rangeDays = Number(document.getElementById('rangeDays').value);
+      const maxCandidates = Number(document.getElementById('maxCandidates').value);
+      const startHour = Number(document.getElementById('startHour').value);
+      const endHour = Number(document.getElementById('endHour').value);
+      const excludeHolidays = document.getElementById('excludeHolidays').checked;
+      const seed = emailSeed(email);
+      const times = buildTimes(startHour, endHour);
+      extractedSlots = [];
+
+      buildDates(rangeDays).forEach(date => {
+        if (excludeHolidays && isExcludedDay(date)) return;
+        times.forEach(time => {
+          if (extractedSlots.length >= maxCandidates) return;
+          if (isFreeSlot(date, time, seed)) {
+            extractedSlots.push({ date, start: time, end: addThirtyMinutes(time) });
+          }
+        });
+      });
+
+      renderResults(email, rangeDays);
+    }
+
+    function groupedSlots() {
+      return extractedSlots.reduce((groups, slot) => {
+        const key = dateLabel(slot.date);
+        groups[key] = groups[key] || [];
+        groups[key].push(slot);
+        return groups;
+      }, {});
+    }
+
+    function renderResults(email, rangeDays) {
+      document.getElementById('statEmail').textContent = email;
+      document.getElementById('statRange').textContent = `${rangeDays}日`;
+      document.getElementById('statSlots').textContent = `${extractedSlots.length}件`;
+      const groups = groupedSlots();
+      document.getElementById('candidateList').innerHTML = Object.entries(groups).map(([date, slots]) => `
+        <section class="candidate-day">
+          <div class="candidate-date"><span>${date}</span><span>${slots.length}枠</span></div>
+          <div class="candidate-times">
+            ${slots.map(slot => `<span class="candidate-time">${slot.start}-${slot.end}</span>`).join('')}
+          </div>
+        </section>
+      `).join('') || '<div class="candidate-day"><div class="candidate-date"><span>空き枠が見つかりませんでした</span><span>0枠</span></div></div>';
+      renderMessage();
+    }
+
+    function renderMessage() {
+      const zoomUrl = document.getElementById('zoomUrl').value.trim() || 'https://zoom.us/my/yourname';
+      const lines = extractedSlots.map(slot => `・${dateLabel(slot.date)} ${slot.start}-${slot.end}`);
+      document.getElementById('messageText').value = `以下の日程でご都合いかがでしょうか？\n\n${lines.join('\n')}\n\n当日は以下のZoomにお入りください。\n${zoomUrl}\n\n※30分単位で調整させてください。`;
+    }
+
+    async function copyMessage() {
+      const textarea = document.getElementById('messageText');
+      textarea.select();
+      try {
+        await navigator.clipboard.writeText(textarea.value);
+        document.getElementById('copyButton').textContent = 'コピー済み';
+        setTimeout(() => document.getElementById('copyButton').textContent = 'コピー', 1400);
+      } catch (error) {
+        document.execCommand('copy');
+      }
+    }
+
+    document.querySelectorAll('#bookingForm input, #bookingForm select').forEach(el => {
+      el.addEventListener('input', extractAvailability);
+      el.addEventListener('change', extractAvailability);
+    });
+
+    extractAvailability();
+  </script>
+</body>
+</html>

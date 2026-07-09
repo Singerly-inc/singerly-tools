@@ -394,13 +394,17 @@ function saveFormState() {
   const profile = {
     name: document.getElementById("name").value,
     email: document.getElementById("email").value,
+    company: document.getElementById("company").value,
+    companyUrl: document.getElementById("companyUrl").value,
+    position: document.getElementById("position").value,
     birthdate: document.getElementById("birthdate").value,
     snsX: document.getElementById("snsX").value,
     snsFacebook: document.getElementById("snsFacebook").value,
     snsNote: document.getElementById("snsNote").value,
     mediaUrl1: document.getElementById("mediaUrl1").value,
     mediaUrl2: document.getElementById("mediaUrl2").value,
-    mediaUrl3: document.getElementById("mediaUrl3").value
+    mediaUrl3: document.getElementById("mediaUrl3").value,
+    leadConsent: !!document.getElementById("leadConsent")?.checked
   };
   const narrative = readNarrative();
   const orgPrefs = readOrgPrefs();
@@ -423,6 +427,9 @@ function loadFormState() {
     };
     set("name", p.name);
     set("email", p.email);
+    set("company", p.company);
+    set("companyUrl", p.companyUrl);
+    set("position", p.position);
     set("birthdate", p.birthdate);
     set("snsX", p.snsX);
     set("snsFacebook", p.snsFacebook);
@@ -430,6 +437,9 @@ function loadFormState() {
     set("mediaUrl1", p.mediaUrl1);
     set("mediaUrl2", p.mediaUrl2);
     set("mediaUrl3", p.mediaUrl3);
+    const leadConsent = document.getElementById("leadConsent");
+    if (leadConsent) leadConsent.checked = !!p.leadConsent;
+    set("leadConsentHidden", p.leadConsent ? "1" : "");
     const op = data.orgPrefs || {};
     set("orgPrefSize", op.preferredSize);
     set("orgPrefFounding", op.preferredFounding);
@@ -1012,6 +1022,30 @@ function checkLastResult() {
   } catch (_) {}
 }
 
+window.clearMoodmakerLocalData = function() {
+  const ok = window.confirm('この端末に保存された診断結果・入力途中の内容・端末IDを削除します。よろしいですか？');
+  if (!ok) return;
+  const keys = [
+    STORAGE_KEY,
+    'moodmaker-result-v1',
+    'moodmaker-last-survey-id',
+    'moodmaker-device-id',
+    'moodmaker-episodes-pending',
+  ];
+  try {
+    keys.forEach(key => localStorage.removeItem(key));
+    const prefix = 'mudome-mm-';
+    for (let i = localStorage.length - 1; i >= 0; i--) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith(prefix)) localStorage.removeItem(key);
+    }
+  } catch (_) {}
+  const resume = document.getElementById('hero-resume-wrap');
+  if (resume) resume.classList.add('hidden');
+  alert('この端末の保存データを削除しました。');
+  goStep(0);
+};
+
 window.resumeLastResult = function() {
   const raw = localStorage.getItem('moodmaker-result-v1');
   if (!raw) return;
@@ -1064,7 +1098,20 @@ if (mainEl) mainEl.addEventListener("input", saveFormState);
 document.getElementById("contactBtn").addEventListener("click", () => {
   const subj = encodeURIComponent("ムードメーカーサーベイ｜問い合わせ");
   const name = document.getElementById("name").value.trim() || "（未入力）";
-  const body = encodeURIComponent(`氏名: ${name}\n\n（診断結果は JSON 保存または管理画面で共有できます）\n`);
+  const wantsContact = !!document.getElementById("leadConsent")?.checked;
+  const lines = [`氏名: ${name}`];
+  if (wantsContact) {
+    lines.push(
+      `会社名: ${document.getElementById("company").value.trim() || "（未入力）"}`,
+      `役職: ${document.getElementById("position").value.trim() || "（未入力）"}`,
+      `メール: ${document.getElementById("email").value.trim() || "（未入力）"}`,
+      `会社URL: ${document.getElementById("companyUrl").value.trim() || "（未入力）"}`,
+      `X: ${document.getElementById("snsX").value.trim() || "（未入力）"}`,
+      `Facebook: ${document.getElementById("snsFacebook").value.trim() || "（未入力）"}`
+    );
+  }
+  lines.push("", "（診断結果は JSON 保存または管理画面で共有できます）");
+  const body = encodeURIComponent(lines.join("\n"));
   window.location.href = `mailto:info@singerly.co.jp?subject=${subj}&body=${body}`;
 });
 

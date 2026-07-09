@@ -216,6 +216,47 @@ textarea { resize: vertical; }
 .resume-status.error     { color: var(--red); }
 .resume-status.uploading { color: var(--text-sub); }
 
+.profile-privacy-note {
+  margin-top: 18px;
+  padding: 16px 18px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--gold);
+  border-radius: var(--r-sm);
+}
+.profile-privacy-kicker {
+  font-family: var(--font-num);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .16em;
+  color: var(--gold-dark);
+  margin-bottom: 7px;
+}
+.profile-privacy-note p {
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--text-sub);
+  margin: 0 0 10px;
+}
+.profile-consent-line {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 9px;
+  font-size: 12px;
+  line-height: 1.65;
+  color: var(--ink);
+  letter-spacing: 0;
+  cursor: pointer;
+}
+.profile-consent-line input {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  accent-color: var(--red);
+}
+
 /* ── BUTTONS ── */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
@@ -1137,6 +1178,46 @@ textarea { resize: vertical; }
 .result-share-label {
   font-size: 12px; font-weight: 700; color: var(--text-mute);
   letter-spacing: .06em;
+}
+.result-data-control {
+  max-width: 1040px;
+  margin: 16px auto 0;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+  box-shadow: var(--shadow-card);
+}
+.result-data-label {
+  font-family: var(--font-num);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .14em;
+  color: var(--text-mute);
+  margin-bottom: 4px;
+}
+.result-data-control p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--text-sub);
+}
+.result-clear-btn {
+  flex-shrink: 0;
+  font-size: 12px;
+  white-space: nowrap;
+}
+@media (max-width: 680px) {
+  .result-data-control {
+    margin: 14px 16px 0;
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .result-clear-btn { width: 100%; justify-content: center; }
 }
 .sns-btn {
   display: inline-flex; align-items: center; gap: 6px;

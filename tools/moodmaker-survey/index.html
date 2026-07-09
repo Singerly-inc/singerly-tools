@@ -164,6 +164,18 @@
           </div>
         </div>
 
+        <div class="profile-privacy-note" role="note">
+          <div class="profile-privacy-kicker">保存について</div>
+          <p>
+            診断精度の改善と統計分析のため、属性スコア・組織条件・ブラウザ情報などを匿名化して保存します。
+            氏名・メール・会社名・SNSは、診断結果のサーバー保存には含めません。
+          </p>
+          <label class="profile-consent-line">
+            <input type="checkbox" id="leadConsent"/>
+            <span>Singerlyからの連絡を希望する場合のみ、問い合わせ時に入力情報を本文へ含めます。</span>
+          </label>
+        </div>
+
       </div>
       <div class="step-footer">
         <button class="btn ghost" onclick="goStep(0)">← 戻る</button>
@@ -406,6 +418,14 @@
       <button class="btn sns-btn sns-copy" id="copy-url-btn" onclick="copyShareUrl()">URLをコピー</button>
     </div>
 
+    <div class="result-data-control" id="result-data-control">
+      <div>
+        <div class="result-data-label">保存データ</div>
+        <p>この端末には前回結果と入力途中の内容が保存されます。共有PCで使った場合は削除できます。</p>
+      </div>
+      <button type="button" class="btn ghost result-clear-btn" onclick="clearMoodmakerLocalData()">この端末の保存データを削除</button>
+    </div>
+
     <!-- ══ COMPAT ══ -->
     <div class="result-compat-wrap">
       <div id="result-compat-section" class="result-compat-inner"></div>
@@ -608,6 +628,7 @@
   <input id="mediaUrl1"    type="url"/>
   <input id="mediaUrl2"    type="url"/>
   <input id="mediaUrl3"    type="url"/>
+  <input id="leadConsentHidden" type="hidden"/>
   <!-- 黒田官兵衛 2026-05-04: レジュメPDF抽出機能はフェーズ2で撤去（論点F2-A） -->
 </div>
 

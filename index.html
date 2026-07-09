@@ -319,6 +319,7 @@ body {
 }
 .login-btn:hover { background:#83151B; }
 .login-sent { font-size:0.82rem; color:#B7282E; font-weight:700; display:none; }
+.login-error { font-size:0.78rem; color:#B7282E; font-weight:700; display:none; line-height:1.5; }
 .login-note { font-size:0.7rem; color:#aaa; }
 
 /* ── FOOTER ── */
@@ -374,6 +375,7 @@ body {
     <input class="login-input" id="emailInput" type="email" placeholder="your@email.com">
     <button class="login-btn" onclick="sendMagicLink()">ログインリンクを送る</button>
     <div class="login-sent" id="loginSent">メールを送信しました！リンクをクリックしてください。</div>
+    <div class="login-error" id="loginError"></div>
     <div class="login-note">初回のみ必要です。次回以降は自動でログインされます。</div>
   </div>
 </div>
@@ -387,11 +389,11 @@ body {
     </h1>
     <p class="hero-sub">
       場を盛り上げ、チームの関係性を育てる。<br>
-      52ツール × 7カテゴリのファシリテーション・コレクション。
+      53ツール × 7カテゴリのファシリテーション・コレクション。
     </p>
     <div class="scoreboard">
       <div class="scoreboard-item">
-        <div class="scoreboard-num">52</div>
+        <div class="scoreboard-num">53</div>
         <div class="scoreboard-label">Tools</div>
       </div>
       <div class="scoreboard-item">
@@ -408,14 +410,14 @@ body {
 
 <!-- Filter bar -->
 <div class="filter-bar">
-  <button class="filter-chip active" data-cat="all"      onclick="filter('all',this)">すべて <span class="chip-count">52</span></button>
-  <button class="filter-chip" data-cat="icebreak"        onclick="filter('icebreak',this)">🎲 アイスブレイク <span class="chip-count">10</span></button>
+  <button class="filter-chip active" data-cat="all"      onclick="filter('all',this)">すべて <span class="chip-count">53</span></button>
+  <button class="filter-chip" data-cat="icebreak"        onclick="filter('icebreak',this)">🎲 アイスブレイク <span class="chip-count">9</span></button>
   <button class="filter-chip" data-cat="team"            onclick="filter('team',this)">👥 チームビルド <span class="chip-count">9</span></button>
   <button class="filter-chip" data-cat="mvv"             onclick="filter('mvv',this)">🧩 理念・文化 <span class="chip-count">8</span></button>
   <button class="filter-chip" data-cat="safety"          onclick="filter('safety',this)">🛡️ 心理的安全性 <span class="chip-count">8</span></button>
   <button class="filter-chip" data-cat="motiv"           onclick="filter('motiv',this)">⚡ モチベーション <span class="chip-count">8</span></button>
   <button class="filter-chip" data-cat="dialog"          onclick="filter('dialog',this)">🎯 対話・意思決定 <span class="chip-count">9</span></button>
-  <button class="filter-chip" data-cat="diagnose"        onclick="filter('diagnose',this)">📊 診断 <span class="chip-count">3</span></button>
+  <button class="filter-chip" data-cat="diagnose"        onclick="filter('diagnose',this)">📊 診断 <span class="chip-count">2</span></button>
 </div>
 
 <main class="grid-section">
@@ -430,6 +432,10 @@ body {
 
 <script>
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const AUTH_REDIRECT_URL =
+  location.hostname === 'localhost' || location.hostname === '127.0.0.1'
+    ? location.origin + location.pathname
+    : 'https://singerly-tools.vercel.app/';
 let currentUser = null;
 
 async function initAuth() {
@@ -456,8 +462,18 @@ function clearUser() {
 async function sendMagicLink() {
   const email = document.getElementById('emailInput').value.trim();
   if (!email) return;
-  await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: location.origin + location.pathname } });
-  document.getElementById('loginSent').style.display = 'block';
+  const sent = document.getElementById('loginSent');
+  const errBox = document.getElementById('loginError');
+  sent.style.display = 'none';
+  errBox.style.display = 'none';
+  errBox.textContent = '';
+  const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: AUTH_REDIRECT_URL } });
+  if (error) {
+    errBox.textContent = `送信できませんでした: ${error.message}`;
+    errBox.style.display = 'block';
+    return;
+  }
+  sent.style.display = 'block';
 }
 async function logout() { await sb.auth.signOut(); }
 
@@ -475,7 +491,6 @@ const CAT = {
 const TOOLS = [
   { id:'moodmaker-survey', icon:'🎯', name:'ムードメーカー診断',              catch:'6タイプ診断であなたのムードメイク属性を5分で分析', cat:'diagnose', theory:'ムードメーカー理論（Singerly）',     status:'active', path:'tools/moodmaker-survey/index.html' },
   { id:'culture-survey',   icon:'🏯', name:'組織カルチャー診断',              catch:'24問で理念・主体性・挑戦・対話のギャップを可視化', cat:'diagnose', theory:'組織カルチャー診断（Singerly）',     status:'active', path:'https://culture-survey-sigma.vercel.app/' },
-  { id:'nittei-daijin',    icon:'📅', name:'日程調整大臣',                  catch:'30分枠を選ぶだけ。Zoom発行とGoogle予定送信まで一気通貫', cat:'diagnose', theory:'Google Calendar × Zoom連携',     status:'active', path:'tools/nittei-daijin/index.html' },
 
   { id:'lottery',            icon:'🎰', name:'抽選スロット',              catch:'誰が当たる？スロットで選ぶ緊張と興奮',         cat:'icebreak', theory:'タックマンモデル（形成期）',       status:'active', path:'tools/lottery/index.html' },
   { id:'presentation-order', icon:'🎤', name:'発表順くじ引き',            catch:'プレゼン発表順をランダム決定・PPTXで即出力',   cat:'icebreak', theory:'ランダマイズ・公平性',             status:'active', path:'tools/presentation-order/index.html' },

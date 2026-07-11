@@ -389,15 +389,15 @@ body {
     </h1>
     <p class="hero-sub">
       場を盛り上げ、チームの関係性を育てる。<br>
-      52ツール × 7カテゴリのファシリテーション・コレクション。
+      <span id="heroToolCount">—</span>ツール × <span id="heroCategoryCount">—</span>カテゴリのファシリテーション・コレクション。
     </p>
     <div class="scoreboard">
       <div class="scoreboard-item">
-        <div class="scoreboard-num">52</div>
+        <div class="scoreboard-num" id="scoreToolCount">—</div>
         <div class="scoreboard-label">Tools</div>
       </div>
       <div class="scoreboard-item">
-        <div class="scoreboard-num">7</div>
+        <div class="scoreboard-num" id="scoreCategoryCount">—</div>
         <div class="scoreboard-label">Categories</div>
       </div>
       <div class="scoreboard-item">
@@ -410,14 +410,14 @@ body {
 
 <!-- Filter bar -->
 <div class="filter-bar">
-  <button class="filter-chip active" data-cat="all"      onclick="filter('all',this)">すべて <span class="chip-count">52</span></button>
-  <button class="filter-chip" data-cat="icebreak"        onclick="filter('icebreak',this)">🎲 アイスブレイク <span class="chip-count">10</span></button>
-  <button class="filter-chip" data-cat="team"            onclick="filter('team',this)">👥 チームビルド <span class="chip-count">9</span></button>
-  <button class="filter-chip" data-cat="mvv"             onclick="filter('mvv',this)">🧩 理念・文化 <span class="chip-count">8</span></button>
-  <button class="filter-chip" data-cat="safety"          onclick="filter('safety',this)">🛡️ 心理的安全性 <span class="chip-count">8</span></button>
-  <button class="filter-chip" data-cat="motiv"           onclick="filter('motiv',this)">⚡ モチベーション <span class="chip-count">8</span></button>
-  <button class="filter-chip" data-cat="dialog"          onclick="filter('dialog',this)">🎯 対話・意思決定 <span class="chip-count">9</span></button>
-  <button class="filter-chip" data-cat="diagnose"        onclick="filter('diagnose',this)">📊 診断 <span class="chip-count">3</span></button>
+  <button class="filter-chip active" data-cat="all"      onclick="filter('all',this)">すべて <span class="chip-count">—</span></button>
+  <button class="filter-chip" data-cat="icebreak"        onclick="filter('icebreak',this)">🎲 アイスブレイク <span class="chip-count">—</span></button>
+  <button class="filter-chip" data-cat="team"            onclick="filter('team',this)">👥 チームビルド <span class="chip-count">—</span></button>
+  <button class="filter-chip" data-cat="mvv"             onclick="filter('mvv',this)">🧩 理念・文化 <span class="chip-count">—</span></button>
+  <button class="filter-chip" data-cat="safety"          onclick="filter('safety',this)">🛡️ 心理的安全性 <span class="chip-count">—</span></button>
+  <button class="filter-chip" data-cat="motiv"           onclick="filter('motiv',this)">⚡ モチベーション <span class="chip-count">—</span></button>
+  <button class="filter-chip" data-cat="dialog"          onclick="filter('dialog',this)">🎯 対話・意思決定 <span class="chip-count">—</span></button>
+  <button class="filter-chip" data-cat="diagnose"        onclick="filter('diagnose',this)">📊 診断 <span class="chip-count">—</span></button>
 </div>
 
 <main class="grid-section">
@@ -553,6 +553,25 @@ const TOOLS = [
 
 let currentCat = 'all';
 
+function updateToolStats() {
+  const counts = TOOLS.reduce((acc, tool) => {
+    acc[tool.cat] = (acc[tool.cat] || 0) + 1;
+    return acc;
+  }, {});
+  const categoryCount = Object.keys(CAT).length;
+  const total = TOOLS.length;
+  document.getElementById('heroToolCount').textContent = total;
+  document.getElementById('heroCategoryCount').textContent = categoryCount;
+  document.getElementById('scoreToolCount').textContent = total;
+  document.getElementById('scoreCategoryCount').textContent = categoryCount;
+  document.querySelectorAll('.filter-chip').forEach(chip => {
+    const cat = chip.dataset.cat;
+    const count = cat === 'all' ? total : (counts[cat] || 0);
+    const badge = chip.querySelector('.chip-count');
+    if (badge) badge.textContent = count;
+  });
+}
+
 function isMilestone(n) {
   if (n < 10) return false;
   const s = String(n);
@@ -677,6 +696,7 @@ function render() {
   }).join('');
 }
 
+updateToolStats();
 render();
 updateMudomeDisplay();
 fetchToolCounts();

@@ -27,6 +27,26 @@ async function checkSite() {
   assert(!text.includes('https://localhost'), 'production HTML contains https://localhost');
 }
 
+async function checkHomeToolStats() {
+  const { response, text } = await fetchText(SITE_URL);
+  assert(response.ok, `site is not healthy: ${SITE_URL} returned ${response.status}`);
+  if (!response.ok) return;
+
+  const toolBlock = text.match(/const TOOLS = \[([\s\S]*?)\];/)?.[1] || '';
+  const toolCount = [...toolBlock.matchAll(/\{\s*id:/g)].length;
+  const categories = new Set([...toolBlock.matchAll(/cat:'([^']+)'/g)].map(match => match[1]));
+
+  assert(toolCount > 0, 'home page tool catalog could not be parsed');
+  assert(text.includes('id="heroToolCount"'), 'home page tool count is not rendered dynamically');
+  assert(text.includes('id="scoreToolCount"'), 'home page scoreboard tool count is not rendered dynamically');
+  assert(text.includes('function updateToolStats()'), 'home page is missing dynamic tool stats updater');
+  assert(
+    !text.includes(`${toolCount - 1}ツール`) && !text.includes(`${toolCount - 2}ツール`),
+    'home page may contain stale hard-coded tool count wording',
+  );
+  assert(categories.size === 7, `home page should have 7 categories, but has ${categories.size}`);
+}
+
 async function checkSupabaseConfig() {
   const configUrl = new URL('/supabase-config.js', SITE_URL).toString();
   const { response, text } = await fetchText(configUrl);
@@ -118,6 +138,7 @@ async function checkMoodmakerSurveyLength() {
 
 async function main() {
   await checkSite();
+  await checkHomeToolStats();
   await checkSupabaseConfig();
   await checkSupabaseAuthSettings();
   await checkSupabaseDashboardConfig();

@@ -47,6 +47,27 @@ async function checkHomeToolStats() {
   assert(categories.size === 7, `home page should have 7 categories, but has ${categories.size}`);
 }
 
+async function checkHomeToolLinks() {
+  const { response, text } = await fetchText(SITE_URL);
+  assert(response.ok, `site is not healthy: ${SITE_URL} returned ${response.status}`);
+  if (!response.ok) return;
+
+  const toolBlock = text.match(/const TOOLS = \[([\s\S]*?)\];/)?.[1] || '';
+  const tools = [...toolBlock.matchAll(/\{\s*id:'([^']+)'[\s\S]*?status:'([^']+)'[\s\S]*?path:'([^']+)'/g)]
+    .map(match => ({ id: match[1], status: match[2], path: match[3] }));
+  const localActiveTools = tools.filter(tool =>
+    tool.status === 'active' && !/^https?:\/\//.test(tool.path)
+  );
+
+  assert(tools.length > 0, 'home page tool links could not be parsed');
+
+  for (const tool of localActiveTools) {
+    const url = new URL(tool.path, SITE_URL).toString();
+    const { response: toolResponse } = await fetchText(url);
+    assert(toolResponse.ok, `tool link is broken: ${tool.id} -> ${url} returned ${toolResponse.status}`);
+  }
+}
+
 async function checkSupabaseConfig() {
   const configUrl = new URL('/supabase-config.js', SITE_URL).toString();
   const { response, text } = await fetchText(configUrl);
@@ -139,6 +160,7 @@ async function checkMoodmakerSurveyLength() {
 async function main() {
   await checkSite();
   await checkHomeToolStats();
+  await checkHomeToolLinks();
   await checkSupabaseConfig();
   await checkSupabaseAuthSettings();
   await checkSupabaseDashboardConfig();

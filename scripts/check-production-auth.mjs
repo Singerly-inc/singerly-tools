@@ -55,13 +55,11 @@ async function checkHomeToolLinks() {
   const toolBlock = text.match(/const TOOLS = \[([\s\S]*?)\];/)?.[1] || '';
   const tools = [...toolBlock.matchAll(/\{\s*id:'([^']+)'[\s\S]*?status:'([^']+)'[\s\S]*?path:'([^']+)'/g)]
     .map(match => ({ id: match[1], status: match[2], path: match[3] }));
-  const localActiveTools = tools.filter(tool =>
-    tool.status === 'active' && !/^https?:\/\//.test(tool.path)
-  );
+  const activeTools = tools.filter(tool => tool.status === 'active');
 
   assert(tools.length > 0, 'home page tool links could not be parsed');
 
-  for (const tool of localActiveTools) {
+  for (const tool of activeTools) {
     const url = new URL(tool.path, SITE_URL).toString();
     const { response: toolResponse } = await fetchText(url);
     assert(toolResponse.ok, `tool link is broken: ${tool.id} -> ${url} returned ${toolResponse.status}`);

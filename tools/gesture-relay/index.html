@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>ジェスチャーリレー — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  min-height:100vh; background:#fff;
+  font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif;
+  color:#000; display:flex; flex-direction:column; align-items:center;
+}
+.outer {
+  width:100%; max-width:1100px;
+  padding:24px 24px 60px;
+  display:flex; flex-direction:column; gap:16px;
+}
+.section-label { font-size:0.63rem; letter-spacing:0.14em; color:#888; text-transform:uppercase; font-weight:700; margin-bottom:10px; }
+
+/* ── 設定 ── */
+.setup-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:800px){ .setup-row{ grid-template-columns:1fr; } }
+.setup-box {
+  background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px;
+  padding:16px 20px;
+}
+.chip-btns { display:flex; gap:8px; flex-wrap:wrap; }
+.chip-btn {
+  padding:8px 18px; border-radius:6px; border:1px solid #CCC;
+  background:#fff; color:#555; font-size:0.82rem; font-weight:700;
+  font-family:inherit; cursor:pointer; transition:all 0.15s;
+}
+.chip-btn:hover { border-color:#B7282E; color:#B7282E; }
+.chip-btn.active { background:#B7282E; border-color:#B7282E; color:#fff; }
+
+.team-list { display:flex; flex-direction:column; gap:8px; }
+.team-row { display:flex; gap:8px; align-items:center; }
+.team-input {
+  flex:1; padding:9px 12px; border:1px solid #CCC; border-radius:6px;
+  font-size:0.85rem; font-family:inherit; outline:none;
+}
+.team-input:focus { border-color:#B7282E; }
+.team-del {
+  width:30px; height:30px; border:1px solid #DDD; border-radius:6px;
+  background:#fff; color:#999; cursor:pointer; font-family:inherit;
+}
+.team-del:hover { border-color:#B7282E; color:#B7282E; }
+.team-add {
+  padding:8px; border:1px dashed #BBB; border-radius:6px;
+  background:transparent; color:#888; font-size:0.78rem; font-weight:700;
+  font-family:inherit; cursor:pointer;
+}
+.team-add:hover { border-color:#B7282E; color:#B7282E; }
+
+/* ── ゲームエリア ── */
+.game-area {
+  background:#0A0A0A; border-radius:14px;
+  padding:30px 28px; display:none;
+  flex-direction:column; gap:20px; position:relative; overflow:hidden;
+}
+.game-area.show { display:flex; }
+.game-area::before {
+  content:''; position:absolute; inset:0;
+  background-image: radial-gradient(circle, rgba(183,40,46,0.2) 1px, transparent 1.5px);
+  background-size:24px 24px; opacity:0.5; pointer-events:none;
+}
+.game-top { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; position:relative; }
+.turn-label { font-size:0.72rem; letter-spacing:0.2em; color:rgba(255,255,255,0.4); text-transform:uppercase; font-weight:700; }
+.turn-team { font-size:1.5rem; font-weight:900; color:#E8636A; }
+.timer {
+  font-size:3.4rem; font-weight:900; color:#fff; line-height:1;
+  font-variant-numeric:tabular-nums; letter-spacing:-0.02em;
+}
+.timer.warning { color:#E8636A; animation:timerBlink 0.5s step-start infinite; }
+@keyframes timerBlink { 50%{ opacity:0.35; } }
+
+.odai-card {
+  background:linear-gradient(150deg,#1E1310,#26100F);
+  border:2px solid rgba(183,40,46,0.55); border-radius:16px;
+  min-height:180px; padding:28px 20px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;
+  position:relative; text-align:center;
+  box-shadow:0 0 50px rgba(183,40,46,0.2);
+}
+.odai-label { font-size:0.65rem; letter-spacing:0.22em; color:rgba(255,255,255,0.4); text-transform:uppercase; font-weight:700; }
+.odai-text {
+  font-size:2.6rem; font-weight:900; color:#fff; line-height:1.3;
+  animation:odaiPop 0.35s cubic-bezier(0.3,1.6,0.5,1) both;
+}
+@keyframes odaiPop { 0%{opacity:0;transform:scale(0.6)} 100%{opacity:1;transform:scale(1)} }
+.odai-cat { font-size:0.75rem; color:#E8636A; font-weight:700; letter-spacing:0.1em; }
+.odai-hint { font-size:0.72rem; color:rgba(255,255,255,0.35); }
+
+.game-btns { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; position:relative; }
+.g-btn {
+  padding:13px 30px; font-size:0.95rem; font-weight:900;
+  border:none; border-radius:9px; cursor:pointer; font-family:inherit;
+  transition:transform 0.12s, opacity 0.15s;
+}
+.g-btn:hover { transform:translateY(-1px); opacity:0.92; }
+.g-btn:disabled { opacity:0.35; cursor:not-allowed; }
+.g-btn--correct { background:#2F6B4F; color:#fff; }
+.g-btn--skip { background:transparent; color:rgba(255,255,255,0.6); border:1px solid rgba(255,255,255,0.25); }
+.g-btn--start { background:#B7282E; color:#fff; padding:15px 46px; font-size:1.05rem; }
+.g-btn--stop { background:transparent; color:rgba(255,255,255,0.5); border:1px solid rgba(255,255,255,0.2); }
+
+/* ── スコアボード ── */
+.score-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:10px; position:relative; }
+.score-card {
+  background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12);
+  border-radius:10px; padding:14px 16px; text-align:center; transition:all 0.2s;
+}
+.score-card.current { border-color:#E8636A; background:rgba(183,40,46,0.18); box-shadow:0 0 24px rgba(183,40,46,0.25); }
+.score-name { font-size:0.8rem; font-weight:700; color:rgba(255,255,255,0.75); margin-bottom:4px; }
+.score-pts { font-size:2rem; font-weight:900; color:#fff; line-height:1; font-variant-numeric:tabular-nums; }
+.score-pts small { font-size:0.7rem; color:rgba(255,255,255,0.4); font-weight:700; }
+.score-adj { display:flex; gap:6px; justify-content:center; margin-top:8px; }
+.score-adj button {
+  width:26px; height:26px; border-radius:6px; border:1px solid rgba(255,255,255,0.2);
+  background:transparent; color:rgba(255,255,255,0.6); cursor:pointer; font-family:inherit; font-weight:700;
+}
+.score-adj button:hover { border-color:#E8636A; color:#E8636A; }
+
+.start-box {
+  background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px;
+  padding:20px; text-align:center;
+}
+.btn-begin {
+  padding:15px 52px; font-size:1.05rem; font-weight:900; letter-spacing:0.05em;
+  border:none; border-radius:10px; cursor:pointer;
+  background:#B7282E; color:#fff; font-family:inherit;
+  transition:background 0.15s, transform 0.12s;
+}
+.btn-begin:hover { background:#83151B; transform:translateY(-1px); }
+
+/* ── 結果オーバーレイ ── */
+.result-overlay {
+  position:fixed; inset:0; background:rgba(10,10,10,0.92);
+  display:none; align-items:center; justify-content:center; z-index:1000;
+}
+.result-overlay.show { display:flex; }
+.result-canvas { position:absolute; inset:0; pointer-events:none; }
+.result-content {
+  position:relative; text-align:center; max-width:480px; width:90%;
+  animation:resPop 0.6s cubic-bezier(0.3,1.6,0.5,1) both;
+}
+@keyframes resPop { 0%{opacity:0;transform:scale(0.5)} 100%{opacity:1;transform:scale(1)} }
+.result-title { font-size:1.1rem; font-weight:900; color:rgba(255,255,255,0.6); letter-spacing:0.2em; margin-bottom:18px; }
+.rank-row {
+  display:flex; align-items:center; gap:14px;
+  background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12);
+  border-radius:10px; padding:12px 20px; margin-bottom:8px;
+}
+.rank-row.first { border-color:#FFD700; background:rgba(255,215,0,0.1); }
+.rank-medal { font-size:1.6rem; }
+.rank-name { flex:1; text-align:left; font-weight:900; color:#fff; font-size:1.05rem; }
+.rank-pts { font-weight:900; color:#E8636A; font-size:1.3rem; font-variant-numeric:tabular-nums; }
+.result-close {
+  margin-top:22px; padding:12px 40px;
+  background:#B7282E; color:#fff; border:none; border-radius:9px;
+  font-size:0.95rem; font-weight:900; font-family:inherit; cursor:pointer;
+}
+@media(max-width:600px) {
+  .odai-text { font-size:1.8rem; }
+  .timer { font-size:2.6rem; }
+}
+</style>
+<link rel="stylesheet" href="../shared.css">
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="../../">← ムドメわっしょい！</a>
+  <span class="nav-brand">SINGERLY</span>
+</nav>
+
+<div class="page-header">
+  <div class="tool-badge">🎭 もりあげる</div>
+  <h1 class="page-title">ジェスチャーリレー</h1>
+  <p class="page-sub">声出し禁止！身体だけでお題を伝えろ。制限時間内に何問正解できるか。</p>
+</div>
+
+<div class="outer">
+
+  <!-- 設定 -->
+  <div class="setup-row" id="setupRow">
+    <div class="setup-box">
+      <div class="section-label">チーム設定</div>
+      <div class="team-list" id="teamList"></div>
+      <button class="team-add" onclick="addTeam()" style="margin-top:8px; width:100%;">＋ チームを追加</button>
+    </div>
+    <div class="setup-box">
+      <div class="section-label">制限時間（1チームあたり）</div>
+      <div class="chip-btns" id="timeBtns">
+        <button class="chip-btn" data-sec="30" onclick="setTime(30,this)">30秒</button>
+        <button class="chip-btn active" data-sec="60" onclick="setTime(60,this)">60秒</button>
+        <button class="chip-btn" data-sec="90" onclick="setTime(90,this)">90秒</button>
+        <button class="chip-btn" data-sec="120" onclick="setTime(120,this)">120秒</button>
+      </div>
+      <div class="section-label" style="margin-top:16px;">お題カテゴリ（複数選択可）</div>
+      <div class="chip-btns" id="catBtns"></div>
+    </div>
+  </div>
+
+  <div class="start-box" id="startBox">
+    <button class="btn-begin" onclick="startGame()">🎭 ゲーム開始！</button>
+  </div>
+
+  <!-- ゲームエリア -->
+  <div class="game-area" id="gameArea">
+    <div class="game-top">
+      <div>
+        <div class="turn-label">NOW PLAYING</div>
+        <div class="turn-team" id="turnTeam">—</div>
+      </div>
+      <div class="timer" id="timerDisplay">60</div>
+    </div>
+
+    <div class="odai-card">
+      <div class="odai-label">お題</div>
+      <div class="odai-text" id="odaiText">スタートを押してね</div>
+      <div class="odai-cat" id="odaiCat"></div>
+      <div class="odai-hint">演者だけがお題を見る。声・口パク・文字は禁止！</div>
+    </div>
+
+    <div class="game-btns" id="gameBtns">
+      <button class="g-btn g-btn--start" id="startTurnBtn" onclick="startTurn()">▶ このチームのターン開始</button>
+      <button class="g-btn g-btn--correct" id="correctBtn" onclick="correct()" disabled>⭕ 正解！ +1</button>
+      <button class="g-btn g-btn--skip" id="skipBtn" onclick="skip()" disabled>パス →</button>
+      <button class="g-btn g-btn--stop" onclick="showResult()">🏁 ゲーム終了・結果発表</button>
+    </div>
+
+    <div>
+      <div class="turn-label" style="margin-bottom:8px;">スコアボード</div>
+      <div class="score-grid" id="scoreGrid"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 結果オーバーレイ -->
+<div class="result-overlay" id="resultOverlay" onclick="closeResult()">
+  <canvas class="result-canvas" id="resultCanvas"></canvas>
+  <div class="result-content" onclick="event.stopPropagation()">
+    <div class="result-title">🏆 RESULT 🏆</div>
+    <div id="rankList"></div>
+    <button class="result-close" onclick="closeResult()">わっしょい！</button>
+  </div>
+</div>
+
+<script>
+/* ── お題データ ── */
+const ODAI = {
+  '動物': ['ゴリラ','ペンギン','フラミンゴ','カンガルー','ナマケモノ','タコ','ニワトリ','ゾウ','ヘビ','カマキリ','パンダ','ラッコ','ハト','カニ','チーター'],
+  'スポーツ': ['ボウリング','剣道','シンクロナイズドスイミング','カーリング','砲丸投げ','クライミング','フェンシング','バレーボール','ゴルフ','綱引き','弓道','ラグビー','卓球','縄跳び','空手'],
+  '職業': ['寿司職人','美容師','消防士','オーケストラの指揮者','ラーメン屋','歯医者','バスガイド','宅配ドライバー','マジシャン','農家','パイロット','保育士','警備員','ユーチューバー','占い師'],
+  '日常の動作': ['寝坊して慌てる','満員電車','歯磨き','ラーメンをすする','くしゃみを我慢する','自撮り','蚊を退治する','傘が壊れる','熱いお風呂に入る','固い瓶のフタを開ける','靴下を履く','枕投げ','大掃除','洗濯物を干す','タピオカを飲む'],
+  'ビジネスあるある': ['オンライン会議でミュートのまま話す','名刺交換','上司へのゴマすり','月曜朝の憂鬱','パソコンがフリーズ','電話のたらい回し','徹夜明けの朝','プレゼンで頭が真っ白','満席の新幹線で弁当','経費精算の締切','エレベーターで気まずい','昼休みの争奪戦','リモート会議に子供乱入','終電ダッシュ','決裁ハンコをもらう'],
+  'むちゃぶり': ['洗濯機','東京タワー','Wi-Fiが切れた瞬間','正月','花粉症','人工知能','インフレ','月曜日','青春','コンビニのレジ','渋滞','自動ドア','マヨネーズ','リモコンが見つからない','静電気'],
+};
+
+let teams = ['チームA', 'チームB'];
+let timeLimit = 60;
+let activeCats = Object.keys(ODAI);
+let scores = [], currentTeam = 0, timer = null, remaining = 0, turnActive = false;
+let usedOdai = new Set();
+
+/* ── 設定UI ── */
+function renderTeams() {
+  const list = document.getElementById('teamList');
+  list.innerHTML = teams.map((t, i) => `
+    <div class="team-row">
+      <input class="team-input" value="${t}" onchange="teams[${i}]=this.value">
+      ${teams.length > 2 ? `<button class="team-del" onclick="delTeam(${i})">✕</button>` : ''}
+    </div>`).join('');
+}
+function addTeam() { if (teams.length < 8) { teams.push(`チーム${String.fromCharCode(65+teams.length)}`); renderTeams(); } }
+function delTeam(i) { teams.splice(i,1); renderTeams(); }
+function setTime(sec, btn) {
+  timeLimit = sec;
+  document.querySelectorAll('#timeBtns .chip-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function renderCats() {
+  const box = document.getElementById('catBtns');
+  box.innerHTML = Object.keys(ODAI).map(c =>
+    `<button class="chip-btn active" data-cat="${c}" onclick="toggleCat('${c}',this)">${c}</button>`).join('');
+}
+function toggleCat(cat, btn) {
+  btn.classList.toggle('active');
+  activeCats = [...document.querySelectorAll('#catBtns .chip-btn.active')].map(b => b.dataset.cat);
+  if (!activeCats.length) { btn.classList.add('active'); activeCats = [cat]; }
+}
+
+/* ── ゲーム進行 ── */
+function startGame() {
+  scores = teams.map(() => 0);
+  currentTeam = 0; usedOdai.clear();
+  document.getElementById('setupRow').style.display = 'none';
+  document.getElementById('startBox').style.display = 'none';
+  document.getElementById('gameArea').classList.add('show');
+  updateTurnUI();
+}
+function updateTurnUI() {
+  document.getElementById('turnTeam').textContent = teams[currentTeam];
+  document.getElementById('timerDisplay').textContent = timeLimit;
+  document.getElementById('timerDisplay').classList.remove('warning');
+  document.getElementById('odaiText').textContent = 'ターン開始を押してね';
+  document.getElementById('odaiCat').textContent = '';
+  document.getElementById('startTurnBtn').disabled = false;
+  document.getElementById('correctBtn').disabled = true;
+  document.getElementById('skipBtn').disabled = true;
+  renderScores();
+}
+function renderScores() {
+  document.getElementById('scoreGrid').innerHTML = teams.map((t, i) => `
+    <div class="score-card ${i === currentTeam ? 'current' : ''}">
+      <div class="score-name">${t}</div>
+      <div class="score-pts">${scores[i]}<small> 点</small></div>
+      <div class="score-adj">
+        <button onclick="adjustScore(${i},-1)">−</button>
+        <button onclick="adjustScore(${i},1)">＋</button>
+      </div>
+    </div>`).join('');
+}
+function adjustScore(i, d) { scores[i] = Math.max(0, scores[i] + d); renderScores(); }
+
+function drawOdai() {
+  const pool = [];
+  activeCats.forEach(c => ODAI[c].forEach(o => { if (!usedOdai.has(c+o)) pool.push({ cat:c, text:o }); }));
+  if (!pool.length) { usedOdai.clear(); return drawOdai(); }
+  const pick = pool[Math.floor(Math.random()*pool.length)];
+  usedOdai.add(pick.cat + pick.text);
+  const el = document.getElementById('odaiText');
+  el.style.animation = 'none'; el.offsetHeight; el.style.animation = '';
+  el.textContent = pick.text;
+  document.getElementById('odaiCat').textContent = `カテゴリ: ${pick.cat}`;
+}
+
+function startTurn() {
+  turnActive = true;
+  remaining = timeLimit;
+  document.getElementById('startTurnBtn').disabled = true;
+  document.getElementById('correctBtn').disabled = false;
+  document.getElementById('skipBtn').disabled = false;
+  drawOdai();
+  beep(880, 0.15, 0.15);
+  timer = setInterval(() => {
+    remaining--;
+    const td = document.getElementById('timerDisplay');
+    td.textContent = remaining;
+    if (remaining <= 10) { td.classList.add('warning'); beep(660, 0.06, 0.08); }
+    if (remaining <= 0) endTurn();
+  }, 1000);
+}
+function endTurn() {
+  clearInterval(timer); turnActive = false;
+  beep(330, 0.5, 0.2, 0, 'sawtooth');
+  document.getElementById('odaiText').textContent = '⏰ タイムアップ！';
+  document.getElementById('odaiCat').textContent = '';
+  document.getElementById('correctBtn').disabled = true;
+  document.getElementById('skipBtn').disabled = true;
+  currentTeam = (currentTeam + 1) % teams.length;
+  setTimeout(updateTurnUI, 1600);
+}
+function correct() {
+  if (!turnActive) return;
+  scores[currentTeam]++;
+  renderScores();
+  beep(1047, 0.15, 0.2, 0, 'triangle'); beep(1319, 0.2, 0.2, 0.08, 'triangle');
+  drawOdai();
+}
+function skip() { if (turnActive) { beep(440, 0.1, 0.1); drawOdai(); } }
+
+/* ── 結果 ── */
+function showResult() {
+  clearInterval(timer); turnActive = false;
+  const ranked = teams.map((t, i) => ({ name:t, pts:scores[i] })).sort((a,b) => b.pts - a.pts);
+  const medals = ['🥇','🥈','🥉'];
+  document.getElementById('rankList').innerHTML = ranked.map((r, i) => `
+    <div class="rank-row ${i === 0 ? 'first' : ''}">
+      <span class="rank-medal">${medals[i] || '　'}</span>
+      <span class="rank-name">${r.name}</span>
+      <span class="rank-pts">${r.pts}点</span>
+    </div>`).join('');
+  document.getElementById('resultOverlay').classList.add('show');
+  launchConfetti();
+  [523,659,784,1047,784,1047,1319].forEach((f,i) => beep(f, 0.22, 0.18, i*0.13, 'triangle'));
+}
+function closeResult() { document.getElementById('resultOverlay').classList.remove('show'); }
+
+/* ── 効果音・紙吹雪 ── */
+let actx = null;
+function beep(freq, dur = 0.12, vol = 0.15, delay = 0, type = 'square') {
+  try {
+    if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = actx.createOscillator(), g = actx.createGain();
+    o.connect(g); g.connect(actx.destination);
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(vol, actx.currentTime + delay);
+    g.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + delay + dur);
+    o.start(actx.currentTime + delay); o.stop(actx.currentTime + delay + dur);
+  } catch(e) {}
+}
+function launchConfetti() {
+  const canvas = document.getElementById('resultCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+  const colors = ['#FFD700','#B7282E','#fff','#FF6B6B','#4ECDC4','#FF9F43'];
+  const parts = [];
+  for (let i = 0; i < 240; i++) {
+    parts.push({
+      x: Math.random()*canvas.width, y: -20 - Math.random()*canvas.height*0.5,
+      vx: (Math.random()-0.5)*2.4, vy: 2 + Math.random()*3.5,
+      w: 6+Math.random()*7, h: 4+Math.random()*5,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      rot: Math.random()*Math.PI, vr: (Math.random()-0.5)*0.25,
+    });
+  }
+  let frames = 0;
+  (function anim() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    parts.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+      ctx.fillStyle = p.color; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      ctx.restore();
+    });
+    if (++frames < 420) requestAnimationFrame(anim);
+    else ctx.clearRect(0,0,canvas.width,canvas.height);
+  })();
+}
+
+renderTeams();
+renderCats();
+</script>
+</body>
+</html>

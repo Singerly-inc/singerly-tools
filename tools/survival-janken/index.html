@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>サバイバルじゃんけん — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  min-height:100vh; background:#fff;
+  font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif;
+  color:#000; display:flex; flex-direction:column; align-items:center;
+}
+
+.outer {
+  width:100%; max-width:860px;
+  padding:24px 24px 60px;
+  display:flex; flex-direction:column; gap:16px;
+}
+
+/* ── ルール説明 ── */
+.rule-box {
+  background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px;
+  padding:14px 20px; display:flex; gap:18px; align-items:center; flex-wrap:wrap;
+}
+.rule-label { font-size:0.63rem; letter-spacing:0.14em; color:#888; text-transform:uppercase; font-weight:700; }
+.rule-steps { display:flex; gap:14px; flex-wrap:wrap; font-size:0.78rem; color:#555; font-weight:700; }
+.rule-steps b { color:#B7282E; }
+.mode-btns { display:flex; gap:8px; margin-left:auto; }
+.mode-btn {
+  padding:7px 16px; border-radius:6px; border:1px solid #CCC;
+  background:#fff; color:#555; font-size:0.78rem; font-weight:700;
+  font-family:inherit; cursor:pointer; transition:all 0.15s;
+}
+.mode-btn:hover { border-color:#B7282E; color:#B7282E; }
+.mode-btn.active { background:#B7282E; border-color:#B7282E; color:#fff; }
+
+/* ── メインアリーナ ── */
+.arena {
+  background:#0A0A0A; border-radius:14px;
+  padding:36px 24px 32px; text-align:center;
+  display:flex; flex-direction:column; align-items:center; gap:18px;
+  position:relative; overflow:hidden;
+}
+.arena::before {
+  content:''; position:absolute; inset:0;
+  background-image: radial-gradient(circle, rgba(183,40,46,0.22) 1px, transparent 1.5px);
+  background-size: 24px 24px; opacity:0.5; pointer-events:none;
+}
+.round-label {
+  font-size:0.7rem; letter-spacing:0.24em; color:rgba(255,255,255,0.4);
+  text-transform:uppercase; font-weight:700; position:relative;
+}
+.round-num { color:#E8636A; font-size:1rem; }
+.hand-display {
+  width:220px; height:220px; border-radius:28px;
+  background:linear-gradient(150deg, #1E1310, #26100F);
+  border:2px solid rgba(183,40,46,0.5);
+  display:flex; align-items:center; justify-content:center;
+  font-size:7.5rem; position:relative; user-select:none;
+  box-shadow: 0 0 60px rgba(183,40,46,0.25), inset 0 2px 0 rgba(255,255,255,0.08);
+  transition: transform 0.1s;
+}
+.hand-display.shaking { animation:handShake 0.14s linear infinite; }
+@keyframes handShake {
+  0%,100% { transform:rotate(-4deg) scale(0.98); }
+  50%     { transform:rotate(4deg) scale(1.02); }
+}
+.hand-display.reveal { animation:handPop 0.45s cubic-bezier(0.3,1.8,0.5,1) both; }
+@keyframes handPop { 0%{transform:scale(0.4) rotate(-15deg)} 100%{transform:scale(1) rotate(0)} }
+.status-msg {
+  font-size:1.15rem; font-weight:900; color:#fff; min-height:1.8em; position:relative;
+  letter-spacing:0.04em;
+}
+.status-msg .accent { color:#E8636A; }
+.countdown {
+  font-size:3.2rem; font-weight:900; color:#E8636A; line-height:1;
+  animation:countPulse 0.5s ease both;
+}
+@keyframes countPulse { 0%{transform:scale(1.6);opacity:0.3} 100%{transform:scale(1);opacity:1} }
+
+.btn-main {
+  padding:16px 52px; font-size:1.05rem; font-weight:900; letter-spacing:0.06em;
+  border:none; border-radius:10px; cursor:pointer;
+  background:#B7282E; color:#fff; font-family:inherit;
+  transition:background 0.15s, transform 0.12s;
+  position:relative;
+}
+.btn-main:hover { background:#83151B; transform:translateY(-1px); }
+.btn-main:disabled { opacity:0.35; cursor:not-allowed; }
+.btn-sub {
+  padding:10px 24px; font-size:0.8rem; font-weight:700;
+  border:1px solid rgba(255,255,255,0.25); border-radius:8px; cursor:pointer;
+  background:transparent; color:rgba(255,255,255,0.6); font-family:inherit;
+  transition:all 0.15s; position:relative;
+}
+.btn-sub:hover { border-color:#fff; color:#fff; }
+.arena-btns { display:flex; gap:12px; align-items:center; position:relative; }
+
+/* ── 履歴 ── */
+.history-box {
+  background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px;
+  padding:14px 20px;
+}
+.history-label { font-size:0.63rem; letter-spacing:0.14em; color:#888; text-transform:uppercase; font-weight:700; margin-bottom:8px; }
+.history-hands { display:flex; gap:10px; flex-wrap:wrap; min-height:44px; }
+.history-hand {
+  width:44px; height:44px; border-radius:9px;
+  background:#fff; border:1px solid #DDD;
+  display:flex; align-items:center; justify-content:center; font-size:1.4rem;
+  position:relative;
+}
+.history-hand .no {
+  position:absolute; top:-6px; right:-6px;
+  background:#B7282E; color:#fff; font-size:0.55rem; font-weight:700;
+  width:16px; height:16px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+}
+.history-empty { font-size:0.75rem; color:#bbb; align-self:center; }
+
+/* ── 優勝オーバーレイ ── */
+.champion-overlay {
+  position:fixed; inset:0; background:rgba(10,10,10,0.92);
+  display:none; align-items:center; justify-content:center; z-index:1000; flex-direction:column;
+}
+.champion-overlay.show { display:flex; }
+.champion-canvas { position:absolute; inset:0; pointer-events:none; }
+.champion-content { position:relative; text-align:center; animation:champPop 0.7s cubic-bezier(0.3,1.6,0.5,1) both; }
+@keyframes champPop { 0%{opacity:0;transform:scale(0.4)} 100%{opacity:1;transform:scale(1)} }
+.champion-crown { font-size:5rem; animation:crownFloat 2s ease-in-out infinite; }
+@keyframes crownFloat { 0%,100%{transform:translateY(0) rotate(-4deg)} 50%{transform:translateY(-12px) rotate(4deg)} }
+.champion-title {
+  font-size:2.6rem; font-weight:900; color:#FFD700; letter-spacing:0.08em;
+  text-shadow:0 0 40px rgba(255,215,0,0.6); margin-top:8px;
+}
+.champion-msg { font-size:1rem; color:rgba(255,255,255,0.7); margin-top:10px; line-height:1.7; }
+.champion-close {
+  margin-top:30px; padding:13px 44px;
+  background:#B7282E; color:#fff; border:none; border-radius:9px;
+  font-size:1rem; font-weight:900; font-family:inherit; cursor:pointer;
+}
+.champion-close:hover { background:#83151B; }
+
+@media(max-width:600px) {
+  .hand-display { width:170px; height:170px; font-size:5.5rem; }
+  .mode-btns { margin-left:0; }
+}
+</style>
+<link rel="stylesheet" href="../shared.css">
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="../../">← ムドメわっしょい！</a>
+  <span class="nav-brand">SINGERLY</span>
+</nav>
+
+<div class="page-header">
+  <div class="tool-badge">✊ あたためる</div>
+  <h1 class="page-title">サバイバルじゃんけん</h1>
+  <p class="page-sub">全員起立！画面とじゃんけん勝負。最後の1人に栄光と拍手を。</p>
+</div>
+
+<div class="outer">
+
+  <div class="rule-box">
+    <div>
+      <div class="rule-label">ルール</div>
+      <div class="rule-steps">
+        <span><b>1.</b> 全員起立</span>
+        <span><b>2.</b> 画面とじゃんけん</span>
+        <span><b>3.</b> <span id="ruleText"><b>負けたら</b>着席</span></span>
+        <span><b>4.</b> 最後の1人が優勝！</span>
+      </div>
+    </div>
+    <div class="mode-btns">
+      <button class="mode-btn active" id="modeLose" onclick="setMode('lose')">負け残り着席</button>
+      <button class="mode-btn" id="modeWin" onclick="setMode('win')">勝ち残り着席</button>
+    </div>
+  </div>
+
+  <div class="arena">
+    <div class="round-label">ROUND <span class="round-num" id="roundNum">1</span></div>
+    <div class="hand-display" id="handDisplay">✊</div>
+    <div class="status-msg" id="statusMsg">ボタンを押すと勝負開始！</div>
+    <div class="arena-btns">
+      <button class="btn-main" id="playBtn" onclick="play()">じゃんけん…</button>
+      <button class="btn-sub" onclick="crownChampion()">👑 優勝者決定！</button>
+      <button class="btn-sub" onclick="resetGame()">リセット</button>
+    </div>
+  </div>
+
+  <div class="history-box">
+    <div class="history-label">出した手の履歴</div>
+    <div class="history-hands" id="historyHands">
+      <span class="history-empty">まだ勝負していません</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- 優勝オーバーレイ -->
+<div class="champion-overlay" id="championOverlay" onclick="closeChampion()">
+  <canvas class="champion-canvas" id="championCanvas"></canvas>
+  <div class="champion-content" onclick="event.stopPropagation()">
+    <div class="champion-crown">👑</div>
+    <div class="champion-title">CHAMPION!</div>
+    <div class="champion-msg">最後まで勝ち残った王者に、盛大な拍手を！！<br>おめでとうございます 🎉</div>
+    <button class="champion-close" onclick="closeChampion()">わっしょい！</button>
+  </div>
+</div>
+
+<script>
+const HANDS = [
+  { emoji:'✊', name:'グー' },
+  { emoji:'✌️', name:'チョキ' },
+  { emoji:'✋', name:'パー' },
+];
+let round = 1, playing = false, history = [];
+let mode = 'lose';
+
+function setMode(m) {
+  mode = m;
+  document.getElementById('modeLose').classList.toggle('active', m === 'lose');
+  document.getElementById('modeWin').classList.toggle('active', m === 'win');
+  document.getElementById('ruleText').innerHTML = m === 'lose' ? '<b>負けたら</b>着席' : '<b>勝ったら</b>着席';
+}
+
+/* WebAudio 効果音 */
+let actx = null;
+function audio() { if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)(); return actx; }
+function beep(freq, dur = 0.12, vol = 0.15, delay = 0, type = 'square') {
+  try {
+    const ctx = audio();
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(vol, ctx.currentTime + delay);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + dur);
+    o.start(ctx.currentTime + delay); o.stop(ctx.currentTime + delay + dur);
+  } catch(e) {}
+}
+
+async function play() {
+  if (playing) return;
+  playing = true;
+  const btn = document.getElementById('playBtn');
+  const hand = document.getElementById('handDisplay');
+  const msg = document.getElementById('statusMsg');
+  btn.disabled = true;
+
+  /* カウントダウン */
+  const counts = ['さいしょはグー！', 'じゃんけん…'];
+  hand.classList.remove('reveal');
+  hand.textContent = '✊';
+  msg.innerHTML = counts[0];
+  beep(660, 0.15, 0.12);
+  await sleep(900);
+
+  msg.innerHTML = counts[1];
+  hand.classList.add('shaking');
+  /* シャッフル演出 */
+  const shuffleMs = 1400;
+  const t0 = performance.now();
+  const shuffleTimer = setInterval(() => {
+    hand.textContent = HANDS[Math.floor(Math.random()*3)].emoji;
+    beep(440 + Math.random()*200, 0.05, 0.05);
+  }, 90);
+  await sleep(shuffleMs);
+  clearInterval(shuffleTimer);
+  hand.classList.remove('shaking');
+
+  /* 決定 */
+  const result = HANDS[Math.floor(Math.random()*3)];
+  hand.textContent = result.emoji;
+  hand.classList.add('reveal');
+  msg.innerHTML = `ポンッ！画面は <span class="accent">${result.name}</span>！ ${mode === 'lose' ? '負けた人は着席！' : '勝った人は着席！'}`;
+  beep(880, 0.2, 0.2, 0, 'triangle');
+  beep(1174, 0.3, 0.2, 0.1, 'triangle');
+
+  /* 履歴 */
+  history.push(result);
+  renderHistory();
+  round++;
+  document.getElementById('roundNum').textContent = round;
+  btn.textContent = 'もう一勝負！';
+  btn.disabled = false;
+  playing = false;
+}
+
+function renderHistory() {
+  const box = document.getElementById('historyHands');
+  box.innerHTML = history.map((h, i) =>
+    `<div class="history-hand">${h.emoji}<span class="no">${i+1}</span></div>`
+  ).join('');
+}
+
+function resetGame() {
+  round = 1; history = [];
+  document.getElementById('roundNum').textContent = 1;
+  document.getElementById('handDisplay').textContent = '✊';
+  document.getElementById('statusMsg').textContent = 'ボタンを押すと勝負開始！';
+  document.getElementById('playBtn').textContent = 'じゃんけん…';
+  document.getElementById('historyHands').innerHTML = '<span class="history-empty">まだ勝負していません</span>';
+}
+
+/* 優勝演出 */
+function crownChampion() {
+  document.getElementById('championOverlay').classList.add('show');
+  launchConfetti();
+  /* ファンファーレ */
+  [523,659,784,1047,784,1047,1319].forEach((f,i) => beep(f, 0.22, 0.18, i*0.13, 'triangle'));
+}
+function closeChampion() { document.getElementById('championOverlay').classList.remove('show'); }
+function launchConfetti() {
+  const canvas = document.getElementById('championCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+  const colors = ['#FFD700','#B7282E','#fff','#FF6B6B','#4ECDC4','#FF9F43'];
+  const parts = [];
+  for (let i = 0; i < 260; i++) {
+    parts.push({
+      x: Math.random()*canvas.width, y: -20 - Math.random()*canvas.height*0.5,
+      vx: (Math.random()-0.5)*2.4, vy: 2 + Math.random()*3.5,
+      w: 6+Math.random()*7, h: 4+Math.random()*5,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      rot: Math.random()*Math.PI, vr: (Math.random()-0.5)*0.25,
+    });
+  }
+  let frames = 0;
+  (function anim() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    parts.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+      ctx.fillStyle = p.color; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      ctx.restore();
+    });
+    if (++frames < 420) requestAnimationFrame(anim);
+    else ctx.clearRect(0,0,canvas.width,canvas.height);
+  })();
+}
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+</script>
+</body>
+</html>

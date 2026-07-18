@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&family=Noto+Serif+JP:wght@700;900&display=swap" rel="stylesheet">
+<title>表彰状ジェネレーター — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  min-height:100vh; background:#fff;
+  font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif;
+  color:#000; display:flex; flex-direction:column; align-items:center;
+}
+.outer {
+  width:100%; max-width:1150px;
+  padding:24px 24px 60px;
+  display:grid; grid-template-columns:340px 1fr; gap:18px; align-items:start;
+}
+@media(max-width:900px){ .outer{ grid-template-columns:1fr; } }
+.section-label { font-size:0.63rem; letter-spacing:0.14em; color:#888; text-transform:uppercase; font-weight:700; margin-bottom:10px; }
+
+/* ── フォーム ── */
+.form-box {
+  background:#F6F6F6; border:1px solid #E0E0E0; border-radius:12px;
+  padding:20px; display:flex; flex-direction:column; gap:14px;
+}
+.field label { display:block; font-size:0.72rem; font-weight:700; color:#777; margin-bottom:5px; }
+.field input, .field textarea, .field select {
+  width:100%; padding:10px 12px; border:1px solid #CCC; border-radius:7px;
+  font-size:0.88rem; font-family:inherit; outline:none; background:#fff;
+}
+.field input:focus, .field textarea:focus { border-color:#B7282E; }
+.field textarea { min-height:88px; resize:vertical; line-height:1.7; }
+.tmpl-btns { display:flex; gap:6px; flex-wrap:wrap; }
+.tmpl-btn {
+  padding:6px 12px; border-radius:99px; border:1px dashed #BBB;
+  background:transparent; color:#888; font-size:0.7rem; font-weight:700;
+  font-family:inherit; cursor:pointer;
+}
+.tmpl-btn:hover { border-color:#B7282E; color:#B7282E; }
+.action-btns { display:flex; flex-direction:column; gap:9px; margin-top:4px; }
+.btn-ceremony {
+  padding:14px; font-size:1rem; font-weight:900; letter-spacing:0.05em;
+  border:none; border-radius:9px; cursor:pointer;
+  background:#B7282E; color:#fff; font-family:inherit;
+  transition:background 0.15s, transform 0.12s;
+}
+.btn-ceremony:hover { background:#83151B; transform:translateY(-1px); }
+.btn-print {
+  padding:12px; font-size:0.85rem; font-weight:700;
+  border:1px solid #CCC; border-radius:9px; cursor:pointer;
+  background:#fff; color:#666; font-family:inherit; transition:all 0.15s;
+}
+.btn-print:hover { border-color:#B7282E; color:#B7282E; }
+
+/* ── 賞状 ── */
+.cert-wrap { display:flex; flex-direction:column; gap:10px; }
+.certificate {
+  aspect-ratio: 1.414;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(200,160,80,0.08), transparent 55%),
+    linear-gradient(180deg, #FFFDF6 0%, #FBF6E8 100%);
+  border:3px solid #C8A050;
+  outline:1.5px solid #C8A050;
+  outline-offset:-11px;
+  border-radius:4px;
+  padding:5.5% 7%;
+  position:relative;
+  display:flex; flex-direction:column; align-items:center;
+  font-family:'Noto Serif JP','Hiragino Mincho ProN',serif;
+  color:#2A2118;
+  box-shadow:0 10px 40px rgba(0,0,0,0.12);
+  overflow:hidden;
+}
+.certificate::before { /* 鳳凰風の透かし */
+  content:'賞'; position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  font-size:min(34vw, 320px); font-weight:900;
+  color:rgba(200,160,80,0.07); line-height:1; pointer-events:none;
+}
+.cert-corner { position:absolute; width:34px; height:34px; border-color:#C8A050; border-style:solid; opacity:0.85; }
+.cert-corner.tl { top:18px; left:18px; border-width:2.5px 0 0 2.5px; }
+.cert-corner.tr { top:18px; right:18px; border-width:2.5px 2.5px 0 0; }
+.cert-corner.bl { bottom:18px; left:18px; border-width:0 0 2.5px 2.5px; }
+.cert-corner.br { bottom:18px; right:18px; border-width:0 2.5px 2.5px 0; }
+.cert-title {
+  font-size:clamp(26px, 5.2vw, 46px); font-weight:900; letter-spacing:0.55em;
+  text-indent:0.55em; margin-top:1%;
+}
+.cert-award {
+  margin-top:2.5%; font-size:clamp(13px, 2vw, 19px); font-weight:700;
+  color:#B7282E; letter-spacing:0.2em;
+}
+.cert-name {
+  margin-top:2%; font-size:clamp(22px, 4vw, 36px); font-weight:900;
+  border-bottom:2px solid #C8A050; padding:0 6% 6px; letter-spacing:0.1em;
+  position:relative;
+}
+.cert-name small { font-size:0.45em; font-weight:700; margin-left:8px; }
+.cert-body {
+  margin-top:3%; font-size:clamp(11px, 1.55vw, 15.5px); line-height:2.1;
+  text-align:center; max-width:82%; font-weight:700;
+  position:relative;
+}
+.cert-foot {
+  margin-top:auto; display:flex; justify-content:space-between; align-items:flex-end;
+  width:88%; position:relative;
+}
+.cert-date { font-size:clamp(10px, 1.4vw, 14px); font-weight:700; }
+.cert-issuer { text-align:right; }
+.cert-issuer-name { font-size:clamp(13px, 1.9vw, 18px); font-weight:900; letter-spacing:0.12em; }
+.cert-seal {
+  display:inline-flex; align-items:center; justify-content:center;
+  width:clamp(30px, 4.5vw, 44px); height:clamp(30px, 4.5vw, 44px);
+  border:2.5px solid #B7282E; border-radius:8px;
+  color:#B7282E; font-weight:900; font-size:clamp(12px, 1.9vw, 18px);
+  transform:rotate(5deg); margin-left:10px; vertical-align:middle;
+  background:rgba(183,40,46,0.06);
+}
+
+/* ── 表彰式モード ── */
+.ceremony-overlay {
+  position:fixed; inset:0; background:#0A0A0A;
+  display:none; align-items:center; justify-content:center; z-index:1000;
+  flex-direction:column; padding:3vh 3vw;
+}
+.ceremony-overlay.show { display:flex; }
+.ceremony-canvas { position:absolute; inset:0; pointer-events:none; }
+.ceremony-cert {
+  width:min(92vw, calc(88vh * 1.414)); position:relative;
+  animation:certEnter 1.2s cubic-bezier(0.2,1.4,0.4,1) both;
+}
+@keyframes certEnter {
+  0%{opacity:0; transform:scale(0.6) translateY(60px)}
+  100%{opacity:1; transform:scale(1) translateY(0)}
+}
+.ceremony-close {
+  position:absolute; top:20px; right:24px; z-index:10;
+  padding:10px 22px; border:1px solid rgba(255,255,255,0.3); border-radius:99px;
+  background:transparent; color:rgba(255,255,255,0.6);
+  font-family:inherit; font-size:0.8rem; font-weight:700; cursor:pointer;
+}
+.ceremony-close:hover { border-color:#fff; color:#fff; }
+
+@media print {
+  .nav, .page-header, .form-box, .btn-ceremony, .btn-print, .section-label { display:none !important; }
+  body { background:#fff; }
+  .outer { display:block; padding:0; max-width:none; }
+  .certificate { box-shadow:none; width:100%; }
+}
+</style>
+<link rel="stylesheet" href="../shared.css">
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="../../">← ムドメわっしょい！</a>
+  <span class="nav-brand">SINGERLY</span>
+</nav>
+
+<div class="page-header">
+  <div class="tool-badge">🏆 たたえる</div>
+  <h1 class="page-title">表彰状ジェネレーター</h1>
+  <p class="page-sub">名前と称号を入れるだけで、その場で賞状が完成。得賞歌つきの即席表彰式を。</p>
+</div>
+
+<div class="outer">
+
+  <!-- フォーム -->
+  <div class="form-box">
+    <div class="section-label">賞状をつくる</div>
+    <div class="field">
+      <label>賞の名前</label>
+      <input id="inTitle" value="MVP賞" oninput="render()">
+      <div class="tmpl-btns" style="margin-top:6px;">
+        <button class="tmpl-btn" onclick="setTitle('MVP賞')">MVP賞</button>
+        <button class="tmpl-btn" onclick="setTitle('ベストムードメーカー賞')">ムードメーカー賞</button>
+        <button class="tmpl-btn" onclick="setTitle('ナイスチャレンジ賞')">チャレンジ賞</button>
+        <button class="tmpl-btn" onclick="setTitle('ベスト質問賞')">ベスト質問賞</button>
+        <button class="tmpl-btn" onclick="setTitle('縁の下の力持ち賞')">縁の下の力持ち賞</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>受賞者名</label>
+      <input id="inName" placeholder="例：奥田 真広" oninput="render()">
+    </div>
+    <div class="field">
+      <label>本文</label>
+      <textarea id="inBody" oninput="render()">あなたは本研修において
+誰よりも場を盛り上げ
+チームに大きな熱を生み出しました
+その功績を称え ここに表彰します</textarea>
+      <div class="tmpl-btns" style="margin-top:6px;">
+        <button class="tmpl-btn" onclick="setBody('mvp')">MVP向け</button>
+        <button class="tmpl-btn" onclick="setBody('challenge')">挑戦向け</button>
+        <button class="tmpl-btn" onclick="setBody('support')">貢献向け</button>
+        <button class="tmpl-btn" onclick="setBody('fun')">おもしろ向け</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>贈呈者</label>
+      <input id="inIssuer" value="ムドメわっしょい！実行委員会" oninput="render()">
+    </div>
+    <div class="field">
+      <label>日付</label>
+      <input id="inDate" oninput="render()">
+    </div>
+    <div class="action-btns">
+      <button class="btn-ceremony" onclick="startCeremony()">🎺 表彰式をはじめる（得賞歌つき）</button>
+      <button class="btn-print" onclick="window.print()">🖨 印刷・PDF保存</button>
+    </div>
+  </div>
+
+  <!-- プレビュー -->
+  <div class="cert-wrap">
+    <div class="section-label">プレビュー</div>
+    <div class="certificate" id="certificate"></div>
+  </div>
+
+</div>
+
+<!-- 表彰式モード -->
+<div class="ceremony-overlay" id="ceremonyOverlay">
+  <canvas class="ceremony-canvas" id="ceremonyCanvas"></canvas>
+  <button class="ceremony-close" onclick="closeCeremony()">✕ 閉じる</button>
+  <div class="ceremony-cert">
+    <div class="certificate" id="ceremonyCert"></div>
+  </div>
+</div>
+
+<audio id="fanfareAudio" src="fanfare.mp3" preload="auto"></audio>
+
+<script>
+const BODY_TMPL = {
+  mvp: 'あなたは本研修において\n誰よりも場を盛り上げ\nチームに大きな熱を生み出しました\nその功績を称え ここに表彰します',
+  challenge: 'あなたは失敗を恐れず\n誰よりも果敢に挑戦し\n全員の背中を押しました\nその勇気を称え ここに表彰します',
+  support: 'あなたはチームを支え\nさりげない気配りで\n場の心理的安全性を守り抜きました\nその貢献を称え ここに表彰します',
+  fun: 'あなたの一言は\n会場を爆笑の渦に巻き込み\n全員の記憶に深く刻まれました\nその伝説を称え ここに表彰します',
+};
+
+/* URLパラメータ（MVPアワードからの連携） */
+const params = new URLSearchParams(location.search);
+if (params.get('name')) document.getElementById('inName').value = params.get('name');
+if (params.get('title')) document.getElementById('inTitle').value = params.get('title');
+
+/* 日付初期値（和暦風） */
+(function initDate() {
+  const d = new Date();
+  document.getElementById('inDate').value = `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
+})();
+
+function setTitle(t) { document.getElementById('inTitle').value = t; render(); }
+function setBody(key) { document.getElementById('inBody').value = BODY_TMPL[key]; render(); }
+
+function certHTML() {
+  const title = esc(document.getElementById('inTitle').value) || '表彰状';
+  const name = esc(document.getElementById('inName').value) || '＿＿＿＿＿＿';
+  const body = esc(document.getElementById('inBody').value).replace(/\n/g, '<br>');
+  const issuer = esc(document.getElementById('inIssuer').value);
+  const date = esc(document.getElementById('inDate').value);
+  return `
+    <div class="cert-corner tl"></div><div class="cert-corner tr"></div>
+    <div class="cert-corner bl"></div><div class="cert-corner br"></div>
+    <div class="cert-title">表彰状</div>
+    <div class="cert-award">${title}</div>
+    <div class="cert-name">${name}<small>殿</small></div>
+    <div class="cert-body">${body}</div>
+    <div class="cert-foot">
+      <div class="cert-date">${date}</div>
+      <div class="cert-issuer">
+        <span class="cert-issuer-name">${issuer}</span><span class="cert-seal">祭</span>
+      </div>
+    </div>`;
+}
+function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function render() {
+  document.getElementById('certificate').innerHTML = certHTML();
+}
+
+/* ── 表彰式 ── */
+function startCeremony() {
+  document.getElementById('ceremonyCert').innerHTML = certHTML();
+  document.getElementById('ceremonyOverlay').classList.add('show');
+  const audio = document.getElementById('fanfareAudio');
+  try { audio.currentTime = 0; audio.play(); } catch(e) {}
+  setTimeout(launchConfetti, 900);
+  if (document.documentElement.requestFullscreen) {
+    document.documentElement.requestFullscreen().catch(() => {});
+  }
+}
+function closeCeremony() {
+  document.getElementById('ceremonyOverlay').classList.remove('show');
+  const audio = document.getElementById('fanfareAudio');
+  try { audio.pause(); } catch(e) {}
+  if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+}
+
+function launchConfetti() {
+  const canvas = document.getElementById('ceremonyCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+  const colors = ['#FFD700','#B7282E','#fff','#FF6B6B','#4ECDC4','#FF9F43','#C8A050'];
+  const parts = [];
+  for (let i = 0; i < 320; i++) {
+    parts.push({
+      x: Math.random()*canvas.width, y: -20 - Math.random()*canvas.height,
+      vx: (Math.random()-0.5)*2.2, vy: 1.6 + Math.random()*3,
+      w: 6+Math.random()*8, h: 4+Math.random()*6,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      rot: Math.random()*Math.PI, vr: (Math.random()-0.5)*0.22,
+    });
+  }
+  let frames = 0;
+  (function anim() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    parts.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+      if (p.y > canvas.height + 20) { p.y = -20; p.x = Math.random()*canvas.width; }
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+      ctx.fillStyle = p.color; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      ctx.restore();
+    });
+    if (++frames < 1500 && document.getElementById('ceremonyOverlay').classList.contains('show')) requestAnimationFrame(anim);
+    else ctx.clearRect(0,0,canvas.width,canvas.height);
+  })();
+}
+
+render();
+</script>
+</body>
+</html>

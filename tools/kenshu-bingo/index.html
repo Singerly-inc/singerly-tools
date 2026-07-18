@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+<title>研修ビンゴ — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  min-height:100vh; background:#fff;
+  font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif;
+  color:#000; display:flex; flex-direction:column; align-items:center;
+}
+.outer {
+  width:100%; max-width:1000px;
+  padding:24px 24px 60px;
+  display:flex; flex-direction:column; gap:16px;
+}
+.section-label { font-size:0.63rem; letter-spacing:0.14em; color:#888; text-transform:uppercase; font-weight:700; margin-bottom:10px; }
+
+/* ── 設定 ── */
+.setup-box {
+  background:#F6F6F6; border:1px solid #E0E0E0; border-radius:10px;
+  padding:18px 20px;
+}
+.kw-textarea {
+  width:100%; min-height:110px; padding:12px 14px;
+  border:1px solid #CCC; border-radius:8px;
+  font-size:0.88rem; font-family:inherit; outline:none; resize:vertical; line-height:1.8;
+}
+.kw-textarea:focus { border-color:#B7282E; }
+.kw-note { font-size:0.7rem; color:#999; margin-top:6px; }
+.kw-count { font-weight:700; color:#B7282E; }
+.setup-foot { display:flex; gap:12px; align-items:center; margin-top:14px; flex-wrap:wrap; }
+.size-btns { display:flex; gap:8px; }
+.size-btn {
+  padding:8px 18px; border-radius:6px; border:1px solid #CCC;
+  background:#fff; color:#555; font-size:0.82rem; font-weight:700;
+  font-family:inherit; cursor:pointer; transition:all 0.15s;
+}
+.size-btn:hover { border-color:#B7282E; color:#B7282E; }
+.size-btn.active { background:#B7282E; border-color:#B7282E; color:#fff; }
+.btn-gen {
+  margin-left:auto; padding:12px 34px;
+  font-size:0.95rem; font-weight:900; letter-spacing:0.04em;
+  border:none; border-radius:8px; cursor:pointer;
+  background:#B7282E; color:#fff; font-family:inherit;
+  transition:background 0.15s, transform 0.12s;
+}
+.btn-gen:hover { background:#83151B; transform:translateY(-1px); }
+.btn-gen:disabled { opacity:0.4; cursor:not-allowed; }
+.preset-btns { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+.preset-btn {
+  padding:6px 14px; border-radius:99px; border:1px dashed #BBB;
+  background:transparent; color:#888; font-size:0.72rem; font-weight:700;
+  font-family:inherit; cursor:pointer;
+}
+.preset-btn:hover { border-color:#B7282E; color:#B7282E; }
+
+/* ── カードエリア ── */
+.card-area { display:none; flex-direction:column; gap:14px; align-items:center; }
+.card-area.show { display:flex; }
+.card-toolbar { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+.tb-btn {
+  padding:9px 20px; border-radius:7px; border:1px solid #CCC;
+  background:#fff; color:#555; font-size:0.8rem; font-weight:700;
+  font-family:inherit; cursor:pointer; transition:all 0.15s;
+}
+.tb-btn:hover { border-color:#B7282E; color:#B7282E; }
+.status-line { font-size:0.85rem; font-weight:700; color:#888; min-height:1.5em; }
+.status-line .reach { color:#C26A1F; }
+
+.bingo-grid {
+  display:grid; gap:6px; width:100%; max-width:620px;
+  background:#0A0A0A; padding:14px; border-radius:14px;
+  border-bottom:4px solid #B7282E;
+}
+.bingo-cell {
+  aspect-ratio:1.15; background:#fff; border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.82rem; font-weight:700; color:#333; text-align:center;
+  padding:6px; cursor:pointer; user-select:none; position:relative;
+  transition:all 0.15s; line-height:1.35; word-break:break-word;
+}
+.bingo-cell:hover { transform:scale(1.03); }
+.bingo-cell.free { background:#FFF6E5; color:#C26A1F; font-weight:900; }
+.bingo-cell.marked { background:#FDECEC; color:#999; }
+.bingo-cell.marked::after {
+  content:''; position:absolute; inset:14%;
+  border:4px solid rgba(183,40,46,0.75); border-radius:50%;
+  animation:markPop 0.3s cubic-bezier(0.3,1.8,0.5,1) both;
+}
+@keyframes markPop { 0%{transform:scale(0.3);opacity:0} 100%{transform:scale(1);opacity:1} }
+.bingo-cell.line { background:#B7282E; color:rgba(255,255,255,0.85); }
+.bingo-cell.line::after { border-color:#fff; }
+
+/* ── BINGOオーバーレイ ── */
+.bingo-overlay {
+  position:fixed; inset:0; background:rgba(10,10,10,0.92);
+  display:none; align-items:center; justify-content:center; z-index:1000;
+}
+.bingo-overlay.show { display:flex; }
+.bingo-canvas { position:absolute; inset:0; pointer-events:none; }
+.bingo-content { position:relative; text-align:center; animation:bPop 0.6s cubic-bezier(0.3,1.7,0.5,1) both; }
+@keyframes bPop { 0%{opacity:0;transform:scale(0.4) rotate(-6deg)} 100%{opacity:1;transform:scale(1) rotate(0)} }
+.bingo-word {
+  font-size:5rem; font-weight:900; letter-spacing:0.06em;
+  background:linear-gradient(120deg,#FFD700,#FF6B6B,#FFD700);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  background-size:200% auto; animation:bShimmer 2s linear infinite;
+  text-shadow:none;
+}
+@keyframes bShimmer { to{background-position:200% center} }
+.bingo-msg { font-size:1rem; color:rgba(255,255,255,0.7); margin-top:10px; }
+.bingo-close {
+  margin-top:26px; padding:12px 42px;
+  background:#B7282E; color:#fff; border:none; border-radius:9px;
+  font-size:0.95rem; font-weight:900; font-family:inherit; cursor:pointer;
+}
+@media(max-width:600px) {
+  .bingo-cell { font-size:0.62rem; }
+  .bingo-word { font-size:3.2rem; }
+  .btn-gen { margin-left:0; width:100%; }
+}
+@media print {
+  .nav, .page-header, .setup-box, .card-toolbar, .status-line { display:none !important; }
+  .bingo-grid { border:2px solid #000; background:#fff; }
+  .bingo-cell { border:1px solid #999; }
+}
+</style>
+<link rel="stylesheet" href="../shared.css">
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="../../">← ムドメわっしょい！</a>
+  <span class="nav-brand">SINGERLY</span>
+</nav>
+
+<div class="page-header">
+  <div class="tool-badge">🎯 もりあげる</div>
+  <h1 class="page-title">研修ビンゴ</h1>
+  <p class="page-sub">「今日出てきそうなキーワード」でビンゴ。講義を聞く姿勢が前のめりに変わる。</p>
+</div>
+
+<div class="outer">
+
+  <!-- 設定 -->
+  <div class="setup-box" id="setupBox">
+    <div class="section-label">キーワード入力（改行・読点区切り）</div>
+    <textarea class="kw-textarea" id="kwInput" placeholder="例：&#10;心理的安全性&#10;フィードバック&#10;アイスブレイク&#10;エンゲージメント&#10;…研修で登場しそうな言葉をどんどん入れてください"></textarea>
+    <div class="kw-note">現在 <span class="kw-count" id="kwCount">0</span> 個 ／ 3×3は<b>9個以上</b>、5×5は<b>24個以上</b>あると重複なしで作れます</div>
+    <div class="preset-btns">
+      <button class="preset-btn" onclick="loadPreset('mvv')">プリセット: 理念・文化研修</button>
+      <button class="preset-btn" onclick="loadPreset('mgmt')">プリセット: マネジメント研修</button>
+      <button class="preset-btn" onclick="loadPreset('ai')">プリセット: AI・DX研修</button>
+    </div>
+    <div class="setup-foot">
+      <div class="size-btns">
+        <button class="size-btn active" data-size="3" onclick="setSize(3,this)">3×3（手軽）</button>
+        <button class="size-btn" data-size="5" onclick="setSize(5,this)">5×5（本格）</button>
+      </div>
+      <button class="btn-gen" onclick="generate()">🎯 カードを生成！</button>
+    </div>
+  </div>
+
+  <!-- カード -->
+  <div class="card-area" id="cardArea">
+    <div class="status-line" id="statusLine">マスをタップして「出た！」をマーク</div>
+    <div class="bingo-grid" id="bingoGrid"></div>
+    <div class="card-toolbar">
+      <button class="tb-btn" onclick="generate()">🔀 別のカードを引く</button>
+      <button class="tb-btn" onclick="window.print()">🖨 印刷（配布用）</button>
+      <button class="tb-btn" onclick="editKeywords()">✏️ キーワードを編集</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- BINGOオーバーレイ -->
+<div class="bingo-overlay" id="bingoOverlay" onclick="closeBingo()">
+  <canvas class="bingo-canvas" id="bingoCanvas"></canvas>
+  <div class="bingo-content" onclick="event.stopPropagation()">
+    <div class="bingo-word">BINGO!!</div>
+    <div class="bingo-msg">おめでとうございます！大きな声で「ビンゴ！」と叫びましょう 🎉</div>
+    <button class="bingo-close" onclick="closeBingo()">続ける</button>
+  </div>
+</div>
+
+<script>
+const PRESETS = {
+  mvv:  ['理念','ミッション','ビジョン','バリュー','パーパス','カルチャー','浸透','体現','行動指針','クレド','共感','言語化','エピソード','自分ごと','習慣','対話','ストーリー','創業','原点','未来','誇り','仲間','感謝','挑戦'],
+  mgmt: ['心理的安全性','1on1','フィードバック','傾聴','コーチング','ティーチング','目標設定','KPI','権限委譲','承認','動機づけ','エンゲージメント','アサーション','リーダーシップ','フォロワーシップ','育成','評価','面談','信頼関係','チームビルディング','衝突','合意形成','振り返り','成長'],
+  ai:   ['生成AI','プロンプト','ChatGPT','業務効率化','自動化','DX','データ活用','ハルシネーション','エージェント','RAG','セキュリティ','リスキリング','アイデア出し','要約','壁打ち','ワークフロー','API','ノーコード','検証','リテラシー','活用事例','コスト削減','人間の役割','未来'],
+};
+let size = 3;
+let bingoCount = 0;
+
+function kwList() {
+  return document.getElementById('kwInput').value
+    .split(/[\n、,，]/).map(s => s.trim()).filter(Boolean);
+}
+function updateCount() { document.getElementById('kwCount').textContent = kwList().length; }
+document.getElementById('kwInput').addEventListener('input', updateCount);
+function loadPreset(key) {
+  document.getElementById('kwInput').value = PRESETS[key].join('\n');
+  updateCount();
+}
+function setSize(s, btn) {
+  size = s;
+  document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function generate() {
+  const kws = kwList();
+  const need = size * size - 1; /* 中央FREE */
+  if (kws.length < 3) { alert('キーワードを3個以上入力してください'); return; }
+  /* シャッフル */
+  const pool = [...kws];
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  const cells = [];
+  for (let i = 0; i < need; i++) cells.push(pool[i % pool.length]);
+  const mid = Math.floor((size * size) / 2);
+  cells.splice(mid, 0, 'FREE');
+
+  const grid = document.getElementById('bingoGrid');
+  grid.style.gridTemplateColumns = `repeat(${size},1fr)`;
+  grid.innerHTML = cells.map((c, i) =>
+    `<div class="bingo-cell ${c === 'FREE' ? 'free marked' : ''}" data-i="${i}" onclick="toggleCell(this)">${c}</div>`
+  ).join('');
+  bingoCount = 0;
+  document.getElementById('cardArea').classList.add('show');
+  document.getElementById('setupBox').style.display = 'none';
+  document.getElementById('statusLine').textContent = 'マスをタップして「出た！」をマーク';
+  checkLines();
+}
+function editKeywords() {
+  document.getElementById('setupBox').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggleCell(el) {
+  if (el.classList.contains('free')) return;
+  el.classList.toggle('marked');
+  beep(el.classList.contains('marked') ? 880 : 440, 0.1, 0.12);
+  checkLines();
+}
+
+function checkLines() {
+  const cells = [...document.querySelectorAll('.bingo-cell')];
+  const marked = i => cells[i].classList.contains('marked');
+  const lines = [];
+  for (let r = 0; r < size; r++) lines.push([...Array(size)].map((_, c) => r * size + c));
+  for (let c = 0; c < size; c++) lines.push([...Array(size)].map((_, r) => r * size + c));
+  lines.push([...Array(size)].map((_, i) => i * size + i));
+  lines.push([...Array(size)].map((_, i) => i * size + (size - 1 - i)));
+
+  cells.forEach(c => c.classList.remove('line'));
+  let complete = 0, reach = 0;
+  lines.forEach(line => {
+    const m = line.filter(marked).length;
+    if (m === size) { complete++; line.forEach(i => cells[i].classList.add('line')); }
+    else if (m === size - 1) reach++;
+  });
+
+  const status = document.getElementById('statusLine');
+  if (complete > bingoCount) { showBingo(); }
+  bingoCount = complete;
+  if (complete) status.innerHTML = `🎉 <b>${complete}ライン ビンゴ中！</b>${reach ? ` ＋ <span class="reach">リーチ${reach}本</span>` : ''}`;
+  else if (reach) status.innerHTML = `<span class="reach">🔥 リーチ${reach}本！ あと1マス！</span>`;
+  else status.textContent = 'マスをタップして「出た！」をマーク';
+}
+
+function showBingo() {
+  document.getElementById('bingoOverlay').classList.add('show');
+  launchConfetti();
+  [523,659,784,1047,784,1047,1319].forEach((f,i) => beep(f, 0.22, 0.18, i*0.13, 'triangle'));
+}
+function closeBingo() { document.getElementById('bingoOverlay').classList.remove('show'); }
+
+/* 効果音・紙吹雪 */
+let actx = null;
+function beep(freq, dur = 0.12, vol = 0.15, delay = 0, type = 'square') {
+  try {
+    if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = actx.createOscillator(), g = actx.createGain();
+    o.connect(g); g.connect(actx.destination);
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(vol, actx.currentTime + delay);
+    g.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + delay + dur);
+    o.start(actx.currentTime + delay); o.stop(actx.currentTime + delay + dur);
+  } catch(e) {}
+}
+function launchConfetti() {
+  const canvas = document.getElementById('bingoCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+  const colors = ['#FFD700','#B7282E','#fff','#FF6B6B','#4ECDC4','#FF9F43'];
+  const parts = [];
+  for (let i = 0; i < 240; i++) {
+    parts.push({
+      x: Math.random()*canvas.width, y: -20 - Math.random()*canvas.height*0.5,
+      vx: (Math.random()-0.5)*2.4, vy: 2 + Math.random()*3.5,
+      w: 6+Math.random()*7, h: 4+Math.random()*5,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      rot: Math.random()*Math.PI, vr: (Math.random()-0.5)*0.25,
+    });
+  }
+  let frames = 0;
+  (function anim() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    parts.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+      ctx.fillStyle = p.color; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      ctx.restore();
+    });
+    if (++frames < 420) requestAnimationFrame(anim);
+    else ctx.clearRect(0,0,canvas.width,canvas.height);
+  })();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&family=Noto+Serif+JP:wght@700;900&display=swap" rel="stylesheet">
+<title>MVPアワード — ムドメわっしょい！</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  min-height:100vh; background:#fff;
+  font-family:'DM Sans','Hiragino Sans','Hiragino Kaku Gothic ProN',Arial,sans-serif;
+  color:#000; display:flex; flex-direction:column; align-items:center;
+}
+.outer {
+  width:100%; max-width:900px;
+  padding:24px 24px 60px;
+  display:flex; flex-direction:column; gap:16px;
+}
+.section-label { font-size:0.63rem; letter-spacing:0.14em; color:#888; text-transform:uppercase; font-weight:700; margin-bottom:10px; }
+
+/* ステップナビ */
+.steps { display:flex; gap:8px; justify-content:center; }
+.step-pill {
+  display:flex; align-items:center; gap:8px;
+  padding:8px 18px; border-radius:99px;
+  background:#F6F6F6; border:1px solid #E0E0E0;
+  font-size:0.78rem; font-weight:700; color:#999;
+}
+.step-pill.active { background:#B7282E; border-color:#B7282E; color:#fff; }
+.step-pill.done { border-color:#B7282E; color:#B7282E; }
+.step-no {
+  width:20px; height:20px; border-radius:50%;
+  background:rgba(0,0,0,0.12); color:inherit;
+  display:flex; align-items:center; justify-content:center; font-size:0.68rem; font-weight:900;
+}
+.step-pill.active .step-no { background:rgba(255,255,255,0.25); }
+
+.panel {
+  background:#F6F6F6; border:1px solid #E0E0E0; border-radius:12px;
+  padding:22px; display:none; flex-direction:column; gap:14px;
+}
+.panel.show { display:flex; }
+
+/* 候補者 */
+.cand-input-row { display:flex; gap:10px; }
+.cand-input {
+  flex:1; padding:12px 14px; border:1px solid #CCC; border-radius:8px;
+  font-size:0.95rem; font-family:inherit; outline:none;
+}
+.cand-input:focus { border-color:#B7282E; }
+.btn-add {
+  padding:12px 26px; border:none; border-radius:8px;
+  background:#B7282E; color:#fff; font-weight:900; font-family:inherit;
+  cursor:pointer; font-size:0.9rem;
+}
+.btn-add:hover { background:#83151B; }
+.cand-list { display:flex; gap:8px; flex-wrap:wrap; }
+.cand-chip {
+  display:inline-flex; align-items:center; gap:8px;
+  background:#fff; border:1px solid #DDD; border-radius:99px;
+  padding:8px 8px 8px 16px; font-size:0.88rem; font-weight:700;
+}
+.cand-chip button {
+  width:22px; height:22px; border-radius:50%;
+  border:none; background:#EEE; color:#999; cursor:pointer; font-family:inherit;
+}
+.cand-chip button:hover { background:#B7282E; color:#fff; }
+.panel-foot { display:flex; justify-content:flex-end; gap:10px; }
+.btn-next {
+  padding:13px 36px; border:none; border-radius:9px;
+  background:#B7282E; color:#fff; font-weight:900; font-family:inherit;
+  cursor:pointer; font-size:0.95rem; letter-spacing:0.04em;
+  transition:background 0.15s;
+}
+.btn-next:hover { background:#83151B; }
+.btn-next:disabled { opacity:0.4; cursor:not-allowed; }
+.btn-ghost {
+  padding:13px 24px; border:1px solid #CCC; border-radius:9px;
+  background:#fff; color:#777; font-weight:700; font-family:inherit;
+  cursor:pointer; font-size:0.85rem;
+}
+.btn-ghost:hover { border-color:#B7282E; color:#B7282E; }
+
+/* 投票 */
+.vote-note { font-size:0.8rem; color:#777; line-height:1.7; }
+.vote-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; }
+.vote-card {
+  background:#fff; border:2px solid #E0E0E0; border-radius:12px;
+  padding:22px 16px; text-align:center; cursor:pointer;
+  transition:all 0.15s; user-select:none;
+}
+.vote-card:hover { border-color:#B7282E; transform:translateY(-2px); box-shadow:0 8px 20px rgba(183,40,46,0.12); }
+.vote-card:active { transform:scale(0.97); }
+.vote-name { font-size:1.1rem; font-weight:900; }
+.vote-tap { font-size:0.68rem; color:#bbb; margin-top:6px; }
+.vote-done-screen {
+  background:#0A0A0A; border-radius:12px; padding:44px 20px; text-align:center; display:none;
+}
+.vote-done-screen.show { display:block; }
+.vote-done-emoji { font-size:3rem; }
+.vote-done-text { color:#fff; font-weight:900; font-size:1.2rem; margin-top:10px; }
+.vote-done-sub { color:rgba(255,255,255,0.5); font-size:0.8rem; margin-top:6px; }
+.btn-nextvoter {
+  margin-top:20px; padding:13px 40px; border:none; border-radius:9px;
+  background:#B7282E; color:#fff; font-weight:900; font-family:inherit;
+  cursor:pointer; font-size:0.95rem;
+}
+.vote-count-line { text-align:center; font-size:0.82rem; color:#888; font-weight:700; }
+.vote-count-line b { color:#B7282E; font-size:1rem; }
+
+/* 手動集計 */
+.tally-list { display:flex; flex-direction:column; gap:8px; }
+.tally-row {
+  display:flex; align-items:center; gap:12px;
+  background:#fff; border:1px solid #DDD; border-radius:9px; padding:10px 14px;
+}
+.tally-name { flex:1; font-weight:900; font-size:0.95rem; }
+.tally-controls { display:flex; align-items:center; gap:10px; }
+.tally-controls button {
+  width:32px; height:32px; border-radius:8px; border:1px solid #CCC;
+  background:#fff; color:#555; cursor:pointer; font-family:inherit; font-weight:900; font-size:1rem;
+}
+.tally-controls button:hover { border-color:#B7282E; color:#B7282E; }
+.tally-num { font-size:1.2rem; font-weight:900; min-width:2em; text-align:center; font-variant-numeric:tabular-nums; }
+
+/* 発表 */
+.reveal-stage {
+  background:#0A0A0A; border-radius:14px; padding:50px 24px;
+  text-align:center; position:relative; overflow:hidden; min-height:340px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;
+}
+.reveal-stage::before {
+  content:''; position:absolute; inset:0;
+  background-image: radial-gradient(circle, rgba(183,40,46,0.22) 1px, transparent 1.5px);
+  background-size:24px 24px; opacity:0.5; pointer-events:none;
+}
+.reveal-label { font-size:0.75rem; letter-spacing:0.3em; color:rgba(255,255,255,0.4); text-transform:uppercase; font-weight:700; position:relative; }
+.reveal-drum { font-size:3.4rem; position:relative; }
+.reveal-drum.rolling { animation:drumShake 0.12s linear infinite; }
+@keyframes drumShake { 0%,100%{transform:rotate(-5deg)} 50%{transform:rotate(5deg)} }
+.reveal-name {
+  font-family:'Noto Serif JP',serif;
+  font-size:3.4rem; font-weight:900; color:#FFD700; line-height:1.3;
+  text-shadow:0 0 44px rgba(255,215,0,0.55); position:relative;
+  animation:namePop 0.7s cubic-bezier(0.25,1.7,0.45,1) both;
+}
+@keyframes namePop { 0%{opacity:0;transform:scale(0.3)} 100%{opacity:1;transform:scale(1)} }
+.reveal-sub { color:rgba(255,255,255,0.65); font-size:1rem; font-weight:700; position:relative; }
+.reveal-votes { color:#E8636A; font-weight:900; }
+.btn-reveal {
+  padding:16px 52px; font-size:1.1rem; font-weight:900; letter-spacing:0.06em;
+  border:none; border-radius:10px; cursor:pointer;
+  background:#B7282E; color:#fff; font-family:inherit; position:relative;
+  transition:background 0.15s, transform 0.12s;
+}
+.btn-reveal:hover { background:#83151B; transform:translateY(-1px); }
+.btn-reveal:disabled { opacity:0.35; cursor:not-allowed; }
+.reveal-canvas { position:absolute; inset:0; pointer-events:none; }
+.cert-link {
+  display:inline-block; margin-top:4px; position:relative;
+  color:#E7C87F; font-size:0.85rem; font-weight:700; text-decoration:underline;
+}
+.runner-list { position:relative; display:flex; gap:14px; flex-wrap:wrap; justify-content:center; }
+.runner {
+  background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.15);
+  border-radius:9px; padding:8px 18px; color:rgba(255,255,255,0.75);
+  font-size:0.85rem; font-weight:700;
+}
+.runner b { color:#E8636A; }
+@media(max-width:600px) { .reveal-name { font-size:2.2rem; } }
+</style>
+<link rel="stylesheet" href="../shared.css">
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="../../">← ムドメわっしょい！</a>
+  <span class="nav-brand">SINGERLY</span>
+</nav>
+
+<div class="page-header">
+  <div class="tool-badge">👑 たたえる</div>
+  <h1 class="page-title">MVPアワード</h1>
+  <p class="page-sub">投票を集めて、ドラムロール→紙吹雪で大発表。研修の主役を決める瞬間。</p>
+</div>
+
+<div class="outer">
+
+  <div class="steps">
+    <div class="step-pill active" id="stepPill1"><span class="step-no">1</span>候補者</div>
+    <div class="step-pill" id="stepPill2"><span class="step-no">2</span>投票</div>
+    <div class="step-pill" id="stepPill3"><span class="step-no">3</span>発表</div>
+  </div>
+
+  <!-- STEP 1: 候補者 -->
+  <div class="panel show" id="panel1">
+    <div class="section-label">MVP候補者を登録（2名以上）</div>
+    <div class="cand-input-row">
+      <input class="cand-input" id="candInput" placeholder="名前を入力してEnter（例：奥田さん）" onkeydown="if(event.key==='Enter')addCand()">
+      <button class="btn-add" onclick="addCand()">追加</button>
+    </div>
+    <div class="cand-list" id="candList"></div>
+    <div class="panel-foot">
+      <button class="btn-next" id="toVoteBtn" onclick="goStep(2)" disabled>投票へ進む →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: 投票 -->
+  <div class="panel" id="panel2">
+    <div class="section-label">投票方法</div>
+    <div class="vote-note">
+      <b>📱 デバイスまわし投票</b>：この画面を1台の端末で順番にまわし、1人1タップ。誰に入れたかは表示されないので匿名です。<br>
+      <b>✋ 挙手・集計投票</b>：挙手で数えて、ファシリテーターが票数を直接入力します。
+    </div>
+    <div class="chip-row" style="display:flex;gap:8px;">
+      <button class="btn-ghost" id="modeTapBtn" style="border-color:#B7282E;color:#B7282E;" onclick="setVoteMode('tap')">📱 デバイスまわし</button>
+      <button class="btn-ghost" id="modeTallyBtn" onclick="setVoteMode('tally')">✋ 挙手・集計</button>
+    </div>
+
+    <!-- タップ投票 -->
+    <div id="tapVoteArea">
+      <div class="vote-count-line" style="margin-bottom:10px;">現在 <b id="voteTotal">0</b> 票</div>
+      <div class="vote-grid" id="voteGrid"></div>
+      <div class="vote-done-screen" id="voteDoneScreen">
+        <div class="vote-done-emoji">🤫</div>
+        <div class="vote-done-text">投票を受け付けました</div>
+        <div class="vote-done-sub">次の人に端末をまわしてください</div>
+        <button class="btn-nextvoter" onclick="nextVoter()">次の人へ →</button>
+      </div>
+    </div>
+
+    <!-- 手動集計 -->
+    <div id="tallyArea" style="display:none;">
+      <div class="tally-list" id="tallyList"></div>
+    </div>
+
+    <div class="panel-foot">
+      <button class="btn-ghost" onclick="goStep(1)">← 候補者に戻る</button>
+      <button class="btn-next" onclick="goStep(3)">発表へ進む →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: 発表 -->
+  <div class="panel" id="panel3" style="background:transparent;border:none;padding:0;">
+    <div class="reveal-stage" id="revealStage">
+      <canvas class="reveal-canvas" id="revealCanvas"></canvas>
+      <div class="reveal-label" id="revealLabel">ARE YOU READY?</div>
+      <div class="reveal-drum" id="revealDrum">🥁</div>
+      <div class="reveal-sub" id="revealSub">結果を発表します</div>
+      <div id="revealMain"></div>
+      <button class="btn-reveal" id="revealBtn" onclick="startReveal()">🥁 結果発表！</button>
+    </div>
+    <div class="panel-foot" style="margin-top:12px;">
+      <button class="btn-ghost" onclick="goStep(2)">← 投票に戻る</button>
+      <button class="btn-ghost" onclick="resetAll()">最初からやり直す</button>
+    </div>
+  </div>
+
+</div>
+
+<audio id="drumAudio" src="drumroll.mp3" preload="auto"></audio>
+
+<script>
+let candidates = [];
+let votes = {};
+let voteMode = 'tap';
+
+/* ── STEP管理 ── */
+function goStep(n) {
+  [1,2,3].forEach(i => {
+    document.getElementById('panel'+i).classList.toggle('show', i === n);
+    const pill = document.getElementById('stepPill'+i);
+    pill.classList.toggle('active', i === n);
+    pill.classList.toggle('done', i < n);
+  });
+  if (n === 2) renderVote();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ── 候補者 ── */
+function addCand() {
+  const input = document.getElementById('candInput');
+  const name = input.value.trim();
+  if (!name || candidates.includes(name)) { input.value=''; return; }
+  candidates.push(name);
+  votes[name] = 0;
+  input.value = '';
+  renderCands();
+}
+function delCand(i) {
+  delete votes[candidates[i]];
+  candidates.splice(i,1);
+  renderCands();
+}
+function renderCands() {
+  document.getElementById('candList').innerHTML = candidates.map((c,i) =>
+    `<span class="cand-chip">${c}<button onclick="delCand(${i})">✕</button></span>`).join('');
+  document.getElementById('toVoteBtn').disabled = candidates.length < 2;
+}
+
+/* ── 投票 ── */
+function setVoteMode(m) {
+  voteMode = m;
+  document.getElementById('tapVoteArea').style.display = m === 'tap' ? 'block' : 'none';
+  document.getElementById('tallyArea').style.display = m === 'tally' ? 'block' : 'none';
+  const tapBtn = document.getElementById('modeTapBtn'), tallyBtn = document.getElementById('modeTallyBtn');
+  tapBtn.style.borderColor = m==='tap' ? '#B7282E' : '#CCC'; tapBtn.style.color = m==='tap' ? '#B7282E' : '#777';
+  tallyBtn.style.borderColor = m==='tally' ? '#B7282E' : '#CCC'; tallyBtn.style.color = m==='tally' ? '#B7282E' : '#777';
+  renderVote();
+}
+function renderVote() {
+  document.getElementById('voteGrid').innerHTML = candidates.map(c =>
+    `<div class="vote-card" onclick="castVote('${c.replace(/'/g,"\\'")}')">
+      <div class="vote-name">${c}</div>
+      <div class="vote-tap">タップで投票</div>
+    </div>`).join('');
+  document.getElementById('voteTotal').textContent = totalVotes();
+  document.getElementById('tallyList').innerHTML = candidates.map(c => `
+    <div class="tally-row">
+      <span class="tally-name">${c}</span>
+      <div class="tally-controls">
+        <button onclick="adjVote('${c.replace(/'/g,"\\'")}',-1)">−</button>
+        <span class="tally-num">${votes[c]||0}</span>
+        <button onclick="adjVote('${c.replace(/'/g,"\\'")}',1)">＋</button>
+      </div>
+    </div>`).join('');
+}
+function totalVotes() { return Object.values(votes).reduce((a,b) => a+b, 0); }
+function castVote(name) {
+  votes[name] = (votes[name]||0) + 1;
+  document.getElementById('voteGrid').style.display = 'none';
+  document.getElementById('voteDoneScreen').classList.add('show');
+  beep(880, 0.12, 0.12);
+}
+function nextVoter() {
+  document.getElementById('voteDoneScreen').classList.remove('show');
+  document.getElementById('voteGrid').style.display = 'grid';
+  document.getElementById('voteTotal').textContent = totalVotes();
+}
+function adjVote(name, d) {
+  votes[name] = Math.max(0, (votes[name]||0) + d);
+  renderVote();
+}
+
+/* ── 発表 ── */
+let revealing = false;
+async function startReveal() {
+  if (revealing) return;
+  revealing = true;
+  const btn = document.getElementById('revealBtn');
+  const drum = document.getElementById('revealDrum');
+  const label = document.getElementById('revealLabel');
+  const sub = document.getElementById('revealSub');
+  const main = document.getElementById('revealMain');
+  btn.disabled = true;
+  main.innerHTML = '';
+
+  /* ドラムロール */
+  label.textContent = 'AND THE MVP IS...';
+  sub.textContent = '';
+  drum.classList.add('rolling');
+  const audio = document.getElementById('drumAudio');
+  try { audio.currentTime = 0; await audio.play(); } catch(e) {}
+  await sleep(4000);
+  try { audio.pause(); } catch(e) {}
+  drum.classList.remove('rolling');
+  drum.style.display = 'none';
+
+  /* 結果 */
+  const ranked = candidates.map(c => ({ name:c, v:votes[c]||0 })).sort((a,b) => b.v - a.v);
+  const winner = ranked[0];
+  const runners = ranked.slice(1, 4);
+
+  label.textContent = '👑 MVP 👑';
+  main.innerHTML = `
+    <div class="reveal-name">${winner.name}</div>
+    <div class="reveal-sub" style="margin-top:8px;"><span class="reveal-votes">${winner.v}票</span> を獲得！おめでとうございます！</div>
+    ${runners.length ? `<div class="runner-list" style="margin-top:16px;">${runners.map((r,i) => `<span class="runner">${['🥈','🥉','4位'][i]} ${r.name} <b>${r.v}票</b></span>`).join('')}</div>` : ''}
+    <div style="margin-top:14px;"><a class="cert-link" href="../certificate-maker/index.html?name=${encodeURIComponent(winner.name)}&title=${encodeURIComponent('MVP賞')}">🏆 このまま表彰状を作る →</a></div>
+  `;
+  launchConfetti();
+  [523,659,784,1047,784,1047,1319,1568].forEach((f,i) => beep(f, 0.25, 0.16, i*0.14, 'triangle'));
+  btn.textContent = 'もう一度発表する';
+  btn.disabled = false;
+  revealing = false;
+  drum.style.display = '';
+  drum.textContent = '🎉';
+}
+function resetAll() {
+  candidates = []; votes = {};
+  renderCands();
+  document.getElementById('revealMain').innerHTML = '';
+  document.getElementById('revealLabel').textContent = 'ARE YOU READY?';
+  document.getElementById('revealDrum').textContent = '🥁';
+  document.getElementById('revealBtn').textContent = '🥁 結果発表！';
+  goStep(1);
+}
+
+/* ── 効果音・紙吹雪 ── */
+let actx = null;
+function beep(freq, dur = 0.12, vol = 0.15, delay = 0, type = 'square') {
+  try {
+    if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = actx.createOscillator(), g = actx.createGain();
+    o.connect(g); g.connect(actx.destination);
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(vol, actx.currentTime + delay);
+    g.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + delay + dur);
+    o.start(actx.currentTime + delay); o.stop(actx.currentTime + delay + dur);
+  } catch(e) {}
+}
+function launchConfetti() {
+  const canvas = document.getElementById('revealCanvas');
+  const ctx = canvas.getContext('2d');
+  const stage = document.getElementById('revealStage');
+  canvas.width = stage.offsetWidth; canvas.height = stage.offsetHeight;
+  const colors = ['#FFD700','#B7282E','#fff','#FF6B6B','#4ECDC4','#FF9F43'];
+  const parts = [];
+  for (let i = 0; i < 200; i++) {
+    parts.push({
+      x: Math.random()*canvas.width, y: -20 - Math.random()*canvas.height*0.6,
+      vx: (Math.random()-0.5)*2.4, vy: 2 + Math.random()*3.2,
+      w: 6+Math.random()*7, h: 4+Math.random()*5,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      rot: Math.random()*Math.PI, vr: (Math.random()-0.5)*0.25,
+    });
+  }
+  let frames = 0;
+  (function anim() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    parts.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+      ctx.fillStyle = p.color; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      ctx.restore();
+    });
+    if (++frames < 480) requestAnimationFrame(anim);
+    else ctx.clearRect(0,0,canvas.width,canvas.height);
+  })();
+}
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+</script>
+</body>
+</html>

@@ -375,7 +375,7 @@ body {
     <div class="attr-btns" id="attrBtns"></div>
     <div class="ai-gen">
       <input class="ai-gen__input" id="aiTheme" placeholder="例: 営業チームの忘年会 / 医療業界 / サッカー好きの集まり"
-             onkeydown="if(event.key==='Enter')generateDeck()">
+             onkeydown="if(event.key==='Enter' && !event.isComposing && event.keyCode!==229)generateDeck()">
       <button class="ai-gen__btn" id="aiGenBtn" onclick="generateDeck()">✨ AIで36お題を自動生成</button>
       <div class="ai-gen__hint">テーマを入れると、AIが6カテゴリ×6お題のオリジナルデッキを作ります(約10秒)。作ったデッキは保存され、✕で削除できます。</div>
       <div class="ai-gen__err" id="aiGenErr"></div>
@@ -579,13 +579,16 @@ function deleteDeck(key) {
 }
 
 /* ── AIデッキ生成 ── */
+let aiGenerating = false;
 async function generateDeck() {
+  if (aiGenerating) return;
   const input = document.getElementById('aiTheme');
   const btn = document.getElementById('aiGenBtn');
   const err = document.getElementById('aiGenErr');
   const theme = input.value.trim();
   err.style.display = 'none';
   if (!theme) { input.focus(); return; }
+  aiGenerating = true;
   btn.disabled = true;
   const orig = btn.textContent;
   btn.textContent = '🎲 生成中…(10秒ほど)';
@@ -608,6 +611,7 @@ async function generateDeck() {
     err.textContent = `生成できませんでした: ${e.message}`;
     err.style.display = 'block';
   } finally {
+    aiGenerating = false;
     btn.disabled = false;
     btn.textContent = orig;
   }

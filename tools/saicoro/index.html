@@ -132,6 +132,39 @@ body {
   border-color:transparent; color:#fff;
   box-shadow:0 4px 12px rgba(183,40,46,0.35), inset 0 1px 0 rgba(255,255,255,0.3);
 }
+.attr-btn--ai { border-style:dashed; border-color:var(--gold); color:var(--gold-dk, #8F6F2E); }
+.attr-btn--ai.active {
+  background:linear-gradient(135deg, var(--gold), #8F6F2E);
+  border-style:solid; color:#fff;
+  box-shadow:0 4px 12px rgba(200,160,80,0.4), inset 0 1px 0 rgba(255,255,255,0.35);
+}
+.attr-del { margin-left:7px; opacity:0.55; font-weight:900; }
+.attr-btn--ai:hover .attr-del { opacity:1; }
+
+/* ── AI生成 ── */
+.ai-gen {
+  display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+  border-top:1px dashed var(--line); padding-top:14px;
+}
+.ai-gen__input {
+  flex:1; min-width:220px; padding:11px 14px;
+  border:1.5px solid var(--line); border-radius:999px;
+  font-size:13px; font-family:inherit; outline:none; background:#FDFBF6;
+  transition:border-color .15s;
+}
+.ai-gen__input:focus { border-color:var(--gold); }
+.ai-gen__btn {
+  position:relative; overflow:hidden;
+  padding:11px 26px; border:none; border-radius:999px; cursor:pointer;
+  background:linear-gradient(135deg, #C8A050, #8F6F2E); color:#fff;
+  font-weight:900; font-family:inherit; font-size:13px; letter-spacing:0.04em;
+  box-shadow:0 4px 12px rgba(200,160,80,0.4), inset 0 1px 0 rgba(255,255,255,0.35);
+  transition:transform .12s;
+}
+.ai-gen__btn:hover { transform:translateY(-1px); }
+.ai-gen__btn:disabled { opacity:0.55; cursor:wait; }
+.ai-gen__hint { width:100%; font-size:10.5px; color:var(--ink-40); }
+.ai-gen__err { width:100%; font-size:11px; color:var(--red); font-weight:700; display:none; }
 
 /* ── LAYOUT ── */
 .content-row {
@@ -338,6 +371,13 @@ body {
   <div class="attr-section">
     <div class="section-label">お題デッキを選ぶ</div>
     <div class="attr-btns" id="attrBtns"></div>
+    <div class="ai-gen">
+      <input class="ai-gen__input" id="aiTheme" placeholder="例: 営業チームの忘年会 / 医療業界 / サッカー好きの集まり"
+             onkeydown="if(event.key==='Enter')generateDeck()">
+      <button class="ai-gen__btn" id="aiGenBtn" onclick="generateDeck()">✨ AIで36お題を自動生成</button>
+      <div class="ai-gen__hint">テーマを入れると、AIが6カテゴリ×6お題のオリジナルデッキを作ります(約10秒)。作ったデッキは保存され、✕で削除できます。</div>
+      <div class="ai-gen__err" id="aiGenErr"></div>
+    </div>
   </div>
 
   <div class="content-row">
@@ -505,6 +545,10 @@ function saveEditions() {
 }
 
 function resetEdition() {
+  if (!EDITIONS_DEFAULT[currentAttr]) {
+    deleteDeck(currentAttr);
+    return;
+  }
   if (!confirm(`「${EDITIONS_DEFAULT[currentAttr].label}」を初期値に戻しますか？`)) return;
   editions[currentAttr] = JSON.parse(JSON.stringify(EDITIONS_DEFAULT[currentAttr]));
   saveEditions();
@@ -515,10 +559,56 @@ function resetEdition() {
 }
 
 function buildAttrBtns() {
-  document.getElementById('attrBtns').innerHTML = Object.keys(EDITIONS_DEFAULT).map(key => {
+  const keys = [...Object.keys(EDITIONS_DEFAULT), ...Object.keys(editions).filter(k => !EDITIONS_DEFAULT[k])];
+  document.getElementById('attrBtns').innerHTML = keys.map(key => {
     const active = key === currentAttr ? ' active' : '';
-    return `<button class="attr-btn${active}" onclick="switchAttr('${key}')">${EDITIONS_DEFAULT[key].label}</button>`;
+    const isAI = !EDITIONS_DEFAULT[key];
+    const del = isAI ? `<span class="attr-del" onclick="event.stopPropagation();deleteDeck('${key.replace(/'/g,"\\'")}')">✕</span>` : '';
+    return `<button class="attr-btn${isAI ? ' attr-btn--ai' : ''}${active}" onclick="switchAttr('${key.replace(/'/g,"\\'")}')">${(editions[key]||EDITIONS_DEFAULT[key]).label}${del}</button>`;
   }).join('');
+}
+
+function deleteDeck(key) {
+  if (!confirm(`AIデッキ「${editions[key]?.label || key}」を削除しますか？`)) return;
+  delete editions[key];
+  saveEditions();
+  if (currentAttr === key) { currentAttr = '経営者'; }
+  switchAttr(currentAttr);
+}
+
+/* ── AIデッキ生成 ── */
+async function generateDeck() {
+  const input = document.getElementById('aiTheme');
+  const btn = document.getElementById('aiGenBtn');
+  const err = document.getElementById('aiGenErr');
+  const theme = input.value.trim();
+  err.style.display = 'none';
+  if (!theme) { input.focus(); return; }
+  btn.disabled = true;
+  const orig = btn.textContent;
+  btn.textContent = '🎲 生成中…(10秒ほど)';
+  try {
+    const r = await fetch('/api/saicoro-generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ theme }),
+    });
+    const data = await r.json();
+    if (data.error) throw new Error(data.error);
+    const key = `✨${theme}`.slice(0, 24);
+    editions[key] = { label: data.label, cats: data.cats, topics: data.topics };
+    saveEditions();
+    input.value = '';
+    switchAttr(key);
+    beep(880, 0.15, 0.15, 0, 'triangle');
+    beep(1174, 0.25, 0.15, 0.1, 'triangle');
+  } catch (e) {
+    err.textContent = `生成できませんでした: ${e.message}`;
+    err.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = orig;
+  }
 }
 
 function switchAttr(attr) {
@@ -535,7 +625,7 @@ function switchAttr(attr) {
   document.getElementById('topicEditHint').textContent = '';
   buildAttrBtns();
   buildTable();
-  document.getElementById('tableTitle').textContent = `テーマ一覧（${EDITIONS_DEFAULT[attr].label}）`;
+  document.getElementById('tableTitle').textContent = `テーマ一覧（${editions[attr].label}）`;
   beep(660, 0.08, 0.08);
 }
 
@@ -643,7 +733,7 @@ function roll() {
 loadEditions();
 buildAttrBtns();
 buildTable();
-document.getElementById('tableTitle').textContent = `テーマ一覧（${EDITIONS_DEFAULT[currentAttr].label}）`;
+document.getElementById('tableTitle').textContent = `テーマ一覧（${editions[currentAttr].label}）`;
 </script>
 </body>
 </html>
